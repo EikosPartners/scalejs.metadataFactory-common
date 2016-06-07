@@ -1,0 +1,19 @@
+{
+  "name": "",
+  "version": "",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel src --presets babel-preset-es2015 --out-dir dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EikosPartners/"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EikosPartners/"
+  },
+  "homepage": "https://github.com/EikosPartners/"
+}
