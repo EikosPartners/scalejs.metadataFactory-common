@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/scalejs.extensions.js"],"names":[],"mappings":";;AAAA","file":"scalejs.extensions.js","sourcesContent":["import 'scalejs.mvvm';"]}

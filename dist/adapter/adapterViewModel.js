@@ -81,7 +81,8 @@ i.e. plugin to adapter context with other components
  * }
  */
 function adapterViewModel(node) {
-    var observable = _scalejs2.default.mvvm.observable,
+    var // imports
+    observable = _scalejs2.default.mvvm.observable,
         observableArray = _scalejs2.default.mvvm.observableArray,
         unwrap = _knockout2.default.unwrap,
         computed = _scalejs2.default.mvvm.computed,
@@ -230,3 +231,4 @@ function adapterViewModel(node) {
     });
 } /*global define,ko,sandbox,dataservice */
 ;
+//# sourceMappingURL=adapterViewModel.js.map

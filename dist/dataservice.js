@@ -9,7 +9,6 @@ var testData = {
         B: 'updated'
     }
 };
-
 function ajax(r, callback) {
     callback(testData[r.uri]);
 }
@@ -17,3 +16,4 @@ function ajax(r, callback) {
 exports.default = {
     ajax: ajax
 };
+//# sourceMappingURL=dataservice.js.map

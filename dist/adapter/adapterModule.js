@@ -31,3 +31,4 @@ function adapter() {
         adapter: _adapterViewModel2.default
     });
 };
+//# sourceMappingURL=adapterModule.js.map
