@@ -84,7 +84,13 @@ import { createViewModels } from 'scalejs.metadataFactory';
             mappedChildNodes = observableArray(),
             updated = false,
             subs = [],
-            dataSyncSubscription;
+            dataSyncSubscription,
+            plugins = node.plugins ? createViewModels.call(context, node.plugins) : [],
+            contextPlugins = {};
+
+        plugins.forEach(plugin => {
+            contextPlugins[plugin.type] = plugin;
+        });
 
         // recursive function which parses through nodes and adds nodes with an id to dictionary
         function createDictionary(nodes) {                
@@ -167,6 +173,9 @@ import { createViewModels } from 'scalejs.metadataFactory';
             // data has been defined for the node but the node doesnt exist yet
             if (dataValue) { return dataValue; }
 
+            if (contextPlugins && contextPlugins[id]) {
+               return contextPlugins[id](); 
+            }
             return context.parentContext.getValue(id);
         }
 
@@ -199,6 +208,7 @@ import { createViewModels } from 'scalejs.metadataFactory';
         return merge(node, {
             mappedChildNodes: mappedChildNodes,
             data: data,
+            contextPlugins: contextPlugins,
             dispose: function () {
                 subs.forEach(function (sub) {
                     sub.unsubscribe(); // should be DISPOSE!
