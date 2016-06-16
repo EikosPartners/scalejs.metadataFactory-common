@@ -6,7 +6,7 @@ The following modules will be availale in this package:
 
 * accordion
 * action
-* adapter [complete]
+* [adapter](https://eikospartners.github.io/scalejs.metadataFactory-common/doc/module-adapter.html) [2 / 8]
 * form
 * grid
 * gridAdvanced
