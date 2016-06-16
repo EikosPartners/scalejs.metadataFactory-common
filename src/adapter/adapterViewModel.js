@@ -63,7 +63,8 @@ import { createViewModels } from 'scalejs.metadataFactory';
      * }
      */
     export default function adapterViewModel(node) {
-        let observable = sandbox.mvvm.observable,
+        let // imports
+            observable = sandbox.mvvm.observable,
             observableArray = sandbox.mvvm.observableArray,
             unwrap = ko.unwrap,
             computed = sandbox.mvvm.computed,

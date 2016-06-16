@@ -6,10 +6,7 @@
   "scripts": {
     "build": "babel src --presets babel-preset-es2015 --out-dir dist && npm run copy",
     "copy": "copyup src/**/*.html dist",
-<<<<<<< HEAD
     "doc": "jsdoc -d ./doc/ src/",
-=======
->>>>>>> 38bbffe... Added testing boilerplate code.
     "test": "karma start test/karma_config/karma.config.js",
     "test-coverage": "rimraf test/coverage && karma start test/karma_config/karma.config.coverage.js"
   },
