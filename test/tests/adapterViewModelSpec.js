@@ -66,15 +66,15 @@ describe('adapterViewModel test', function () {
         done();
     });
 
-    it.skip('maps descedant nodes to view models');
+    it('maps descedant nodes to view models');
 
-    it.skip('contains dictionary of all child nodes');
+    it('contains dictionary of all child nodes');
 
-    it.skip('fetches data from a  single dataSourceEndpoint');
+    it('fetches data from a  single dataSourceEndpoint');
 
-    it.skip('fetches data from an array of dataSourceEndpoints');
+    it('fetches data from an array of dataSourceEndpoints');
 
-    it.skip('[TODO] updates children with data');
+    it('[TODO] updates children with data');
 
     it('tracks data changes from its children', function (done) {
         let children = ko.unwrap(adapter.mappedChildNodes);
