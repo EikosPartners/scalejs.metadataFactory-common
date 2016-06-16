@@ -1,19 +1,72 @@
 {
-  "name": "",
-  "version": "",
-  "description": "",
-  "main": "index.js",
+  "name": "scalejs.metadatafactory-common",
+  "version": "1.0.0",
+  "description": "Common scalejs.metadatafactory modules",
+  "main": "dist/scalejs.metadataFactory-common.js",
   "scripts": {
-    "build": "babel src --presets babel-preset-es2015 --out-dir dist"
+    "build": "babel src --presets babel-preset-es2015 --out-dir dist && npm run copy",
+    "copy": "copyup src/**/*.html dist",
+<<<<<<< HEAD
+    "doc": "jsdoc -d ./doc/ src/",
+=======
+>>>>>>> 38bbffe... Added testing boilerplate code.
+    "test": "karma start test/karma_config/karma.config.js",
+    "test-coverage": "rimraf test/coverage && karma start test/karma_config/karma.config.coverage.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EikosPartners/"
+    "url": "git+https://github.com/EikosPartners/scalejs.metadataFactory-common"
   },
-  "author": "",
+  "author": "Erica Gucciardo <erica.gucciardo@eikospartners.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/EikosPartners/"
+    "url": "https://github.com/EikosPartners/scalejs.metadataFactory-common/issues"
   },
-  "homepage": "https://github.com/EikosPartners/"
+  "homepage": "https://github.com/EikosPartners/scalejs.metadataFactory-common#readme",
+  "devDependencies": {
+    "babel-cli": "^6.9.0",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.9.0",
+    "chai": "^3.5.0",
+    "istanbul-instrumenter-loader": "^0.2.0",
+    "jsdoc": "^3.4.0",
+    "karma": "^0.13.22",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-coverage": "^1.0.0",
+    "karma-mocha": "^1.0.1",
+    "karma-mocha-debug": "^0.1.2",
+    "karma-mocha-reporter": "^2.0.4",
+    "mocha": "^2.5.3",
+    "rimraf": "^2.5.2",
+    "webpack": "^1.13.1"
+  },
+  "dependencies": {
+    "karma-webpack": "^1.7.0",
+    "babel-preset-es2015": "^6.9.0",
+    "chai": "^3.5.0",
+    "copyfiles": "^0.2.1",
+    "html-loader": "^0.4.3",
+    "istanbul-instrumenter-loader": "^0.2.0",
+    "karma": "^0.13.22",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-coverage": "^1.0.0",
+    "karma-mocha": "^1.0.1",
+    "karma-mocha-debug": "^0.1.2",
+    "karma-mocha-reporter": "^2.0.4",
+    "karma-sourcemap-loader": "^0.3.7",
+    "mocha": "^2.5.3",
+    "rimraf": "^2.5.2",
+    "webpack": "^1.13.1"
+  },
+  "dependencies": {
+    "karma-webpack": "^1.7.0",
+    "knockout": "^3.4.0",
+    "lodash": "^4.13.1",
+    "scalejs": "^0.4.0",
+    "scalejs.messagebus": "^1.0.0",
+    "scalejs.metadataFactory": "^0.1.7",
+    "scalejs.mvvm": "0.0.1"
+  }
 }
