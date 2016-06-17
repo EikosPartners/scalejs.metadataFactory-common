@@ -1,12 +1,12 @@
 # Metadata Factory Common Modules
 
-Use this with the [scalejs metadata factory](www.github.com/EikosPartners/scalejs.metadataFactory) to build fully functional applications from JSON very rapidly.
+Use this with the [scalejs metadata factory](https://www.github.com/EikosPartners/scalejs.metadataFactory) to build fully functional applications from JSON very rapidly.
 
 The following modules will be availale in this package:
 
 * accordion
 * action
-* [adapter](https://eikospartners.github.io/scalejs.metadataFactory-common/doc/module-adapter.html) [2 / 8]
+* [adapter](https://eikospartners.github.io/scalejs.metadataFactory-common/doc/module-adapter.html) [4 / 10]
 * form
 * grid
 * gridAdvanced

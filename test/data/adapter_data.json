@@ -1,0 +1,12 @@
+{
+    "adapter": {
+        "A": "updated_a",
+        "B": "updated_b"
+    },
+    "adapter_a": {
+        "result": "updated_a"
+    },
+    "adapter_b": {
+        "result": "updated_b"
+    }
+}

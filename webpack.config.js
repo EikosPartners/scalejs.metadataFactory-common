@@ -7,7 +7,8 @@ module.exports = {
         alias: {
             // scalejs
             'scalejs.core': path.join(__dirname, 'node_modules/scalejs/dist/scalejs.core.js'),
-            'scalejs.sandbox': path.join(__dirname, 'node_modules/scalejs/dist/scalejs.sandbox.js')
+            'scalejs.sandbox': path.join(__dirname, 'node_modules/scalejs/dist/scalejs.sandbox.js'),
+            'dataservice': path.join(__dirname, 'test/dataservice.js')
         }
     },
     module: {
@@ -16,7 +17,7 @@ module.exports = {
                 loader: 'babel-loader',
                 test: [
                     path.join(__dirname, 'src/'),
-                    path.join(__dirname, 'test/tests/')
+                    path.join(__dirname, 'test')
                 ],
                 exclude: /\.html?$/,
                 query: {
@@ -26,6 +27,10 @@ module.exports = {
             {
                 test: /\.html$/,
                 loader: 'html-loader'
+            },
+            {
+                test: /\.json$/,
+                loader: 'json-loader'
             },
         ]
     }
