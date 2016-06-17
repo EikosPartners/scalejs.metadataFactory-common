@@ -5,7 +5,7 @@ import ko from 'knockout';
 import _ from 'lodash';
 import 'chai';
 
-var expect = chai.expect,
+let expect = chai.expect,
     adapter;
 
 
@@ -39,7 +39,7 @@ describe('adapterViewModel test', function () {
     before(function (done) {
         registerViewModels({
             adapter: adapterViewModel,
-            test_input (node) {
+            test_input(node) {
                 let value = ko.observable(),
                     error = ko.observable(true);
 
@@ -60,7 +60,7 @@ describe('adapterViewModel test', function () {
                     error
                 });
             },
-            test_parent (node) {
+            test_parent(node) {
                 let mappedChildNodes = createViewModels.call(this, node.children || []);
 
                 return _.merge(node, {
@@ -98,26 +98,26 @@ describe('adapterViewModel test', function () {
         expect(adapter.context.data()).to.have.property('B');
     });
 
-    // todo: make it async!
-    it.skip('fetches data from a  single dataSourceEndpoint', function () {
+    it('fetches data from a  single dataSourceEndpoint', function (done) {
         let testJson = _.merge(node, {
             "dataSourceEndpoint": {
                 "uri": "adapter"
             }
         });
-        
-        let testAdapter = createViewModel(testJson);
 
-        expect(testAdapter.data()).to.deep.equal({
-            A: 'updated_a',
-            B: 'updated_b'
-        });
-
+        let testAdapter = createViewModel(testJson),
+            subscription = testAdapter.data.subscribe(data => {
+                expect(data).to.deep.equal({
+                    A: 'updated_a',
+                    B: 'updated_b'
+                });
+                subscription.dispose();
+                done();
+            });
         testAdapter.dispose();
     });
 
-    // todo: make it async!
-    it.skip('fetches data from a an array of dataSourceEndpoints', function () {
+    it('fetches data from a an array of dataSourceEndpoints', function (done) {
         let testJson = _.merge(node, {
             "dataSourceEndpoint": [
                 {
@@ -136,15 +136,17 @@ describe('adapterViewModel test', function () {
                 }
             ]
         });
-        
-        let testAdapter = createViewModel(testJson); 
 
-        expect(testAdapter.data()).to.deep.equal({
-            A: 'updated_a',
-            B: 'updated_b'
-        });
-
-        //testAdapter.dispose();
+        let testAdapter = createViewModel(testJson),
+            subscription = testAdapter.data.subscribe(data => {
+                expect(data).to.deep.equal({
+                    A: 'updated_a',
+                    B: 'updated_b'
+                });
+                subscription.dispose();
+                done();
+            });
+        //testAdapter.dispose(); do we need to do this here?
     });
 
     it('[TODO] updates children with data');

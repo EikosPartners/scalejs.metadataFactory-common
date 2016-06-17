@@ -1,0 +1,67 @@
+{
+    "store": {
+        "A": "store_a",
+        "B": "store_b"
+    },
+    "updatedStore": {
+        "A": "updated_store_a",
+        "B": "updated_store_b"
+    },
+    "store_B": {
+        "results": [
+            {
+                "A_result": "store_a"
+            },
+            {
+                "B_result": "store_a"
+            }
+        ]
+    },
+    "storeLookup": {
+        "lookup": [
+            {
+                "A": "store_a",
+                "B": "store_b"
+            },
+            {
+                "A": "store_a_2",
+                "B": "store_b_2"
+            },
+            {
+                "A": "store_a_3"
+            }
+        ]
+    },
+    "storeLookup2": {
+        "lookup": [
+            {
+                "key": "store_a",
+                "value": "store_b"
+            },
+            {
+                "key": "store_a_2",
+                "value": "store_b_2"
+            }
+        ]
+    },
+    "storeAggregateLookup": {
+        "lookup": [
+            {
+                "key": "store_a",
+                "value": "store_b"
+            },
+            {
+                "key": "store_a_2",
+                "value": "store_b_2"
+            },
+             {
+                "key": "store_a_2",
+                "value": "new store_b_2"
+            },
+            {
+                "key": "store_a",
+                "value": "new store_a"
+            }
+        ]
+    }
+}
