@@ -115,14 +115,27 @@ describe('adapterViewModel test', function () {
         testAdapter.dispose();
     });
 
-    it('fetches data from a  single dataSourceEndpoint', function () {
+    it('fetches data from a an array of dataSourceEndpoints', function () {
         let testJson = _.merge(node, {
-            "dataSourceEndpoint": {
-                "uri": "adapter"
-            }
+            "dataSourceEndpoint": [
+                {
+                    "uri": "adapter_a",
+                    "keyMap": {
+                        "resultsKey": "result",
+                        "dataKey": "A"
+                    }
+                },
+                {
+                    "uri": "adapter_b",
+                    "keyMap": {
+                        "resultsKey": "result",
+                        "dataKey": "B"
+                    }
+                }
+            ]
         });
         
-        let testAdapter = createViewModel(testJson);
+        let testAdapter = createViewModel(testJson); 
 
         expect(testAdapter.data()).to.deep.equal({
             A: 'updated_a',
