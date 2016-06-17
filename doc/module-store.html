@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: adapter</title>
+    <title>JSDoc: Module: store</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: adapter</h1>
+    <h1 class="page-title">Module: store</h1>
 
     
 
@@ -38,7 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description">Adapter: a viewless component which keeps track of child nodes and the data for the nodes</div>
+            <div class="description">Store: a component that takes a dataSourceEndpointand adds the results to the noticeboard.It has no viewmodel and does not accept children.</div>
         
 
         
@@ -95,7 +95,7 @@
 
             
 
-            <td class="description last">The configuration object for the module
+            <td class="description last">The configuation object for the module
                 <h6>Properties</h6>
                 
 
@@ -150,25 +150,25 @@
             
                 <td class="default">
                 
-                    'adapter'
+                    'store'
                 
                 </td>
             
 
-            <td class="description last">The type of the node is adapter</td>
+            <td class="description last">The type of the node is store     *</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>storeKey</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">object</span>
 
 
             
@@ -190,46 +190,7 @@
                 </td>
             
 
-            <td class="description last">The id for the module</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>lazy</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    false
-                
-                </td>
-            
-
-            <td class="description last">If the child nodes need to be lazily loaded (e.g. delay creation of children viewmodels until data returns)</td>
+            <td class="description last">The key that the results are stored on in the noticeboard</td>
         </tr>
 
     
@@ -253,8 +214,6 @@
 
             
                 <td class="attributes">
-                
-                    &lt;optional><br>
                 
 
                 
@@ -361,133 +320,6 @@
 
         <tr>
             
-                <td class="name"><code>keyMap</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">A mapper object to map keys
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>resultsKey</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Map the results from the ajax call with this key</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>dataKey</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Extend the data object with this key</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>options</code></td>
             
 
@@ -528,13 +360,13 @@
 
         <tr>
             
-                <td class="name"><code>children</code></td>
+                <td class="name"><code>keyMap</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type">object</span>
 
 
             
@@ -542,6 +374,8 @@
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -556,30 +390,11 @@
                 </td>
             
 
-            <td class="description last">The json configuration for children nodes which will be mapped to view models and kept track of from the adapter</td>
-        </tr>
+            <td class="description last">A mapper object to map keys
+                <h6>Properties</h6>
+                
 
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -588,6 +403,8 @@
 
         <th>Type</th>
 
+        
+        <th>Attributes</th>
         
 
         
@@ -601,51 +418,54 @@
 
         <tr>
             
-                <td class="name"><code>mappedChildNodes</code></td>
+                <td class="name"><code>result</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type">object</span>
 
 
             
             </td>
 
             
-
-            
-
-            <td class="description last">the mapped children nodes</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>dispose</code></td>
-            
-
-            <td class="type">
-            
+                <td class="attributes">
                 
-<span class="param-type">function</span>
+                    &lt;optional><br>
+                
 
+                
+
+                
+                </td>
+            
 
             
-            </td>
 
-            
-
-            
-
-            <td class="description last">the dispose function for all internal subs</td>
+            <td class="description last">Map the results from the ajax call with this key</td>
         </tr>
 
     
     </tbody>
 </table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -679,7 +499,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="adapter_adapterViewModel.js.html">adapter/adapterViewModel.js</a>, <a href="adapter_adapterViewModel.js.html#line13">line 13</a>
+        <a href="store_storeViewModel.js.html">store/storeViewModel.js</a>, <a href="store_storeViewModel.js.html#line8">line 8</a>
     </li></ul></dd>
     
 
@@ -702,11 +522,6 @@
 
 
 
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>{     "type": "adapter",     "id": "ADAPTER_ID",     "dataSourceEndpoint": [         {             "uri": "endpoint/uri",             "options": {                 "type": "PUT"             },             "keyMap": {                 "dataKey": "a",                 "resultsKey": "b"             }         }     ],     "children": [         // children json configuration goes here     ]}</code></pre>
 
 
 
