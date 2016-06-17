@@ -8,16 +8,47 @@ import 'chai';
 var expect = chai.expect,
     adapter;
 
+
+const node = {
+    "type": "adapter",
+    "children": [
+        {
+            "id": "A",
+            "type": "test_input"
+        },
+        {
+            "type": "test_parent",
+            "children": [
+                {
+                    "id": "B",
+                    "type": "test_input"
+                }
+            ]
+        }
+    ],
+    "plugins": [
+        {
+            "type": "errors"
+        }
+    ]
+};
+
 describe('adapterViewModel test', function () {
     this.timeout(0); //disable timeout for dev
 
     before(function (done) {
         registerViewModels({
             adapter: adapterViewModel,
-            test_input(node) {
+            test_input (node) {
                 let value = ko.observable(),
-                    error = ko.observable(true),
-                    mappedChildNodes = createViewModels.call(this, node.children || []);
+                    error = ko.observable(true);
+
+                // using subscribe pattern
+                if (this.data && this.data.subscribe) {
+                    this.data.subscribe(data => {
+                        value(data[node.id]);
+                    });
+                }
 
                 return _.merge(node, {
                     getValue() {
@@ -26,7 +57,13 @@ describe('adapterViewModel test', function () {
                     setValue(val) {
                         value(val);
                     },
-                    error,
+                    error
+                });
+            },
+            test_parent (node) {
+                let mappedChildNodes = createViewModels.call(this, node.children || []);
+
+                return _.merge(node, {
                     mappedChildNodes
                 });
             },
@@ -41,39 +78,56 @@ describe('adapterViewModel test', function () {
             }
         });
 
-        let node = {
-            "type": "adapter",
-            "children": [
-                {
-                    "id": "A",
-                    "type": "test_input",
-                    "children": [
-                        {
-                            "id": "B",
-                            "type": "test_input"
-                        }
-                    ]
-                }
-            ],
-            "plugins": [
-                {
-                    "type": "errors"
-                }
-            ]
-        };
-
         adapter = createViewModel(node);
         done();
     });
 
-    it('maps descedant nodes to view models');
+    it('maps descedant nodes to view models', function () {
+        let children = ko.unwrap(adapter.mappedChildNodes);
+        expect(children.length).to.equal(2);
+        expect(children[0]).to.have.property('getValue');
+    });
 
-    it('contains dictionary of all child nodes');
+    it('contains dictionary of all child nodes', function () {
+        expect(adapter.context).to.have.property('data');
+        expect(adapter.context.data()).to.have.property('A');
+        expect(adapter.context.data()).to.have.property('B');
+    });
 
-    it('fetches data from a  single dataSourceEndpoint');
+    it('fetches data from a  single dataSourceEndpoint', function () {
+        let testJson = _.merge(node, {
+            "dataSourceEndpoint": {
+                "uri": "adapter"
+            }
+        });
+        
+        let testAdapter = createViewModel(testJson);
 
-    it('fetches data from an array of dataSourceEndpoints');
+        expect(testAdapter.data()).to.deep.equal({
+            A: 'updated_a',
+            B: 'updated_b'
+        });
 
+        //testAdapter.dispose();
+    });
+
+    it('fetches data from a  single dataSourceEndpoint', function () {
+        let testJson = _.merge(node, {
+            "dataSourceEndpoint": {
+                "uri": "adapter"
+            }
+        });
+        
+        let testAdapter = createViewModel(testJson);
+
+        expect(testAdapter.data()).to.deep.equal({
+            A: 'updated_a',
+            B: 'updated_b'
+        });
+
+        //testAdapter.dispose();
+    });
+    
     it('[TODO] updates children with data');
 
     it('tracks data changes from its children', function (done) {

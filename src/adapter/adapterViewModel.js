@@ -209,6 +209,7 @@ import { createViewModels } from 'scalejs.metadataFactory';
             mappedChildNodes: mappedChildNodes,
             data: data,
             contextPlugins: contextPlugins,
+            context: context,
             dispose: function () {
                 subs.forEach(function (sub) {
                     sub.unsubscribe(); // should be DISPOSE!
