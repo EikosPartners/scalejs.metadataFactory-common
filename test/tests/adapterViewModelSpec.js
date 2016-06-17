@@ -82,6 +82,10 @@ describe('adapterViewModel test', function () {
         done();
     });
 
+    after(function () {
+        adapter.dispose();
+    });
+
     it('maps descedant nodes to view models', function () {
         let children = ko.unwrap(adapter.mappedChildNodes);
         expect(children.length).to.equal(2);
@@ -108,7 +112,7 @@ describe('adapterViewModel test', function () {
             B: 'updated_b'
         });
 
-        //testAdapter.dispose();
+        testAdapter.dispose();
     });
 
     it('fetches data from a  single dataSourceEndpoint', function () {
@@ -127,7 +131,7 @@ describe('adapterViewModel test', function () {
 
         //testAdapter.dispose();
     });
-    
+
     it('[TODO] updates children with data');
 
     it('tracks data changes from its children', function (done) {
