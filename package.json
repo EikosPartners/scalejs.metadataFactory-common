@@ -8,7 +8,7 @@
     "copy": "copyup src/**/*.html dist",
     "doc": "jsdoc -d ./doc/ src/ -r",
     "test": "karma start test/karma_config/karma.config.js",
-    "test-travis": "rimraf test/coverage && karma start test/karma_config/karma.config.travis.js",
+    "test-travis": "karma start test/karma_config/karma.config.travis.js",
     "test-coverage": "rimraf test/coverage && karma start test/karma_config/karma.config.coverage.js"
   },
   "repository": {
