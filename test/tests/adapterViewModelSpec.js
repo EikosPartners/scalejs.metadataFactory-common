@@ -149,7 +149,7 @@ describe('adapterViewModel test', function () {
         //testAdapter.dispose(); do we need to do this here?
     });
 
-    it('[TODO] updates children with data');
+    //temp removed it('[TODO] updates children with data');
 
     it('tracks data changes from its children', function (done) {
         let children = ko.unwrap(adapter.mappedChildNodes);
@@ -165,11 +165,11 @@ describe('adapterViewModel test', function () {
         done();
     });
 
-    it('can lazily load children when data returns');
+   //temp removed it('can lazily load children when data returns');
 
-    it('can be refreshed from an event');
+   //temp removed it('can be refreshed from an event');
 
-    it('[TODO] properly disposes of subscriptions');
+    //temp removed it('[TODO] properly disposes of subscriptions');
 });
 
 
