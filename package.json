@@ -43,7 +43,6 @@
     "webpack": "^1.13.1"
   },
   "dependencies": {
-    "karma-webpack": "^1.7.0",
     "knockout": "^3.4.0",
     "lodash": "^4.13.1",
     "scalejs": "^0.4.0",
