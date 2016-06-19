@@ -1,7 +1,7 @@
 # Metadata Factory Common Modules
 
 Use this with the [scalejs metadata factory](https://www.github.com/EikosPartners/scalejs.metadataFactory) to build fully functional applications from JSON very rapidly.
-
+[![Build Status](https://travis-ci.org/EikosPartners/scalejs.metadataFactory-common.svg?branch=master)](https://travis-ci.org/EikosPartners/scalejs.metadataFactory-common)
 The following modules will be availale in this package:
 
 * accordion
