@@ -1,0 +1,91 @@
+'use strict';
+
+var _scalejs = require('scalejs.core');
+
+var _scalejs2 = _interopRequireDefault(_scalejs);
+
+var _knockout = require('knockout');
+
+var _knockout2 = _interopRequireDefault(_knockout);
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+require('knockout.validation');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/*
+* made validation engine its own file to support more complex logic
+*/
+
+//set the generic validation on the knockout binding
+_knockout2.default.validation.init({
+    insertMessages: false,
+    messagesOnModified: true,
+    decorateElement: false,
+    decorateElementOnModified: false,
+    decorateInputElement: false
+});
+
+_knockout2.default.validation.rules['expression'] = {
+    validator: function validator(val, p) {
+        var params = p.params ? p.params : p,
+            getValue = params[1],
+            validator = this;
+        // option 1: params[0] is not an array so it is just the term
+        if (!Array.isArray(params[0])) {
+            return _scalejs2.default.expression.evaluate.apply(null, params);
+        }
+        // option 2: params[0] is an array so it is many terms
+        return params[0].every(function (e) {
+            var isValid = _scalejs2.default.expression.evaluate.call(null, e.term, getValue);
+            if (!isValid) {
+                validator.message = e.message;
+            }
+            return isValid;
+        });
+    },
+    message: 'Expression is not correct'
+};
+
+_knockout2.default.validation.rules['autocomplete'] = {
+    validator: function validator(val, p) {
+        if (!val) {
+            return true; //if the value is undefined, then we ignore the validation.
+        }
+
+        return _lodash2.default.findIndex(p, ['value', val]) > -1;
+    },
+    message: 'Expression is not correct'
+};
+
+_knockout2.default.validation.rules['customError'] = {
+    validator: function validator(val, error) {
+        if (error) {
+            this.message = error;
+            return false;
+        }
+        return true;
+    },
+    message: 'Value is not valid'
+};
+
+var patternValidator = _knockout2.default.validation.rules['pattern'].validator;
+_knockout2.default.validation.rules['pattern'].validator = function (val, params) {
+    var validator = this;
+    if (Array.isArray(params)) {
+        return params.every(function (param) {
+            var isValid = patternValidator(val, param.params);
+            if (!isValid) {
+                validator.message = param.message;
+            }
+            return isValid;
+        });
+    }
+    return patternValidator(val, params);
+};
+
+_knockout2.default.validation.registerExtenders();
+//# sourceMappingURL=validationEngine.js.map

@@ -1,1 +1,1 @@
-{"version":3,"sources":[],"names":[],"mappings":"","file":"scalejs.metadataFactory-common.js","sourcesContent":[]}
+{"version":3,"sources":["../src/scalejs.metadataFactory-common.js"],"names":[],"mappings":";;AAAA;;AACA;;AACA","file":"scalejs.metadataFactory-common.js","sourcesContent":["import './adapter/adapterModule';\r\nimport './input/inputModule';\r\nimport './store/storeModule';"]}

@@ -1,0 +1,111 @@
+<div id="input_template">
+    <div data-bind="css: $data.classes, visible: isShown" class="input">
+        <label data-class="input-labels input-color-text" class="input-label"></label>
+        <!-- ko if: $data.helpText -->
+            <i class="fa fa-info-circle info">
+                <div class="tool-tip" data-bind="text: $data.helpText"></div>
+            </i>
+        <!-- /ko -->
+
+        <!-- ko template: 'input_' + inputType + '_template' -->
+        <!-- /ko -->
+        <span data-class="input-validation"></span>
+        <span data-class="input-tooltip"></span>
+
+    </div>
+</div>
+
+<div id="input_list_template">
+    <label data-class="input-labels" class="input-label"></label>
+    <!-- ko template: 'input_' + inputType + '_template' -->
+    <!-- /ko -->
+</div>
+
+<div id="input_textLabel_template">
+    <div class="input-label label-only" data-class="input-labels-only"></div>
+</div>
+
+<div id="input_text_template">
+    <div class="input-wrapper">
+        <input data-class="input-input input-validation-checker" type="text" class="input-text"/>
+    </div>
+</div>
+
+<div id="input_select_template">
+    <div class="input-wrapper">
+        <select data-class="input-select input-validation-checker" class="input-select"></select>
+    </div>
+
+</div>
+
+<div id="input_date_template">
+    <div class="input-wrapper">
+        <input type="date" data-class="input-datetime" class="input-date">
+    </div>
+</div>
+
+<div id="input_datepicker_template">
+    <div class="input-wrapper">
+        <input type="text" data-class="input-datepicker input-validation-checker" class="input-date"/>
+    </div>
+</div>
+
+<div id="input_autosize_template">
+    <div class="input-wrapper">
+        <textarea  data-class="input-input input-validation-checker input-autosize" class="input-text"></textarea>
+    </div>
+</div>
+
+<div id="input_radio_template">
+    <div data-class="input-radio input-color-text" class="input-radio-wrapper">
+    <span>
+        <input type="radio" class="input-radio"data-class="input-radio-button" />
+        <div class="input-radio-label">
+            <!-- ko text: value --> <!-- /ko -->
+        </div>
+    </span>
+    </div>
+</div>
+
+<div id="input_checkbox_template">
+    <label class="input-checkbox-wrapper">
+        <input type="checkbox" class="input-checkbox-button" data-class="input-checkbox-button input-validation-checker">
+        <span class="input-checkbox-display"></span>
+        <span class="input-checkbox-label" data-bind="text: options.text"></span>
+    </label>
+</div>
+
+<div id="input_checkbox_group_template">
+    <div data-bind="css:$data.classes">
+    <!-- ko foreach: values -->
+        <div class="pb10">
+            <label class="input-checkbox-wrapper">
+                <input type="checkbox" data-class="input-checkbox-button-group" class="input-checkbox-button">
+                <span class="input-checkbox-display"></span>
+                <span class="input-checkbox-label" data-bind="text: text" ></span>
+            </label>
+        </div>
+    <!-- /ko -->
+    </div>
+</div>
+
+<div id="input_autocomplete_template">
+     <!-- ko if: mappedChildNodes().length === 0 -->
+    <div class="input-wrapper">
+        <input data-class="input-autocomplete input-validation-checker" class="input-text"/>
+    </div>
+     <!-- /ko -->
+    <!-- ko if: mappedChildNodes().length !==  0-->
+        <!-- ko foreach: mappedChildNodes -->
+            <!-- ko template: 'metadata_item_template' -->
+            <!-- /ko -->
+        <!-- /ko -->
+    <!-- /ko -->
+
+</div>
+
+<div id="input_add_button_template" class="add">
+        <button class="fa fa-icon-add" data-bind="click: input.add">
+            <span class="button-text">Add</span>
+        </button>
+</div>

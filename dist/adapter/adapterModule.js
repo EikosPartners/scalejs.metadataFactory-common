@@ -1,13 +1,8 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = adapter;
+var _scalejs = require('scalejs.mvvm');
 
-var _scalejs = require('scalejs.sandbox');
-
-var _scalejs2 = _interopRequireDefault(_scalejs);
+var _scalejs2 = require('scalejs.metadataFactory');
 
 var _adapterViewModel = require('./adapterViewModel');
 
@@ -17,18 +12,10 @@ var _adapter = require('./adapter.html');
 
 var _adapter2 = _interopRequireDefault(_adapter);
 
-var _scalejs3 = require('scalejs.metadataFactory');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/*global define */
-
-
-_scalejs2.default.mvvm.registerTemplates(_adapter2.default);
-
-function adapter() {
-    (0, _scalejs3.registerViewModels)({
-        adapter: _adapterViewModel2.default
-    });
-};
+(0, _scalejs.registerTemplates)(_adapter2.default);
+(0, _scalejs2.registerViewModels)({
+    adapter: _adapterViewModel2.default
+});
 //# sourceMappingURL=adapterModule.js.map
