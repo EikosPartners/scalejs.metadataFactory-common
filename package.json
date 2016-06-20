@@ -1,11 +1,11 @@
 {
   "name": "scalejs.metadatafactory-common",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Common scalejs.metadatafactory modules",
   "main": "dist/scalejs.metadataFactory-common.js",
   "scripts": {
     "build": "babel src --presets babel-preset-es2015 --out-dir dist --source-maps && npm run copy",
-    "copy": "copyup src/**/*.html dist",
+    "copy": "copyup src/**/*.html dist && copyup src/**/*.scss dist",
     "doc": "jsdoc -d ./doc/ src/ -r",
     "test": "karma start test/karma_config/karma.config.js",
     "test-travis": "karma start test/karma_config/karma.config.travis.js",
