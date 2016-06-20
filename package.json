@@ -52,7 +52,7 @@
     "scalejs": "^0.4.0",
     "scalejs.messagebus": "^1.0.0",
     "scalejs.metadataFactory": "^0.1.7",
-    "scalejs.mvvm": "0.0.1",
+    "scalejs.mvvm": "latest",
     "scalejs.noticeboard": "git+https://github.com/EikosPartners/scalejs.noticeboard.git"
   }
 }
