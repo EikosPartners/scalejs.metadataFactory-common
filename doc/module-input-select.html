@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: store</title>
+    <title>JSDoc: Module: input-select</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: store</h1>
+    <h1 class="page-title">Module: input-select</h1>
 
     
 
@@ -38,7 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description">Store: a component that takes a dataSourceEndpointand adds the results to the noticeboard.It has no viewmodel and does not accept children.</div>
+            <div class="description">select is a type of input that lets the  user select the value from dropdown options</div>
         
 
         
@@ -95,7 +95,49 @@
 
             
 
-            <td class="description last">The configuation object for the module
+            <td class="description last">The configuration specs for the component.
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Options specific to this component
                 <h6>Properties</h6>
                 
 
@@ -125,13 +167,13 @@
 
         <tr>
             
-                <td class="name"><code>type</code></td>
+                <td class="name"><code>addBlank</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">bool</span>
 
 
             
@@ -139,6 +181,8 @@
 
             
                 <td class="attributes">
+                
+                    &lt;optional><br>
                 
 
                 
@@ -150,54 +194,19 @@
             
                 <td class="default">
                 
-                    'store'
+                    true
                 
                 </td>
             
 
-            <td class="description last">The type of the node is store     *</td>
+            <td class="description last">Whether or not to add a blank to the beginning of the select options</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>storeKey</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The key that the results are stored on in the noticeboard</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>dataSourceEndpoint</code></td>
+                <td class="name"><code>values</code></td>
             
 
             <td class="type">
@@ -206,7 +215,7 @@
 <span class="param-type">object</span>
 |
 
-<span class="param-type">Array.&lt;Object></span>
+<span class="param-type">array</span>
 
 
             
@@ -228,7 +237,7 @@
                 </td>
             
 
-            <td class="description last">An object defining the endpoint(s) that makes the ajax calls
+            <td class="description last">Specifies either an array of values to use or an object describing the values
                 <h6>Properties</h6>
                 
 
@@ -246,6 +255,8 @@
         
 
         
+        <th>Default</th>
+        
 
         <th class="last">Description</th>
     </tr>
@@ -256,7 +267,7 @@
 
         <tr>
             
-                <td class="name"><code>uri</code></td>
+                <td class="name"><code>fromArray</code></td>
             
 
             <td class="type">
@@ -279,15 +290,92 @@
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
-            <td class="description last">The uri for the endpoint</td>
+            <td class="description last">A string to be evaluated that will be used to map the values</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>url</code></td>
+                <td class="name"><code>textKey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A string or array which refers to the text key (i.e. the label) for the options</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>valueKey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A string which referes to the value key for the options</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>delimeter</code></td>
             
 
             <td class="type">
@@ -312,21 +400,27 @@
             
 
             
+                <td class="default">
+                
+                    ' / '
+                
+                </td>
+            
 
-            <td class="description last">The url for the endpoint</td>
+            <td class="description last">A delimeter for the label if the textKey is an array</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>textFormatter</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type">string</span>
 
 
             
@@ -345,8 +439,12 @@
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
-            <td class="description last">Options for the ajax call</td>
+            <td class="description last">The name of a function to format the label for the option (i.e. dateFormatter)</td>
         </tr>
 
     
@@ -354,97 +452,6 @@
 </table>
 
             </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>keyMap</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">A mapper object to map keys
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>result</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Map the results from the ajax call with this key</td>
         </tr>
 
     
@@ -499,7 +506,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="store_storeViewModel.js.html">store/storeViewModel.js</a>, <a href="store_storeViewModel.js.html#line8">line 8</a>
+        <a href="input_select_selectViewModel.js.html">input/select/selectViewModel.js</a>, <a href="input_select_selectViewModel.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
@@ -539,6 +546,72 @@
 
     
 
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="~computedValues"><span class="type-signature">(inner) </span>computedValues<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    If currentFilter is defined, return only values which match
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="input_select_selectViewModel.js.html">input/select/selectViewModel.js</a>, <a href="input_select_selectViewModel.js.html#line151">line 151</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
     
 
     

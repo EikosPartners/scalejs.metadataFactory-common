@@ -38,8 +38,13 @@ import { createViewModels } from 'scalejs.metadataFactory';
      *  Options for the ajax call
      * @param {array} node.children
      *  The json configuration for children nodes which will be mapped to view models and kept track of from the adapter
+     * @param {array} [node.plugins]
+     *  The json configuration for plugins which will be accessible from getValue function, based upon type
      *
      * @property {array} mappedChildNodes the mapped children nodes
+     * @property {observable} data the data retrieved from dataSourceEndpoint and tracked from children
+     * @property {object} contextPlugins an object that contains the plugins which have been added to the adapter context
+     * @property {context} the context for the adapter (which can be utilized in a custom template)
      * @property {function} dispose the dispose function for all internal subs
      *
      * @example
@@ -85,10 +90,6 @@ import { createViewModels } from 'scalejs.metadataFactory';
             dataSyncSubscription,
             plugins = node.plugins ? createViewModels.call(context, node.plugins) : [],
             contextPlugins = {};
-
-        plugins.forEach(plugin => {
-            contextPlugins[plugin.type] = plugin;
-        });
 
         // recursive function which parses through nodes and adds nodes with an id to dictionary
         function createDictionary(nodes) {                
@@ -180,6 +181,10 @@ import { createViewModels } from 'scalejs.metadataFactory';
         if (!node.lazy) {
             mappedChildNodes(createViewModels.call(context, node.children || []));
         }
+
+        plugins.forEach(plugin => {
+            contextPlugins[plugin.type] = plugin;
+        });
 
         // update dictionary if mappedChildNodes of a node updates
         computed(() => {
