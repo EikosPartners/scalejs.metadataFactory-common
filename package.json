@@ -57,12 +57,11 @@
   "dependencies": {
     "knockout": "^3.4.0",
     "lodash": "^4.13.1",
-    "scalejs": "^0.4.0",
-    "scalejs.messagebus": "^1.0.0",
-    "scalejs.metadataFactory": "^0.1.7",
+    "scalejs": "latest",
+    "scalejs.messagebus": "latest",
+    "scalejs.metadataFactory": "latest",
     "scalejs.mvvm": "latest",
     "scalejs.noticeboard": "latest",
-    "scalejs.expression-jsep": "latest",
     "js-format": "git+https://github.com/tsu-complete/js-format.git",
     "knockout.validation": "git+https://github.com/EikosPartners/Knockout-Validation.git"
   }
