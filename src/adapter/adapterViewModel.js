@@ -2,6 +2,7 @@
 import sandbox from 'scalejs.sandbox';
 import ko from 'knockout';
 import dataservice from 'dataservice';
+import { observable, observableArray, computed } from 'scalejs.mvvm';
 import { receive, notify } from 'scalejs.messagebus';
 import { createViewModels } from 'scalejs.metadataFactory';
 
@@ -64,10 +65,7 @@ import { createViewModels } from 'scalejs.metadataFactory';
      */
     export default function adapterViewModel(node) {
         let // imports
-            observable = sandbox.mvvm.observable,
-            observableArray = sandbox.mvvm.observableArray,
             unwrap = ko.unwrap,
-            computed = sandbox.mvvm.computed,
             merge = sandbox.object.merge,
             get = sandbox.object.get,
             extend = sandbox.object.extend,
