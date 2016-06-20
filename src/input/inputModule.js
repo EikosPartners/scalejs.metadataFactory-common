@@ -4,6 +4,7 @@ import { registerViewModels } from 'scalejs.metadataFactory';
 import inputViewModel from './inputViewModel';
 import inputBindings from './inputBindings';
 import inputTemplates from './input.html';
+import './input.scss';
     
 
     registerBindings(inputBindings);

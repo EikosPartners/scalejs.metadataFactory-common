@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link href="./build/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+
+<body>
+
+    <div data-bind="metadataFactory: inputJSON"></div>
+    <script>
+        var inputJSON = {
+            "type": "input",
+            "inputType": "text"
+        }
+    </script>
+
+    <script src="./build/bundle.js"></script>
+    <script>
+        ko.applyBindings({});
+    </script>
+</body>
+
+</html>
