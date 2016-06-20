@@ -3,12 +3,14 @@ var path    = require('path');
 
 module.exports = {
     resolve: {
-        root: [__dirname, path.join(__dirname, 'src/')],
+        root: [
+            __dirname, path.join(__dirname, 'src/'),
+            __dirname, path.join(__dirname, 'test/')
+        ],
         alias: {
             // scalejs
             'scalejs.core': path.join(__dirname, 'node_modules/scalejs/dist/scalejs.core.js'),
-            'scalejs.sandbox': path.join(__dirname, 'node_modules/scalejs/dist/scalejs.sandbox.js'),
-            'dataservice': path.join(__dirname, 'test/dataservice.js')
+            'scalejs.sandbox': path.join(__dirname, 'node_modules/scalejs/dist/scalejs.sandbox.js')        
         }
     },
     module: {
