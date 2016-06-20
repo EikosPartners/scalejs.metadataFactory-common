@@ -1,10 +1,11 @@
-/*global define */
+import { registerTemplates } from 'scalejs.mvvm';
+import { registerViewModels } from 'scalejs.metadataFactory';
+
 import storeViewModel from './storeViewModel';
-import { registerViewModels } from 'scalejs.metadataFactory'    
+import storeTemplates from './store.html';
+    
 
-    export default function store() {
-
-        registerViewModels({
-            store: storeViewModel
-        });
-    };
+    registerTemplates(storeTemplates);
+    registerViewModels({
+        store: storeViewModel
+    });
