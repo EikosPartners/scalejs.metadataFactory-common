@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: store</title>
+    <title>JSDoc: Module: input</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: store</h1>
+    <h1 class="page-title">Module: input</h1>
 
     
 
@@ -38,7 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description">Store: a component that takes a dataSourceEndpointand adds the results to the noticeboard.It has no viewmodel and does not accept children.</div>
+            <div class="description">input is the component to use when accepting user-input. This is the best way to create an interactive UI and autogenerate your underlying data model by using an adapter in the parent chain.</div>
         
 
         
@@ -95,7 +95,7 @@
 
             
 
-            <td class="description last">The configuation object for the module
+            <td class="description last">The configuration specs for the component.
                 <h6>Properties</h6>
                 
 
@@ -125,169 +125,7 @@
 
         <tr>
             
-                <td class="name"><code>type</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    'store'
-                
-                </td>
-            
-
-            <td class="description last">The type of the node is store     *</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>storeKey</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The key that the results are stored on in the noticeboard</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>dataSourceEndpoint</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-|
-
-<span class="param-type">Array.&lt;Object></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">An object defining the endpoint(s) that makes the ajax calls
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>uri</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The uri for the endpoint</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>url</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
@@ -312,8 +150,12 @@
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
-            <td class="description last">The url for the endpoint</td>
+            <td class="description last">By specifying an "id" on your input, you are automatically adding your input's data to the data context model.</td>
         </tr>
 
     
@@ -335,6 +177,62 @@
             
                 <td class="attributes">
                 
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The options pertaining to your specific inputType
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>values</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
                     &lt;optional><br>
                 
 
@@ -346,7 +244,7 @@
 
             
 
-            <td class="description last">Options for the ajax call</td>
+            <td class="description last">The values that can be chosen from for inputTypes that have selections (e.g. radio, checkboxList)</td>
         </tr>
 
     
@@ -360,7 +258,46 @@
 
         <tr>
             
-                <td class="name"><code>keyMap</code></td>
+                <td class="name"><code>hidden</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">Whether or not to hide the input</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options.validations</code></td>
             
 
             <td class="type">
@@ -390,7 +327,7 @@
                 </td>
             
 
-            <td class="description last">A mapper object to map keys
+            <td class="description last">KO validations object to validate the inputValue
                 <h6>Properties</h6>
                 
 
@@ -418,13 +355,13 @@
 
         <tr>
             
-                <td class="name"><code>result</code></td>
+                <td class="name"><code>required</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type">boolean</span>
 
 
             
@@ -444,7 +381,7 @@
 
             
 
-            <td class="description last">Map the results from the ajax call with this key</td>
+            <td class="description last">Required validation for ko - also will show * next to label indicating it is required</td>
         </tr>
 
     
@@ -452,6 +389,86 @@
 </table>
 
             </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options.disabled</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Disables the input</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options.pattern</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+|
+
+<span class="param-type">string</span>
+|
+
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Sets an inputmask for the input. If a string, this is the mask. If an object, gets passed as is. If boolean = true, uses pattern validation.</td>
         </tr>
 
     
@@ -499,7 +516,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="store_storeViewModel.js.html">store/storeViewModel.js</a>, <a href="store_storeViewModel.js.html#line8">line 8</a>
+        <a href="input_inputViewModel.js.html">input/inputViewModel.js</a>, <a href="input_inputViewModel.js.html#line41">line 41</a>
     </li></ul></dd>
     
 
