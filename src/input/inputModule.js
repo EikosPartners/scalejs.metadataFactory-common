@@ -1,6 +1,8 @@
 import { registerTemplates, registerBindings } from 'scalejs.mvvm';
 import { registerViewModels } from 'scalejs.metadataFactory';
 
+import './validation/validationEngine';
+import 'scalejs.inputmask';
 import inputViewModel from './inputViewModel';
 import inputBindings from './inputBindings';
 import inputTemplates from './input.html';

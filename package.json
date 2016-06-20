@@ -55,14 +55,15 @@
     "source-map-loader": "^0.1.5"
   },
   "dependencies": {
+    "js-format": "git+https://github.com/tsu-complete/js-format.git",
     "knockout": "^3.4.0",
+    "knockout.validation": "git+https://github.com/EikosPartners/Knockout-Validation.git",
     "lodash": "^4.13.1",
     "scalejs": "latest",
+    "scalejs.inputmask": "latest",
     "scalejs.messagebus": "latest",
     "scalejs.metadataFactory": "latest",
     "scalejs.mvvm": "latest",
-    "scalejs.noticeboard": "latest",
-    "js-format": "git+https://github.com/tsu-complete/js-format.git",
-    "knockout.validation": "git+https://github.com/EikosPartners/Knockout-Validation.git"
+    "scalejs.noticeboard": "latest"
   }
 }
