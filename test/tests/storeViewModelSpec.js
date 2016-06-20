@@ -189,18 +189,18 @@ describe('storeViewModel test', function () {
             });
         testStore.dispose();
     });
-    // TODO: undo comment after tavis test
-    // it('returns early if storekey isnt specified', function (done) {
-    //     // including this test for code coverage.
-    //     let testJson = {
-    //         "type": "store",
-    //         "dataSourceEndpoint": {
-    //             "uri": "store"
-    //         }
-    //     };
-    //     createViewModel(testJson);
-    //     done();
-    // });
+    
+    it('returns early if storekey isnt specified', function (done) {
+        // including this test for code coverage.
+        let testJson = {
+            "type": "store",
+            "dataSourceEndpoint": {
+                "uri": "store"
+            }
+        };
+        createViewModel(testJson);
+        done();
+    });
 
 
     it('returns early if dateSourceEndpoint isnt specified', function (done) {
