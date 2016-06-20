@@ -189,7 +189,7 @@ describe('storeViewModel test', function () {
             });
         testStore.dispose();
     });
-
+    
     it('returns early if storekey isnt specified', function (done) {
         // including this test for code coverage.
         let testJson = {
