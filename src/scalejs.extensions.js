@@ -5,5 +5,4 @@ import 'scalejs.noticeboard';
 import 'scalejs.expression-jsep';
 import 'validationEngine';
 
-window.ko = ko;
-mvvm.init({ doNotRender: true });
+mvvm.init({ });
