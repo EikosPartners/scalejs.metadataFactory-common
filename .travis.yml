@@ -9,7 +9,7 @@ cache:
 
 install:
   - npm cache clean
-  - npm install
+  - npm update
 
 before_script:
   - npm run build
