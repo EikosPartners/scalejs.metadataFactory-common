@@ -10,6 +10,7 @@ import 'chai';
 import inputViewModel from 'input/inputViewModel';
 import inputBindings from 'input/inputBindings';
 import inputTemplates from 'input/input.html';
+import 'input/validation/validationEngine';
 
 function catchRejection(done) {
     return function (err) {
