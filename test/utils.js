@@ -7,7 +7,7 @@ function createMetadataDomStub(md, stubName = 'container') {
     document.body.appendChild(node);
 
     let metadata = ko.observable(md);
-    ko.applyBindings({ metadata: metadata });
+    ko.applyBindings({ metadata: metadata}, node);
 
     return {
         node: node,

@@ -19,7 +19,7 @@ module.exports = {
                 loader: 'babel-loader',
                 test: [
                     path.join(__dirname, 'src/'),
-                    path.join(__dirname, 'test')
+                    path.join(__dirname, 'test/')
                 ],
                 exclude: /\.html?$/,
                 query: {

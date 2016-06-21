@@ -27,6 +27,7 @@
     "babel-cli": "^6.9.0",
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.9.0",
+    "bluebird": "^3.4.1",
     "chai": "^3.5.0",
     "copyfiles": "^0.2.1",
     "css-loader": "^0.23.1",
@@ -50,9 +51,9 @@
     "phantomjs-prebuilt": "^2.1.7",
     "rimraf": "^2.5.2",
     "sass-loader": "^3.2.0",
+    "source-map-loader": "^0.1.5",
     "style-loader": "^0.13.1",
-    "webpack": "^1.13.1",
-    "source-map-loader": "^0.1.5"
+    "webpack": "^1.13.1"
   },
   "dependencies": {
     "js-format": "git+https://github.com/tsu-complete/js-format.git",
@@ -64,6 +65,8 @@
     "scalejs.messagebus": "latest",
     "scalejs.metadataFactory": "latest",
     "scalejs.mvvm": "latest",
-    "scalejs.noticeboard": "latest"
+    "scalejs.noticeboard": "latest",
+    "scalejs.expression-jsep": "latest"
+    
   }
 }
