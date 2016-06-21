@@ -8,6 +8,7 @@ cache:
     - node_modules
 
 install:
+  - npm cache clean
   - npm install
 
 before_script:
