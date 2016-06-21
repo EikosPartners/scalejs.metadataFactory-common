@@ -61,11 +61,11 @@
     "knockout": "^3.4.0",
     "knockout.validation": "git+https://github.com/EikosPartners/Knockout-Validation.git",
     "lodash": "^4.13.1",
-    "scalejs": "latest",
-    "scalejs.inputmask": "latest",
-    "scalejs.messagebus": "latest",
-    "scalejs.metadataFactory": "latest",
-    "scalejs.mvvm": "latest",
-    "scalejs.noticeboard": "latest"
+    "scalejs": ">=0.4.1",
+    "scalejs.inputmask": ">=1.0.1",
+    "scalejs.messagebus": ">=1.0.4",
+    "scalejs.metadataFactory": ">=0.1.8",
+    "scalejs.mvvm": ">=1.0.1",
+    "scalejs.noticeboard": ">=0.0.1"
   }
 }
