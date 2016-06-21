@@ -1,44 +1,15 @@
 
 import { registerViewModels, createViewModel, createViewModels } from 'scalejs.metadataFactory';
-import { registerTemplates, registerBindings } from 'scalejs.mvvm';
 import { createMetadataDomStub } from 'utils';
+import { waitsFor, catchRejection } from 'mocha-waitsfor';
 import Promise from 'bluebird';
 import ko from 'knockout';
 import _ from 'lodash';
 import 'chai';
-
+import 'input/inputModule';
 import inputViewModel from 'input/inputViewModel';
-import inputBindings from 'input/inputBindings';
-import inputTemplates from 'input/input.html';
-import 'input/validation/validationEngine';
 
-function catchRejection(done) {
-    return function (err) {
-        console.error(err);
-        done();
-    }
-}
 
-function waitsFor(f, c, i) {
-    var func = f, // this function returns true when promise is fufilled
-        context = c, // optional "this" gets passed to adjust timeout
-        intervalTime = i || 10; // optional interval
-
-    return new Promise(function (fufill, reject) {
-        var interval = setInterval(function () {
-            if (func()) {
-                clearTimeout(timeout);
-                clearInterval(interval);
-                fufill();
-            }
-        }, intervalTime);
-
-        var timeout = setTimeout(function () {
-            clearInterval(interval);
-            reject(new Error(context.test.title));
-        }, context && context.timeout() || 2000)
-    });
-}
 
 let expect = chai.expect,
     domStub,
@@ -62,9 +33,7 @@ describe('inputViewModel test', function () {
         registerViewModels({
             input: inputViewModel
         });
-        registerBindings(inputBindings);
-        registerTemplates(inputTemplates);
-
+        
         domStub = createMetadataDomStub(node);
 
     });
