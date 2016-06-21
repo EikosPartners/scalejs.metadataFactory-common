@@ -2,7 +2,7 @@
 import sandbox from 'scalejs.sandbox';
 import dataservice from 'dataservice';
 import { receive } from 'scalejs.messagebus';
-    
+
     //TODO: Rename results to resultsKey
 
     /**
@@ -85,9 +85,8 @@ import { receive } from 'scalejs.messagebus';
         return {
                 dispose: function () {
                 subs.forEach(function (sub) {
-                    sub.unsubscribe();
+                    sub.dispose();
                 });
             }
         }
     };
-
