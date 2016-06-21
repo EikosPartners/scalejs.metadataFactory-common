@@ -2,7 +2,6 @@
 import { registerViewModels, createViewModel, createViewModels } from 'scalejs.metadataFactory';
 import { createMetadataDomStub } from 'utils';
 import { waitsFor, catchRejection } from 'mocha-waitsfor';
-import Promise from 'bluebird';
 import ko from 'knockout';
 import _ from 'lodash';
 import 'chai';
