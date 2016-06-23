@@ -16,10 +16,6 @@ webpackConfig.module.loaders =  webpackConfig.module.loaders.concat([
         loader: 'source-map-loader'
     },
     {
-        test: /\.scss$/,
-        loader: 'style-loader!css-loader!autoprefixer-loader!sass-loader'
-    },
-    {
         test: /\.css$/,
         loader: 'style-loader!css-loader!autoprefixer-loader'
     }

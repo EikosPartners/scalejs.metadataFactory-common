@@ -57,11 +57,16 @@
     "webpack": "^1.13.1"
   },
   "dependencies": {
+    "jquery": "^3.0.0",
     "js-format": "git+https://github.com/tsu-complete/js-format.git",
     "knockout": "^3.4.0",
     "knockout.validation": "git+https://github.com/EikosPartners/Knockout-Validation.git",
+    "ko-bindings": "^1.0.3",
     "lodash": "^4.13.1",
+    "moment": "^2.13.0",
+    "pikaday": "^1.4.0",
     "scalejs": ">=0.4.1",
+    "scalejs.expression-jsep": "0.0.4",
     "scalejs.inputmask": ">=1.0.1",
     "scalejs.messagebus": ">=1.0.4",
     "scalejs.metadataFactory": ">=0.1.8",
