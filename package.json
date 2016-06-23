@@ -5,7 +5,7 @@
   "main": "dist/scalejs.metadataFactory-common.js",
   "scripts": {
     "build": "babel src --presets babel-preset-es2015 --out-dir dist --source-maps && npm run copy",
-    "copy": "copyup src/**/*.html dist && copyup src/**/*.scss dist",
+    "copy": "copyup src/**/*.html dist && copyup src/**/*.scss dist && copyup src/**/images/*.svg dist && copyup src/**/images/*.png dist",
     "doc": "jsdoc -d ./doc/ src/ -r",
     "test": "karma start test/karma_config/karma.config.js",
     "test-travis": "karma start test/karma_config/karma.config.travis.js",

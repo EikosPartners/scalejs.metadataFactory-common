@@ -7,7 +7,8 @@ import inputViewModel from './inputViewModel';
 import inputBindings from './inputBindings';
 import inputTemplates from './input.html';
 import './input.scss';
-    
+import '../../node_modules/pikaday/scss/pikaday.scss';
+import 'ko-bindings/datepicker.js';
 
     registerBindings(inputBindings);
     registerTemplates(inputTemplates);

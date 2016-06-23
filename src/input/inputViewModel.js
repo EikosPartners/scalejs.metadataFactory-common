@@ -6,8 +6,6 @@ import dataservice from 'dataservice';
 import _ from 'lodash';
 import ko from 'knockout';
 import moment from 'moment';
-import '../../node_modules/pikaday/scss/pikaday.scss';
-import '../../node_modules/ko-bindings/datepicker.js';
     
     // imports
     var observable = sandbox.mvvm.observable,
