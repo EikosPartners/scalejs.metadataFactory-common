@@ -8,9 +8,11 @@ function createMetadataDomStub(md, stubName = 'container') {
 
     let metadata = ko.observable(md);
     ko.applyBindings({ metadata: metadata}, node);
+    var viewModel = ko.dataFor(node); 
 
     return {
         node: node,
+        viewModel: viewModel,
         dispose: function () {
             ko.cleanNode(node);
             node.parentElement.removeChild(node);
