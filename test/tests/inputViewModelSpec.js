@@ -32,7 +32,7 @@ describe('inputViewModel test', function () {
         registerViewModels({
             input: inputViewModel
         });
-        
+
         domStub = createMetadataDomStub(node);
 
     });
@@ -44,11 +44,13 @@ describe('inputViewModel test', function () {
     it('renders value and label', function (done) {
         waitsFor(function () {
             return domStub.node.querySelector('input');
-        }, this).then(function () {
+        }, this)
+        .then(function () {
             expect(domStub.node.querySelector('input').value).equals(testValue);
             expect(domStub.node.querySelector('label').innerHTML).equals(testLabel);
             done();
-        }).catch(catchRejection(done));
+        })
+        .catch(catchRejection(done));
     })
 
     it('updates value from user input', function (done) {
@@ -72,16 +74,20 @@ describe('inputViewModel test', function () {
 
         waitsFor(function () {
             return testStub = createMetadataDomStub(testNode, 'container_readonly');
-        }, this).then(function () {
+        }, this)
+        .then(function () {
             return waitsFor(function () {
                 return testStub.node.querySelector('input');
-            }, this).then(function () {
+            }, this)
+            .then(function () {
                 expect(testStub.node.querySelector('input').hasAttribute('readonly')).to.be.true;
                 expect(testStub.node.querySelector('input').hasAttribute('disabled')).to.be.true;
                 testStub.dispose();
                 done();
-            }).catch(catchRejection(done));
-        }).catch(catchRejection(done));
+            })
+            .catch(catchRejection(done));
+        })
+        .catch(catchRejection(done));
     });
     
     it.skip('toggles inactive attributes on readonly updates', function(done) {

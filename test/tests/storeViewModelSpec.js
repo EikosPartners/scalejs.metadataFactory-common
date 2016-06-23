@@ -107,11 +107,10 @@ describe('storeViewModel test', function () {
                         }
                     });
                     subscription.dispose();
+                    testStore.dispose();
                     done();
                 }
-            });
-
-        testStore.dispose();
+            });        
     });
 
     it('maps arrays to dictionaries with a resultsValueKey', function (done) {
@@ -137,10 +136,11 @@ describe('storeViewModel test', function () {
                         "store_a_2": "store_b_2"
                     })
                     subscription.dispose();
+                    testStore.dispose();
                     done();
                 }
             });
-        testStore.dispose();
+        
     });
 
     it('maps and aggregates array values to dictionary', function (done) {
@@ -157,7 +157,7 @@ describe('storeViewModel test', function () {
                 "uri": "storeAggregateLookup"
             }
         }),
-            testStore = createViewModel(node),
+            testStore = createViewModel(testJson),
 
             subscription = noticeboard.subscribe('AggregateMappedLookupTest', function (value) {
                 if (value) {
@@ -184,10 +184,11 @@ describe('storeViewModel test', function () {
                         ]
                     });
                     subscription.dispose();
+                    testStore.dispose();
                     done();
                 }
             });
-        testStore.dispose();
+        
     });
     
     it('returns early if storekey isnt specified', function (done) {
@@ -210,11 +211,10 @@ describe('storeViewModel test', function () {
                 "resultsKey": "result"
             },
             "storeKey": "storeTest"
-        },
-            testStore = createViewModel(node);
+        };
+        createViewModel(testJson);
         expect(noticeboard.getValue('endpointTest')).to.not.exist;
         done();
-        testStore.dispose();
     });
 
 });

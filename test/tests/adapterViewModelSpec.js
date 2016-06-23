@@ -112,9 +112,9 @@ describe('adapterViewModel test', function () {
                     B: 'updated_b'
                 });
                 subscription.dispose();
+                testAdapter.dispose();
                 done();
             });
-        testAdapter.dispose();
     });
 
     it('fetches data from a an array of dataSourceEndpoints', function (done) {
@@ -144,9 +144,9 @@ describe('adapterViewModel test', function () {
                     B: 'updated_b'
                 });
                 subscription.dispose();
+                testAdapter.dispose();
                 done();
             });
-        //testAdapter.dispose(); do we need to do this here?
     });
 
     it('[TODO] updates children with data');
