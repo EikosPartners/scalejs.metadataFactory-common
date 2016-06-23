@@ -1,7 +1,6 @@
 
 import { registerViewModels, createViewModel, createViewModels } from 'scalejs.metadataFactory';
 import { createMetadataDomStub } from 'utils';
-import { waitsFor, catchRejection } from 'mocha-waitsfor';
 import ko from 'knockout';
 import _ from 'lodash';
 import 'chai';
@@ -42,15 +41,9 @@ describe('inputViewModel test', function () {
     });
 
     it('renders value and label', function (done) {
-        waitsFor(function () {
-            return domStub.node.querySelector('input');
-        }, this)
-        .then(function () {
-            expect(domStub.node.querySelector('input').value).equals(testValue);
-            expect(domStub.node.querySelector('label').innerHTML).equals(testLabel);
-            done();
-        })
-        .catch(catchRejection(done));
+        expect(domStub.node.querySelector('input').value).equals(testValue);
+        expect(domStub.node.querySelector('label').innerHTML).equals(testLabel);
+        done();
     })
 
     it('updates value from user input', function (done) {
@@ -70,24 +63,14 @@ describe('inputViewModel test', function () {
                 "readonly": true
             }
         }),
-            testStub;
+         testStub = createMetadataDomStub(testNode, 'container_readonly'),
+         input = testStub.node.querySelector('input');
 
-        waitsFor(function () {
-            return testStub = createMetadataDomStub(testNode, 'container_readonly');
-        }, this)
-        .then(function () {
-            return waitsFor(function () {
-                return testStub.node.querySelector('input');
-            }, this)
-            .then(function () {
-                expect(testStub.node.querySelector('input').hasAttribute('readonly')).to.be.true;
-                expect(testStub.node.querySelector('input').hasAttribute('disabled')).to.be.true;
-                testStub.dispose();
-                done();
-            })
-            .catch(catchRejection(done));
-        })
-        .catch(catchRejection(done));
+        expect(input.hasAttribute('readonly')).to.be.true;
+        expect(input.hasAttribute('disabled')).to.be.true;
+        testStub.dispose();
+        done();
+
     });
     
     it.skip('toggles inactive attributes on readonly updates', function(done) {

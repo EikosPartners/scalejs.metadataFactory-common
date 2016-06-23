@@ -2,7 +2,6 @@ import 'chai';
 import { registerViewModels, createViewModel, createViewModels } from 'scalejs.metadataFactory';
 import { registerTemplates, registerBindings } from 'scalejs.mvvm';
 import { createMetadataDomStub } from 'utils';
-import { waitsFor, catchRejection } from 'mocha-waitsfor';
 import ko from 'knockout';
 import _ from 'lodash';
 import 'template/templateModule';
