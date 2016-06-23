@@ -1,13 +1,10 @@
-
+import * as noticeboard from 'scalejs.noticeboard';
 import storeViewModel from 'store/storeViewModel';
 import { registerViewModels, createViewModel, createViewModels } from 'scalejs.metadataFactory';
-import core from 'scalejs.core';
-import sandbox from 'scalejs.sandbox';
 import _ from 'lodash';
 import 'chai';
 
 let expect = chai.expect,
-    noticeboard = core.noticeboard.global,
     store;
 
 const node = {

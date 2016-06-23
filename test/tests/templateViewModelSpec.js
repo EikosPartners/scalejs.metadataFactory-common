@@ -5,7 +5,6 @@ import { createMetadataDomStub } from 'utils';
 import { waitsFor, catchRejection } from 'mocha-waitsfor';
 import ko from 'knockout';
 import _ from 'lodash';
-
 import 'template/templateModule';
 
 //Regirster templates and bindings
@@ -31,19 +30,17 @@ describe('templateViewModel test', function () {
     });
 
     after(function () {
-        domStub.dispose();
+        //domStub.dispose();
     });
 
-    it('test the template is created', function(done){
+    it('test the template is created', function(){
         const node = {
             "type": "template",
             "template": "template_test_template",
             "title": "hello dan"
         };
         domStub = createMetadataDomStub(node);
-        setTimeout(function () {
-            console.log('-->', domStub);            
-        });
+        expect(domStub.data.length).to.equal(1);
         /* waitsFor(function () {
             return 
         }, this).then(function () {
