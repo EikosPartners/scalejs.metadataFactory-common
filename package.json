@@ -63,14 +63,16 @@
     "knockout.validation": "git+https://github.com/EikosPartners/Knockout-Validation.git",
     "ko-bindings": "^1.0.3",
     "lodash": "^4.13.1",
-    "moment": "^2.13.0",
     "pikaday": "^1.4.0",
+    "moment": "^2.13.0",
+    "mustache": "^2.2.1",
     "scalejs": ">=0.4.1",
     "scalejs.expression-jsep": "0.0.4",
     "scalejs.inputmask": ">=1.0.1",
     "scalejs.messagebus": ">=1.0.4",
     "scalejs.metadataFactory": ">=0.1.8",
     "scalejs.mvvm": ">=1.0.1",
+    "scalejs.navigation": ">=0.0.1",
     "scalejs.noticeboard": ">=0.0.1"
   }
 }
