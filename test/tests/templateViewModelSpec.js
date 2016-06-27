@@ -28,7 +28,7 @@ describe('templateViewModel test', function () {
     });
 
     afterEach(function () {
-        //domStub.dispose();
+        domStub.dispose();
     });
 
     it('was rendered', function (done) {

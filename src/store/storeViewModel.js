@@ -1,4 +1,3 @@
-/*global define, dataservice, sandbox */
 import * as noticeboard from 'scalejs.noticeboard';
 import dataservice from 'dataservice';
 import { receive } from 'scalejs.messagebus';

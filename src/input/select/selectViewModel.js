@@ -1,12 +1,12 @@
-/*global define,sandbox */
 import sandbox from 'scalejs.sandbox';
 import _ from 'lodash';
+import {
+    observable,
+    observableArray,
+    computed
+} from 'scalejs.mvvm';    
     
-    
-    var observableArray = sandbox.mvvm.observableArray,    
-        evaluate = sandbox.expression.evaluate,
-        observable = sandbox.mvvm.observable,
-        computed = sandbox.mvvm.computed,
+    var evaluate = sandbox.expression.evaluate,
         has = sandbox.object.has,
         get = sandbox.object.get,
         is = sandbox.type.is;
