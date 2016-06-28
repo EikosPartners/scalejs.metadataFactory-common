@@ -13,15 +13,11 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _scalejs3 = require('scalejs.mvvm');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/*global define,sandbox */
-
-
-var observableArray = _scalejs2.default.mvvm.observableArray,
-    evaluate = _scalejs2.default.expression.evaluate,
-    observable = _scalejs2.default.mvvm.observable,
-    computed = _scalejs2.default.mvvm.computed,
+var evaluate = _scalejs2.default.expression.evaluate,
     has = _scalejs2.default.object.has,
     get = _scalejs2.default.object.get,
     is = _scalejs2.default.type.is;
@@ -64,8 +60,8 @@ function selectViewModel(node, inputViewModel) {
 
     // props           
     addBlank = !has(options.addBlank) || options.addBlank,
-        currentFilter = observable(),
-        values = observableArray(),
+        currentFilter = (0, _scalejs3.observable)(),
+        values = (0, _scalejs3.observableArray)(),
         computedValues;
 
     /** 
@@ -116,7 +112,7 @@ function selectViewModel(node, inputViewModel) {
      */
     function setValuesFromOptionsObject() {
         // create a sub to subscribe to changes in values
-        subs.push(computed(function () {
+        subs.push((0, _scalejs3.computed)(function () {
             var value = inputValue.peek(),
                 newValues = (evaluate(options.values.fromArray, context.getValue) || []).filter(function (item) {
                 return has(item);
@@ -168,7 +164,7 @@ function selectViewModel(node, inputViewModel) {
     /**
      * If currentFilter is defined, return only values which match
      */
-    computedValues = computed({
+    computedValues = (0, _scalejs3.computed)({
         read: function read() {
             if (!currentFilter()) {
                 return values();

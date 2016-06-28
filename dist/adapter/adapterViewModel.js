@@ -25,7 +25,7 @@ var _scalejs5 = require('scalejs.metadataFactory');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/* TODO: 
+/* TODO:
 In PJSON, we used readonly, errors, etc. We need a way to do that outside of adapter
 i.e. plugin to adapter context with other components
 */
@@ -113,6 +113,10 @@ function adapterViewModel(node) {
         dataSyncSubscription = void 0,
         plugins = node.plugins ? _scalejs5.createViewModels.call(context, node.plugins) : [],
         contextPlugins = {};
+
+    plugins.forEach(function (plugin) {
+        contextPlugins[plugin.type] = plugin;
+    });
 
     // recursive function which parses through nodes and adds nodes with an id to dictionary
     function createDictionary(nodes) {
@@ -208,10 +212,6 @@ function adapterViewModel(node) {
         mappedChildNodes(_scalejs5.createViewModels.call(context, node.children || []));
     }
 
-    plugins.forEach(function (plugin) {
-        contextPlugins[plugin.type] = plugin;
-    });
-
     // update dictionary if mappedChildNodes of a node updates
     (0, _scalejs3.computed)(function () {
         updated = false;
@@ -241,7 +241,7 @@ function adapterViewModel(node) {
         context: context,
         dispose: function dispose() {
             subs.forEach(function (sub) {
-                sub.unsubscribe(); // should be DISPOSE!
+                sub.dispose();
             });
         }
     });

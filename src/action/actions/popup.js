@@ -5,7 +5,7 @@ import mustache from 'mustache';
 
 import { registerActions } from '../actionModule';
 
-function popup(options) {
+function popupAction(options) {
     let context = this,
         onHidePopup, actions, data, modal, merged, message = {};
 
@@ -74,4 +74,4 @@ function popup(options) {
     popup.hidePopup();
 }
 
-registerActions({popup, closePopup});
+registerActions({popup: popupAction, closePopup});

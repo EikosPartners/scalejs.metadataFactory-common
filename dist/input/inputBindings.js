@@ -10,9 +10,13 @@ var _scalejs2 = _interopRequireDefault(_scalejs);
 
 var _jsFormat = require('js-format');
 
-var _jsFormat2 = _interopRequireDefault(_jsFormat);
+var format = _interopRequireWildcard(_jsFormat);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// TODO: update to es6 with named export
 
 //import 'knockout-jqautocomplete'; TODO: Fix this dependency DS
 

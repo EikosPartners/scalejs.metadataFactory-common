@@ -10,11 +10,14 @@ var _knockout2 = _interopRequireDefault(_knockout);
 
 require('scalejs.metadataFactory');
 
+require('scalejs.navigation');
+
 require('scalejs.noticeboard');
 
 require('scalejs.expression-jsep');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+console.log('loading mvvm.init');
 _scalejs2.default.init({});
 //# sourceMappingURL=scalejs.extensions.js.map

@@ -22,6 +22,10 @@ var _input2 = _interopRequireDefault(_input);
 
 require('./input.scss');
 
+require('../../node_modules/pikaday/scss/pikaday.scss');
+
+require('ko-bindings/datepicker.js');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (0, _scalejs.registerBindings)(_inputBindings2.default);

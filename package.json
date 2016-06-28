@@ -11,7 +11,7 @@
     "test-travis": "karma start test/karma_config/karma.config.travis.js",
     "test-coverage": "rimraf test/coverage && karma start test/karma_config/karma.config.coverage.js",
     "build-sample": "webpack --config webpack.sample.config.js",
-    "prepublish": "npm run test && npm run build"
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",

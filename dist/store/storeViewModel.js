@@ -5,8 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (node) {
-    var noticeboard = _scalejs2.default.noticeboard.global,
-        keyMap = node.keyMap || {},
+    var keyMap = node.keyMap || {},
         storeKey = node.storeKey,
         dataSourceEndpoint = node.dataSourceEndpoint,
         options = node.options || {},
@@ -51,7 +50,7 @@ exports.default = function (node) {
 
     if (node.id) {
         //setup refresh receiver if store has id
-        subs.push((0, _scalejs3.receive)(node.id + '.refresh', function () {
+        subs.push((0, _scalejs2.receive)(node.id + '.refresh', function () {
             fetchData();
         }));
     }
@@ -59,25 +58,26 @@ exports.default = function (node) {
     return {
         dispose: function dispose() {
             subs.forEach(function (sub) {
-                sub.unsubscribe();
+                sub.dispose();
             });
         }
     };
 };
 
-var _scalejs = require('scalejs.sandbox');
+var _scalejs = require('scalejs.noticeboard');
 
-var _scalejs2 = _interopRequireDefault(_scalejs);
+var noticeboard = _interopRequireWildcard(_scalejs);
 
 var _dataservice = require('dataservice');
 
 var _dataservice2 = _interopRequireDefault(_dataservice);
 
-var _scalejs3 = require('scalejs.messagebus');
+var _scalejs2 = require('scalejs.messagebus');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/*global define, dataservice, sandbox */
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 ;
 
 //TODO: Rename results to resultsKey
