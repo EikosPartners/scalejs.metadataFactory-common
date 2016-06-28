@@ -10,7 +10,11 @@ import $ from 'jquery';
 //Regirster templates and bindings
 import template from './templateTest/templateTest.html';
 import templateBindings from './templateTest/templateTestBindings';
+import { receive } from 'scalejs.messagebus';
 
+import 'action/actionModule';
+import 'action/actions/event';
+import 'action/actions/ajax';
 
 let expect = chai.expect,
     domStub;
@@ -76,7 +80,8 @@ describe('templateViewModel test', function () {
         expect(domStub.node.querySelector('.test-two').innerHTML).equals("two");
         done();
     });
-    it.skip('the template has datasource', function (done) {
+
+    it('the template has datasource', function (done) {
         const node = {
             "type": "template",
             "template": "template_test_children_template",
@@ -85,20 +90,22 @@ describe('templateViewModel test', function () {
                 "actionType": "ajax",
                 "options": {
                     "target": {
-                        "uri": "adapter_a",
-                        "keyMap": {
-                            "resultsKey": "result",
-                            "dataKey": "A"
-                        }
+                        "uri": "store"
                     }
                 }
             }
         };
         domStub = createMetadataDomStub(node);
-
-        done();
+        let subscription = domStub.data[0].data.subscribe(data => {
+            expect(data).to.deep.equal({
+                "A": "store_a",
+                "B": "store_b"
+            });
+            subscription.dispose();
+            done();
+        });
     });
-    it.skip('the template has an action', function (done) {
+    it('the template has an action', function (done) {
         const node = {
             "type": "template",
             "template": "template_test_children_template",
@@ -106,14 +113,19 @@ describe('templateViewModel test', function () {
                 "type": "action",
                 "actionType": "event",
                 "options": {
-                    "target": "eventtest"
+                    "target": "eventtest",
+                    "params": "test"
                 }
             }
         };
-        domStub = createMetadataDomStub(node);
-        domStub.data.action.action();
 
-        done();
+        let subscription = receive('eventtest', function (change) {
+            expect(change).to.equal(node.action.options.params)
+            subscription.dispose();
+            done();
+        });
+        domStub = createMetadataDomStub(node);
+        domStub.data[0].action.action();
     });
 });
 

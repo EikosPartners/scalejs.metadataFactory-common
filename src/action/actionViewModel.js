@@ -17,21 +17,23 @@ core.mvvm.registerBindings(binding);
 
 export default function actionViewModel(node) {
     let registeredActions = getRegisteredActions(),
+        context = this,        
         text = node.text || node.options.text,
-        createViewModel = core.metadataFactory.createViewModel.bind(this),
+        createViewModel = core.metadataFactory.createViewModel.bind(context),
         validate = node.validate,
         options = node.options || {},
         actionType = node.actionType,
         actions = {},
         mergedActions = core.object.extend(actions, registeredActions),
-        actionFunc = mergedActions[actionType] && mergedActions[actionType].bind(this) || null,
+        actionFunc = mergedActions[actionType] && mergedActions[actionType].bind(context) || null ,
         isShown = observable(true),
-        disabled = observable(has(options.disabled) ? options.disabled : false),
-        context = this;
+        disabled = observable(has(options.disabled) ? options.disabled : false);
+        
 
     function action(args) {
+        
         if (!actionFunc){
-            console.error('actions[actionType] is not defined', node);
+            console.error('actionType is not defined', node);
             return;
         }
 

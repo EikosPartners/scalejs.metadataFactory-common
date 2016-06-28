@@ -12,6 +12,8 @@ baseConfig.webpack.module.postLoaders = [
 
 module.exports = function(config) {
     baseConfig.logLevel = config.LOG_INFO;
+    baseConfig.singleRun = true;
+
     baseConfig.reporters.push('coverage');
     baseConfig.coverageReporter = {
         dir: 'test/coverage',

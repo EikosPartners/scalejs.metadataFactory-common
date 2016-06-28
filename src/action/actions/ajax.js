@@ -7,13 +7,14 @@ import dataservice from 'dataservice';
 import { registerActions } from '../actionModule';
 
 const has = sandbox.object.has,
+      merge = _.merge,
       is = sandbox.type.is;
 
 function ajax(options, args) {
     let data = this.data && this.data(),
         target = options.target,
-        paramData = options.data || {},
-        uri = mustache.render(options.target.uri, merge(data, paramData, getCurrent().query, state)),
+        optionData = options.data || {},
+        uri = mustache.render(options.target.uri, merge(data, optionData)),
         contextValue,
         context = this,
         callback = args && args.callback,

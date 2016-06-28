@@ -43,5 +43,7 @@ module.exports = {
                 loader: 'url?prefix=font/&limit=10000'
             }
         ]
-    }
+
+    },
+    devtool: 'source-map'
 }

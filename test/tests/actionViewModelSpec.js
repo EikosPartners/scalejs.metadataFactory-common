@@ -5,10 +5,10 @@ import 'chai';
 
 import { getRegisteredActions } from 'action/actionModule';
 
-import event from 'action/actions/event';
-import series from 'action/actions/series';
-import route from 'action/actions/route';
-import ajax from 'action/actions/ajax';
+import 'action/actions/event';
+import 'action/actions/series';
+import 'action/actions/route';
+import 'action/actions/ajax';
 
 describe('actionModule test', function () {
     it('registers the action viewModel', function () {
