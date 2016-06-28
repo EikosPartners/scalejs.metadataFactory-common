@@ -33,6 +33,8 @@ export default function globalNavigation(node) {
         });
     });
 
+    navigation.reRoute();
+
     return merge(node, {
         navLinks: navLinks,
         activeLink: activeLink

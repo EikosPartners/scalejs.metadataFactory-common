@@ -52,6 +52,8 @@ function globalNavigation(node) {
         });
     });
 
+    _scalejs4.navigation.reRoute();
+
     return merge(node, {
         navLinks: navLinks,
         activeLink: activeLink
