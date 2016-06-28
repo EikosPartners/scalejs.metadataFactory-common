@@ -17,6 +17,7 @@ import 'action/actions/event';
 import 'action/actions/ajax';
 
 let expect = chai.expect,
+    should = chai.should(),
     domStub;
 
 describe('templateViewModel test', function () {
@@ -104,7 +105,11 @@ describe('templateViewModel test', function () {
             subscription.dispose();
             done();
         });
+
+        // call the no-op action 
+        domStub.data[0].action.action();
     });
+    
     it('the template has an action', function (done) {
         const node = {
             "type": "template",
@@ -126,6 +131,16 @@ describe('templateViewModel test', function () {
         });
         domStub = createMetadataDomStub(node);
         domStub.data[0].action.action();
+    });
+    it('create templateviewModel that has no matching template', function (done) {
+        const node = {
+            "type": "template",
+            "template": "does_not_exist"
+        };
+        domStub = createMetadataDomStub(node);
+        should.exist(domStub.node.querySelector('.metadata-default-template'))
+        // expect(domStub.node.querySelector('metadata-default-template').innerHTML.length).to.equal(node);
+        done();
     });
 });
 

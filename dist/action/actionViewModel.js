@@ -40,21 +40,22 @@ _scalejs2.default.mvvm.registerBindings(_actionBindings2.default);
 
 function actionViewModel(node) {
     var registeredActions = (0, _actionModule.getRegisteredActions)(),
+        context = this,
         text = node.text || node.options.text,
-        createViewModel = _scalejs2.default.metadataFactory.createViewModel.bind(this),
+        createViewModel = _scalejs2.default.metadataFactory.createViewModel.bind(context),
         validate = node.validate,
         options = node.options || {},
         actionType = node.actionType,
         actions = {},
         mergedActions = _scalejs2.default.object.extend(actions, registeredActions),
-        actionFunc = mergedActions[actionType] && mergedActions[actionType].bind(this) || null,
+        actionFunc = mergedActions[actionType] && mergedActions[actionType].bind(context) || null,
         isShown = observable(true),
-        disabled = observable(has(options.disabled) ? options.disabled : false),
-        context = this;
+        disabled = observable(has(options.disabled) ? options.disabled : false);
 
     function action(args) {
+
         if (!actionFunc) {
-            console.error('actions[actionType] is not defined', node);
+            console.error('actionType is not defined', node);
             return;
         }
 

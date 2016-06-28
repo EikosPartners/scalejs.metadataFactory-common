@@ -20,13 +20,10 @@ export default function templateViewModel(node) {
         mappedChildNodes,
         registeredTemplates = getRegisteredTemplates();
 
-    function getValue(key) {
-        return (data() || {})[key];
-    }
 
     if (node.template && !registeredTemplates[node.template]) {
         console.error('Template not registered ', node.template);
-        node.template = 'no_template';
+        node.template = 'metadata_default_template';
     }
 
     mappedChildNodes = createViewModels(node.children || []);
@@ -34,7 +31,7 @@ export default function templateViewModel(node) {
     if (actionNode) {
         action = createViewModel(actionNode);
     } else {
-        action = function () { };
+        action = {action: function () { }};
     }
 
     if (node.dataSourceEndpoint) {

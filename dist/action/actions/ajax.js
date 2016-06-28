@@ -23,13 +23,14 @@ var _actionModule = require('../actionModule');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var has = _scalejs2.default.object.has,
+    merge = _lodash2.default.merge,
     is = _scalejs2.default.type.is;
 
 function ajax(options, args) {
     var data = this.data && this.data(),
         target = options.target,
-        paramData = options.data || {},
-        uri = _mustache2.default.render(options.target.uri, merge(data, paramData, getCurrent().query, state)),
+        optionData = options.data || {},
+        uri = _mustache2.default.render(options.target.uri, merge(data, optionData)),
         contextValue = void 0,
         context = this,
         callback = args && args.callback,
