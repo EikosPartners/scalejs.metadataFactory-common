@@ -171,5 +171,3 @@ describe('adapterViewModel test', function () {
 
     it('[TODO] properly disposes of subscriptions');
 });
-
-

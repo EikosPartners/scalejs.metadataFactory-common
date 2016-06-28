@@ -6,10 +6,10 @@ import { observable, observableArray, computed } from 'scalejs.mvvm';
 import { receive, notify } from 'scalejs.messagebus';
 import { createViewModels } from 'scalejs.metadataFactory';
 
-    /* TODO: 
+    /* TODO:
     In PJSON, we used readonly, errors, etc. We need a way to do that outside of adapter
     i.e. plugin to adapter context with other components
-    */     
+    */
 
     /** Adapter: a viewless component which keeps track of child nodes and the data for the nodes
      * @module adapter
@@ -96,7 +96,7 @@ import { createViewModels } from 'scalejs.metadataFactory';
         });
 
         // recursive function which parses through nodes and adds nodes with an id to dictionary
-        function createDictionary(nodes) {                
+        function createDictionary(nodes) {
             let dict = dictionary.peek();
             nodes.forEach(node => {
                 // add node to dictionary if it isnt there yet
@@ -122,7 +122,7 @@ import { createViewModels } from 'scalejs.metadataFactory';
                 });
             });
         }
-        
+
         // pause dataSyncDescription and update the data
         function updateData(newData) {
             dataSyncSubscription && dataSyncSubscription.dispose();
@@ -177,7 +177,7 @@ import { createViewModels } from 'scalejs.metadataFactory';
             if (dataValue) { return dataValue; }
 
             if (contextPlugins && contextPlugins[id]) {
-               return contextPlugins[id](); 
+               return contextPlugins[id]();
             }
             return context.parentContext.getValue(id);
         }
@@ -199,7 +199,7 @@ import { createViewModels } from 'scalejs.metadataFactory';
         syncDataDictionary();
 
         // get initial data
-        if (node.dataSourceEndpoint) { 
+        if (node.dataSourceEndpoint) {
             fetchData();
         }
 

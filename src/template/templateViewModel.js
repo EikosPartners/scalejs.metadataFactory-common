@@ -1,4 +1,4 @@
-import { createViewModel as createViewModelUnbound, 
+import { createViewModel as createViewModelUnbound,
         createViewModels as createViewModelsUnbound } from 'scalejs.metadataFactory'
 import { getRegisteredTemplates } from 'scalejs.mvvm'
 import _ from 'lodash';
@@ -60,4 +60,3 @@ export default function templateViewModel(node) {
         context: this
     });
 }
-

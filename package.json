@@ -1,6 +1,6 @@
 {
   "name": "scalejs.metadatafactory-common",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Common scalejs.metadatafactory modules",
   "main": "dist/scalejs.metadataFactory-common.js",
   "scripts": {
@@ -10,7 +10,8 @@
     "test": "karma start test/karma_config/karma.config.js",
     "test-travis": "karma start test/karma_config/karma.config.travis.js",
     "test-coverage": "rimraf test/coverage && karma start test/karma_config/karma.config.coverage.js",
-    "build-sample": "webpack --config webpack.sample.config.js"
+    "build-sample": "webpack --config webpack.sample.config.js",
+    "prepublish": "npm run test && npm run build"
   },
   "repository": {
     "type": "git",

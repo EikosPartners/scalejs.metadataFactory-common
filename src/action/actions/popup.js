@@ -1,4 +1,4 @@
-import { createViewModel } from 'scalejs.metadatafactory';
+import { createViewModel } from 'scalejs.metadataFactory';
 import popup from 'scalejs.popup';
 import { notify } from 'scalejs.messagebus';
 import mustache from 'mustache';

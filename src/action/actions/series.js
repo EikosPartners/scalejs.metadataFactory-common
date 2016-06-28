@@ -1,4 +1,4 @@
-import { createViewModel } from 'scalejs.metadatafactory';
+import { createViewModel } from 'scalejs.metadataFactory';
 
 import { registerActions } from '../actionModule';
 

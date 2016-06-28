@@ -1,5 +1,5 @@
 import sandbox from 'scalejs.sandbox';
-import { getRegisteredTypes, registerViewModels, createViewModel, createViewModels } from 'scalejs.metadatafactory';
+import { getRegisteredTypes, registerViewModels, createViewModel, createViewModels } from 'scalejs.metadataFactory';
 import { receive } from 'scalejs.messagebus';
 import 'chai';
 

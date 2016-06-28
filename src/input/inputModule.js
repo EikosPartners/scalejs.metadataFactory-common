@@ -15,4 +15,3 @@ import 'ko-bindings/datepicker.js';
     registerViewModels({
         input: inputViewModel
     });
-        

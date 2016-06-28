@@ -1,6 +1,6 @@
 import core from 'scalejs.core';
 import { registerTemplates, registerBindings } from 'scalejs.mvvm';
-import { registerViewModels } from 'scalejs.metadatafactory';
+import { registerViewModels } from 'scalejs.metadataFactory';
 
 import actionViewModel from './actionViewModel';
 import actionBindings from './actionBindings';

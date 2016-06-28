@@ -37,7 +37,7 @@ describe('inputViewModel test', function () {
     });
 
     after(function () {
-        domStub.dispose();
+        //domStub.dispose();
     });
 
     it('renders value and label', function (done) {
@@ -72,7 +72,7 @@ describe('inputViewModel test', function () {
         done();
 
     });
-    
+
     it.skip('toggles inactive attributes on readonly updates', function(done) {
         done();
     });
@@ -125,5 +125,3 @@ describe('inputViewModel test', function () {
         });
     });
 });
-
-
