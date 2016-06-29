@@ -73,12 +73,29 @@ describe('inputViewModel test', function () {
 
     });
 
-    it.skip('toggles inactive attributes on readonly updates', function(done) {
+    it('toggles inactive attributes on readonly updates', function(done) {
+        let testNode = _.merge(node, {
+            "options": {
+                "readonly": true
+            }
+        }),
+            testStub = createMetadataDomStub(testNode, 'container_readonly'),
+            input = testStub.node.querySelector('input');
+
+         let subscription = ko.dataFor(input).readonly.subscribe(function(toggle) {
+            expect(toggle).equals(false);
+            expect(ko.dataFor(input).readonly()).equals(false);
+            subscription.dispose();
+         });
+
+        ko.dataFor(input).readonly(false);
+        input.dispatchEvent(new Event('change'));
+        testStub.dispose();
         done();
     });
 
     describe('inputViewModel tests for text types', function () {
-        it.skip('does something for text inputs', function (done) {
+        it.('does something for text inputs', function (done) {
             done();
         });
     });
