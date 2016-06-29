@@ -2,7 +2,7 @@
 import sandbox from 'scalejs.sandbox';
 import ko from 'knockout';
 import { notify } from 'scalejs.messagebus';
-    
+
     // the list advanced component provides advanced features over the base list
     // - Headers (TBD) and Footers (partially done)
     // - ListItems such as ADD and EMPTY
@@ -201,7 +201,6 @@ import { notify } from 'scalejs.messagebus';
                 });
             }),
             groups,
-            selectedGroup = observable(),
             visibleRows = observableArray(),
             viewmodel,
             showInfinite;
@@ -235,15 +234,6 @@ import { notify } from 'scalejs.messagebus';
            updateRowsWithGroupValues(groups());
        }
 
-       // TODO: Move to issuerConstructionDraw
-       selectedGroup.subscribe(function(group) {
-           if(!context.selectedDraw) {
-               console.error('selectedDraw missing fron context!');
-               return;
-           }
-           context.selectedDraw(group[0].DrawNumber());
-       });
-
        if(listViewModel.infinite) {
            //the listViewModel is managing its rows to account for infinite scroll
            //the listAdvanced will show only up to 25 rows and show the infinitely scrolling list in a popup
@@ -275,11 +265,9 @@ import { notify } from 'scalejs.messagebus';
             showInfinite: showInfinite,
             showRemove: listViewModel.showRemove,
             deleteRows: listViewModel.deleteRows,
-            selectedGroup: selectedGroup,
             itemDictionary: itemDictionary,
             mappedChildNodes: listViewModel.mappedChildNodes, //for automatic stuff
             context: this //for the bindings to access context
         });
         return viewmodel;
     };
-

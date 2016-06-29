@@ -15,19 +15,6 @@ import _ from 'lodash';
                 }
             };
         },
-        'list-advanced-group': function (ctx) {
-            var group = ctx.$parent.groups()[this],
-                selectedGroup = ctx.$parent.selectedGroup;
-
-            return {
-                click: function () {
-                    selectedGroup(group);
-                },
-                css: {
-                    selected: selectedGroup() === group
-                }
-            };
-        },
         'list-advanced-row-editable': function (ctx) {
             var editMode = this.editMode,
                 context = ctx.$parent.context || {},
@@ -80,30 +67,29 @@ import _ from 'lodash';
         'list-advanced-group-row-spacer': function (ctx) {
             var showSpacer = false,
                 currentGroupIndex = Number(ctx.$data) - 1;
-            
+
             showSpacer = Object.keys(ctx.$parent.groups())
                 .map(function (groupKey) {
                     return ctx.$parent.groups()[groupKey];
                 })
                 .slice(0, currentGroupIndex +1)
                 .reduce(function (previousHasSpacer, group, index) {
-                    var ret, 
+                    var ret,
                         previousGroup = ctx.$parent.groups()[index.toString()];
-                        
+
                     if(!previousGroup) {
                         return false;
                     }
-                        
+
                     if ((previousGroup.length + (previousHasSpacer ? 1 : 0)) % 2 !== 0) {
                         return true;
                     } else {
                         return false;
                     }
                 }, false);
-                    
+
             return {
                 if: showSpacer
             };
         }
     };
-
