@@ -98,7 +98,7 @@ function listViewModel(node) {
         options = node.options || {},
         isShown = observable(true),
         context = this,
-        readonly = observable(context.readonly() || false),
+        readonly = observable(context.readOnly && context.readonly() || false),
         //initialize to the context's state as determined by the form generally
     deleteRows = observable(options.deleteRows !== false),
         minRequiredRows = 0,

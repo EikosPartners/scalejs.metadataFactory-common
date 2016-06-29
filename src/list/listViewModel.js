@@ -2,7 +2,7 @@
 import sandbox from 'scalejs.sandbox';
 import _ from 'lodash';
 import ko from 'knockout';
-    
+
 
     // todo: revisit comments below
     // listViewModel is a component which manages a simple list
@@ -84,7 +84,7 @@ import ko from 'knockout';
             options = node.options || {},
             isShown = observable(true),
             context = this,
-            readonly = observable(context.readonly() || false), //initialize to the context's state as determined by the form generally
+            readonly = observable((context.readOnly && context.readonly()) || false), //initialize to the context's state as determined by the form generally
             deleteRows = observable(options.deleteRows !== false),
             minRequiredRows = 0,
             showRemoveButton,
@@ -448,4 +448,3 @@ import ko from 'knockout';
             setReadonly: setReadonly
         });
     };
-
