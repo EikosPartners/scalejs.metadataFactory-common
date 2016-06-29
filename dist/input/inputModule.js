@@ -20,11 +20,11 @@ var _input = require('./input.html');
 
 var _input2 = _interopRequireDefault(_input);
 
-require('./input.scss');
-
-require('../../node_modules/pikaday/scss/pikaday.scss');
-
 require('ko-bindings/datepicker.js');
+
+require('pikaday/scss/pikaday.scss');
+
+require('./input.scss');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
