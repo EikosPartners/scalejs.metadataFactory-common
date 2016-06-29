@@ -19,5 +19,5 @@ require('scalejs.expression-jsep');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 console.log('loading mvvm.init');
-_scalejs2.default.init({});
+_scalejs2.default.init({ doNotRender: true });
 //# sourceMappingURL=scalejs.extensions.js.map

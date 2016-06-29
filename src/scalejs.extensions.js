@@ -6,4 +6,4 @@ import 'scalejs.noticeboard';
 import 'scalejs.expression-jsep';
 
 console.log('loading mvvm.init');
-mvvm.init({});
+mvvm.init({doNotRender: true});

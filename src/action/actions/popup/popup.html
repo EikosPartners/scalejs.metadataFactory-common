@@ -1,0 +1,26 @@
+<div id="action_popup_template">
+    <span class="popup-message" data-bind="text: $data.message"></span>
+    <!-- ko foreach: actions -->
+        <button data-class="action-popup-action" class="btn btn-default-primary"></button>
+    <!-- /ko -->
+
+    <!-- ko ifnot: modal -->
+        <button data-bind="click: hidePopup" class="btn btn-default secondary">Cancel</button>
+    <!-- /ko -->
+</div>
+
+<div id="popup_default_region_template">
+    <span class="popup-message" data-bind="text: $data.message"></span>
+</div>
+
+<div id="popup_default_wrapper_template">
+    <header id="popup_header">
+        <h1 data-bind="text: title"></h1>
+        <!-- ko ifnot: modal -->
+        <h1 data-bind="click: hidePopup" class="x"></h1>
+        <!-- /ko -->
+    </header>
+    <section data-bind="template: popupContent"></section>
+</div>
+
+

@@ -75,6 +75,7 @@
     "scalejs.metadataFactory": ">=0.1.8",
     "scalejs.mvvm": ">=1.0.1",
     "scalejs.navigation": ">=0.0.1",
-    "scalejs.noticeboard": ">=0.0.1"
+    "scalejs.noticeboard": ">=0.0.1",
+    "scalejs.popup": ">=0.0.1"
   }
 }

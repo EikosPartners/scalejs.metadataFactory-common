@@ -13,24 +13,6 @@
     </div>
 </div>
 
-<div id="action_row_dropdown_template">
-    <button data-class="action-row-dropdown-button">
-            <span data-bind="text: text"></span>
-        </button>
-</div>
-
-<div id="action_popup_template">
-    <h2 data-bind="text: message"></h2>
-    <!-- ko foreach: actions -->
-        <button data-class="action-popup-action" class="btn btn-default-primary"></button>
-    <!-- /ko -->
-    <!-- ko ifnot: modal -->
-  
-        <button data-bind="click: hidePopup" class="btn btn-default secondary">Cancel</button>
-
-    <!-- /ko -->
-</div>
-
 <div id = "action_popup_button_template">
     <div data-bind="css: $data.classes, visible:isShown">
         <button data-class="action-popup-action" class="btn btn-default-primary"></button>
@@ -46,32 +28,5 @@
 <div id="action_text">
     <div data-bind="visible: isShown">
         <span data-bind="css: $data.classes, text: text, click: $data.action">
-    </div>
-</div>
-
-<!-- button template that toggles visibility based on a property defined in the context -->
-<div id="action_contextVis_template">
-    <div data-class="action-contextvis-button" class="action-button-wrapper">
-        <button data-class="action-button">
-            <span data-bind="text: text"></span>
-        </button>
-        <!-- ko if: actionType === 'dropdown' -->
-        <div class="drop-menu" data-bind="visible: options.dropdown.showDropdown, foreach: options.dropdown.items">
-            <a class="drop-menu-option" data-bind="click: function() { action(); $parent.options.dropdown.showDropdown(false); }, text: text"></a>
-        </div>
-        <!-- /ko -->
-    </div>
-</div>
-
-<div id="action_draft_template">
-    <div data-bind="css: $data.classes, visible: $data.context.getValue('PoolStatusCode') === 'DF', clickOff: function () { options.dropdown && options.dropdown.showDropdown && options.dropdown.showDropdown(false) }" class="action-button-wrapper">
-        <button data-class="action-button">
-            <span data-bind="text: text"></span>
-        </button>
-        <!-- ko if: actionType === 'dropdown' -->
-        <div class="drop-menu" data-bind="visible: options.dropdown.showDropdown, foreach: options.dropdown.items">
-            <a class="drop-menu-option" data-bind="click: function() { action(); $parent.options.dropdown.showDropdown(false); }, text: text"></a>
-        </div>
-        <!-- /ko -->
     </div>
 </div>
