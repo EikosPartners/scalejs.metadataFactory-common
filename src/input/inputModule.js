@@ -6,9 +6,10 @@ import 'scalejs.inputmask';
 import inputViewModel from './inputViewModel';
 import inputBindings from './inputBindings';
 import inputTemplates from './input.html';
+import 'ko-bindings/datepicker.js';
+import 'pikaday/scss/pikaday.scss';
 import './input.scss';
- import 'pikaday/scss/pikaday.scss';
- import 'ko-bindings/datepicker.js';
+
 
     registerBindings(inputBindings);
     registerTemplates(inputTemplates);
