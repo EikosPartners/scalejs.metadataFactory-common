@@ -33,7 +33,7 @@ export default function globalNavigation(node) {
         });
     });
 
-    navigation.reRoute();
+    navigation.init(node.initial || 0);
 
     return merge(node, {
         navLinks: navLinks,

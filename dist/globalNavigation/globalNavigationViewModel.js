@@ -52,7 +52,7 @@ function globalNavigation(node) {
         });
     });
 
-    _scalejs4.navigation.reRoute();
+    _scalejs4.navigation.init(node.initial || 0);
 
     return merge(node, {
         navLinks: navLinks,
