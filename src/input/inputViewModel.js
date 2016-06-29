@@ -102,22 +102,11 @@ export default function inputViewModel(node) {
         return inputValue() || '';
     }
 
-    // function setValue(data) {
-    //     if (has(data, 'value')) {
-    //         console.error('Use update to set attributes. Use setValue to pass a single value');
-    //         value = data.value;
-    //     }
-    //     // TODO: Refactor - should only accept "value", not "data".
-    //     var wasModifed = inputValue.isModified(),
-    //         setFunc = setValueFuncs[node.inputType] || viewmodel.setValue || inputValue;
-
-    //     inputValue.isModified(wasModifed); //reset isModified
-    // }
-
     function setValue(data) {
-        var value = is(data, 'object') ? data.value : data,
+        var value = is(data, 'object') ? data.value : data,  // TODO: Refactor - should only accept "value", not "data".
             wasModifed = inputValue.isModified();
-        // uses setValueFunc if defined, else updates inputValue
+           
+         // uses setValueFunc if defined, else updates inputValue
         if (setValueFuncs[node.inputType]) {
             setValueFuncs[node.inputType](data);
         } else if (viewmodel.setValue) {
