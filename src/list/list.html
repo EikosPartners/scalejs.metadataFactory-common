@@ -1,0 +1,42 @@
+<div id="list_template">
+    <div data-bind="css: $data.classes, visible: isShown">
+        <div class="grid-100 fieldset-panel">
+            <span class="legend" data-bind="text: name"></span>
+            <!-- ko foreach: rows -->
+                <!-- ko template: { name: 'list_items_template', data: items } -->
+                <!-- /ko -->
+            <!-- /ko -->
+            <div class="row" data-bind="if: options.addRows !== false && !readonly()">
+                <button class="fa fa-icon-add" data-bind="click: add">
+                    <span class="button-text">Add</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="list_items_template">
+    <div class="grid-100 row">
+        <!-- ko template: { name: 'list_item_template', foreach: $data } -->
+        <!--/ko -->
+        <!-- ko template: 'list_del_template' -->
+        <!-- /ko -->
+    </div>
+</div>
+
+<div id="list_item_template">
+        <!-- ko template: $data.template || $data.type + '_template' -->
+        <!-- /ko -->
+</div>
+
+<div id="list_del_template">
+    <div class="list-del-button" data-class="list-remove">
+        <a class="fa fa-icon-trash icon-only"></a>
+    </div>
+</div>
+
+<div id="list_del_flag_template">
+    <div class="list-del-button" data-class="list-delete-flag">
+        <a class="fa fa-icon-trash icon-only"></a>
+    </div>
+</div>

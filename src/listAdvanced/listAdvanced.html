@@ -1,0 +1,174 @@
+<div id="listAdvanced_template">
+    <div data-class="classes-binding">
+        <header data-bind="if: !list.readonly()">
+            <div class="add">
+                <button class="fa fa-icon-add" data-bind="click:  list.add.bind(null, null, true)">
+                    <span class="button-text">Add</span>
+                </button>
+            </div>
+        </header>
+        <table>
+            <!-- ko template: { name: 'list_table_header_row_template', foreach: headers } -->
+            <!-- /ko -->
+            <tr data-bind="foreach: headerItems">
+                <!-- ko if: !$data.hidden -->
+                    <td class="header-cell" data-bind="text: text, css: classes"></td>
+                <!-- /ko -->
+            </tr>
+            <tbody>
+                <!-- ko template: {name: 'list_table_row_template', foreach: rows } -->
+                <!-- /ko -->
+                <tr class="row-no-data">
+                    <td class="cell" data-bind="attr: { colspan: headerItems.length }">No data available.</td>
+                </tr>
+                <!-- ko template: {name: 'list_table_footer_row_template', foreach: footers } -->
+                <!-- /ko -->
+            </tbody>
+        </table>
+
+    </div>
+    <!-- ko if: list.infinite -->
+    <button data-bind="click: showInfinite, visible: list.mappedChildNodes().length > 20">Show More</button>
+    <!-- /ko -->
+</div>
+
+
+<!-- Note to Developers: The infinte template is used within a popup
+therefore lots of work-arounds needed to be put in place for fixed header stylings-->
+<div id="listAdvanced_infinite_template">
+    <div class="table-viewport table-fixed-header" data-class="classes-binding">
+        <div class="table-header">
+            <div class="add" data-bind="if: !list.readonly()">
+                <button class="fa fa-icon-add" style="float:none" data-bind="click:  list.add.bind(null, null, true)">
+                    <span class="button-text">Add</span>
+                </button>
+            </div>
+        </div>
+        <table data-bind="fixedTableHeader: { scrollListener: list.scrolled }">
+            <!-- ko template: { name: 'list_table_header_row_template', foreach: headers } -->
+            <!-- /ko -->
+            <thead>
+                <tr data-bind="foreach: headerItems">
+                    <td class="header-cell" data-bind="text: text, css: classes">
+                </tr>
+            </thead>
+            <tbody>
+                <!-- ko template: {name: 'list_table_row_template', foreach: list.rows } -->
+                <!-- /ko -->
+                <!-- ko template: {name: 'list_table_footer_row_template', foreach: footers } -->
+                <!-- /ko -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- templates for groups -->
+<div id="listAdvanced_groups_template">
+     <div data-class="classes-binding">
+        <table>
+            <!-- ko template: { name: 'list_table_header_row_template', foreach: headers } -->
+            <!-- /ko -->
+            <tbody>
+                <tr data-bind="foreach: headerItems">
+                    <td class="header-cell" data-bind="text: text, css: classes">
+                </tr>
+            </tbody>
+            <!-- ko template: { name: 'list_group_template', foreach: Object.keys(groups()) } -->
+            <!-- /ko -->
+            <tbody>
+                <!-- ko foreach: footers -->
+                <!-- ko template: $data.template || 'list_table_footer_row_template' -->
+                <!-- /ko -->
+                <!-- /ko -->
+            </tbody>
+        </table>
+        <div data-bind="if: !list.readonly()">
+            <button class="fa fa-icon-add" data-bind="click: list.add.bind(null, null)">
+                <span class="button-text">Add</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script type="text/template" id="list_group_template">
+    <tbody class="group" data-class="list-advanced-group">
+        <!-- ko class: list-advanced-group-row-spacer -->
+        <tr style="display:none"><td>test</td></tr>
+        <!-- /ko -->
+        <!-- ko template: {name: 'list_table_group_row_template', foreach: $parent.groups()[$data] } -->
+        <!-- /ko -->
+    </tbody>
+</script>
+
+
+<script type="text/template" id="list_table_group_row_template">
+    <tr data-class="list-advanced-row-editable">
+        <!-- ko foreach: items -->
+        <td class="cell" data-class="list-advanced-cell">
+            <!-- ko template: 'metadata_item_template'-->
+            <!-- /ko -->
+        </td>
+        <!-- /ko -->
+        <td style="width: 0px; position: relative">
+
+        <!-- ko if: $index() == 0 -->
+            <div class="list-advanced-group-actions" data-class="list-advanced-group-actions"></div>
+        <!-- /ko -->
+        </td>
+    </tr>
+</script>
+
+<!-- todo: refactor row templates into 1 template -->
+
+<script type="text/template" id="list_table_header_row_template">
+    <tr>
+        <!-- ko foreach: items -->
+        <td class="header-cell" data-class="list-advanced-cell">
+            <!-- ko template: 'metadata_item_template'-->
+            <!-- /ko -->
+        </td>
+        <!-- /ko -->
+    </tr>
+</script>
+
+<script type="text/template" id="list_table_row_template">
+    <!-- ko if: !deleteFlag() -->
+    <tr data-class="list-advanced-row-editable">
+        <!-- ko foreach: items -->
+            <!-- ko if: !$data.hidden -->
+                <td class="cell" data-class="list-advanced-cell">
+                    <!-- ko template: 'metadata_item_template'-->
+                    <!-- /ko -->
+                </td>
+            <!-- /ko -->
+        <!-- /ko -->
+    </tr>
+    <!-- /ko -->
+</script>
+
+<script type="text/template" id="list_table_footer_row_template">
+    <tr data-bind="if: visible, click: $data.clickHandler, clickOff: $data.clickOffHandler">
+        <!-- ko foreach: items -->
+        <td class="footer-cell" data-class="list-advanced-cell">
+            <!-- ko template: 'metadata_item_template'-->
+            <!-- /ko -->
+        </td>
+        <!-- /ko -->
+    </tr>
+</script>
+
+<!-- item templates -->
+
+<div id="list_advanced_add_item_template">
+    <button class="fa fa-icon-add" data-bind="click: add">
+        <span data-bind="text: text" class="button-text">Add</span>
+    </button>
+</div>
+
+<div id="list_advanced_empty_item_template">
+
+</div>
+
+<div id="list_advanced_text_item_template">
+    <span data-bind="text:text"></span>
+</div>
