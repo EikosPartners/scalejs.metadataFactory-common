@@ -143,16 +143,34 @@ function inputViewModel(node) {
         return inputValue() || '';
     }
 
-    function setValue(data) {
-        if (has(data, 'value')) {
-            console.error('Use update to set attributes. Use setValue to pass a single value');
-            value = data.value;
-        }
-        // TODO: Refactor - should only accept "value", not "data".
-        var wasModifed = inputValue.isModified(),
-            setFunc = setValueFunc[node.inputType] || viewmodel.setValue || inputValue;
+    // function setValue(data) {
+    //     if (has(data, 'value')) {
+    //         console.error('Use update to set attributes. Use setValue to pass a single value');
+    //         value = data.value;
+    //     }
+    //     // TODO: Refactor - should only accept "value", not "data".
+    //     var wasModifed = inputValue.isModified(),
+    //         setFunc = setValueFuncs[node.inputType] || viewmodel.setValue || inputValue;
 
-        inputValue.isModified(wasModifed); //reset isModified
+    //     inputValue.isModified(wasModifed); //reset isModified
+    // }
+
+    function setValue(data) {
+        var value = is(data, 'object') ? data.value : data,
+            wasModifed = inputValue.isModified();
+        // uses setValueFunc if defined, else updates inputValue
+        if (setValueFuncs[node.inputType]) {
+            setValueFuncs[node.inputType](data);
+        } else if (viewmodel.setValue) {
+            viewmodel.setValue(data);
+        } else {
+            inputValue(value);
+        }
+
+        // programtically setting the inputValue will not cause isModified to become true
+        if (!wasModifed) {
+            inputValue.isModified(false);
+        }
     }
 
     function update(data) {

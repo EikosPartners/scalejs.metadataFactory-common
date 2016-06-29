@@ -8,12 +8,12 @@ export default function setValueViewModel(node) {
         context.data.subscribe(data => {
             let dict = context.dictionary();
             Object.keys(dict).forEach(function (node) {
-                setValue(dict[node], data);
+                _setValue(dict[node], data);
             })
         })
     }
 
-    function setValue(node, data, clear) {
+    function _setValue(node, data, clear) {
         if (node.id && node.setValue && (data.hasOwnProperty(node.id) || clear)) {
             node.setValue(data[node.id]); //pass as object with value key?
         }

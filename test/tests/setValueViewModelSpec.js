@@ -44,7 +44,6 @@ describe('setValueViewModel test', function () {
         registerViewModels({
             test_parent(node) {
                 let mappedChildNodes = createViewModels.call(this, node.children || []);
-
                 return _.merge(node, {
                     mappedChildNodes
                 });
