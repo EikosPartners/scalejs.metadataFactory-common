@@ -3,6 +3,8 @@ import { registerViewModels } from 'scalejs.metadataFactory';
 
 import './validation/validationEngine';
 import 'scalejs.inputmask';
+import autocompleteViewModel from './autocomplete/autocompleteViewModel';
+import selectViewModel from './select/selectViewModel';
 import inputViewModel from './inputViewModel';
 import inputBindings from './inputBindings';
 import inputTemplates from './input.html';

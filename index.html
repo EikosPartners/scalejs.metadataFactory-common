@@ -13,15 +13,24 @@
 <body>
 
     <div data-bind="metadataFactory: inputJSON"></div>
-    <script src="./build/bundle.js"></script>
-        <script>
+    <script>
         var inputJSON = {
-            "type": "input",
-            "inputType": "select"
-        }
-
-        ko.applyBindings();
+                      "id": "Autocomplete",
+                      "type": "input",
+                      "inputType": "autocomplete",
+                      "label": "Autocomplete",
+                      "autocompleteSource": [
+                            "stressball",
+                            "gumball",
+                            "hairball",
+                            "tossball"
+                            
+                      ]
+                }
     </script>
+
+    <script src="./build/bundle.js"></script>
 </body>
 
 </html>
+
