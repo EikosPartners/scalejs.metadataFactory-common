@@ -1,21 +1,17 @@
 import { createViewModel as createViewModelUnbound,
-        createViewModels as createViewModelsUnbound } from 'scalejs.metadataFactory'
+    createViewModels as createViewModelsUnbound } from 'scalejs.metadataFactory'
 import { getRegisteredTemplates } from 'scalejs.mvvm'
-import _ from 'lodash';
-import ko from 'knockout';
+import { merge, cloneDeep } from 'lodash';
+import { observable } from 'knockout';
 
 
 export default function templateViewModel(node) {
-    var observable = ko.observable,
-        merge = _.merge,
-        data = observable(node.data || {}),
+    var data = observable(node.data || {}),
         context = node.options && node.options.createContext ? { metadata: [], data: data } : this,
         createViewModel = createViewModelUnbound.bind(context), // passes context
         createViewModels = createViewModelsUnbound.bind(context), // passes context
-        // properties
         isShown = observable(node.visible !== false),
-        //visible = observable(),
-        actionNode = _.cloneDeep(node.action),
+        actionNode = cloneDeep(node.action),
         action,
         mappedChildNodes,
         registeredTemplates = getRegisteredTemplates();
@@ -31,7 +27,7 @@ export default function templateViewModel(node) {
     if (actionNode) {
         action = createViewModel(actionNode);
     } else {
-        action = {action: function () { }};
+        action = { action: function () { } };
     }
 
     if (node.dataSourceEndpoint) {
