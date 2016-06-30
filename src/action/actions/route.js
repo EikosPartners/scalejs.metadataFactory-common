@@ -1,12 +1,10 @@
-import sandbox from 'scalejs.sandbox';
+import { setRoute } from 'scalejs.navigation';
+import { unwrap } from 'knockout';
+import { merge } from 'scalejs';
 import mustache from 'mustache';
 import ko from 'knockout';
 
 import { registerActions } from '../actionModule';
-
-const setRoute = sandbox.navigation.setRoute,
-      merge = sandbox.object.merge,
-      unwrap = ko.unwrap;
 
 function renderParams(params, data) {
     let ret = params;
