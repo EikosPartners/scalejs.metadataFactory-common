@@ -55,9 +55,13 @@
 	
 	__webpack_require__(2);
 	
-	__webpack_require__(140);
+	__webpack_require__(135);
 	
-	__webpack_require__(163);
+	__webpack_require__(149);
+	
+	__webpack_require__(178);
+	
+	__webpack_require__(181);
 
 /***/ },
 /* 2 */
@@ -65,122 +69,57 @@
 
 	'use strict';
 	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.getRegisteredActions = exports.registerActions = undefined;
+	
 	var _scalejs = __webpack_require__(3);
 	
-	var _scalejs2 = __webpack_require__(22);
+	var _scalejs2 = _interopRequireDefault(_scalejs);
 	
-	var _adapterViewModel = __webpack_require__(129);
+	var _scalejs3 = __webpack_require__(10);
 	
-	var _adapterViewModel2 = _interopRequireDefault(_adapterViewModel);
+	var _scalejs4 = __webpack_require__(22);
 	
-	var _adapter = __webpack_require__(139);
+	var _actionViewModel = __webpack_require__(129);
 	
-	var _adapter2 = _interopRequireDefault(_adapter);
+	var _actionViewModel2 = _interopRequireDefault(_actionViewModel);
+	
+	var _actionBindings = __webpack_require__(131);
+	
+	var _actionBindings2 = _interopRequireDefault(_actionBindings);
+	
+	var _action = __webpack_require__(130);
+	
+	var _action2 = _interopRequireDefault(_action);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	(0, _scalejs.registerTemplates)(_adapter2.default);
-	(0, _scalejs2.registerViewModels)({
-	    adapter: _adapterViewModel2.default
-	});
+	var registeredActions = {};
+	
+	function registerActions(actions) {
+	    _scalejs2.default.object.extend(registeredActions, actions);
+	}
+	
+	function getRegisteredActions() {
+	    return registeredActions;
+	}
+	
+	(0, _scalejs3.registerBindings)(_actionBindings2.default);
+	(0, _scalejs3.registerTemplates)(_action2.default);
+	(0, _scalejs4.registerViewModels)({ action: _actionViewModel2.default });
+	
+	exports.registerActions = registerActions;
+	exports.getRegisteredActions = getRegisteredActions;
 
 /***/ },
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.toViewModel = exports.toObject = exports.toJson = exports.computed = exports.observableArray = exports.observable = exports.getRegisteredTemplates = exports.registerBindings = exports.registerTemplates = exports.dataBinding = exports.dataClass = exports.template = exports.root = exports.init = undefined;
-	
-	var _scalejs = __webpack_require__(4);
-	
-	var _scalejs2 = _interopRequireDefault(_scalejs);
-	
-	var _knockout = __webpack_require__(11);
-	
-	var _knockout2 = _interopRequireDefault(_knockout);
-	
-	var _mvvm = __webpack_require__(14);
-	
-	var _mvvm2 = _interopRequireDefault(_mvvm);
-	
-	var _change = __webpack_require__(20);
-	
-	var _change2 = _interopRequireDefault(_change);
-	
-	var _render = __webpack_require__(21);
-	
-	var _render2 = _interopRequireDefault(_render);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	_knockout2.default.bindingHandlers.change = _change2.default; /*global define*/
-	
-	_knockout2.default.bindingHandlers.render = _render2.default;
-	
-	_knockout2.default.virtualElements.allowedBindings.change = true;
-	_knockout2.default.virtualElements.allowedBindings.render = true;
-	
-	_scalejs2.default.registerExtension(_mvvm2.default);
-	
-	// base
-	var init = _mvvm2.default.init;
-	
-	// rendering helpers
-	
-	var _mvvm$core$mvvm = _mvvm2.default.core.mvvm;
-	var root = _mvvm$core$mvvm.root;
-	var template = _mvvm$core$mvvm.template;
-	var dataClass = _mvvm$core$mvvm.dataClass;
-	var dataBinding = _mvvm$core$mvvm.dataBinding;
-	
-	// registry
-	
-	var _mvvm$core$mvvm2 = _mvvm2.default.core.mvvm;
-	var registerTemplates = _mvvm$core$mvvm2.registerTemplates;
-	var registerBindings = _mvvm$core$mvvm2.registerBindings;
-	var getRegisteredTemplates = _mvvm$core$mvvm2.getRegisteredTemplates;
-	
-	// knockout
-	
-	var _mvvm$sandbox$mvvm = _mvvm2.default.sandbox.mvvm;
-	var observable = _mvvm$sandbox$mvvm.observable;
-	var observableArray = _mvvm$sandbox$mvvm.observableArray;
-	var computed = _mvvm$sandbox$mvvm.computed;
-	
-	// viewmodel helpers
-	
-	var _mvvm$sandbox$mvvm2 = _mvvm2.default.sandbox.mvvm;
-	var toJson = _mvvm$sandbox$mvvm2.toJson;
-	var toObject = _mvvm$sandbox$mvvm2.toObject;
-	var toViewModel = _mvvm$sandbox$mvvm2.toViewModel;
-	exports.init = init;
-	exports.root = root;
-	exports.template = template;
-	exports.dataClass = dataClass;
-	exports.dataBinding = dataBinding;
-	exports.registerTemplates = registerTemplates;
-	exports.registerBindings = registerBindings;
-	exports.getRegisteredTemplates = getRegisteredTemplates;
-	exports.observable = observable;
-	exports.observableArray = observableArray;
-	exports.computed = computed;
-	exports.toJson = toJson;
-	exports.toObject = toObject;
-	exports.toViewModel = toViewModel;
-	exports.default = _mvvm2.default;
-
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
 	"use strict";
 	
-	var _scalejsEs = __webpack_require__(5);
+	var _scalejsEs = __webpack_require__(4);
 	
 	var _scalejsEs2 = _interopRequireDefault(_scalejsEs);
 	
@@ -189,7 +128,7 @@
 	module.exports = _scalejsEs2.default;
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -198,7 +137,7 @@
 	    value: true
 	});
 	
-	var _scalejs = __webpack_require__(6);
+	var _scalejs = __webpack_require__(5);
 	
 	var _scalejs2 = _interopRequireDefault(_scalejs);
 	
@@ -432,7 +371,7 @@
 	});
 
 /***/ },
-/* 6 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -441,19 +380,19 @@
 	    value: true
 	});
 	
-	var _scalejsBase = __webpack_require__(7);
+	var _scalejsBase = __webpack_require__(6);
 	
 	var _scalejsBase2 = _interopRequireDefault(_scalejsBase);
 	
-	var _scalejsBase3 = __webpack_require__(10);
+	var _scalejsBase3 = __webpack_require__(9);
 	
 	var _scalejsBase4 = _interopRequireDefault(_scalejsBase3);
 	
-	var _scalejsBase5 = __webpack_require__(8);
+	var _scalejsBase5 = __webpack_require__(7);
 	
 	var _scalejsBase6 = _interopRequireDefault(_scalejsBase5);
 	
-	var _scalejsBase7 = __webpack_require__(9);
+	var _scalejsBase7 = __webpack_require__(8);
 	
 	var _scalejsBase8 = _interopRequireDefault(_scalejsBase7);
 	
@@ -472,7 +411,7 @@
 	};
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -481,7 +420,7 @@
 	    value: true
 	});
 	
-	var _scalejsBase = __webpack_require__(8);
+	var _scalejsBase = __webpack_require__(7);
 	
 	var _scalejsBase2 = _interopRequireDefault(_scalejsBase);
 	
@@ -593,7 +532,7 @@
 	};
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -611,7 +550,7 @@
 	/*global define*/
 	
 	
-	var _scalejsBase = __webpack_require__(9);
+	var _scalejsBase = __webpack_require__(8);
 	
 	var _scalejsBase2 = _interopRequireDefault(_scalejsBase);
 	
@@ -839,7 +778,7 @@
 	};
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1013,7 +952,7 @@
 	};
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1022,7 +961,7 @@
 	    value: true
 	});
 	
-	var _scalejsBase = __webpack_require__(8);
+	var _scalejsBase = __webpack_require__(7);
 	
 	var _scalejsBase2 = _interopRequireDefault(_scalejsBase);
 	
@@ -1146,6 +1085,96 @@
 	    /** */
 	    formatException: formatException
 	};
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.toViewModel = exports.toObject = exports.toJson = exports.computed = exports.observableArray = exports.observable = exports.getRegisteredTemplates = exports.registerBindings = exports.registerTemplates = exports.dataBinding = exports.dataClass = exports.template = exports.root = exports.init = undefined;
+	
+	var _scalejs = __webpack_require__(3);
+	
+	var _scalejs2 = _interopRequireDefault(_scalejs);
+	
+	var _knockout = __webpack_require__(11);
+	
+	var _knockout2 = _interopRequireDefault(_knockout);
+	
+	var _mvvm = __webpack_require__(14);
+	
+	var _mvvm2 = _interopRequireDefault(_mvvm);
+	
+	var _change = __webpack_require__(20);
+	
+	var _change2 = _interopRequireDefault(_change);
+	
+	var _render = __webpack_require__(21);
+	
+	var _render2 = _interopRequireDefault(_render);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	_knockout2.default.bindingHandlers.change = _change2.default; /*global define*/
+	
+	_knockout2.default.bindingHandlers.render = _render2.default;
+	
+	_knockout2.default.virtualElements.allowedBindings.change = true;
+	_knockout2.default.virtualElements.allowedBindings.render = true;
+	
+	_scalejs2.default.registerExtension(_mvvm2.default);
+	
+	// base
+	var init = _mvvm2.default.init;
+	
+	// rendering helpers
+	
+	var _mvvm$core$mvvm = _mvvm2.default.core.mvvm;
+	var root = _mvvm$core$mvvm.root;
+	var template = _mvvm$core$mvvm.template;
+	var dataClass = _mvvm$core$mvvm.dataClass;
+	var dataBinding = _mvvm$core$mvvm.dataBinding;
+	
+	// registry
+	
+	var _mvvm$core$mvvm2 = _mvvm2.default.core.mvvm;
+	var registerTemplates = _mvvm$core$mvvm2.registerTemplates;
+	var registerBindings = _mvvm$core$mvvm2.registerBindings;
+	var getRegisteredTemplates = _mvvm$core$mvvm2.getRegisteredTemplates;
+	
+	// knockout
+	
+	var _mvvm$sandbox$mvvm = _mvvm2.default.sandbox.mvvm;
+	var observable = _mvvm$sandbox$mvvm.observable;
+	var observableArray = _mvvm$sandbox$mvvm.observableArray;
+	var computed = _mvvm$sandbox$mvvm.computed;
+	
+	// viewmodel helpers
+	
+	var _mvvm$sandbox$mvvm2 = _mvvm2.default.sandbox.mvvm;
+	var toJson = _mvvm$sandbox$mvvm2.toJson;
+	var toObject = _mvvm$sandbox$mvvm2.toObject;
+	var toViewModel = _mvvm$sandbox$mvvm2.toViewModel;
+	exports.init = init;
+	exports.root = root;
+	exports.template = template;
+	exports.dataClass = dataClass;
+	exports.dataBinding = dataBinding;
+	exports.registerTemplates = registerTemplates;
+	exports.registerBindings = registerBindings;
+	exports.getRegisteredTemplates = getRegisteredTemplates;
+	exports.observable = observable;
+	exports.observableArray = observableArray;
+	exports.computed = computed;
+	exports.toJson = toJson;
+	exports.toObject = toObject;
+	exports.toViewModel = toViewModel;
+	exports.default = _mvvm2.default;
+
 
 /***/ },
 /* 11 */
@@ -7066,7 +7095,7 @@
 	
 	var _knockout4 = _interopRequireDefault(_knockout3);
 	
-	var _scalejs = __webpack_require__(4);
+	var _scalejs = __webpack_require__(3);
 	
 	var _scalejs2 = _interopRequireDefault(_scalejs);
 	
@@ -8281,7 +8310,7 @@
 	
 	var _knockout2 = _interopRequireDefault(_knockout);
 	
-	var _scalejs = __webpack_require__(4);
+	var _scalejs = __webpack_require__(3);
 	
 	var _scalejs2 = _interopRequireDefault(_scalejs);
 	
@@ -8379,7 +8408,7 @@
 	
 	var _knockout2 = _interopRequireDefault(_knockout);
 	
-	var _scalejs = __webpack_require__(4);
+	var _scalejs = __webpack_require__(3);
 	
 	var _scalejs2 = _interopRequireDefault(_scalejs);
 	
@@ -8486,7 +8515,7 @@
 	    value: true
 	});
 	
-	var _scalejs = __webpack_require__(4);
+	var _scalejs = __webpack_require__(3);
 	
 	var _scalejs2 = _interopRequireDefault(_scalejs);
 	
@@ -8525,7 +8554,7 @@
 	
 	var _knockout2 = _interopRequireDefault(_knockout);
 	
-	var _scalejs = __webpack_require__(4);
+	var _scalejs = __webpack_require__(3);
 	
 	var _scalejs2 = _interopRequireDefault(_scalejs);
 	
@@ -8606,7 +8635,7 @@
 	    value: true
 	});
 	
-	var _scalejs = __webpack_require__(4);
+	var _scalejs = __webpack_require__(3);
 	
 	var _scalejs2 = _interopRequireDefault(_scalejs);
 	
@@ -8710,11 +8739,11 @@
 	
 	__webpack_require__(127);
 	
-	var _scalejs = __webpack_require__(4);
+	var _scalejs = __webpack_require__(3);
 	
 	var _scalejs2 = _interopRequireDefault(_scalejs);
 	
-	__webpack_require__(3);
+	__webpack_require__(10);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -8746,7 +8775,13 @@
 	    if (node && node.type === 'ignore') {
 	        console.log('ignored node ', node);
 	    } else {
-	        var mappedNode = viewModels[node.type] ? viewModels[node.type].call(this, node) : defaultViewModel.call(this, node);
+	        var mappedNode;
+	        if (viewModels[node.type]) {
+	            mappedNode = viewModels[node.type].call(this, node);
+	        } else {
+	            console.log('no viewModel of type ' + node.type + ' was found');
+	            mappedNode = defaultViewModel.call(this, node);
+	        }
 	
 	        if (mappedNode && has(node.rendered)) {
 	            rendered = is(node.rendered, 'boolean') ? observable(node.rendered) : computed(function () {
@@ -9030,6 +9065,8 @@
 	    return schema;
 	}
 	
+	_knockout2.default.bindingHandlers.metadataSync = {}; // optional for MD factory
+	
 	_knockout2.default.bindingHandlers.metadataFactory = {
 	    init: function init() {
 	        return {
@@ -9038,8 +9075,11 @@
 	    },
 	    update: function update(element, valueAccessor, allBindings, viewModel, bindingContext) {
 	
-	        var metadata = _knockout2.default.unwrap(valueAccessor()).metadata ? _knockout2.default.unwrap(valueAccessor()).metadata : _knockout2.default.unwrap(valueAccessor()),
-	            context = _knockout2.default.unwrap(valueAccessor()).context ? _knockout2.default.unwrap(valueAccessor()).context : null,
+	        var value = _knockout2.default.unwrap(valueAccessor()) || {};
+	
+	        var metadata = value.metadata ? value.metadata : value,
+	            sync = allBindings().metadataSync,
+	            context = value.context ? value.context : null,
 	            prevMetadata;
 	
 	        function disposeMetadata() {
@@ -9051,7 +9091,7 @@
 	            }
 	        }
 	
-	        setTimeout(function () {
+	        function applyMetadataBinding() {
 	            var metadataTemplate = createTemplate(metadata, context).template;
 	
 	            disposeMetadata();
@@ -9068,7 +9108,13 @@
 	                    disposeMetadata();
 	                });
 	            }
-	        });
+	        }
+	
+	        if (sync) {
+	            applyMetadataBinding();
+	        } else {
+	            setTimeout(applyMetadataBinding);
+	        }
 	    }
 	
 	};
@@ -25508,7 +25554,7 @@
 /* 24 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=\"metadata_items_template\">\r\n    <!-- ko template: { name: 'metadata_item_template', foreach: $data } -->\r\n\r\n    <!--/ko -->\r\n</div>\r\n\r\n<div id=\"metadata_item_template\">\r\n    <!-- ko comment: $data.template || $data.type + '_template' -->\r\n    <!-- /ko -->\r\n    <!-- ko if: ($data.rendered == null) ? true : $data.rendered  -->\r\n    <!-- ko template: $data.template || $data.type + '_template' -->\r\n    <!-- /ko -->\r\n    <!-- /ko -->\r\n</div>\r\n\r\n<div id=\"metadata_default_template\">\r\n    <div data-bind=\"text: JSON.stringify($data)\"></div>\r\n</div>\r\n\r\n<div id=\"metadata_loading_template\">\r\n    <div class=\"loader hexdots-loader\">\r\n    loading...\r\n    </div>\r\n</div>\r\n\r\n<div id=\"no_template\">    \r\n    <div data-bind=\"template: { name: 'metadata_items_template', data: mappedChildNodes}\"></div>\r\n</div>\r\n";
+	module.exports = "<div id=\"metadata_items_template\">\n    <!-- ko template: { name: 'metadata_item_template', foreach: $data } -->\n\n    <!--/ko -->\n</div>\n\n<div id=\"metadata_item_template\">\n    <!-- ko comment: $data.template || $data.type + '_template' -->\n    <!-- /ko -->\n    <!-- ko if: ($data.rendered == null) ? true : $data.rendered  -->\n    <!-- ko template: $data.template || $data.type + '_template' -->\n    <!-- /ko -->\n    <!-- /ko -->\n</div>\n\n<div id=\"metadata_default_template\">\n    <div class=\"metadata-default-template\" data-bind=\"text: JSON.stringify($data)\"></div>\n</div>\n\n<div id=\"metadata_loading_template\">\n    <div class=\"loader hexdots-loader\">\n    loading...\n    </div>\n</div>\n\n<div id=\"no_template\">    \n    <div data-bind=\"template: { name: 'metadata_items_template', data: mappedChildNodes}\"></div>\n</div>\n";
 
 /***/ },
 /* 25 */
@@ -39295,7 +39341,7 @@
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 	
-	var _scalejs = __webpack_require__(4);
+	var _scalejs = __webpack_require__(3);
 	
 	var _scalejs2 = _interopRequireDefault(_scalejs);
 	
@@ -40110,283 +40156,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.default = adapterViewModel;
-	
-	var _scalejs = __webpack_require__(130);
-	
-	var _scalejs2 = _interopRequireDefault(_scalejs);
-	
-	var _knockout = __webpack_require__(11);
-	
-	var _knockout2 = _interopRequireDefault(_knockout);
-	
-	var _dataservice = __webpack_require__(133);
-	
-	var _dataservice2 = _interopRequireDefault(_dataservice);
-	
-	var _scalejs3 = __webpack_require__(3);
-	
-	var _scalejs4 = __webpack_require__(136);
-	
-	var _scalejs5 = __webpack_require__(22);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/* TODO: 
-	In PJSON, we used readonly, errors, etc. We need a way to do that outside of adapter
-	i.e. plugin to adapter context with other components
-	*/
-	
-	/** Adapter: a viewless component which keeps track of child nodes and the data for the nodes
-	 * @module adapter
-	 *
-	 * @param {object} node
-	 *  The configuration object for the module
-	 * @param {string} node.type='adapter'
-	 *  The type of the node is adapter
-	 * @param {string} node.id
-	 *  The id for the module
-	 * @param {boolean} [node.lazy=false]
-	 *  If the child nodes need to be lazily loaded (e.g. delay creation of children viewmodels until data returns)
-	 * @param {object|Object[]} [node.dataSourceEndpoint]
-	 *  An object defining the endpoint(s) that makes the ajax calls
-	 * @param {string} node.dataSourceEndpoint.uri
-	 *   The uri for the endpoint
-	 * @param {string} [node.dataSourceEndpoint.url]
-	 *  The url for the endpoint
-	 * @param {object} [node.dataSourceEndpoint.keyMap]
-	 *  A mapper object to map keys
-	 * @param {string} [node.dataSourceEndpoint.keyMap.resultsKey]
-	 *  Map the results from the ajax call with this key
-	 * @param {string} [node.dataSourceEndpoint.keyMap.dataKey]
-	 *  Extend the data object with this key
-	 * @param {object} [node.dataSourceEndpoint.options]
-	 *  Options for the ajax call
-	 * @param {array} node.children
-	 *  The json configuration for children nodes which will be mapped to view models and kept track of from the adapter
-	 * @param {array} [node.plugins]
-	 *  The json configuration for plugins which will be accessible from getValue function, based upon type
-	 *
-	 * @property {array} mappedChildNodes the mapped children nodes
-	 * @property {observable} data the data retrieved from dataSourceEndpoint and tracked from children
-	 * @property {object} contextPlugins an object that contains the plugins which have been added to the adapter context
-	 * @property {context} the context for the adapter (which can be utilized in a custom template)
-	 * @property {function} dispose the dispose function for all internal subs
-	 *
-	 * @example
-	 * {
-	 *      "type": "adapter",
-	 *      "id": "ADAPTER_ID",
-	 *      "dataSourceEndpoint": [
-	 *          {
-	 *              "uri": "endpoint/uri",
-	 *              "options": {
-	 *                  "type": "PUT"
-	 *              },
-	 *              "keyMap": {
-	 *                  "dataKey": "a",
-	 *                  "resultsKey": "b"
-	 *              }
-	 *          }
-	 *      ],
-	 *      "children": [
-	 *          // children json configuration goes here
-	 *      ]
-	 * }
-	 */
-	/*global define,ko,sandbox,dataservice */
-	function adapterViewModel(node) {
-	    var // imports
-	    unwrap = _knockout2.default.unwrap,
-	        merge = _scalejs2.default.object.merge,
-	        get = _scalejs2.default.object.get,
-	        extend = _scalejs2.default.object.extend,
-	
-	    // props
-	    dictionary = (0, _scalejs3.observable)({}),
-	        // dictionary of nodes with an id
-	    data = (0, _scalejs3.observable)({}),
-	        // data of dictionary contents
-	    context = {
-	        metadata: node.children,
-	        parentContext: this,
-	        getValue: getValue,
-	        dictionary: dictionary,
-	        data: data
-	    },
-	        mappedChildNodes = (0, _scalejs3.observableArray)(),
-	        updated = false,
-	        subs = [],
-	        dataSyncSubscription = void 0,
-	        plugins = node.plugins ? _scalejs5.createViewModels.call(context, node.plugins) : [],
-	        contextPlugins = {};
-	
-	    // recursive function which parses through nodes and adds nodes with an id to dictionary
-	    function createDictionary(nodes) {
-	        var dict = dictionary.peek();
-	        nodes.forEach(function (node) {
-	            // add node to dictionary if it isnt there yet
-	            if (node.id && !dict[node.id]) {
-	                dict[node.id] = node;
-	                updated = true;
-	            }
-	            // add children to dictionary if getValue function is not exposed
-	            if (!node.getValue) {
-	                createDictionary(unwrap(node.mappedChildNodes) || []);
-	            }
-	        });
-	    }
-	
-	    // keep the data current if the node value changed with dataSyncDescription
-	    function syncDataDictionary() {
-	        dataSyncSubscription = (0, _scalejs3.computed)(function () {
-	            var dict = dictionary();
-	            Object.keys(dict).forEach(function (id) {
-	                if (dict[id].getValue) {
-	                    data()[id] = dict[id].getValue();
-	                }
-	            });
-	        });
-	    }
-	
-	    // pause dataSyncDescription and update the data
-	    function updateData(newData) {
-	        dataSyncSubscription && dataSyncSubscription.dispose();
-	        data(newData);
-	        syncDataDictionary();
-	    }
-	
-	    // fetches the data from dataSourceEndpoint(s)
-	    function fetchData() {
-	        var dataSourceEndpointArray = Array.isArray(node.dataSourceEndpoint) ? node.dataSourceEndpoint : [node.dataSourceEndpoint],
-	            count = 0,
-	            dataObject = data();
-	
-	        dataSourceEndpointArray.forEach(function (endpoint) {
-	            _dataservice2.default.ajax(endpoint, function (error, results) {
-	                var resultsByKey = void 0,
-	                    keyMap = endpoint.keyMap || {},
-	                    newDataObject = {};
-	
-	                count++;
-	
-	                if (!error) {
-	                    resultsByKey = keyMap.resultsKey ? get(results, keyMap.resultsKey) : results;
-	                    // optional: keyMap.dataKey path to extend dataObject on
-	                    if (keyMap.dataKey) {
-	                        newDataObject[keyMap.dataKey] = resultsByKey;
-	                    } else {
-	                        newDataObject = resultsByKey;
-	                    }
-	                    extend(dataObject, newDataObject);
-	                }
-	
-	                if (count === dataSourceEndpointArray.length) {
-	                    updateData(dataObject);
-	                    if (!mappedChildNodes().length) {
-	                        mappedChildNodes(_scalejs5.createViewModels.call(context, node.children || []));
-	                    }
-	                }
-	            });
-	        });
-	    }
-	
-	    function getValue(id) {
-	        var node = dictionary()[id],
-	            dataValue = (data() || {})[id];
-	
-	        // the node has been defined so get the value from the node
-	        if (node && node.getValue) {
-	            return node.getValue();
-	        }
-	
-	        // data has been defined for the node but the node doesnt exist yet
-	        if (dataValue) {
-	            return dataValue;
-	        }
-	
-	        if (contextPlugins && contextPlugins[id]) {
-	            return contextPlugins[id]();
-	        }
-	        return context.parentContext.getValue(id);
-	    }
-	
-	    if (!node.lazy) {
-	        mappedChildNodes(_scalejs5.createViewModels.call(context, node.children || []));
-	    }
-	
-	    plugins.forEach(function (plugin) {
-	        contextPlugins[plugin.type] = plugin;
-	    });
-	
-	    // update dictionary if mappedChildNodes of a node updates
-	    (0, _scalejs3.computed)(function () {
-	        updated = false;
-	        createDictionary(mappedChildNodes());
-	        if (updated) {
-	            dictionary.valueHasMutated();
-	        }
-	    });
-	
-	    // initialize the data subscription
-	    syncDataDictionary();
-	
-	    // get initial data
-	    if (node.dataSourceEndpoint) {
-	        fetchData();
-	    }
-	
-	    // listen for 'refresh' event
-	    subs.push((0, _scalejs4.receive)(node.id + '.refresh', function (options) {
-	        fetchData(options);
-	    }));
-	
-	    return merge(node, {
-	        mappedChildNodes: mappedChildNodes,
-	        data: data,
-	        contextPlugins: contextPlugins,
-	        context: context,
-	        dispose: function dispose() {
-	            subs.forEach(function (sub) {
-	                sub.unsubscribe(); // should be DISPOSE!
-	            });
-	        }
-	    });
-	};
-
-/***/ },
-/* 130 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _scalejs = __webpack_require__(4);
-	
-	var _scalejs2 = _interopRequireDefault(_scalejs);
-	
-	__webpack_require__(131);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	// create a sandbox to shim existing requires
-	// give ability to generate new sandbox if desired.
-	/*global define*/
-	/*jslint unparam:true*/
-	var sandbox = _scalejs2.default.buildSandbox('main', _scalejs2.default.object.merge({
-	    buildSandbox: _scalejs2.default.buildSandbox
-	}));
-	
-	exports.default = sandbox;
-
-/***/ },
-/* 131 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
+	exports.default = actionViewModel;
 	
 	var _scalejs = __webpack_require__(3);
 	
@@ -40396,221 +40166,177 @@
 	
 	var _knockout2 = _interopRequireDefault(_knockout);
 	
-	__webpack_require__(22);
+	var _action = __webpack_require__(130);
 	
-	__webpack_require__(132);
+	var _action2 = _interopRequireDefault(_action);
 	
-	__webpack_require__(127);
+	var _actionBindings = __webpack_require__(131);
+	
+	var _actionBindings2 = _interopRequireDefault(_actionBindings);
+	
+	__webpack_require__(10);
+	
+	var _actionModule = __webpack_require__(2);
+	
+	var _scalejs3 = __webpack_require__(132);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	_scalejs2.default.init({});
-
-/***/ },
-/* 132 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	    __webpack_require__(4),
-	    __webpack_require__(11)
-	], __WEBPACK_AMD_DEFINE_RESULT__ = function (
-	    core,
-	    ko
-	) {
-	    'use strict';
-	    
-	    var observable = ko.observable,
-	        computed = ko.computed;
+	var merge = _scalejs2.default.object.merge,
+	    observable = _knockout2.default.observable,
+	    unwrap = _knockout2.default.unwrap,
+	    has = _scalejs2.default.object.has; /*global define, ko, core, view, binding */
 	
-	    function noticeboard() {
-	        var dictionary = observable({}),
-	            subs = {};
 	
-	        // will set the value on an existing observable
+	_scalejs2.default.mvvm.registerTemplates(_action2.default);
+	_scalejs2.default.mvvm.registerBindings(_actionBindings2.default);
 	
-	        function setValue(key, value) {
-	            if (dictionary()[key]) {
-	                dictionary()[key](value);
-	            } else {
-	                dictionary()[key] = observable(value);
-	                dictionary.valueHasMutated();
-	            }
+	function actionViewModel(node) {
+	    var registeredActions = (0, _actionModule.getRegisteredActions)(),
+	        context = this,
+	        text = node.text || node.options.text,
+	        createViewModel = _scalejs2.default.metadataFactory.createViewModel.bind(context),
+	        validate = node.validate,
+	        options = node.options || {},
+	        actionType = node.actionType,
+	        actions = {},
+	        mergedActions = _scalejs2.default.object.extend(actions, registeredActions),
+	        actionFunc = mergedActions[actionType] && mergedActions[actionType].bind(context) || null,
+	        isShown = observable(true),
+	        disabled = observable(has(options.disabled) ? options.disabled : false);
+	
+	    function action(args) {
+	
+	        if (!actionFunc) {
+	            console.error('actionType is not defined', node);
+	            return;
 	        }
 	
-	        function getValue(key) {
-	            var item = dictionary()[key];
-	            if (item) {
-	                return item();
-	            }
-	        }
-	
-	        function subscribe(key, callback) {
-	            var sub = computed(function () {
-	                return getValue(key);
-	            });
-	            sub.subscribe(function (newValue) {
-	                callback(newValue);
-	            });
-	            callback(sub()); // When initially called
-	            subs[key] = subs[key] || [];
-	            subs[key].push(sub);
-	            return sub;
-	        }
-	
-	        function remove(key) {
-	            if (dictionary()[key]) {
-	                if (subs[key]) {
-	                    subs[key].forEach(function (sub) {
-	                        sub.dispose();
-	                    })
+	        if (validate) {
+	            (0, _scalejs3.notify)(validate, {
+	                successCallback: function successCallback() {
+	                    actionFunc(options, args);
 	                }
-	                delete dictionary()[key];
-	                dictionary.valueHasMutated();
-	            }
+	            });
+	        } else {
+	            actionFunc(options, args);
 	        }
-	
-	        return {
-	            setValue: setValue,
-	            getValue: getValue,
-	            get: getValue,
-	            set: setValue,
-	            subscribe: subscribe,
-	            remove: remove,
-	            dictionary: dictionary
-	        };
 	    }
 	
-	    core.registerExtension({
-	        noticeboard: {
-	            createNewNoticeboard: noticeboard,
-	            global: noticeboard()
-	        }
+	    if (node.immediate) {
+	        action();
+	        return;
+	    }
+	
+	    return merge(node, {
+	        isShown: isShown,
+	        action: action,
+	        text: text,
+	        actionType: actionType,
+	        options: options,
+	        disabled: disabled,
+	        context: context
 	    });
-	}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	
-	
-
+	};
 
 /***/ },
-/* 133 */
-/***/ function(module, exports, __webpack_require__) {
+/* 130 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=\"action_template\">\r\n    <div data-bind=\"css: $data.classes, visible:isShown, clickOff: function () { options.dropdown && options.dropdown.showDropdown && options.dropdown.showDropdown(false) }\" class=\"action-button-wrapper\">\r\n        <button data-class=\"action-button\">\r\n            <span data-bind=\"text: text\"></span>\r\n        </button>\r\n        <!-- ko if: actionType === 'dropdown' -->\r\n        <div class=\"drop-menu\" data-bind=\"visible: options.dropdown.showDropdown, foreach: options.dropdown.items\">\r\n            <!-- ko if: rendered -->\r\n                <a class=\"drop-menu-option\" data-bind=\"click: function() { action(); $parent.options.dropdown.showDropdown(false); }, text: text\"></a>\r\n            <!-- /ko -->\r\n        </div>\r\n        <!-- /ko -->\r\n    </div>\r\n</div>\r\n\r\n<div id=\"action_row_dropdown_template\">\r\n    <button data-class=\"action-row-dropdown-button\">\r\n            <span data-bind=\"text: text\"></span>\r\n        </button>\r\n</div>\r\n\r\n<div id=\"action_popup_template\">\r\n    <h2 data-bind=\"text: message\"></h2>\r\n    <!-- ko foreach: actions -->\r\n        <button data-class=\"action-popup-action\" class=\"btn btn-default-primary\"></button>\r\n    <!-- /ko -->\r\n    <!-- ko ifnot: modal -->\r\n  \r\n        <button data-bind=\"click: hidePopup\" class=\"btn btn-default secondary\">Cancel</button>\r\n\r\n    <!-- /ko -->\r\n</div>\r\n\r\n<div id = \"action_popup_button_template\">\r\n    <div data-bind=\"css: $data.classes, visible:isShown\">\r\n        <button data-class=\"action-popup-action\" class=\"btn btn-default-primary\"></button>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"action_hyperlink\">\r\n    <div data-bind=\"visible: isShown\">\r\n        <a href=\"\" data-bind=\"text: text, attr: { href: options.target }\"></a>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"action_text\">\r\n    <div data-bind=\"visible: isShown\">\r\n        <span data-bind=\"css: $data.classes, text: text, click: $data.action\">\r\n    </div>\r\n</div>\r\n\r\n<!-- button template that toggles visibility based on a property defined in the context -->\r\n<div id=\"action_contextVis_template\">\r\n    <div data-class=\"action-contextvis-button\" class=\"action-button-wrapper\">\r\n        <button data-class=\"action-button\">\r\n            <span data-bind=\"text: text\"></span>\r\n        </button>\r\n        <!-- ko if: actionType === 'dropdown' -->\r\n        <div class=\"drop-menu\" data-bind=\"visible: options.dropdown.showDropdown, foreach: options.dropdown.items\">\r\n            <a class=\"drop-menu-option\" data-bind=\"click: function() { action(); $parent.options.dropdown.showDropdown(false); }, text: text\"></a>\r\n        </div>\r\n        <!-- /ko -->\r\n    </div>\r\n</div>\r\n\r\n<div id=\"action_draft_template\">\r\n    <div data-bind=\"css: $data.classes, visible: $data.context.getValue('PoolStatusCode') === 'DF', clickOff: function () { options.dropdown && options.dropdown.showDropdown && options.dropdown.showDropdown(false) }\" class=\"action-button-wrapper\">\r\n        <button data-class=\"action-button\">\r\n            <span data-bind=\"text: text\"></span>\r\n        </button>\r\n        <!-- ko if: actionType === 'dropdown' -->\r\n        <div class=\"drop-menu\" data-bind=\"visible: options.dropdown.showDropdown, foreach: options.dropdown.items\">\r\n            <a class=\"drop-menu-option\" data-bind=\"click: function() { action(); $parent.options.dropdown.showDropdown(false); }, text: text\"></a>\r\n        </div>\r\n        <!-- /ko -->\r\n    </div>\r\n</div>";
+
+/***/ },
+/* 131 */
+/***/ function(module, exports) {
 
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	
-	var _lodash = __webpack_require__(23);
-	
-	var _lodash2 = _interopRequireDefault(_lodash);
-	
-	var _adapter_data = __webpack_require__(134);
-	
-	var _adapter_data2 = _interopRequireDefault(_adapter_data);
-	
-	var _store_data = __webpack_require__(135);
-	
-	var _store_data2 = _interopRequireDefault(_store_data);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var timeout = 100,
-	    testData = {},
-	    o = {};
-	
-	_lodash2.default.merge(testData, _adapter_data2.default, _store_data2.default);
-	
-	function mockAjax(request, callback) {
-	    setTimeout(function () {
-	        callback(null, testData[request.uri]);
-	    }, timeout);
-	}
-	
+	/*global define */
 	exports.default = {
-	    ajax: mockAjax
-	};
-
-/***/ },
-/* 134 */
-/***/ function(module, exports) {
-
-	"use strict";
+	    'action-button': function actionButton() {
+	        var classes = this.buttonClasses || '';
 	
-	module.exports = {
-		"adapter": {
-			"A": "updated_a",
-			"B": "updated_b"
-		},
-		"adapter_a": {
-			"result": "updated_a"
-		},
-		"adapter_b": {
-			"result": "updated_b"
-		}
-	};
-
-/***/ },
-/* 135 */
-/***/ function(module, exports) {
-
-	"use strict";
+	        if (this.icon) {
+	            classes += ' fa fa-' + this.icon;
+	        }
 	
-	module.exports = {
-		"store": {
-			"A": "store_a",
-			"B": "store_b"
-		},
-		"updatedStore": {
-			"A": "updated_store_a",
-			"B": "updated_store_b"
-		},
-		"store_B": {
-			"results": [{
-				"A_result": "store_a"
-			}, {
-				"B_result": "store_a"
-			}]
-		},
-		"storeLookup": {
-			"lookup": [{
-				"A": "store_a",
-				"B": "store_b"
-			}, {
-				"A": "store_a_2",
-				"B": "store_b_2"
-			}, {
-				"A": "store_a_3"
-			}]
-		},
-		"storeLookup2": {
-			"lookup": [{
-				"key": "store_a",
-				"value": "store_b"
-			}, {
-				"key": "store_a_2",
-				"value": "store_b_2"
-			}]
-		},
-		"storeAggregateLookup": {
-			"lookup": [{
-				"key": "store_a",
-				"value": "store_b"
-			}, {
-				"key": "store_a_2",
-				"value": "store_b_2"
-			}, {
-				"key": "store_a_2",
-				"value": "new store_b_2"
-			}, {
-				"key": "store_a",
-				"value": "new store_a"
-			}]
-		}
+	        return {
+	            click: function click() {
+	                this.action();
+	            },
+	            css: classes
+	        };
+	    },
+	    'action-row-dropdown-button': function actionRowDropdownButton(ctx) {
+	        console.log('context: ', ctx);
+	    },
+	    'action-contextvis-button': function actionContextvisButton(ctx) {
+	        // property to bind visibility to in context.
+	        // this can be provided with a bang in front and it will parse correctly
+	        // as the opposite of the context property
+	        var contextProperty = ctx.$data.contextProperty,
+	            context = ctx.$data.context;
+	
+	        return {
+	            css: ctx.$data.classes,
+	            visible: (contextProperty[0] === '!' ? !context[contextProperty.slice(1)]() : context[contextProperty]()) && ctx.$data.isShown(),
+	            clickOff: function clickOff() {
+	                ctx.$data.options.dropdown && ctx.$data.options.dropdown.showDropdown && ctx.$data.options.dropdown.showDropdown(false);
+	            }
+	        };
+	    },
+	    'action-popup-action': function actionPopupAction(ctx) {
+	        var hidePopup = ctx.$parents.filter(function (parent) {
+	            return parent.hidePopup;
+	        })[0].hidePopup,
+	            classes = this.classes || '';
+	
+	        return {
+	            click: function click() {
+	                hidePopup();
+	                this.action();
+	            },
+	            text: this.text,
+	            css: classes
+	        };
+	    },
+	    'classes-binding': function classesBinding(ctx) {
+	        var context = this.context,
+	            classesBinding = this.classesBinding,
+	            classes = this.classes,
+	            css;
+	
+	        if (classesBinding && !context) {
+	            console.error('You cannot define a classes binding expression without passing context');
+	        }
+	
+	        if (classesBinding) {
+	            css = computed(function () {
+	                return Object.keys(classesBinding).reduce(function (cls, className) {
+	                    var applyClass = evaluate(classesBinding[className], function (identifier) {
+	                        return ko.unwrap(context[identifier]);
+	                    });
+	                    if (applyClass) {
+	                        cls += ' ' + className;
+	                    }
+	                    return cls;
+	                }, classes || '');
+	            }, this);
+	        } else {
+	            css = classes;
+	        }
+	
+	        return {
+	            css: css
+	        };
+	    }
 	};
 
 /***/ },
-/* 136 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -40618,9 +40344,9 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.dispose = exports.notify = exports.receive = undefined;
+	exports.notify = exports.receive = undefined;
 	
-	var _postal = __webpack_require__(137);
+	var _postal = __webpack_require__(133);
 	
 	var _postal2 = _interopRequireDefault(_postal);
 	
@@ -40635,7 +40361,7 @@
 	        topic: event,
 	        callback: callback
 	    });
-	
+	    subscription.dispose = subscription.unsubscribe;
 	    return subscription;
 	};
 	
@@ -40647,16 +40373,11 @@
 	    });
 	};
 	
-	function dispose() {
-	    subscription.unsubscribe();
-	};
-	
 	exports.receive = receive;
 	exports.notify = notify;
-	exports.dispose = dispose;
 
 /***/ },
-/* 137 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -41148,7 +40869,7 @@
 	
 		noConflict: function noConflict() {
 			
-			if ( typeof window === "undefined" || ( typeof window !== "undefined" && "function" === "function" && __webpack_require__(138) ) ) {
+			if ( typeof window === "undefined" || ( typeof window !== "undefined" && "function" === "function" && __webpack_require__(134) ) ) {
 				throw new Error( "noConflict can only be used in browser clients which aren't using AMD modules" );
 			}
 			global.postal = prevPostal;
@@ -41341,7 +41062,7 @@
 
 
 /***/ },
-/* 138 */
+/* 134 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
@@ -41349,38 +41070,2591 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ },
-/* 139 */
-/***/ function(module, exports) {
+/* 135 */
+/***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "<div id=\"adapter_template\">\r\n    <!-- ko template: { name: 'metadata_items_template', data: mappedChildNodes } -->\r\n    <!-- /ko -->\r\n</div>";
+	'use strict';
+	
+	var _scalejs = __webpack_require__(10);
+	
+	var _scalejs2 = __webpack_require__(22);
+	
+	var _adapterViewModel = __webpack_require__(136);
+	
+	var _adapterViewModel2 = _interopRequireDefault(_adapterViewModel);
+	
+	var _adapter = __webpack_require__(148);
+	
+	var _adapter2 = _interopRequireDefault(_adapter);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	(0, _scalejs.registerTemplates)(_adapter2.default);
+	(0, _scalejs2.registerViewModels)({
+	    adapter: _adapterViewModel2.default
+	});
+
+/***/ },
+/* 136 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = adapterViewModel;
+	
+	var _scalejs = __webpack_require__(137);
+	
+	var _scalejs2 = _interopRequireDefault(_scalejs);
+	
+	var _knockout = __webpack_require__(11);
+	
+	var _knockout2 = _interopRequireDefault(_knockout);
+	
+	var _dataservice = __webpack_require__(144);
+	
+	var _dataservice2 = _interopRequireDefault(_dataservice);
+	
+	var _scalejs3 = __webpack_require__(10);
+	
+	var _scalejs4 = __webpack_require__(132);
+	
+	var _scalejs5 = __webpack_require__(22);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* TODO:
+	In PJSON, we used readonly, errors, etc. We need a way to do that outside of adapter
+	i.e. plugin to adapter context with other components
+	*/
+	
+	/** Adapter: a viewless component which keeps track of child nodes and the data for the nodes
+	 * @module adapter
+	 *
+	 * @param {object} node
+	 *  The configuration object for the module
+	 * @param {string} node.type='adapter'
+	 *  The type of the node is adapter
+	 * @param {string} node.id
+	 *  The id for the module
+	 * @param {boolean} [node.lazy=false]
+	 *  If the child nodes need to be lazily loaded (e.g. delay creation of children viewmodels until data returns)
+	 * @param {object|Object[]} [node.dataSourceEndpoint]
+	 *  An object defining the endpoint(s) that makes the ajax calls
+	 * @param {string} node.dataSourceEndpoint.uri
+	 *   The uri for the endpoint
+	 * @param {string} [node.dataSourceEndpoint.url]
+	 *  The url for the endpoint
+	 * @param {object} [node.dataSourceEndpoint.keyMap]
+	 *  A mapper object to map keys
+	 * @param {string} [node.dataSourceEndpoint.keyMap.resultsKey]
+	 *  Map the results from the ajax call with this key
+	 * @param {string} [node.dataSourceEndpoint.keyMap.dataKey]
+	 *  Extend the data object with this key
+	 * @param {object} [node.dataSourceEndpoint.options]
+	 *  Options for the ajax call
+	 * @param {array} node.children
+	 *  The json configuration for children nodes which will be mapped to view models and kept track of from the adapter
+	 * @param {array} [node.plugins]
+	 *  The json configuration for plugins which will be accessible from getValue function, based upon type
+	 *
+	 * @property {array} mappedChildNodes the mapped children nodes
+	 * @property {observable} data the data retrieved from dataSourceEndpoint and tracked from children
+	 * @property {object} contextPlugins an object that contains the plugins which have been added to the adapter context
+	 * @property {context} the context for the adapter (which can be utilized in a custom template)
+	 * @property {function} dispose the dispose function for all internal subs
+	 *
+	 * @example
+	 * {
+	 *      "type": "adapter",
+	 *      "id": "ADAPTER_ID",
+	 *      "dataSourceEndpoint": [
+	 *          {
+	 *              "uri": "endpoint/uri",
+	 *              "options": {
+	 *                  "type": "PUT"
+	 *              },
+	 *              "keyMap": {
+	 *                  "dataKey": "a",
+	 *                  "resultsKey": "b"
+	 *              }
+	 *          }
+	 *      ],
+	 *      "children": [
+	 *          // children json configuration goes here
+	 *      ]
+	 * }
+	 */
+	/*global define,ko,sandbox,dataservice */
+	function adapterViewModel(node) {
+	    var // imports
+	    unwrap = _knockout2.default.unwrap,
+	        merge = _scalejs2.default.object.merge,
+	        get = _scalejs2.default.object.get,
+	        extend = _scalejs2.default.object.extend,
+	
+	    // props
+	    dictionary = (0, _scalejs3.observable)({}),
+	        // dictionary of nodes with an id
+	    data = (0, _scalejs3.observable)({}),
+	        // data of dictionary contents
+	    context = {
+	        metadata: node.children,
+	        parentContext: this,
+	        getValue: getValue,
+	        dictionary: dictionary,
+	        data: data
+	    },
+	        mappedChildNodes = (0, _scalejs3.observableArray)(),
+	        updated = false,
+	        subs = [],
+	        dataSyncSubscription = void 0,
+	        plugins = node.plugins ? _scalejs5.createViewModels.call(context, node.plugins) : [],
+	        contextPlugins = {};
+	
+	    plugins.forEach(function (plugin) {
+	        contextPlugins[plugin.type] = plugin;
+	    });
+	
+	    // recursive function which parses through nodes and adds nodes with an id to dictionary
+	    function createDictionary(nodes) {
+	        var dict = dictionary.peek();
+	        nodes.forEach(function (node) {
+	            // add node to dictionary if it isnt there yet
+	            if (node.id && !dict[node.id]) {
+	                dict[node.id] = node;
+	                updated = true;
+	            }
+	            // add children to dictionary if getValue function is not exposed
+	            if (!node.getValue) {
+	                createDictionary(unwrap(node.mappedChildNodes) || []);
+	            }
+	        });
+	    }
+	
+	    // keep the data current if the node value changed with dataSyncDescription
+	    function syncDataDictionary() {
+	        dataSyncSubscription = (0, _scalejs3.computed)(function () {
+	            var dict = dictionary();
+	            Object.keys(dict).forEach(function (id) {
+	                if (dict[id].getValue) {
+	                    data()[id] = dict[id].getValue();
+	                }
+	            });
+	        });
+	    }
+	
+	    // pause dataSyncDescription and update the data
+	    function updateData(newData) {
+	        dataSyncSubscription && dataSyncSubscription.dispose();
+	        data(newData);
+	        syncDataDictionary();
+	    }
+	
+	    // fetches the data from dataSourceEndpoint(s)
+	    function fetchData() {
+	        var dataSourceEndpointArray = Array.isArray(node.dataSourceEndpoint) ? node.dataSourceEndpoint : [node.dataSourceEndpoint],
+	            count = 0,
+	            dataObject = data();
+	
+	        dataSourceEndpointArray.forEach(function (endpoint) {
+	            _dataservice2.default.ajax(endpoint, function (error, results) {
+	                var resultsByKey = void 0,
+	                    keyMap = endpoint.keyMap || {},
+	                    newDataObject = {};
+	
+	                count++;
+	
+	                if (!error) {
+	                    resultsByKey = keyMap.resultsKey ? get(results, keyMap.resultsKey) : results;
+	                    // optional: keyMap.dataKey path to extend dataObject on
+	                    if (keyMap.dataKey) {
+	                        newDataObject[keyMap.dataKey] = resultsByKey;
+	                    } else {
+	                        newDataObject = resultsByKey;
+	                    }
+	                    extend(dataObject, newDataObject);
+	                }
+	
+	                if (count === dataSourceEndpointArray.length) {
+	                    updateData(dataObject);
+	                    if (!mappedChildNodes().length) {
+	                        mappedChildNodes(_scalejs5.createViewModels.call(context, node.children || []));
+	                    }
+	                }
+	            });
+	        });
+	    }
+	
+	    function getValue(id) {
+	        var node = dictionary()[id],
+	            dataValue = (data() || {})[id];
+	
+	        // the node has been defined so get the value from the node
+	        if (node && node.getValue) {
+	            return node.getValue();
+	        }
+	
+	        // data has been defined for the node but the node doesnt exist yet
+	        if (dataValue) {
+	            return dataValue;
+	        }
+	
+	        if (contextPlugins && contextPlugins[id]) {
+	            return contextPlugins[id]();
+	        }
+	        return context.parentContext.getValue(id);
+	    }
+	
+	    if (!node.lazy) {
+	        mappedChildNodes(_scalejs5.createViewModels.call(context, node.children || []));
+	    }
+	
+	    // update dictionary if mappedChildNodes of a node updates
+	    (0, _scalejs3.computed)(function () {
+	        updated = false;
+	        createDictionary(mappedChildNodes());
+	        if (updated) {
+	            dictionary.valueHasMutated();
+	        }
+	    });
+	
+	    // initialize the data subscription
+	    syncDataDictionary();
+	
+	    // get initial data
+	    if (node.dataSourceEndpoint) {
+	        fetchData();
+	    }
+	
+	    // listen for 'refresh' event
+	    subs.push((0, _scalejs4.receive)(node.id + '.refresh', function (options) {
+	        fetchData(options);
+	    }));
+	
+	    return merge(node, {
+	        mappedChildNodes: mappedChildNodes,
+	        data: data,
+	        contextPlugins: contextPlugins,
+	        context: context,
+	        dispose: function dispose() {
+	            subs.forEach(function (sub) {
+	                sub.dispose();
+	            });
+	        }
+	    });
+	};
+
+/***/ },
+/* 137 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _scalejs = __webpack_require__(3);
+	
+	var _scalejs2 = _interopRequireDefault(_scalejs);
+	
+	__webpack_require__(138);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// create a sandbox to shim existing requires
+	// give ability to generate new sandbox if desired.
+	/*global define*/
+	/*jslint unparam:true*/
+	var sandbox = _scalejs2.default.buildSandbox('main', _scalejs2.default.object.merge({
+	    buildSandbox: _scalejs2.default.buildSandbox
+	}));
+	
+	exports.default = sandbox;
+
+/***/ },
+/* 138 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _scalejs = __webpack_require__(10);
+	
+	var _scalejs2 = _interopRequireDefault(_scalejs);
+	
+	var _knockout = __webpack_require__(11);
+	
+	var _knockout2 = _interopRequireDefault(_knockout);
+	
+	__webpack_require__(22);
+	
+	__webpack_require__(139);
+	
+	__webpack_require__(143);
+	
+	__webpack_require__(127);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	console.log('loading mvvm.init');
+	_scalejs2.default.init({});
+
+/***/ },
+/* 139 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.allowSetHash = exports.serialize = exports.reRoute = exports.getCurrent = exports.setRoute = exports.init = exports.removeNav = exports.addNav = exports.navigate = exports.activeLink = exports.navLinks = exports.layout = exports.navigation = undefined;
+	
+	var _scalejs = __webpack_require__(3);
+	
+	var _scalejs2 = _interopRequireDefault(_scalejs);
+	
+	var _knockout = __webpack_require__(11);
+	
+	var _knockout2 = _interopRequireDefault(_knockout);
+	
+	var _crossroads = __webpack_require__(140);
+	
+	var _crossroads2 = _interopRequireDefault(_crossroads);
+	
+	var _hasher = __webpack_require__(142);
+	
+	var _hasher2 = _interopRequireDefault(_hasher);
+	
+	var _lodash = __webpack_require__(23);
+	
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var merge = _scalejs2.default.object.merge,
+	    navLinks = _knockout2.default.observableArray(),
+	    activeLink = _knockout2.default.observable(),
+	    has = _scalejs2.default.object.has,
+	    navLinkMap = {},
+	    navigation = navigation,
+	    active = true,
+	    config = _scalejs2.default.type.is(module.config, 'function') ? module.config() || {} : {},
+	    allowSetHash = has(config.allowSetHash) ? config.allowSetHash : true,
+	    current = {},
+	    observableCurrent = _knockout2.default.observable(current),
+	    defaultLinkIndex = 0;
+	
+	function parseQuery(qstr) {
+	    var query = {},
+	        parsed;
+	    var a = qstr.substr(1).split('&');
+	    for (var i = 0; i < a.length; i = i + 1) {
+	        var b = a[i].split('=');
+	
+	        query[decodeURIComponent(b[0])] = decodeURIComponent(b[1] || '');
+	        try {
+	            query[decodeURIComponent(b[0])] = JSON.parse(query[decodeURIComponent(b[0])]);
+	        } catch (ignore) {
+	            //if it's already a string, we don't need to do anything
+	        }
+	    }
+	    Object.keys(query).forEach(function (key) {
+	        // TODO: implement better typecasting
+	        if (query[key] === 'true') {
+	            query[key] = true;
+	        } else if (query[key] === 'false') {
+	            query[key] = false;
+	        } else if (typeof query[key] === 'string' && query[key].indexOf(',') !== -1) {
+	            query[key] = query[key].split(',');
+	        }
+	    });
+	    return query;
+	}
+	
+	function addNav(navOptions, callback) {
+	    var route,
+	        defaultRoute,
+	        navCallback,
+	        link,
+	        decodeRoute,
+	        navText = navOptions.text,
+	        routes = [];
+	
+	    // if not a route, callback is as is
+	    if (!navOptions.route) {
+	        navCallback = callback;
+	    } else {
+	        // a route will have extra logic in its callbacl
+	        route = navOptions.route;
+	        // determine the 'default' route for the link
+	        // incase we want to have sub-navigations...
+	        defaultRoute = route.split('/')[0];
+	
+	        // callback for the navigation
+	        // tell crossroads to parse the default route when navigation occurs
+	        navCallback = function navCallback() {
+	            _crossroads2.default.parse(defaultRoute);
+	        };
+	
+	        // creats the def for the current route
+	        // route - the default route, e.g. the main route
+	        // path - the sub path for the route, if any
+	        // query - the query params in the route
+	        // url - the full url constructed from all the args
+	        decodeRoute = function decodeRoute(arg) {
+	            // because crossroads cant handle thing:?foo:/bar:?thing:
+	            // workaround - use 'rest' and deconstruct the arg ourselves..
+	            if (typeof arg === 'string') {
+	                // if Arg is a string it is the path plus the serliazed query, so we need to split it
+	                var split = arg.split('?');
+	
+	                // if the split yields more than 1 result, we have a query param
+	                if (split.length > 1) {
+	                    arg = {
+	                        route: defaultRoute,
+	                        path: split[0],
+	                        query: parseQuery('?' + split[1])
+	                    };
+	                } else {
+	                    // there is no query param
+	                    arg = {
+	                        route: defaultRoute,
+	                        path: split[0] || ''
+	                    };
+	                }
+	            } else if (arg) {
+	                // if arg is defined but not a string, it is a query object
+	                arg = {
+	                    route: defaultRoute,
+	                    path: '',
+	                    query: arg
+	                };
+	            } else {
+	                // if arg is not defined at all, it is just the default route
+	                arg = {
+	                    route: defaultRoute,
+	                    path: ''
+	                };
+	            }
+	
+	            // remove trailing "/" from path if exists
+	            if (arg.path[arg.path.length - 1] === '/') {
+	                arg.path = arg.path.slice(0, arg.path.length - 1);
+	            }
+	
+	            // reconstruct the full url from the arg
+	            arg.url = arg.route + (arg.path ? '/' + arg.path : '') + (arg.query ? '/?' + serialize(arg.query) : '');
+	
+	            // maintain a current reference to the arg
+	            current = arg;
+	            observableCurrent(current);
+	
+	            // if we disabled the routing, dont route!
+	            if (!active) {
+	                return;
+	            }
+	
+	            // call the callback on the route, and set the active link
+	            callback(arg);
+	            activeLink(link);
+	        };
+	
+	        routes.push(_crossroads2.default.addRoute(route, decodeRoute));
+	
+	        // need to create 2 listeners for more complex routes (e.g. route + path)
+	        if (route !== defaultRoute) {
+	            routes.push(_crossroads2.default.addRoute(defaultRoute, decodeRoute));
+	        }
+	    }
+	
+	    link = merge(navOptions, {
+	        navText: navText,
+	        navigate: function navigate() {
+	            activeLink(link);
+	            navCallback();
+	        },
+	        routes: routes,
+	        canNav: navOptions.canNav || function () {
+	            return true;
+	        }
+	    });
+	
+	    navLinks.push(link);
+	
+	    navLinkMap[navText] = link;
+	
+	    return link;
+	}
+	
+	function removeNav(navText) {
+	    // removes nav from nav links, nav link map, and crossroads
+	    if (navLinkMap[navText]) {
+	        navLinks.remove(navLinkMap[navText]);
+	        navLinkMap[navText].routes.forEach(function (route) {
+	            _crossroads2.default.removeRoute(route);
+	        });
+	        delete navLinkMap[navText];
+	    }
+	}
+	
+	function navigate(navText) {
+	    // sets the active link to the link from map
+	    if (activeLink() !== navLinkMap[navText]) {
+	        activeLink(navLinkMap[navText]);
+	    }
+	}
+	
+	function init() {
+	    var initial = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+	
+	    defaultLinkIndex = initial;
+	    _hasher2.default.init();
+	    // will set the initial active link if not defined to be the first one
+	    if (navLinks().length !== 0 && !activeLink()) {
+	        navLinks()[initial].navigate();
+	    }
+	}
+	
+	function parseHash(newHash, oldHash) {
+	    _crossroads2.default.parse(newHash);
+	}
+	
+	function serialize(obj) {
+	    var str = [];
+	    for (var p in obj) {
+	        if (obj.hasOwnProperty(p)) {
+	            str.push(encodeURIComponent(p) + '=' + encodeURIComponent(typeof obj[p] === 'string' ? obj[p] : JSON.stringify(obj[p])));
+	        }
+	    }
+	    return str.join('&');
+	}
+	
+	function setRoute(url, query, shouldCallback, shouldNotReplace) {
+	    var currentUrl = current.route + (current.path ? '/' + current.path : '');
+	    // figure out if the app is trying to set the same route and disregard it
+	    if (currentUrl === url && JSON.stringify(current.query || {}) === JSON.stringify(query)) {
+	        console.warn('Trying to set the same route; will be disregarded');
+	        return;
+	    }
+	
+	    // disable the callback for the routing
+	    if (shouldCallback === false) {
+	        active = false;
+	    }
+	    if (query) {
+	        url += '/?' + serialize(query);
+	    }
+	    // if shouldNotReplace is false, then it should replace instead of create a new history record
+	    if (shouldNotReplace === false) {
+	        setHash(url, true);
+	    } else {
+	        setHash(url);
+	    }
+	    active = true;
+	}
+	
+	function reRoute() {
+	    // resets the state of crossroads and reroutes to the latest url
+	    var url = current.url;
+	    _crossroads2.default.resetState();
+	    _crossroads2.default.parse(url);
+	}
+	
+	function getCurrent() {
+	    return _lodash2.default.cloneDeep(observableCurrent());
+	}
+	
+	function setHash(url, replace) {
+	    if (allowSetHash) {
+	        (replace ? _hasher2.default.replaceHash : _hasher2.default.setHash)(url);
+	    } else {
+	        parseHash(url);
+	    }
+	}
+	
+	exports.navigation = navigation = {
+	    navLinks: navLinks,
+	    activeLink: activeLink,
+	    navigate: navigate,
+	    addNav: addNav,
+	    removeNav: removeNav,
+	    init: init,
+	    setRoute: setRoute,
+	    getCurrent: getCurrent,
+	    reRoute: reRoute,
+	    serialize: serialize,
+	    allowSetHash: allowSetHash
+	};
+	
+	var layout = { content: _knockout2.default.observable() };
+	
+	_scalejs2.default.registerExtension({
+	    navigation: navigation,
+	    layout: layout
+	});
+	
+	// when a route is detected, set the hash
+	_crossroads2.default.routed.add(function (request, data) {
+	    setHash(request);
+	});
+	
+	// if a route is bypassed
+	// either there are nav links and the nav doesnt exist so nav to the first link (or defaultLinkIndex)
+	// or there are no nav links in which case navigation still needs to be set up
+	// so store the url in current
+	_crossroads2.default.bypassed.add(function (request) {
+	    if (navLinks()[defaultLinkIndex]) {
+	        navLinks()[defaultLinkIndex].navigate();
+	    } else {
+	        current = {
+	            url: request
+	        };
+	        observableCurrent(current);
+	    }
+	});
+	
+	_hasher2.default.initialized.add(parseHash);
+	_hasher2.default.changed.add(parseHash);
+	
+	// core.onApplicationEvent(function (event) {
+	//     if (event === 'started') {
+	//         // wait for all modules to register before initialization
+	//         setTimeout(function () {
+	//             hasher.init();
+	//             navigation.init();
+	//         });
+	//     }
+	// });
+	
+	exports.navigation = navigation;
+	exports.layout = layout;
+	exports.navLinks = navLinks;
+	exports.activeLink = activeLink;
+	exports.navigate = navigate;
+	exports.addNav = addNav;
+	exports.removeNav = removeNav;
+	exports.init = init;
+	exports.setRoute = setRoute;
+	exports.getCurrent = getCurrent;
+	exports.reRoute = reRoute;
+	exports.serialize = serialize;
+	exports.allowSetHash = allowSetHash;
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12)(module)))
 
 /***/ },
 /* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/** @license
+	 * crossroads <http://millermedeiros.github.com/crossroads.js/>
+	 * Author: Miller Medeiros | MIT License
+	 * v0.12.2 (2015/07/31 18:37)
+	 */
+	
+	(function () {
+	var factory = function (signals) {
+	
+	    var crossroads,
+	        _hasOptionalGroupBug,
+	        UNDEF;
+	
+	    // Helpers -----------
+	    //====================
+	
+	    // IE 7-8 capture optional groups as empty strings while other browsers
+	    // capture as `undefined`
+	    _hasOptionalGroupBug = (/t(.+)?/).exec('t')[1] === '';
+	
+	    function arrayIndexOf(arr, val) {
+	        if (arr.indexOf) {
+	            return arr.indexOf(val);
+	        } else {
+	            //Array.indexOf doesn't work on IE 6-7
+	            var n = arr.length;
+	            while (n--) {
+	                if (arr[n] === val) {
+	                    return n;
+	                }
+	            }
+	            return -1;
+	        }
+	    }
+	
+	    function arrayRemove(arr, item) {
+	        var i = arrayIndexOf(arr, item);
+	        if (i !== -1) {
+	            arr.splice(i, 1);
+	        }
+	    }
+	
+	    function isKind(val, kind) {
+	        return '[object '+ kind +']' === Object.prototype.toString.call(val);
+	    }
+	
+	    function isRegExp(val) {
+	        return isKind(val, 'RegExp');
+	    }
+	
+	    function isArray(val) {
+	        return isKind(val, 'Array');
+	    }
+	
+	    function isFunction(val) {
+	        return typeof val === 'function';
+	    }
+	
+	    //borrowed from AMD-utils
+	    function typecastValue(val) {
+	        var r;
+	        if (val === null || val === 'null') {
+	            r = null;
+	        } else if (val === 'true') {
+	            r = true;
+	        } else if (val === 'false') {
+	            r = false;
+	        } else if (val === UNDEF || val === 'undefined') {
+	            r = UNDEF;
+	        } else if (val === '' || isNaN(val)) {
+	            //isNaN('') returns false
+	            r = val;
+	        } else {
+	            //parseFloat(null || '') returns NaN
+	            r = parseFloat(val);
+	        }
+	        return r;
+	    }
+	
+	    function typecastArrayValues(values) {
+	        var n = values.length,
+	            result = [];
+	        while (n--) {
+	            result[n] = typecastValue(values[n]);
+	        }
+	        return result;
+	    }
+	
+	    // borrowed from MOUT
+	    function decodeQueryString(queryStr, shouldTypecast) {
+	        var queryArr = (queryStr || '').replace('?', '').split('&'),
+	            reg = /([^=]+)=(.+)/,
+	            i = -1,
+	            obj = {},
+	            equalIndex, cur, pValue, pName;
+	
+	        while ((cur = queryArr[++i])) {
+	            equalIndex = cur.indexOf('=');
+	            pName = cur.substring(0, equalIndex);
+	            pValue = decodeURIComponent(cur.substring(equalIndex + 1));
+	            if (shouldTypecast !== false) {
+	                pValue = typecastValue(pValue);
+	            }
+	            if (pName in obj){
+	                if(isArray(obj[pName])){
+	                    obj[pName].push(pValue);
+	                } else {
+	                    obj[pName] = [obj[pName], pValue];
+	                }
+	            } else {
+	                obj[pName] = pValue;
+	           }
+	        }
+	        return obj;
+	    }
+	
+	
+	    // Crossroads --------
+	    //====================
+	
+	    /**
+	     * @constructor
+	     */
+	    function Crossroads() {
+	        this.bypassed = new signals.Signal();
+	        this.routed = new signals.Signal();
+	        this._routes = [];
+	        this._prevRoutes = [];
+	        this._piped = [];
+	        this.resetState();
+	    }
+	
+	    Crossroads.prototype = {
+	
+	        greedy : false,
+	
+	        greedyEnabled : true,
+	
+	        ignoreCase : true,
+	
+	        ignoreState : false,
+	
+	        shouldTypecast : false,
+	
+	        normalizeFn : null,
+	
+	        resetState : function(){
+	            this._prevRoutes.length = 0;
+	            this._prevMatchedRequest = null;
+	            this._prevBypassedRequest = null;
+	        },
+	
+	        create : function () {
+	            return new Crossroads();
+	        },
+	
+	        addRoute : function (pattern, callback, priority) {
+	            var route = new Route(pattern, callback, priority, this);
+	            this._sortedInsert(route);
+	            return route;
+	        },
+	
+	        removeRoute : function (route) {
+	            arrayRemove(this._routes, route);
+	            route._destroy();
+	        },
+	
+	        removeAllRoutes : function () {
+	            var n = this.getNumRoutes();
+	            while (n--) {
+	                this._routes[n]._destroy();
+	            }
+	            this._routes.length = 0;
+	        },
+	
+	        parse : function (request, defaultArgs) {
+	            request = request || '';
+	            defaultArgs = defaultArgs || [];
+	
+	            // should only care about different requests if ignoreState isn't true
+	            if ( !this.ignoreState &&
+	                (request === this._prevMatchedRequest ||
+	                 request === this._prevBypassedRequest) ) {
+	                return;
+	            }
+	
+	            var routes = this._getMatchedRoutes(request),
+	                i = 0,
+	                n = routes.length,
+	                cur;
+	
+	            if (n) {
+	                this._prevMatchedRequest = request;
+	
+	                this._notifyPrevRoutes(routes, request);
+	                this._prevRoutes = routes;
+	                //should be incremental loop, execute routes in order
+	                while (i < n) {
+	                    cur = routes[i];
+	                    cur.route.matched.dispatch.apply(cur.route.matched, defaultArgs.concat(cur.params));
+	                    cur.isFirst = !i;
+	                    this.routed.dispatch.apply(this.routed, defaultArgs.concat([request, cur]));
+	                    i += 1;
+	                }
+	            } else {
+	                this._prevBypassedRequest = request;
+	                this.bypassed.dispatch.apply(this.bypassed, defaultArgs.concat([request]));
+	            }
+	
+	            this._pipeParse(request, defaultArgs);
+	        },
+	
+	        _notifyPrevRoutes : function(matchedRoutes, request) {
+	            var i = 0, prev;
+	            while (prev = this._prevRoutes[i++]) {
+	                //check if switched exist since route may be disposed
+	                if(prev.route.switched && this._didSwitch(prev.route, matchedRoutes)) {
+	                    prev.route.switched.dispatch(request);
+	                }
+	            }
+	        },
+	
+	        _didSwitch : function (route, matchedRoutes){
+	            var matched,
+	                i = 0;
+	            while (matched = matchedRoutes[i++]) {
+	                // only dispatch switched if it is going to a different route
+	                if (matched.route === route) {
+	                    return false;
+	                }
+	            }
+	            return true;
+	        },
+	
+	        _pipeParse : function(request, defaultArgs) {
+	            var i = 0, route;
+	            while (route = this._piped[i++]) {
+	                route.parse(request, defaultArgs);
+	            }
+	        },
+	
+	        getNumRoutes : function () {
+	            return this._routes.length;
+	        },
+	
+	        _sortedInsert : function (route) {
+	            //simplified insertion sort
+	            var routes = this._routes,
+	                n = routes.length;
+	            do { --n; } while (routes[n] && route._priority <= routes[n]._priority);
+	            routes.splice(n+1, 0, route);
+	        },
+	
+	        _getMatchedRoutes : function (request) {
+	            var res = [],
+	                routes = this._routes,
+	                n = routes.length,
+	                route;
+	            //should be decrement loop since higher priorities are added at the end of array
+	            while (route = routes[--n]) {
+	                if ((!res.length || this.greedy || route.greedy) && route.match(request)) {
+	                    res.push({
+	                        route : route,
+	                        params : route._getParamsArray(request)
+	                    });
+	                }
+	                if (!this.greedyEnabled && res.length) {
+	                    break;
+	                }
+	            }
+	            return res;
+	        },
+	
+	        pipe : function (otherRouter) {
+	            this._piped.push(otherRouter);
+	        },
+	
+	        unpipe : function (otherRouter) {
+	            arrayRemove(this._piped, otherRouter);
+	        },
+	
+	        toString : function () {
+	            return '[crossroads numRoutes:'+ this.getNumRoutes() +']';
+	        }
+	    };
+	
+	    //"static" instance
+	    crossroads = new Crossroads();
+	    crossroads.VERSION = '0.12.2';
+	
+	    crossroads.NORM_AS_ARRAY = function (req, vals) {
+	        return [vals.vals_];
+	    };
+	
+	    crossroads.NORM_AS_OBJECT = function (req, vals) {
+	        return [vals];
+	    };
+	
+	
+	    // Route --------------
+	    //=====================
+	
+	    /**
+	     * @constructor
+	     */
+	    function Route(pattern, callback, priority, router) {
+	        var isRegexPattern = isRegExp(pattern),
+	            patternLexer = router.patternLexer;
+	        this._router = router;
+	        this._pattern = pattern;
+	        this._paramsIds = isRegexPattern? null : patternLexer.getParamIds(pattern);
+	        this._optionalParamsIds = isRegexPattern? null : patternLexer.getOptionalParamsIds(pattern);
+	        this._matchRegexp = isRegexPattern? pattern : patternLexer.compilePattern(pattern, router.ignoreCase);
+	        this.matched = new signals.Signal();
+	        this.switched = new signals.Signal();
+	        if (callback) {
+	            this.matched.add(callback);
+	        }
+	        this._priority = priority || 0;
+	    }
+	
+	    Route.prototype = {
+	
+	        greedy : false,
+	
+	        rules : void(0),
+	
+	        match : function (request) {
+	            request = request || '';
+	            return this._matchRegexp.test(request) && this._validateParams(request); //validate params even if regexp because of `request_` rule.
+	        },
+	
+	        _validateParams : function (request) {
+	            var rules = this.rules,
+	                values = this._getParamsObject(request),
+	                key;
+	            for (key in rules) {
+	                // normalize_ isn't a validation rule... (#39)
+	                if(key !== 'normalize_' && rules.hasOwnProperty(key) && ! this._isValidParam(request, key, values)){
+	                    return false;
+	                }
+	            }
+	            return true;
+	        },
+	
+	        _isValidParam : function (request, prop, values) {
+	            var validationRule = this.rules[prop],
+	                val = values[prop],
+	                isValid = false,
+	                isQuery = (prop.indexOf('?') === 0);
+	
+	            if (val == null && this._optionalParamsIds && arrayIndexOf(this._optionalParamsIds, prop) !== -1) {
+	                isValid = true;
+	            }
+	            else if (isRegExp(validationRule)) {
+	                if (isQuery) {
+	                    val = values[prop +'_']; //use raw string
+	                }
+	                isValid = validationRule.test(val);
+	            }
+	            else if (isArray(validationRule)) {
+	                if (isQuery) {
+	                    val = values[prop +'_']; //use raw string
+	                }
+	                isValid = this._isValidArrayRule(validationRule, val);
+	            }
+	            else if (isFunction(validationRule)) {
+	                isValid = validationRule(val, request, values);
+	            }
+	
+	            return isValid; //fail silently if validationRule is from an unsupported type
+	        },
+	
+	        _isValidArrayRule : function (arr, val) {
+	            if (! this._router.ignoreCase) {
+	                return arrayIndexOf(arr, val) !== -1;
+	            }
+	
+	            if (typeof val === 'string') {
+	                val = val.toLowerCase();
+	            }
+	
+	            var n = arr.length,
+	                item,
+	                compareVal;
+	
+	            while (n--) {
+	                item = arr[n];
+	                compareVal = (typeof item === 'string')? item.toLowerCase() : item;
+	                if (compareVal === val) {
+	                    return true;
+	                }
+	            }
+	            return false;
+	        },
+	
+	        _getParamsObject : function (request) {
+	            var shouldTypecast = this._router.shouldTypecast,
+	                values = this._router.patternLexer.getParamValues(request, this._matchRegexp, shouldTypecast),
+	                o = {},
+	                n = values.length,
+	                param, val;
+	            while (n--) {
+	                val = values[n];
+	                if (this._paramsIds) {
+	                    param = this._paramsIds[n];
+	                    if (param.indexOf('?') === 0 && val) {
+	                        //make a copy of the original string so array and
+	                        //RegExp validation can be applied properly
+	                        o[param +'_'] = val;
+	                        //update vals_ array as well since it will be used
+	                        //during dispatch
+	                        val = decodeQueryString(val, shouldTypecast);
+	                        values[n] = val;
+	                    }
+	                    // IE will capture optional groups as empty strings while other
+	                    // browsers will capture `undefined` so normalize behavior.
+	                    // see: #gh-58, #gh-59, #gh-60
+	                    if ( _hasOptionalGroupBug && val === '' && arrayIndexOf(this._optionalParamsIds, param) !== -1 ) {
+	                        val = void(0);
+	                        values[n] = val;
+	                    }
+	                    o[param] = val;
+	                }
+	                //alias to paths and for RegExp pattern
+	                o[n] = val;
+	            }
+	            o.request_ = shouldTypecast? typecastValue(request) : request;
+	            o.vals_ = values;
+	            return o;
+	        },
+	
+	        _getParamsArray : function (request) {
+	            var norm = this.rules? this.rules.normalize_ : null,
+	                params;
+	            norm = norm || this._router.normalizeFn; // default normalize
+	            if (norm && isFunction(norm)) {
+	                params = norm(request, this._getParamsObject(request));
+	            } else {
+	                params = this._getParamsObject(request).vals_;
+	            }
+	            return params;
+	        },
+	
+	        interpolate : function(replacements) {
+	            var str = this._router.patternLexer.interpolate(this._pattern, replacements);
+	            if (! this._validateParams(str) ) {
+	                throw new Error('Generated string doesn\'t validate against `Route.rules`.');
+	            }
+	            return str;
+	        },
+	
+	        dispose : function () {
+	            this._router.removeRoute(this);
+	        },
+	
+	        _destroy : function () {
+	            this.matched.dispose();
+	            this.switched.dispose();
+	            this.matched = this.switched = this._pattern = this._matchRegexp = null;
+	        },
+	
+	        toString : function () {
+	            return '[Route pattern:"'+ this._pattern +'", numListeners:'+ this.matched.getNumListeners() +']';
+	        }
+	
+	    };
+	
+	
+	
+	    // Pattern Lexer ------
+	    //=====================
+	
+	    Crossroads.prototype.patternLexer = (function () {
+	
+	        var
+	            //match chars that should be escaped on string regexp
+	            ESCAPE_CHARS_REGEXP = /[\\.+*?\^$\[\](){}\/'#]/g,
+	
+	            //trailing slashes (begin/end of string)
+	            LOOSE_SLASHES_REGEXP = /^\/|\/$/g,
+	            LEGACY_SLASHES_REGEXP = /\/$/g,
+	
+	            //params - everything between `{ }` or `: :`
+	            PARAMS_REGEXP = /(?:\{|:)([^}:]+)(?:\}|:)/g,
+	
+	            //used to save params during compile (avoid escaping things that
+	            //shouldn't be escaped).
+	            TOKENS = {
+	                'OS' : {
+	                    //optional slashes
+	                    //slash between `::` or `}:` or `\w:` or `:{?` or `}{?` or `\w{?`
+	                    rgx : /([:}]|\w(?=\/))\/?(:|(?:\{\?))/g,
+	                    save : '$1{{id}}$2',
+	                    res : '\\/?'
+	                },
+	                'RS' : {
+	                    //required slashes
+	                    //used to insert slash between `:{` and `}{`
+	                    rgx : /([:}])\/?(\{)/g,
+	                    save : '$1{{id}}$2',
+	                    res : '\\/'
+	                },
+	                'RQ' : {
+	                    //required query string - everything in between `{? }`
+	                    rgx : /\{\?([^}]+)\}/g,
+	                    //everything from `?` till `#` or end of string
+	                    res : '\\?([^#]+)'
+	                },
+	                'OQ' : {
+	                    //optional query string - everything in between `:? :`
+	                    rgx : /:\?([^:]+):/g,
+	                    //everything from `?` till `#` or end of string
+	                    res : '(?:\\?([^#]*))?'
+	                },
+	                'OR' : {
+	                    //optional rest - everything in between `: *:`
+	                    rgx : /:([^:]+)\*:/g,
+	                    res : '(.*)?' // optional group to avoid passing empty string as captured
+	                },
+	                'RR' : {
+	                    //rest param - everything in between `{ *}`
+	                    rgx : /\{([^}]+)\*\}/g,
+	                    res : '(.+)'
+	                },
+	                // required/optional params should come after rest segments
+	                'RP' : {
+	                    //required params - everything between `{ }`
+	                    rgx : /\{([^}]+)\}/g,
+	                    res : '([^\\/?]+)'
+	                },
+	                'OP' : {
+	                    //optional params - everything between `: :`
+	                    rgx : /:([^:]+):/g,
+	                    res : '([^\\/?]+)?\/?'
+	                }
+	            },
+	
+	            LOOSE_SLASH = 1,
+	            STRICT_SLASH = 2,
+	            LEGACY_SLASH = 3,
+	
+	            _slashMode = LOOSE_SLASH;
+	
+	
+	        function precompileTokens(){
+	            var key, cur;
+	            for (key in TOKENS) {
+	                if (TOKENS.hasOwnProperty(key)) {
+	                    cur = TOKENS[key];
+	                    cur.id = '__CR_'+ key +'__';
+	                    cur.save = ('save' in cur)? cur.save.replace('{{id}}', cur.id) : cur.id;
+	                    cur.rRestore = new RegExp(cur.id, 'g');
+	                }
+	            }
+	        }
+	        precompileTokens();
+	
+	
+	        function captureVals(regex, pattern) {
+	            var vals = [], match;
+	            // very important to reset lastIndex since RegExp can have "g" flag
+	            // and multiple runs might affect the result, specially if matching
+	            // same string multiple times on IE 7-8
+	            regex.lastIndex = 0;
+	            while (match = regex.exec(pattern)) {
+	                vals.push(match[1]);
+	            }
+	            return vals;
+	        }
+	
+	        function getParamIds(pattern) {
+	            return captureVals(PARAMS_REGEXP, pattern);
+	        }
+	
+	        function getOptionalParamsIds(pattern) {
+	            return captureVals(TOKENS.OP.rgx, pattern);
+	        }
+	
+	        function compilePattern(pattern, ignoreCase) {
+	            pattern = pattern || '';
+	
+	            if(pattern){
+	                if (_slashMode === LOOSE_SLASH) {
+	                    pattern = pattern.replace(LOOSE_SLASHES_REGEXP, '');
+	                }
+	                else if (_slashMode === LEGACY_SLASH) {
+	                    pattern = pattern.replace(LEGACY_SLASHES_REGEXP, '');
+	                }
+	
+	                //save tokens
+	                pattern = replaceTokens(pattern, 'rgx', 'save');
+	                //regexp escape
+	                pattern = pattern.replace(ESCAPE_CHARS_REGEXP, '\\$&');
+	                //restore tokens
+	                pattern = replaceTokens(pattern, 'rRestore', 'res');
+	
+	                if (_slashMode === LOOSE_SLASH) {
+	                    pattern = '\\/?'+ pattern;
+	                }
+	            }
+	
+	            if (_slashMode !== STRICT_SLASH) {
+	                //single slash is treated as empty and end slash is optional
+	                pattern += '\\/?';
+	            }
+	            return new RegExp('^'+ pattern + '$', ignoreCase? 'i' : '');
+	        }
+	
+	        function replaceTokens(pattern, regexpName, replaceName) {
+	            var cur, key;
+	            for (key in TOKENS) {
+	                if (TOKENS.hasOwnProperty(key)) {
+	                    cur = TOKENS[key];
+	                    pattern = pattern.replace(cur[regexpName], cur[replaceName]);
+	                }
+	            }
+	            return pattern;
+	        }
+	
+	        function getParamValues(request, regexp, shouldTypecast) {
+	            var vals = regexp.exec(request);
+	            if (vals) {
+	                vals.shift();
+	                if (shouldTypecast) {
+	                    vals = typecastArrayValues(vals);
+	                }
+	            }
+	            return vals;
+	        }
+	
+	        function interpolate(pattern, replacements) {
+	            // default to an empty object because pattern might have just
+	            // optional arguments
+	            replacements = replacements || {};
+	            if (typeof pattern !== 'string') {
+	                throw new Error('Route pattern should be a string.');
+	            }
+	
+	            var replaceFn = function(match, prop){
+	                    var val;
+	                    prop = (prop.substr(0, 1) === '?')? prop.substr(1) : prop;
+	                    if (replacements[prop] != null) {
+	                        if (typeof replacements[prop] === 'object') {
+	                            var queryParts = [], rep;
+	                            for(var key in replacements[prop]) {
+	                                rep = replacements[prop][key];
+	                                if (isArray(rep)) {
+	                                    for (var k in rep) {
+	                                        if ( key.slice(-2) == '[]' ) {
+	                                            queryParts.push(encodeURI(key.slice(0, -2)) + '[]=' + encodeURI(rep[k]));
+	                                        } else {
+	                                            queryParts.push(encodeURI(key + '=' + rep[k]));
+	                                        }
+	                                    }
+	                                }
+	                                else {
+	                                    queryParts.push(encodeURI(key + '=' + rep));
+	                                }
+	                            }
+	                            val = '?' + queryParts.join('&');
+	                        } else {
+	                            // make sure value is a string see #gh-54
+	                            val = String(replacements[prop]);
+	                        }
+	
+	                        if (match.indexOf('*') === -1 && val.indexOf('/') !== -1) {
+	                            throw new Error('Invalid value "'+ val +'" for segment "'+ match +'".');
+	                        }
+	                    }
+	                    else if (match.indexOf('{') !== -1) {
+	                        throw new Error('The segment '+ match +' is required.');
+	                    }
+	                    else {
+	                        val = '';
+	                    }
+	                    return val;
+	                };
+	
+	            if (! TOKENS.OS.trail) {
+	                TOKENS.OS.trail = new RegExp('(?:'+ TOKENS.OS.id +')+$');
+	            }
+	
+	            return pattern
+	                        .replace(TOKENS.OS.rgx, TOKENS.OS.save)
+	                        .replace(PARAMS_REGEXP, replaceFn)
+	                        .replace(TOKENS.OS.trail, '') // remove trailing
+	                        .replace(TOKENS.OS.rRestore, '/'); // add slash between segments
+	        }
+	
+	        //API
+	        return {
+	            strict : function(){
+	                _slashMode = STRICT_SLASH;
+	            },
+	            loose : function(){
+	                _slashMode = LOOSE_SLASH;
+	            },
+	            legacy : function(){
+	                _slashMode = LEGACY_SLASH;
+	            },
+	            getParamIds : getParamIds,
+	            getOptionalParamsIds : getOptionalParamsIds,
+	            getParamValues : getParamValues,
+	            compilePattern : compilePattern,
+	            interpolate : interpolate
+	        };
+	
+	    }());
+	
+	
+	    return crossroads;
+	};
+	
+	if (true) {
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(141)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else if (typeof module !== 'undefined' && module.exports) { //Node
+	    module.exports = factory(require('signals'));
+	} else {
+	    /*jshint sub:true */
+	    window['crossroads'] = factory(window['signals']);
+	}
+	
+	}());
+	
+
+
+/***/ },
+/* 141 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*jslint onevar:true, undef:true, newcap:true, regexp:true, bitwise:true, maxerr:50, indent:4, white:false, nomen:false, plusplus:false */
+	/*global define:false, require:false, exports:false, module:false, signals:false */
+	
+	/** @license
+	 * JS Signals <http://millermedeiros.github.com/js-signals/>
+	 * Released under the MIT license
+	 * Author: Miller Medeiros
+	 * Version: 1.0.0 - Build: 268 (2012/11/29 05:48 PM)
+	 */
+	
+	(function(global){
+	
+	    // SignalBinding -------------------------------------------------
+	    //================================================================
+	
+	    /**
+	     * Object that represents a binding between a Signal and a listener function.
+	     * <br />- <strong>This is an internal constructor and shouldn't be called by regular users.</strong>
+	     * <br />- inspired by Joa Ebert AS3 SignalBinding and Robert Penner's Slot classes.
+	     * @author Miller Medeiros
+	     * @constructor
+	     * @internal
+	     * @name SignalBinding
+	     * @param {Signal} signal Reference to Signal object that listener is currently bound to.
+	     * @param {Function} listener Handler function bound to the signal.
+	     * @param {boolean} isOnce If binding should be executed just once.
+	     * @param {Object} [listenerContext] Context on which listener will be executed (object that should represent the `this` variable inside listener function).
+	     * @param {Number} [priority] The priority level of the event listener. (default = 0).
+	     */
+	    function SignalBinding(signal, listener, isOnce, listenerContext, priority) {
+	
+	        /**
+	         * Handler function bound to the signal.
+	         * @type Function
+	         * @private
+	         */
+	        this._listener = listener;
+	
+	        /**
+	         * If binding should be executed just once.
+	         * @type boolean
+	         * @private
+	         */
+	        this._isOnce = isOnce;
+	
+	        /**
+	         * Context on which listener will be executed (object that should represent the `this` variable inside listener function).
+	         * @memberOf SignalBinding.prototype
+	         * @name context
+	         * @type Object|undefined|null
+	         */
+	        this.context = listenerContext;
+	
+	        /**
+	         * Reference to Signal object that listener is currently bound to.
+	         * @type Signal
+	         * @private
+	         */
+	        this._signal = signal;
+	
+	        /**
+	         * Listener priority
+	         * @type Number
+	         * @private
+	         */
+	        this._priority = priority || 0;
+	    }
+	
+	    SignalBinding.prototype = {
+	
+	        /**
+	         * If binding is active and should be executed.
+	         * @type boolean
+	         */
+	        active : true,
+	
+	        /**
+	         * Default parameters passed to listener during `Signal.dispatch` and `SignalBinding.execute`. (curried parameters)
+	         * @type Array|null
+	         */
+	        params : null,
+	
+	        /**
+	         * Call listener passing arbitrary parameters.
+	         * <p>If binding was added using `Signal.addOnce()` it will be automatically removed from signal dispatch queue, this method is used internally for the signal dispatch.</p>
+	         * @param {Array} [paramsArr] Array of parameters that should be passed to the listener
+	         * @return {*} Value returned by the listener.
+	         */
+	        execute : function (paramsArr) {
+	            var handlerReturn, params;
+	            if (this.active && !!this._listener) {
+	                params = this.params? this.params.concat(paramsArr) : paramsArr;
+	                handlerReturn = this._listener.apply(this.context, params);
+	                if (this._isOnce) {
+	                    this.detach();
+	                }
+	            }
+	            return handlerReturn;
+	        },
+	
+	        /**
+	         * Detach binding from signal.
+	         * - alias to: mySignal.remove(myBinding.getListener());
+	         * @return {Function|null} Handler function bound to the signal or `null` if binding was previously detached.
+	         */
+	        detach : function () {
+	            return this.isBound()? this._signal.remove(this._listener, this.context) : null;
+	        },
+	
+	        /**
+	         * @return {Boolean} `true` if binding is still bound to the signal and have a listener.
+	         */
+	        isBound : function () {
+	            return (!!this._signal && !!this._listener);
+	        },
+	
+	        /**
+	         * @return {boolean} If SignalBinding will only be executed once.
+	         */
+	        isOnce : function () {
+	            return this._isOnce;
+	        },
+	
+	        /**
+	         * @return {Function} Handler function bound to the signal.
+	         */
+	        getListener : function () {
+	            return this._listener;
+	        },
+	
+	        /**
+	         * @return {Signal} Signal that listener is currently bound to.
+	         */
+	        getSignal : function () {
+	            return this._signal;
+	        },
+	
+	        /**
+	         * Delete instance properties
+	         * @private
+	         */
+	        _destroy : function () {
+	            delete this._signal;
+	            delete this._listener;
+	            delete this.context;
+	        },
+	
+	        /**
+	         * @return {string} String representation of the object.
+	         */
+	        toString : function () {
+	            return '[SignalBinding isOnce:' + this._isOnce +', isBound:'+ this.isBound() +', active:' + this.active + ']';
+	        }
+	
+	    };
+	
+	
+	/*global SignalBinding:false*/
+	
+	    // Signal --------------------------------------------------------
+	    //================================================================
+	
+	    function validateListener(listener, fnName) {
+	        if (typeof listener !== 'function') {
+	            throw new Error( 'listener is a required param of {fn}() and should be a Function.'.replace('{fn}', fnName) );
+	        }
+	    }
+	
+	    /**
+	     * Custom event broadcaster
+	     * <br />- inspired by Robert Penner's AS3 Signals.
+	     * @name Signal
+	     * @author Miller Medeiros
+	     * @constructor
+	     */
+	    function Signal() {
+	        /**
+	         * @type Array.<SignalBinding>
+	         * @private
+	         */
+	        this._bindings = [];
+	        this._prevParams = null;
+	
+	        // enforce dispatch to aways work on same context (#47)
+	        var self = this;
+	        this.dispatch = function(){
+	            Signal.prototype.dispatch.apply(self, arguments);
+	        };
+	    }
+	
+	    Signal.prototype = {
+	
+	        /**
+	         * Signals Version Number
+	         * @type String
+	         * @const
+	         */
+	        VERSION : '1.0.0',
+	
+	        /**
+	         * If Signal should keep record of previously dispatched parameters and
+	         * automatically execute listener during `add()`/`addOnce()` if Signal was
+	         * already dispatched before.
+	         * @type boolean
+	         */
+	        memorize : false,
+	
+	        /**
+	         * @type boolean
+	         * @private
+	         */
+	        _shouldPropagate : true,
+	
+	        /**
+	         * If Signal is active and should broadcast events.
+	         * <p><strong>IMPORTANT:</strong> Setting this property during a dispatch will only affect the next dispatch, if you want to stop the propagation of a signal use `halt()` instead.</p>
+	         * @type boolean
+	         */
+	        active : true,
+	
+	        /**
+	         * @param {Function} listener
+	         * @param {boolean} isOnce
+	         * @param {Object} [listenerContext]
+	         * @param {Number} [priority]
+	         * @return {SignalBinding}
+	         * @private
+	         */
+	        _registerListener : function (listener, isOnce, listenerContext, priority) {
+	
+	            var prevIndex = this._indexOfListener(listener, listenerContext),
+	                binding;
+	
+	            if (prevIndex !== -1) {
+	                binding = this._bindings[prevIndex];
+	                if (binding.isOnce() !== isOnce) {
+	                    throw new Error('You cannot add'+ (isOnce? '' : 'Once') +'() then add'+ (!isOnce? '' : 'Once') +'() the same listener without removing the relationship first.');
+	                }
+	            } else {
+	                binding = new SignalBinding(this, listener, isOnce, listenerContext, priority);
+	                this._addBinding(binding);
+	            }
+	
+	            if(this.memorize && this._prevParams){
+	                binding.execute(this._prevParams);
+	            }
+	
+	            return binding;
+	        },
+	
+	        /**
+	         * @param {SignalBinding} binding
+	         * @private
+	         */
+	        _addBinding : function (binding) {
+	            //simplified insertion sort
+	            var n = this._bindings.length;
+	            do { --n; } while (this._bindings[n] && binding._priority <= this._bindings[n]._priority);
+	            this._bindings.splice(n + 1, 0, binding);
+	        },
+	
+	        /**
+	         * @param {Function} listener
+	         * @return {number}
+	         * @private
+	         */
+	        _indexOfListener : function (listener, context) {
+	            var n = this._bindings.length,
+	                cur;
+	            while (n--) {
+	                cur = this._bindings[n];
+	                if (cur._listener === listener && cur.context === context) {
+	                    return n;
+	                }
+	            }
+	            return -1;
+	        },
+	
+	        /**
+	         * Check if listener was attached to Signal.
+	         * @param {Function} listener
+	         * @param {Object} [context]
+	         * @return {boolean} if Signal has the specified listener.
+	         */
+	        has : function (listener, context) {
+	            return this._indexOfListener(listener, context) !== -1;
+	        },
+	
+	        /**
+	         * Add a listener to the signal.
+	         * @param {Function} listener Signal handler function.
+	         * @param {Object} [listenerContext] Context on which listener will be executed (object that should represent the `this` variable inside listener function).
+	         * @param {Number} [priority] The priority level of the event listener. Listeners with higher priority will be executed before listeners with lower priority. Listeners with same priority level will be executed at the same order as they were added. (default = 0)
+	         * @return {SignalBinding} An Object representing the binding between the Signal and listener.
+	         */
+	        add : function (listener, listenerContext, priority) {
+	            validateListener(listener, 'add');
+	            return this._registerListener(listener, false, listenerContext, priority);
+	        },
+	
+	        /**
+	         * Add listener to the signal that should be removed after first execution (will be executed only once).
+	         * @param {Function} listener Signal handler function.
+	         * @param {Object} [listenerContext] Context on which listener will be executed (object that should represent the `this` variable inside listener function).
+	         * @param {Number} [priority] The priority level of the event listener. Listeners with higher priority will be executed before listeners with lower priority. Listeners with same priority level will be executed at the same order as they were added. (default = 0)
+	         * @return {SignalBinding} An Object representing the binding between the Signal and listener.
+	         */
+	        addOnce : function (listener, listenerContext, priority) {
+	            validateListener(listener, 'addOnce');
+	            return this._registerListener(listener, true, listenerContext, priority);
+	        },
+	
+	        /**
+	         * Remove a single listener from the dispatch queue.
+	         * @param {Function} listener Handler function that should be removed.
+	         * @param {Object} [context] Execution context (since you can add the same handler multiple times if executing in a different context).
+	         * @return {Function} Listener handler function.
+	         */
+	        remove : function (listener, context) {
+	            validateListener(listener, 'remove');
+	
+	            var i = this._indexOfListener(listener, context);
+	            if (i !== -1) {
+	                this._bindings[i]._destroy(); //no reason to a SignalBinding exist if it isn't attached to a signal
+	                this._bindings.splice(i, 1);
+	            }
+	            return listener;
+	        },
+	
+	        /**
+	         * Remove all listeners from the Signal.
+	         */
+	        removeAll : function () {
+	            var n = this._bindings.length;
+	            while (n--) {
+	                this._bindings[n]._destroy();
+	            }
+	            this._bindings.length = 0;
+	        },
+	
+	        /**
+	         * @return {number} Number of listeners attached to the Signal.
+	         */
+	        getNumListeners : function () {
+	            return this._bindings.length;
+	        },
+	
+	        /**
+	         * Stop propagation of the event, blocking the dispatch to next listeners on the queue.
+	         * <p><strong>IMPORTANT:</strong> should be called only during signal dispatch, calling it before/after dispatch won't affect signal broadcast.</p>
+	         * @see Signal.prototype.disable
+	         */
+	        halt : function () {
+	            this._shouldPropagate = false;
+	        },
+	
+	        /**
+	         * Dispatch/Broadcast Signal to all listeners added to the queue.
+	         * @param {...*} [params] Parameters that should be passed to each handler.
+	         */
+	        dispatch : function (params) {
+	            if (! this.active) {
+	                return;
+	            }
+	
+	            var paramsArr = Array.prototype.slice.call(arguments),
+	                n = this._bindings.length,
+	                bindings;
+	
+	            if (this.memorize) {
+	                this._prevParams = paramsArr;
+	            }
+	
+	            if (! n) {
+	                //should come after memorize
+	                return;
+	            }
+	
+	            bindings = this._bindings.slice(); //clone array in case add/remove items during dispatch
+	            this._shouldPropagate = true; //in case `halt` was called before dispatch or during the previous dispatch.
+	
+	            //execute all callbacks until end of the list or until a callback returns `false` or stops propagation
+	            //reverse loop since listeners with higher priority will be added at the end of the list
+	            do { n--; } while (bindings[n] && this._shouldPropagate && bindings[n].execute(paramsArr) !== false);
+	        },
+	
+	        /**
+	         * Forget memorized arguments.
+	         * @see Signal.memorize
+	         */
+	        forget : function(){
+	            this._prevParams = null;
+	        },
+	
+	        /**
+	         * Remove all bindings from signal and destroy any reference to external objects (destroy Signal object).
+	         * <p><strong>IMPORTANT:</strong> calling any method on the signal instance after calling dispose will throw errors.</p>
+	         */
+	        dispose : function () {
+	            this.removeAll();
+	            delete this._bindings;
+	            delete this._prevParams;
+	        },
+	
+	        /**
+	         * @return {string} String representation of the object.
+	         */
+	        toString : function () {
+	            return '[Signal active:'+ this.active +' numListeners:'+ this.getNumListeners() +']';
+	        }
+	
+	    };
+	
+	
+	    // Namespace -----------------------------------------------------
+	    //================================================================
+	
+	    /**
+	     * Signals namespace
+	     * @namespace
+	     * @name signals
+	     */
+	    var signals = Signal;
+	
+	    /**
+	     * Custom event broadcaster
+	     * @see Signal
+	     */
+	    // alias for backwards compatibility (see #gh-44)
+	    signals.Signal = Signal;
+	
+	
+	
+	    //exports to multiple environments
+	    if(true){ //AMD
+	        !(__WEBPACK_AMD_DEFINE_RESULT__ = function () { return signals; }.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    } else if (typeof module !== 'undefined' && module.exports){ //node
+	        module.exports = signals;
+	    } else { //browser
+	        //use string because of Google closure compiler ADVANCED_MODE
+	        /*jslint sub:true */
+	        global['signals'] = signals;
+	    }
+	
+	}(this));
+
+
+/***/ },
+/* 142 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!!
+	 * Hasher <http://github.com/millermedeiros/hasher>
+	 * @author Miller Medeiros
+	 * @version 1.2.0 (2013/11/11 03:18 PM)
+	 * Released under the MIT License
+	 */
+	
+	;(function () {
+	var factory = function(signals){
+	
+	/*jshint white:false*/
+	/*global signals:false, window:false*/
+	
+	/**
+	 * Hasher
+	 * @namespace History Manager for rich-media applications.
+	 * @name hasher
+	 */
+	var hasher = (function(window){
+	
+	    //--------------------------------------------------------------------------------------
+	    // Private Vars
+	    //--------------------------------------------------------------------------------------
+	
+	    var
+	
+	        // frequency that it will check hash value on IE 6-7 since it doesn't
+	        // support the hashchange event
+	        POOL_INTERVAL = 25,
+	
+	        // local storage for brevity and better compression --------------------------------
+	
+	        document = window.document,
+	        history = window.history,
+	        Signal = signals.Signal,
+	
+	        // local vars ----------------------------------------------------------------------
+	
+	        hasher,
+	        _hash,
+	        _checkInterval,
+	        _isActive,
+	        _frame, //iframe used for legacy IE (6-7)
+	        _checkHistory,
+	        _hashValRegexp = /#(.*)$/,
+	        _baseUrlRegexp = /(\?.*)|(\#.*)/,
+	        _hashRegexp = /^\#/,
+	
+	        // sniffing/feature detection -------------------------------------------------------
+	
+	        //hack based on this: http://webreflection.blogspot.com/2009/01/32-bytes-to-know-if-your-browser-is-ie.html
+	        _isIE = (!+"\v1"),
+	        // hashchange is supported by FF3.6+, IE8+, Chrome 5+, Safari 5+ but
+	        // feature detection fails on IE compatibility mode, so we need to
+	        // check documentMode
+	        _isHashChangeSupported = ('onhashchange' in window) && document.documentMode !== 7,
+	        //check if is IE6-7 since hash change is only supported on IE8+ and
+	        //changing hash value on IE6-7 doesn't generate history record.
+	        _isLegacyIE = _isIE && !_isHashChangeSupported,
+	        _isLocal = (location.protocol === 'file:');
+	
+	
+	    //--------------------------------------------------------------------------------------
+	    // Private Methods
+	    //--------------------------------------------------------------------------------------
+	
+	    function _escapeRegExp(str){
+	        return String(str || '').replace(/\W/g, "\\$&");
+	    }
+	
+	    function _trimHash(hash){
+	        if (!hash) return '';
+	        var regexp = new RegExp('^' + _escapeRegExp(hasher.prependHash) + '|' + _escapeRegExp(hasher.appendHash) + '$', 'g');
+	        return hash.replace(regexp, '');
+	    }
+	
+	    function _getWindowHash(){
+	        //parsed full URL instead of getting window.location.hash because Firefox decode hash value (and all the other browsers don't)
+	        //also because of IE8 bug with hash query in local file [issue #6]
+	        var result = _hashValRegexp.exec( hasher.getURL() );
+	        var path = (result && result[1]) || '';
+	        try {
+	          return hasher.raw? path : decodeURIComponent(path);
+	        } catch (e) {
+	          // in case user did not set `hasher.raw` and decodeURIComponent
+	          // throws an error (see #57)
+	          return path;
+	        }
+	    }
+	
+	    function _getFrameHash(){
+	        return (_frame)? _frame.contentWindow.frameHash : null;
+	    }
+	
+	    function _createFrame(){
+	        _frame = document.createElement('iframe');
+	        _frame.src = 'about:blank';
+	        _frame.style.display = 'none';
+	        document.body.appendChild(_frame);
+	    }
+	
+	    function _updateFrame(){
+	        if(_frame && _hash !== _getFrameHash()){
+	            var frameDoc = _frame.contentWindow.document;
+	            frameDoc.open();
+	            //update iframe content to force new history record.
+	            //based on Really Simple History, SWFAddress and YUI.history.
+	            frameDoc.write('<html><head><title>' + document.title + '</title><script type="text/javascript">var frameHash="' + _hash + '";</script></head><body>&nbsp;</body></html>');
+	            frameDoc.close();
+	        }
+	    }
+	
+	    function _registerChange(newHash, isReplace){
+	        if(_hash !== newHash){
+	            var oldHash = _hash;
+	            _hash = newHash; //should come before event dispatch to make sure user can get proper value inside event handler
+	            if(_isLegacyIE){
+	                if(!isReplace){
+	                    _updateFrame();
+	                } else {
+	                    _frame.contentWindow.frameHash = newHash;
+	                }
+	            }
+	            hasher.changed.dispatch(_trimHash(newHash), _trimHash(oldHash));
+	        }
+	    }
+	
+	    if (_isLegacyIE) {
+	        /**
+	         * @private
+	         */
+	        _checkHistory = function(){
+	            var windowHash = _getWindowHash(),
+	                frameHash = _getFrameHash();
+	            if(frameHash !== _hash && frameHash !== windowHash){
+	                //detect changes made pressing browser history buttons.
+	                //Workaround since history.back() and history.forward() doesn't
+	                //update hash value on IE6/7 but updates content of the iframe.
+	                //needs to trim hash since value stored already have
+	                //prependHash + appendHash for fast check.
+	                hasher.setHash(_trimHash(frameHash));
+	            } else if (windowHash !== _hash){
+	                //detect if hash changed (manually or using setHash)
+	                _registerChange(windowHash);
+	            }
+	        };
+	    } else {
+	        /**
+	         * @private
+	         */
+	        _checkHistory = function(){
+	            var windowHash = _getWindowHash();
+	            if(windowHash !== _hash){
+	                _registerChange(windowHash);
+	            }
+	        };
+	    }
+	
+	    function _addListener(elm, eType, fn){
+	        if(elm.addEventListener){
+	            elm.addEventListener(eType, fn, false);
+	        } else if (elm.attachEvent){
+	            elm.attachEvent('on' + eType, fn);
+	        }
+	    }
+	
+	    function _removeListener(elm, eType, fn){
+	        if(elm.removeEventListener){
+	            elm.removeEventListener(eType, fn, false);
+	        } else if (elm.detachEvent){
+	            elm.detachEvent('on' + eType, fn);
+	        }
+	    }
+	
+	    function _makePath(paths){
+	        paths = Array.prototype.slice.call(arguments);
+	
+	        var path = paths.join(hasher.separator);
+	        path = path? hasher.prependHash + path.replace(_hashRegexp, '') + hasher.appendHash : path;
+	        return path;
+	    }
+	
+	    function _encodePath(path){
+	        //used encodeURI instead of encodeURIComponent to preserve '?', '/',
+	        //'#'. Fixes Safari bug [issue #8]
+	        path = encodeURI(path);
+	        if(_isIE && _isLocal){
+	            //fix IE8 local file bug [issue #6]
+	            path = path.replace(/\?/, '%3F');
+	        }
+	        return path;
+	    }
+	
+	    //--------------------------------------------------------------------------------------
+	    // Public (API)
+	    //--------------------------------------------------------------------------------------
+	
+	    hasher = /** @lends hasher */ {
+	
+	        /**
+	         * hasher Version Number
+	         * @type string
+	         * @constant
+	         */
+	        VERSION : '1.2.0',
+	
+	        /**
+	         * Boolean deciding if hasher encodes/decodes the hash or not.
+	         * <ul>
+	         * <li>default value: false;</li>
+	         * </ul>
+	         * @type boolean
+	         */
+	        raw : false,
+	
+	        /**
+	         * String that should always be added to the end of Hash value.
+	         * <ul>
+	         * <li>default value: '';</li>
+	         * <li>will be automatically removed from `hasher.getHash()`</li>
+	         * <li>avoid conflicts with elements that contain ID equal to hash value;</li>
+	         * </ul>
+	         * @type string
+	         */
+	        appendHash : '',
+	
+	        /**
+	         * String that should always be added to the beginning of Hash value.
+	         * <ul>
+	         * <li>default value: '/';</li>
+	         * <li>will be automatically removed from `hasher.getHash()`</li>
+	         * <li>avoid conflicts with elements that contain ID equal to hash value;</li>
+	         * </ul>
+	         * @type string
+	         */
+	        prependHash : '/',
+	
+	        /**
+	         * String used to split hash paths; used by `hasher.getHashAsArray()` to split paths.
+	         * <ul>
+	         * <li>default value: '/';</li>
+	         * </ul>
+	         * @type string
+	         */
+	        separator : '/',
+	
+	        /**
+	         * Signal dispatched when hash value changes.
+	         * - pass current hash as 1st parameter to listeners and previous hash value as 2nd parameter.
+	         * @type signals.Signal
+	         */
+	        changed : new Signal(),
+	
+	        /**
+	         * Signal dispatched when hasher is stopped.
+	         * -  pass current hash as first parameter to listeners
+	         * @type signals.Signal
+	         */
+	        stopped : new Signal(),
+	
+	        /**
+	         * Signal dispatched when hasher is initialized.
+	         * - pass current hash as first parameter to listeners.
+	         * @type signals.Signal
+	         */
+	        initialized : new Signal(),
+	
+	        /**
+	         * Start listening/dispatching changes in the hash/history.
+	         * <ul>
+	         *   <li>hasher won't dispatch CHANGE events by manually typing a new value or pressing the back/forward buttons before calling this method.</li>
+	         * </ul>
+	         */
+	        init : function(){
+	            if(_isActive) return;
+	
+	            _hash = _getWindowHash();
+	
+	            //thought about branching/overloading hasher.init() to avoid checking multiple times but
+	            //don't think worth doing it since it probably won't be called multiple times.
+	            if(_isHashChangeSupported){
+	                _addListener(window, 'hashchange', _checkHistory);
+	            }else {
+	                if(_isLegacyIE){
+	                    if(! _frame){
+	                        _createFrame();
+	                    }
+	                    _updateFrame();
+	                }
+	                _checkInterval = setInterval(_checkHistory, POOL_INTERVAL);
+	            }
+	
+	            _isActive = true;
+	            hasher.initialized.dispatch(_trimHash(_hash));
+	        },
+	
+	        /**
+	         * Stop listening/dispatching changes in the hash/history.
+	         * <ul>
+	         *   <li>hasher won't dispatch CHANGE events by manually typing a new value or pressing the back/forward buttons after calling this method, unless you call hasher.init() again.</li>
+	         *   <li>hasher will still dispatch changes made programatically by calling hasher.setHash();</li>
+	         * </ul>
+	         */
+	        stop : function(){
+	            if(! _isActive) return;
+	
+	            if(_isHashChangeSupported){
+	                _removeListener(window, 'hashchange', _checkHistory);
+	            }else{
+	                clearInterval(_checkInterval);
+	                _checkInterval = null;
+	            }
+	
+	            _isActive = false;
+	            hasher.stopped.dispatch(_trimHash(_hash));
+	        },
+	
+	        /**
+	         * @return {boolean}    If hasher is listening to changes on the browser history and/or hash value.
+	         */
+	        isActive : function(){
+	            return _isActive;
+	        },
+	
+	        /**
+	         * @return {string} Full URL.
+	         */
+	        getURL : function(){
+	            return window.location.href;
+	        },
+	
+	        /**
+	         * @return {string} Retrieve URL without query string and hash.
+	         */
+	        getBaseURL : function(){
+	            return hasher.getURL().replace(_baseUrlRegexp, ''); //removes everything after '?' and/or '#'
+	        },
+	
+	        /**
+	         * Set Hash value, generating a new history record.
+	         * @param {...string} path    Hash value without '#'. Hasher will join
+	         * path segments using `hasher.separator` and prepend/append hash value
+	         * with `hasher.appendHash` and `hasher.prependHash`
+	         * @example hasher.setHash('lorem', 'ipsum', 'dolor') -> '#/lorem/ipsum/dolor'
+	         */
+	        setHash : function(path){
+	            path = _makePath.apply(null, arguments);
+	            if(path !== _hash){
+	                // we should store raw value
+	                _registerChange(path);
+	                if (path === _hash) {
+	                    // we check if path is still === _hash to avoid error in
+	                    // case of multiple consecutive redirects [issue #39]
+	                    if (! hasher.raw) {
+	                        path = _encodePath(path);
+	                    }
+	                    window.location.hash = '#' + path;
+	                }
+	            }
+	        },
+	
+	        /**
+	         * Set Hash value without keeping previous hash on the history record.
+	         * Similar to calling `window.location.replace("#/hash")` but will also work on IE6-7.
+	         * @param {...string} path    Hash value without '#'. Hasher will join
+	         * path segments using `hasher.separator` and prepend/append hash value
+	         * with `hasher.appendHash` and `hasher.prependHash`
+	         * @example hasher.replaceHash('lorem', 'ipsum', 'dolor') -> '#/lorem/ipsum/dolor'
+	         */
+	        replaceHash : function(path){
+	            path = _makePath.apply(null, arguments);
+	            if(path !== _hash){
+	                // we should store raw value
+	                _registerChange(path, true);
+	                if (path === _hash) {
+	                    // we check if path is still === _hash to avoid error in
+	                    // case of multiple consecutive redirects [issue #39]
+	                    if (! hasher.raw) {
+	                        path = _encodePath(path);
+	                    }
+	                    window.location.replace('#' + path);
+	                }
+	            }
+	        },
+	
+	        /**
+	         * @return {string} Hash value without '#', `hasher.appendHash` and `hasher.prependHash`.
+	         */
+	        getHash : function(){
+	            //didn't used actual value of the `window.location.hash` to avoid breaking the application in case `window.location.hash` isn't available and also because value should always be synched.
+	            return _trimHash(_hash);
+	        },
+	
+	        /**
+	         * @return {Array.<string>} Hash value split into an Array.
+	         */
+	        getHashAsArray : function(){
+	            return hasher.getHash().split(hasher.separator);
+	        },
+	
+	        /**
+	         * Removes all event listeners, stops hasher and destroy hasher object.
+	         * - IMPORTANT: hasher won't work after calling this method, hasher Object will be deleted.
+	         */
+	        dispose : function(){
+	            hasher.stop();
+	            hasher.initialized.dispose();
+	            hasher.stopped.dispose();
+	            hasher.changed.dispose();
+	            _frame = hasher = window.hasher = null;
+	        },
+	
+	        /**
+	         * @return {string} A string representation of the object.
+	         */
+	        toString : function(){
+	            return '[hasher version="'+ hasher.VERSION +'" hash="'+ hasher.getHash() +'"]';
+	        }
+	
+	    };
+	
+	    hasher.initialized.memorize = true; //see #33
+	
+	    return hasher;
+	
+	}(window));
+	
+	
+	    return hasher;
+	};
+	
+	if (true) {
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(141)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else if (typeof exports === 'object') {
+	    module.exports = factory(require('signals'));
+	} else {
+	    /*jshint sub:true */
+	    window['hasher'] = factory(window['signals']);
+	}
+	
+	}());
+
+
+/***/ },
+/* 143 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.createNewNoticeboard = exports.dictionary = exports.remove = exports.subscribe = exports.set = exports.get = exports.getValue = exports.setValue = undefined;
+	
+	var _knockout = __webpack_require__(11);
+	
+	var _knockout2 = _interopRequireDefault(_knockout);
 	
 	var _scalejs = __webpack_require__(3);
 	
+	var _scalejs2 = _interopRequireDefault(_scalejs);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var observable = _knockout2.default.observable,
+	    computed = _knockout2.default.computed,
+	    global = noticeboard();
+	
+	function noticeboard() {
+	    var dictionary = observable({}),
+	        subs = {};
+	
+	    // will set the value on an existing observable
+	
+	    function setValue(key, value) {
+	        if (dictionary()[key]) {
+	            dictionary()[key](value);
+	        } else {
+	            dictionary()[key] = observable(value);
+	            dictionary.valueHasMutated();
+	        }
+	    }
+	
+	    function getValue(key) {
+	        var item = dictionary()[key];
+	        if (item) {
+	            return item();
+	        }
+	    }
+	
+	    function subscribe(key, callback) {
+	        var sub = computed(function () {
+	            return getValue(key);
+	        });
+	        sub.subscribe(function (newValue) {
+	            callback(newValue);
+	        });
+	        callback(sub()); // When initially called
+	        subs[key] = subs[key] || [];
+	        subs[key].push(sub);
+	        return sub;
+	    }
+	
+	    function remove(key) {
+	        if (dictionary()[key]) {
+	            if (subs[key]) {
+	                subs[key].forEach(function (sub) {
+	                    sub.dispose();
+	                });
+	            }
+	            delete dictionary()[key];
+	            dictionary.valueHasMutated();
+	        }
+	    }
+	
+	    return {
+	        setValue: setValue,
+	        getValue: getValue,
+	        get: getValue,
+	        set: setValue,
+	        subscribe: subscribe,
+	        remove: remove,
+	        dictionary: dictionary
+	    };
+	}
+	
+	_scalejs2.default.registerExtension({
+	    noticeboard: {
+	        createNewNoticeboard: noticeboard,
+	        global: noticeboard()
+	    }
+	});
+	
+	var setValue = global.setValue;
+	var getValue = global.getValue;
+	var get = global.get;
+	var set = global.set;
+	var subscribe = global.subscribe;
+	var remove = global.remove;
+	var dictionary = global.dictionary;
+	exports.setValue = setValue;
+	exports.getValue = getValue;
+	exports.get = get;
+	exports.set = set;
+	exports.subscribe = subscribe;
+	exports.remove = remove;
+	exports.dictionary = dictionary;
+	exports.createNewNoticeboard = noticeboard;
+
+
+/***/ },
+/* 144 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _lodash = __webpack_require__(23);
+	
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
+	var _adapter_data = __webpack_require__(145);
+	
+	var _adapter_data2 = _interopRequireDefault(_adapter_data);
+	
+	var _store_data = __webpack_require__(146);
+	
+	var _store_data2 = _interopRequireDefault(_store_data);
+	
+	var _adapterSetValue_data = __webpack_require__(147);
+	
+	var _adapterSetValue_data2 = _interopRequireDefault(_adapterSetValue_data);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var timeout = 100,
+	    testData = {},
+	    o = {};
+	
+	_lodash2.default.merge(testData, _adapter_data2.default, _store_data2.default, _adapterSetValue_data2.default);
+	
+	function mockAjax(request, callback) {
+	    setTimeout(function () {
+	        callback(null, testData[request.uri]);
+	    }, timeout);
+	}
+	
+	exports.default = {
+	    ajax: mockAjax
+	};
+
+/***/ },
+/* 145 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	module.exports = {
+		"adapter": {
+			"A": "updated_a",
+			"B": "updated_b"
+		},
+		"adapter_a": {
+			"result": "updated_a"
+		},
+		"adapter_b": {
+			"result": "updated_b"
+		}
+	};
+
+/***/ },
+/* 146 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	module.exports = {
+		"store": {
+			"A": "store_a",
+			"B": "store_b"
+		},
+		"updatedStore": {
+			"A": "updated_store_a",
+			"B": "updated_store_b"
+		},
+		"store_B": {
+			"results": [{
+				"A_result": "store_a"
+			}, {
+				"B_result": "store_a"
+			}]
+		},
+		"storeLookup": {
+			"lookup": [{
+				"A": "store_a",
+				"B": "store_b"
+			}, {
+				"A": "store_a_2",
+				"B": "store_b_2"
+			}, {
+				"A": "store_a_3"
+			}]
+		},
+		"storeLookup2": {
+			"lookup": [{
+				"key": "store_a",
+				"value": "store_b"
+			}, {
+				"key": "store_a_2",
+				"value": "store_b_2"
+			}]
+		},
+		"storeAggregateLookup": {
+			"lookup": [{
+				"key": "store_a",
+				"value": "store_b"
+			}, {
+				"key": "store_a_2",
+				"value": "store_b_2"
+			}, {
+				"key": "store_a_2",
+				"value": "new store_b_2"
+			}, {
+				"key": "store_a",
+				"value": "new store_a"
+			}]
+		}
+	};
+
+/***/ },
+/* 147 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	module.exports = {
+		"setValue": {
+			"A": "value_a",
+			"B": "value_b",
+			"C": "value_c"
+		}
+	};
+
+/***/ },
+/* 148 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=\"adapter_template\">\r\n    <!-- ko template: { name: 'metadata_items_template', data: mappedChildNodes } -->\r\n    <!-- /ko -->\r\n</div>";
+
+/***/ },
+/* 149 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _scalejs = __webpack_require__(10);
+	
 	var _scalejs2 = __webpack_require__(22);
 	
-	__webpack_require__(141);
+	__webpack_require__(150);
 	
-	__webpack_require__(143);
+	__webpack_require__(152);
 	
-	var _inputViewModel = __webpack_require__(151);
+	var _inputViewModel = __webpack_require__(160);
 	
 	var _inputViewModel2 = _interopRequireDefault(_inputViewModel);
 	
-	var _inputBindings = __webpack_require__(154);
+	var _inputBindings = __webpack_require__(163);
 	
 	var _inputBindings2 = _interopRequireDefault(_inputBindings);
 	
-	var _input = __webpack_require__(158);
+	var _input = __webpack_require__(167);
 	
 	var _input2 = _interopRequireDefault(_input);
 	
-	__webpack_require__(159);
+	__webpack_require__(168);
+	
+	__webpack_require__(170);
+	
+	__webpack_require__(174);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -41391,12 +43665,12 @@
 	});
 
 /***/ },
-/* 141 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _scalejs = __webpack_require__(4);
+	var _scalejs = __webpack_require__(3);
 	
 	var _scalejs2 = _interopRequireDefault(_scalejs);
 	
@@ -41408,7 +43682,7 @@
 	
 	var _lodash2 = _interopRequireDefault(_lodash);
 	
-	__webpack_require__(142);
+	__webpack_require__(151);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -41486,7 +43760,7 @@
 	_knockout2.default.validation.registerExtenders();
 
 /***/ },
-/* 142 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*=============================================================================
@@ -43021,7 +45295,7 @@
 	;}));
 
 /***/ },
-/* 143 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43030,21 +45304,21 @@
 	
 	var _knockout2 = _interopRequireDefault(_knockout);
 	
-	var _jquery = __webpack_require__(144);
+	var _jquery = __webpack_require__(153);
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
 	
-	__webpack_require__(145);
+	__webpack_require__(154);
 	
-	__webpack_require__(146);
+	__webpack_require__(155);
 	
-	__webpack_require__(147);
+	__webpack_require__(156);
 	
-	__webpack_require__(148);
+	__webpack_require__(157);
 	
-	__webpack_require__(149);
+	__webpack_require__(158);
 	
-	__webpack_require__(150);
+	__webpack_require__(159);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -43159,9 +45433,8 @@
 	    }
 	};
 
-
 /***/ },
-/* 144 */
+/* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -53204,7 +55477,7 @@
 
 
 /***/ },
-/* 145 */
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -53215,7 +55488,7 @@
 	* Version: 3.1.63
 	*/
 	!function(factory) {
-	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(144) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery")) : factory(jQuery);
+	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(153) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery")) : factory(jQuery);
 	}(function($) {
 	    function isInputEventSupported(eventName) {
 	        var el = document.createElement("input"), evName = "on" + eventName, isSupported = evName in el;
@@ -54569,7 +56842,7 @@
 	});
 
 /***/ },
-/* 146 */
+/* 155 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -54580,7 +56853,7 @@
 	* Version: 3.1.63
 	*/
 	!function(factory) {
-	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(144), __webpack_require__(145) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./jquery.inputmask")) : factory(jQuery);
+	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(153), __webpack_require__(154) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./jquery.inputmask")) : factory(jQuery);
 	}(function($) {
 	    return $.extend($.inputmask.defaults.definitions, {
 	        h: {
@@ -55035,7 +57308,7 @@
 	});
 
 /***/ },
-/* 147 */
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -55046,7 +57319,7 @@
 	* Version: 3.1.63
 	*/
 	!function(factory) {
-	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(144), __webpack_require__(145) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./jquery.inputmask")) : factory(jQuery);
+	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(153), __webpack_require__(154) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./jquery.inputmask")) : factory(jQuery);
 	}(function($) {
 	    return $.extend($.inputmask.defaults.definitions, {
 	        A: {
@@ -55147,7 +57420,7 @@
 	});
 
 /***/ },
-/* 148 */
+/* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -55158,7 +57431,7 @@
 	* Version: 3.1.63
 	*/
 	!function(factory) {
-	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(144), __webpack_require__(145) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./jquery.inputmask")) : factory(jQuery);
+	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(153), __webpack_require__(154) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./jquery.inputmask")) : factory(jQuery);
 	}(function($) {
 	    return $.extend($.inputmask.defaults.aliases, {
 	        numeric: {
@@ -55509,7 +57782,7 @@
 	});
 
 /***/ },
-/* 149 */
+/* 158 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -55520,7 +57793,7 @@
 	* Version: 3.1.63
 	*/
 	!function(factory) {
-	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(144), __webpack_require__(145) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./jquery.inputmask")) : factory(jQuery);
+	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(153), __webpack_require__(154) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./jquery.inputmask")) : factory(jQuery);
 	}(function($) {
 	    return $.extend($.inputmask.defaults.aliases, {
 	        phone: {
@@ -55562,7 +57835,7 @@
 	});
 
 /***/ },
-/* 150 */
+/* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -55573,7 +57846,7 @@
 	* Version: 3.1.63
 	*/
 	!function(factory) {
-	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(144), __webpack_require__(145) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./jquery.inputmask")) : factory(jQuery);
+	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(153), __webpack_require__(154) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./jquery.inputmask")) : factory(jQuery);
 	}(function($) {
 	    return $.extend($.inputmask.defaults.aliases, {
 	        Regex: {
@@ -55691,7 +57964,7 @@
 	});
 
 /***/ },
-/* 151 */
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55701,56 +57974,442 @@
 	});
 	exports.default = inputViewModel;
 	
-	var _scalejs = __webpack_require__(130);
-	
-	var _scalejs2 = _interopRequireDefault(_scalejs);
-	
-	var _autocompleteViewModel = __webpack_require__(152);
+	var _autocompleteViewModel = __webpack_require__(161);
 	
 	var _autocompleteViewModel2 = _interopRequireDefault(_autocompleteViewModel);
 	
-	var _selectViewModel = __webpack_require__(153);
+	var _selectViewModel = __webpack_require__(162);
 	
 	var _selectViewModel2 = _interopRequireDefault(_selectViewModel);
 	
-	var _dataservice = __webpack_require__(133);
+	var _dataservice = __webpack_require__(144);
 	
 	var _dataservice2 = _interopRequireDefault(_dataservice);
 	
-	var _lodash = __webpack_require__(23);
+	var _scalejs = __webpack_require__(137);
 	
-	var _lodash2 = _interopRequireDefault(_lodash);
-	
-	var _knockout = __webpack_require__(11);
-	
-	var _knockout2 = _interopRequireDefault(_knockout);
+	var _scalejs2 = _interopRequireDefault(_scalejs);
 	
 	var _moment = __webpack_require__(25);
 	
 	var _moment2 = _interopRequireDefault(_moment);
 	
+	var _knockout = __webpack_require__(11);
+	
+	var _knockout2 = _interopRequireDefault(_knockout);
+	
+	var _lodash = __webpack_require__(23);
+	
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
+	var _scalejs3 = __webpack_require__(10);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// imports
-	var observable = _scalejs2.default.mvvm.observable,
-	    observableArray = _scalejs2.default.mvvm.observableArray,
-	    computed = _scalejs2.default.mvvm.computed,
-	    evaluate = _scalejs2.default.expression.evaluate,
-	    merge = _scalejs2.default.object.merge,
-	    extend = _scalejs2.default.object.extend,
+	var evaluate = _scalejs2.default.expression.evaluate,
 	    has = _scalejs2.default.object.has,
 	    get = _scalejs2.default.object.get,
 	    is = _scalejs2.default.type.is,
-	    unwrap = _knockout2.default.unwrap,
-	    inputTypes = {
+	    merge = _scalejs2.default.object.merge;
+	
+	var inputTypes = {
 	    autocomplete: _autocompleteViewModel2.default,
 	    select: _selectViewModel2.default
 	};
 	
-	// inputViewModel
-	// implements an input of type
-	// text, select, date, radio, checkbox, checkboxList
+	function inputViewModel(node) {
+	    var // metadata node + context
+	    options = node.options || {},
+	        keyMap = node.keyMap || {},
+	        context = this || {},
 	
+	
+	    // inputValue: accepts user input via KO Binding
+	    inputValue = createInputValue(),
+	
+	
+	    // values which can be chosen from
+	    values = (0, _scalejs3.observableArray)(Array.isArray(options.values) ? options.values : []),
+	
+	
+	    // Depricated?
+	    isShown = (0, _scalejs3.observable)(!node.hidden),
+	
+	
+	    // 2-way binding with state of focus
+	    hasFocus = (0, _scalejs3.observable)(),
+	
+	
+	    // 1-way binding with state of hover           
+	    hover = (0, _scalejs3.observable)(),
+	
+	
+	    // validations
+	    validations = options.validations || null,
+	        required = validations ? validations.required : false,
+	        customError = (0, _scalejs3.observable)(),
+	
+	
+	    // attributes
+	    disabled = (0, _scalejs3.observable)(!!options.disabled),
+	        readonly = (0, _scalejs3.observable)(!!options.readonly),
+	        maxlength = validations && validations.maxLength,
+	
+	
+	    // patterns
+	    pattern = options.pattern === true ? getPattern() : options.pattern,
+	        tooltipShown = (0, _scalejs3.observable)(false),
+	        //for patterns
+	    shake = (0, _scalejs3.observable)(false),
+	
+	
+	    //specific datepicker
+	    datePlaceholder = node.inputType === 'datepicker' && _knockout2.default.pureComputed(function () {
+	        var placeholder = !hover() || hasFocus() ? '' : 'mm/dd/yyyy';
+	        return placeholder;
+	    }),
+	
+	
+	    // custom setValue functions for input types                       
+	    setValueFuncs = {
+	        checkboxList: setCheckboxListValue
+	    },
+	
+	
+	    // subs disposable array
+	    subs = [],
+	
+	
+	    // how can we define these more clearly / better? Block Scope?
+	    wasModified,
+	        //Needed?
+	    computedValueExpression,
+	        //Needed?
+	    registeredAction,
+	        //Needed?
+	
+	    // move out to sandbox?
+	    formatters = {
+	        dateFormatter: dateFormatter
+	    },
+	        format = options.values && options.values.textFormatter ? formatters[options.values.textFormatter] : _lodash2.default.identity,
+	
+	
+	    // BaseViewModel to be passed to Mixins
+	    viewmodel = {
+	        mapItem: mapItem,
+	        inputValue: inputValue,
+	        hasFocus: hasFocus,
+	        format: format,
+	        subs: subs,
+	        readonly: readonly
+	    };
+	
+	    /*
+	     * PJSON API (refine)
+	     */
+	    function getValue() {
+	        return inputValue() || '';
+	    }
+	
+	    function setValue(data) {
+	        var value = is(data, 'object') ? data.value : data,
+	            // TODO: Refactor - should only accept "value", not "data".
+	        wasModifed = inputValue.isModified();
+	
+	        // uses setValueFunc if defined, else updates inputValue
+	        if (setValueFuncs[node.inputType]) {
+	            setValueFuncs[node.inputType](data);
+	        } else if (viewmodel.setValue) {
+	            viewmodel.setValue(data);
+	        } else {
+	            inputValue(value);
+	        }
+	
+	        // programtically setting the inputValue will not cause isModified to become true
+	        if (!wasModifed) {
+	            inputValue.isModified(false);
+	        }
+	    }
+	
+	    function update(data) {
+	        if (data.hasOwnProperty('value')) {
+	            setValue(data.value);
+	        }
+	        if (data.hasOwnProperty('ErrorMessage')) {
+	            customError(data.ErrorMessage);
+	        }
+	    }
+	
+	    function validate() {
+	        console.error('Relying on "this" for rendered in validate. REFACTOR');
+	        inputValue.isModified(true);
+	        return !inputValue.isValid() && isShown() && this.rendered() && inputValue.severity() === 1;
+	    }
+	
+	    function visibleMessage() {
+	        // returns the message to be displayed (based on validations)
+	        var inputMessage,
+	            message,
+	            severity = inputValue.severity();
+	
+	        if (!inputValue.isModified() || inputValue.isValid() || !this.rendered() || !isShown()) {
+	            // the user has yet to modify the input
+	            // or there is no message. return nothing
+	            return;
+	        }
+	
+	        inputMessage = inputValue.error();
+	        inputMessage = inputMessage[inputMessage.length - 1] === '.' ? inputMessage : inputMessage + '.';
+	
+	        if (inputMessage === 'Required.') {
+	            message = (node.errorLabel || node.label) + ' is required.';
+	        } else {
+	            message = (node.errorLabel || node.label) + ' is invalid. ' + inputMessage;
+	        }
+	
+	        return {
+	            message: message,
+	            severity: severity,
+	            onClick: function onClick() {
+	                hasFocus(true);
+	            }
+	        };
+	    }
+	
+	    /*
+	     * Rule Engine (todo - Refactor out)
+	     */
+	
+	    function assignDate(value, params) {
+	        if (!is(params, 'object')) {
+	            console.error('Assign date only supports object params', params);
+	            return;
+	        }
+	        var newDate = (0, _moment2.default)(value).add(params).format(options.rawFormat || 'YYYY-MM-DD');
+	        setValue(newDate);
+	    }
+	
+	    function setDisabled(value) {
+	        if (value === 'toggle') {
+	            disabled(!disabled());
+	            return;
+	        }
+	        disabled(value);
+	    }
+	
+	    function setReadonly(bool) {
+	        readonly(bool);
+	    }
+	
+	    function setCheckboxListValue(data) {
+	        if (Array.isArray(data.value)) {
+	            inputValue(data.value);
+	        } else if (data.value !== null && data.value !== undefined) {
+	            inputValue([data.value]);
+	        } else {
+	            inputValue([]);
+	        }
+	    }
+	
+	    /*
+	     * Internal
+	     */
+	    function createInputValue() {
+	        // checkboxList can have multiple answers so make it an array
+	        if (node.inputType === 'checkboxList') {
+	            return (0, _scalejs3.observableArray)(options.value || []);
+	        } else {
+	            // if there is no initial value, set it to empty string,
+	            // so that isModified does not get triggered for empty dropdowns
+	            return (0, _scalejs3.observable)(has(options.value) ? options.value : '');
+	        }
+	    }
+	
+	    function getPattern() {
+	        // implicitly determine pattern (inputmask) if there is a Regex validation
+	        if (validations && validations.pattern) {
+	            return {
+	                alias: 'Regex',
+	                regex: validations.pattern.params
+	            };
+	        }
+	    }
+	
+	    /*
+	     * Utils (can be Refactored to common)
+	     */
+	
+	    function dateFormatter(date) {
+	        return (0, _moment2.default)(date).format('MM/DD/YYYY');
+	    }
+	
+	    function mapItem(mapper) {
+	        var textKey = Array.isArray(mapper.textKey) ? mapper.textKey : [mapper.textKey],
+	            valueKey = Array.isArray(mapper.valueKey) ? mapper.valueKey : [mapper.valueKey],
+	            textFormatter = formatters[mapper.textFormatter] || _lodash2.default.identity,
+	            delimeter = mapper.delimeter || ' / ';
+	
+	        return function (val) {
+	            return {
+	                text: textFormatter(textKey.map(function (k) {
+	                    val[k];
+	                }).join(delimiter)),
+	                value: valueKey.map(function (k) {
+	                    return val[k];
+	                }).join(delimeter),
+	                original: val
+	            };
+	        };
+	    }
+	
+	    /*
+	     * Init
+	     */
+	
+	    // Mixin the viewModel specific to the inputType
+	    if (inputTypes[node.inputType]) {
+	        extend(viewmodel, inputTypes[node.inputType].call(context, node, viewmodel));
+	    }
+	
+	    // Checkbox underlying value is Array because of knockout, maybe refactor to a custom binding?
+	    if (node.inputType === 'checkbox') {
+	        values.subscribe(function (newValues) {
+	            if (newValues.indexOf(options.checked) !== -1) {
+	                inputValue(options.checked);
+	            } else {
+	                inputValue(options.unchecked);
+	            }
+	        });
+	        if (inputValue() === options.checked) {
+	            values.push(options.checked);
+	        }
+	    }
+	
+	    // TODO: Specific to data, move into custom viewModel?
+	    // make min/max date into observables
+	    if (options.minDate) {
+	        viewmodel.minDate = _knockout2.default.observable(options.minDate);
+	    }
+	    if (options.maxDate) {
+	        viewmodel.maxDate = _knockout2.default.observable(options.maxDate);
+	    }
+	
+	    // Is this needed in the common? Should it be a plugin/mixin?
+	    if (options.registered) {
+	        registeredAction = _scalejs2.default.metadataFactory.createViewModel.call(this, {
+	            type: 'action',
+	            actionType: 'ajax',
+	            options: merge(options.registered, { data: {} })
+	        });
+	
+	        inputValue.subscribe(function (newValue) {
+	            registeredAction.options.data[node.id] = newValue; //our own sub gets called before context is updated
+	            if (newValue !== '') {
+	                registeredAction.action({
+	                    callback: function callback(error, data) {
+	                        Object.keys(data).forEach(function (key) {
+	                            if (!context.dictionary && !context.data) {
+	                                console.warn('Using a registered input when no data/dictionary available in context', node);
+	                                return;
+	                            }
+	                            var node = context.dictionary && context.dictionary()[key];
+	                            if (node && node.update) {
+	                                node.update(data[key]);
+	                            } else if (context.data && has(data[key], 'value')) {
+	                                context.data()[key] = data[key].value;
+	                            }
+	                        });
+	                    }
+	                });
+	            }
+	        });
+	    }
+	
+	    // TODO: Clean up validation Code
+	    // add validations to the inputvalue
+	    validations = merge(_lodash2.default.cloneDeep(options.validations), { customError: customError });
+	    if (validations.expression) {
+	        validations.expression.params = [options.validations.expression.message ? options.validations.expression.term : options.validations.expression, context.getValue];
+	    }
+	    if (viewmodel.validations) {
+	        validations = merge(validations, viewmodel.validations);
+	    }
+	    inputValue = inputValue.extend(validations);
+	
+	    // allows us to set values on an input from expression
+	    // usecase: issuerId coming from noticeboard
+	    if (options.valueExpression) {
+	        computedValueExpression = (0, _scalejs3.computed)(function () {
+	            if (options.allowSet === false) {
+	                inputValue(); // re-eval when inputValue is set
+	            }
+	            return evaluate(options.valueExpression, context.getValue);
+	        });
+	        setValue(computedValueExpression());
+	        computedValueExpression.subscribe(setValue(value));
+	        subs.push(computedValueExpression);
+	    }
+	
+	    // Insert Zeros Option?
+	    if (get(options, 'pattern.alias') === 'percent') {
+	        inputValue.subscribe(function (value) {
+	            if (value && isFinite(Number(value))) {
+	                inputValue(Number(value).toFixed(3));
+	            }
+	        });
+	    }
+	
+	    shake.subscribe(function (shook) {
+	        shook && setTimeout(function () {
+	            shake(false);
+	        }, 1000);
+	    });
+	
+	    return merge(node, viewmodel, {
+	        inputValue: inputValue,
+	        visibleMessage: visibleMessage,
+	        customError: customError,
+	        hasFocus: hasFocus,
+	        hover: hover,
+	        datePlaceholder: datePlaceholder,
+	        assignDate: assignDate,
+	        setDisabled: setDisabled,
+	        isShown: isShown,
+	        required: required,
+	        readonly: readonly,
+	        disabled: disabled,
+	        maxlength: maxlength,
+	        pattern: pattern,
+	        tooltipShown: tooltipShown,
+	        shake: shake,
+	        options: options,
+	        setValue: setValue,
+	        update: update,
+	        context: this,
+	        error: inputValue.error,
+	
+	        // Mixin-Overrides       
+	        getValue: viewmodel.getValue || getValue,
+	        values: viewmodel.values || values,
+	        setReadonly: viewmodel.setReadonly || setReadonly,
+	        validate: viewmodel.validate || validate,
+	
+	        dispose: function dispose() {
+	            if (viewmodel.dispose) {
+	                viewmodel.dispose();
+	            }
+	            //sandbox.utils.disposalAll(subs)(); TODO
+	            (subs || []).forEach(function (sub) {
+	                sub.dispose && sub.dispose();
+	            });
+	        }
+	    });
+	};
+	
+	// implements an input of type
+	// text, select, date, radio, checkbox, checkboxList  
+
 	//TODO: Refactor Session
 	//- createJSDocs
 	//- revisit and de-tangle bindings
@@ -55761,7 +58420,7 @@
 	//- move tooltip into pattern object (if pattern is true, use message from validation obj)
 	//
 	// ...add more refactor session goals here!
-	
+
 	/**
 	 *  input is the component to use when accepting user-input.
 	 *  This is the best way to create an interactive UI and
@@ -55789,363 +58448,9 @@
 	 *  Sets an inputmask for the input. If a string, this is the mask. If an object, gets passed as is.
 	 *  If boolean = true, uses pattern validation.
 	 */
-	/*global define,sandbox */
-	function inputViewModel(node) {
-	    var options = node.options || {},
-	        keyMap = node.keyMap || {},
-	        context = this || {},
-	        inputValue = createInputValue(),
-	
-	    // values are used in radio, checkbox, checkboxList
-	    values = observableArray(Array.isArray(options.values) ? options.values : []),
-	        isShown = observable(!node.hidden),
-	        hasFocus = observable(),
-	        validations = options.validations || null,
-	        required = validations ? validations.required : false,
-	        context = this || {},
-	        disabled = observable(options.disabled),
-	        readonly = createReadonly(),
-	        maxlength = validations && validations.maxLength,
-	        pattern = options.pattern === true ? getPattern() : options.pattern,
-	        tooltipShown = observable(false),
-	        //for patterns
-	    shake = observable(false),
-	        customError = observable(),
-	
-	    //specific datepicker
-	    hover = observable(),
-	        datePlaceholder = node.inputType === 'datepicker' && _knockout2.default.pureComputed(function () {
-	        var placeholder = !hover() || hasFocus() ? '' : 'mm/dd/yyyy';
-	        return placeholder;
-	    }),
-	        setValueFuncs,
-	        visible,
-	        validations,
-	        subs = [],
-	        wasModified,
-	        computedValueExpression,
-	        formatters = {
-	        dateFormatter: dateFormatter
-	    },
-	        format = options.values && options.values.textFormatter ? formatters[options.values.textFormatter] : _lodash2.default.identity,
-	        registeredAction,
-	        viewmodel = {
-	        mapItem: mapItem,
-	        inputValue: inputValue,
-	        hasFocus: hasFocus,
-	        format: format,
-	        subs: subs,
-	        readonly: readonly
-	    };
-	
-	    function createInputValue() {
-	
-	        // checkboxList can have multiple answers so make it an array
-	        if (node.inputType === 'checkboxList') {
-	            return observableArray(options.value || []);
-	        } else {
-	            // if there is no initial value, set it to empty string,
-	            // so that isModified does not get triggered for empty dropdowns
-	            return observable(has(options.value) ? options.value : '');
-	        }
-	    }
-	
-	    function createReadonly() {
-	        if (options.readonly) {
-	            return observable(options.readonly);
-	        } else if (context.readonly) {
-	            return observable(context.readonly());
-	        } else {
-	            return observable(false);
-	        }
-	    }
-	
-	    function dateFormatter(date) {
-	        return (0, _moment2.default)(date).format('MM/DD/YYYY');
-	    }
-	
-	    function mapItem(mapper) {
-	        var textKey = Array.isArray(mapper.textKey) ? mapper.textKey : [mapper.textKey],
-	            valueKey = Array.isArray(mapper.valueKey) ? mapper.valueKey : [mapper.valueKey],
-	            delimeter = mapper.delimeter || ' / ',
-	            textFormatter = formatters[mapper.textFormatter] || _lodash2.default.identity;
-	
-	        return function (val) {
-	            return {
-	                text: textFormatter(textKey.map(function (k) {
-	                    return val[k];
-	                }).join(mapper.delimiter || ' / ')),
-	                value: valueKey.map(function (k) {
-	                    return val[k];
-	                }).join(mapper.delimiter || ' / '),
-	                original: val
-	            };
-	        };
-	    }
-	
-	    // validates the input by setting isModified to true
-	    // returns true if the input has an error
-	    function validate() {
-	        inputValue.isModified(true);
-	        return !inputValue.isValid() && isShown() && this.rendered() && inputValue.severity() === 1;
-	    }
-	
-	    // implicitly determine pattern if there is a validation
-	    function getPattern() {
-	        if (validations && validations.pattern) {
-	            return {
-	                alias: 'Regex',
-	                regex: validations.pattern.params
-	            };
-	        }
-	    }
-	
-	    // returns the message to be displayed (based on validations)
-	    function visibleMessage() {
-	        var inputMessage, message;
-	
-	        if (!inputValue.isModified() || inputValue.isValid() || !this.rendered() || !isShown()) {
-	            // the user has yet to modify the input
-	            // or there is no message. return nothing
-	            return;
-	        }
-	
-	        inputMessage = inputValue.error();
-	        inputMessage = inputMessage[inputMessage.length - 1] === '.' ? inputMessage : inputMessage + '.';
-	
-	        if (inputMessage === 'Required.') {
-	            message = (node.errorLabel || node.label) + ' is required.';
-	        } else {
-	            message = (node.errorLabel || node.label) + ' is invalid. ' + inputMessage;
-	        }
-	
-	        return {
-	            message: message,
-	            severity: inputValue.severity(),
-	            onClick: function onClick() {
-	                hasFocus(true);
-	            }
-	        };
-	    }
-	
-	    // default getValue function just unwraps inputValue
-	    // todo: refactor 'inputValue' to 'data'
-	    function getValue() {
-	        return inputValue() || '';
-	    }
-	
-	    function setValue(data) {
-	        var value = is(data, 'object') ? data.value : data,
-	            wasModifed = inputValue.isModified();
-	        // uses setValueFunc if defined, else updates inputValue
-	        if (setValueFuncs[node.inputType]) {
-	            setValueFuncs[node.inputType](data);
-	        } else if (viewmodel.setValue) {
-	            viewmodel.setValue(data);
-	        } else {
-	            inputValue(value);
-	        }
-	
-	        // programtically setting the inputValue will not cause isModified to become true
-	        if (!wasModifed) {
-	            inputValue.isModified(false);
-	        }
-	    }
-	
-	    // to replace setValue accepts object or value
-	    function update(data) {
-	        if (data.hasOwnProperty('value')) {
-	            setValue(data.value);
-	        }
-	        if (data.hasOwnProperty('ErrorMessage')) {
-	            customError(data.ErrorMessage);
-	        }
-	    }
-	
-	    function assignDate(value, params) {
-	        if (!is(params, 'object')) {
-	            console.error('Assign date only supports object params', params);
-	            return;
-	        }
-	        var newDate = (0, _moment2.default)(value).add(params).format(options.rawFormat || 'YYYY-MM-DD');
-	        setValue(newDate);
-	    }
-	
-	    function setDisabled(value) {
-	        if (value === 'toggle') {
-	            disabled(!disabled());
-	            return;
-	        }
-	        disabled(value);
-	    }
-	
-	    function setReadonly(bool) {
-	        readonly(bool);
-	    }
-	
-	    if (inputTypes[node.inputType]) {
-	        extend(viewmodel, inputTypes[node.inputType].call(context, node, viewmodel));
-	    }
-	
-	    if (node.inputType === 'checkbox') {
-	        values.subscribe(function (newValues) {
-	            if (newValues.indexOf(options.checked) !== -1) {
-	                inputValue(options.checked);
-	            } else {
-	                inputValue(options.unchecked);
-	            }
-	        });
-	        if (inputValue() === options.checked) {
-	            values.push(options.checked);
-	        }
-	    }
-	
-	    // make min/max date into observables
-	    if (options.minDate) {
-	        options.minDate = _knockout2.default.observable(options.minDate);
-	    }
-	
-	    if (options.maxDate) {
-	        options.maxDate = _knockout2.default.observable(options.maxDate);
-	    }
-	
-	    // make sure this was bound
-	    if (!context.metadata) {
-	        console.error('context not being passed to input viewmodel', node);
-	    }
-	
-	    if (options.registered) {
-	        registeredAction = _scalejs2.default.metadataFactory.createViewModel.call(this, {
-	            type: 'action',
-	            actionType: 'ajax',
-	            options: merge(options.registered, { data: {} })
-	        });
-	
-	        inputValue.subscribe(function (newValue) {
-	            registeredAction.options.data[node.id] = newValue; //our own sub gets called before context is updated
-	            if (newValue !== '') {
-	                registeredAction.action({ callback: function callback(error, data) {
-	                        Object.keys(data).forEach(function (key) {
-	                            if (!context.dictionary && !context.data) {
-	                                console.warn('Using a registered input when no data/dictionary available in context', node);
-	                                return;
-	                            }
-	                            var node = context.dictionary && context.dictionary()[key];
-	                            if (node && node.update) {
-	                                node.update(data[key]);
-	                            } else if (context.data && has(data[key], 'value')) {
-	                                context.data()[key] = data[key].value;
-	                            }
-	                        });
-	                    } });
-	            }
-	        });
-	    }
-	
-	    // add validations to the inputvalue
-	    validations = merge(_lodash2.default.cloneDeep(options.validations), { customError: customError });
-	    if (validations.expression) {
-	        validations.expression.params = [options.validations.expression.message ? options.validations.expression.term : options.validations.expression, context.getValue];
-	    }
-	    if (viewmodel.validations) {
-	        validations = merge(validations, viewmodel.validations);
-	    }
-	    inputValue = inputValue.extend(validations);
-	
-	    // specific setValueFunc for checkboxList
-	    setValueFuncs = {
-	        checkboxList: function checkboxList(data) {
-	            if (Array.isArray(data.value)) {
-	                inputValue(data.value);
-	            } else if (data.value !== null && data.value !== undefined) {
-	                inputValue([data.value]);
-	            } else {
-	                inputValue([]);
-	            }
-	        }
-	    };
-	
-	    // visible binding using expressions and context's getValue func
-	    if (has(node.visible)) {
-	        is(node.visible, 'boolean') ? isShown(node.visible) : visible = computed(function () {
-	            return evaluate(node.visible, context.getValue || function () {
-	                console.error('Cannot use visible binding without context get value', node);
-	            });
-	        });
-	        // isShown is an observable that can be updated by rules so when visible changes so must isShown
-	        isShown(visible());
-	        visible.subscribe(isShown);
-	    }
-	
-	    // allows us to set values on an input from expression
-	    // usecase: issuerId coming from noticeboard
-	    if (options.valueExpression) {
-	        computedValueExpression = computed(function () {
-	            if (options.allowSet === false) {
-	                inputValue(); // re-eval when inputValue is set
-	            }
-	            return evaluate(options.valueExpression, context.getValue);
-	        });
-	        setValue(computedValueExpression());
-	        computedValueExpression.subscribe(function (value) {
-	            setValue(value);
-	        });
-	        subs.push(computedValueExpression);
-	    }
-	
-	    if (get(options, 'pattern.alias') === 'percent') {
-	        inputValue.subscribe(function (value) {
-	            if (value && isFinite(Number(value))) {
-	                inputValue(Number(value).toFixed(3));
-	            }
-	        });
-	    }
-	
-	    shake.subscribe(function () {
-	        if (shake()) {
-	            setTimeout(shake.bind(null, false), 1000);
-	        }
-	    });
-	
-	    return merge(node, viewmodel, {
-	        inputValue: inputValue,
-	        values: viewmodel.values || values,
-	        visibleMessage: visibleMessage,
-	        customError: customError,
-	        hasFocus: hasFocus,
-	        hover: hover,
-	        datePlaceholder: datePlaceholder,
-	        assignDate: assignDate,
-	        setDisabled: setDisabled,
-	        isShown: isShown,
-	        required: required,
-	        readonly: readonly,
-	        setReadonly: viewmodel.setReadonly || setReadonly,
-	        disabled: disabled,
-	        maxlength: maxlength,
-	        pattern: pattern,
-	        tooltipShown: tooltipShown,
-	        shake: shake,
-	        validate: viewmodel.validate || validate,
-	        options: options,
-	        context: this,
-	        error: inputValue.error,
-	        getValue: viewmodel.getValue || getValue,
-	        setValue: setValue,
-	        update: update,
-	        dispose: function dispose() {
-	            if (viewmodel.dispose) {
-	                viewmodel.dispose();
-	            }
-	            (subs || []).forEach(function (sub) {
-	                sub.dispose && sub.dispose();
-	            });
-	        }
-	    });
-	};
 
 /***/ },
-/* 152 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56155,11 +58460,11 @@
 	});
 	exports.default = autocompleteViewModel;
 	
-	var _scalejs = __webpack_require__(130);
+	var _scalejs = __webpack_require__(137);
 	
 	var _scalejs2 = _interopRequireDefault(_scalejs);
 	
-	var _dataservice = __webpack_require__(133);
+	var _dataservice = __webpack_require__(144);
 	
 	var _dataservice2 = _interopRequireDefault(_dataservice);
 	
@@ -56171,18 +58476,16 @@
 	
 	var _knockout2 = _interopRequireDefault(_knockout);
 	
+	var _scalejs3 = __webpack_require__(10);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// imports
-	/*global define,sandbox */
-	var observable = _scalejs2.default.mvvm.observable,
-	    observableArray = _scalejs2.default.mvvm.observableArray,
-	    computed = _scalejs2.default.mvvm.computed,
-	    evaluate = _scalejs2.default.expression.evaluate,
+	var evaluate = _scalejs2.default.expression.evaluate,
 	    merge = _scalejs2.default.object.merge,
 	    has = _scalejs2.default.object.has,
-	    is = _scalejs2.default.type.is,
-	    unwrap = _knockout2.default.unwrap;
+	    is = _scalejs2.default.type.is; /*global define,sandbox */
+	
 	
 	function autocompleteViewModel(node, inputViewModel) {
 	    var context = this,
@@ -56199,8 +58502,8 @@
 	        isShown = inputViewModel.isShown,
 	
 	    // props
-	    autocompleteSource = observableArray(),
-	        mappedChildNodes = observableArray(),
+	    autocompleteSource = (0, _scalejs3.observableArray)(),
+	        mappedChildNodes = (0, _scalejs3.observableArray)(),
 	        sourceArray,
 	        validations,
 	        options = node.options || {},
@@ -56335,7 +58638,7 @@
 	    }
 	
 	    function childSetReadonly(mappedNodes) {
-	        var nodes = unwrap(mappedNodes);
+	        var nodes = (0, _scalejs3.unwrap)(mappedNodes);
 	        nodes.forEach(function (child) {
 	            if (child.setReadonly) {
 	                child.setReadonly(readonly());
@@ -56351,7 +58654,7 @@
 	    }
 	
 	    function validateChildNodes(childNodes) {
-	        return unwrap(childNodes).reduce(function (isInvalid, curr) {
+	        return (0, _scalejs3.unwrap)(childNodes).reduce(function (isInvalid, curr) {
 	            if (curr.validate && typeof curr.validate === 'function') {
 	                return curr.validate() || isInvalid;
 	            } else {
@@ -56370,7 +58673,7 @@
 	    }
 	
 	    if (dataSourceEndpoint) {
-	        subs.push(computed(getAutocompleteSource));
+	        subs.push((0, _scalejs3.computed)(getAutocompleteSource));
 	    }
 	
 	    if (Array.isArray(node.autocompleteSource)) {
@@ -56379,7 +58682,7 @@
 	    }
 	
 	    if (node.autocompleteSource && !Array.isArray(node.autocompleteSource)) {
-	        subs.push(computed(getAutocompleteSourceFromContext).extend({ deferred: true }));
+	        subs.push((0, _scalejs3.computed)(getAutocompleteSourceFromContext).extend({ deferred: true }));
 	    }
 	
 	    if (!options.addNew) {
@@ -56417,7 +58720,7 @@
 	            });
 	        }
 	
-	        computedSource = computed({
+	        computedSource = (0, _scalejs3.computed)({
 	            read: function read() {
 	                var selectedItems = _lodash2.default.difference(context.unique[node.id](), [inputValue()]).map(function (item) {
 	                    return {
@@ -56444,7 +58747,7 @@
 	    });
 	
 	    if (node.children) {
-	        subs.push(computed(function () {
+	        subs.push((0, _scalejs3.computed)(function () {
 	            if (mappedChildNodes().length) {
 	                //todo - refactor this so that we arent making so many assumptions..?
 	                inputValue(itemMapper(mappedChildNodes()[0].getValue()).value);
@@ -56469,7 +58772,7 @@
 	};
 
 /***/ },
-/* 153 */
+/* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56479,7 +58782,7 @@
 	});
 	exports.default = selectViewModel;
 	
-	var _scalejs = __webpack_require__(130);
+	var _scalejs = __webpack_require__(137);
 	
 	var _scalejs2 = _interopRequireDefault(_scalejs);
 	
@@ -56487,15 +58790,11 @@
 	
 	var _lodash2 = _interopRequireDefault(_lodash);
 	
+	var _scalejs3 = __webpack_require__(10);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	/*global define,sandbox */
-	
-	
-	var observableArray = _scalejs2.default.mvvm.observableArray,
-	    evaluate = _scalejs2.default.expression.evaluate,
-	    observable = _scalejs2.default.mvvm.observable,
-	    computed = _scalejs2.default.mvvm.computed,
+	var evaluate = _scalejs2.default.expression.evaluate,
 	    has = _scalejs2.default.object.has,
 	    get = _scalejs2.default.object.get,
 	    is = _scalejs2.default.type.is;
@@ -56538,8 +58837,8 @@
 	
 	    // props           
 	    addBlank = !has(options.addBlank) || options.addBlank,
-	        currentFilter = observable(),
-	        values = observableArray(),
+	        currentFilter = (0, _scalejs3.observable)(),
+	        values = (0, _scalejs3.observableArray)(),
 	        computedValues;
 	
 	    /** 
@@ -56590,7 +58889,7 @@
 	     */
 	    function setValuesFromOptionsObject() {
 	        // create a sub to subscribe to changes in values
-	        subs.push(computed(function () {
+	        subs.push((0, _scalejs3.computed)(function () {
 	            var value = inputValue.peek(),
 	                newValues = (evaluate(options.values.fromArray, context.getValue) || []).filter(function (item) {
 	                return has(item);
@@ -56642,7 +58941,7 @@
 	    /**
 	     * If currentFilter is defined, return only values which match
 	     */
-	    computedValues = computed({
+	    computedValues = (0, _scalejs3.computed)({
 	        read: function read() {
 	            if (!currentFilter()) {
 	                return values();
@@ -56665,7 +58964,7 @@
 	};
 
 /***/ },
-/* 154 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56674,15 +58973,19 @@
 	    value: true
 	});
 	
-	var _scalejs = __webpack_require__(130);
+	var _scalejs = __webpack_require__(137);
 	
 	var _scalejs2 = _interopRequireDefault(_scalejs);
 	
-	var _jsFormat = __webpack_require__(155);
+	var _jsFormat = __webpack_require__(164);
 	
-	var _jsFormat2 = _interopRequireDefault(_jsFormat);
+	var format = _interopRequireWildcard(_jsFormat);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// TODO: update to es6 with named export
 	
 	//import 'knockout-jqautocomplete'; TODO: Fix this dependency DS
 	
@@ -57021,7 +59324,7 @@
 	};
 
 /***/ },
-/* 155 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
@@ -57036,7 +59339,7 @@
 	    ;
 	
 	    if (true) {
-	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(25), __webpack_require__(156), __webpack_require__(157)], __WEBPACK_AMD_DEFINE_FACTORY__ = (generate), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(25), __webpack_require__(165), __webpack_require__(166)], __WEBPACK_AMD_DEFINE_FACTORY__ = (generate), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else if ("undefined" !== typeof module) {
 	        module.exports = generate(
 	            require("moment")
@@ -57231,7 +59534,7 @@
 
 
 /***/ },
-/* 156 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -57916,7 +60219,7 @@
 
 
 /***/ },
-/* 157 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -58551,36 +60854,1378 @@
 
 
 /***/ },
-/* 158 */
+/* 167 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=\"input_template\">\r\n    <div data-bind=\"css: $data.classes, visible: isShown\" class=\"input\">\r\n        <label data-class=\"input-labels input-color-text\" class=\"input-label\"></label>\r\n        <!-- ko if: $data.helpText -->\r\n            <i class=\"fa fa-info-circle info\">\r\n                <div class=\"tool-tip\" data-bind=\"text: $data.helpText\"></div>\r\n            </i>\r\n        <!-- /ko -->\r\n\r\n        <!-- ko template: 'input_' + inputType + '_template' -->\r\n        <!-- /ko -->\r\n        <span data-class=\"input-validation\"></span>\r\n        <span data-class=\"input-tooltip\"></span>\r\n\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_list_template\">\r\n    <label data-class=\"input-labels\" class=\"input-label\"></label>\r\n    <!-- ko template: 'input_' + inputType + '_template' -->\r\n    <!-- /ko -->\r\n</div>\r\n\r\n<div id=\"input_textLabel_template\">\r\n    <div class=\"input-label label-only\" data-class=\"input-labels-only\"></div>\r\n</div>\r\n\r\n<div id=\"input_text_template\">\r\n    <div class=\"input-wrapper\">\r\n        <input data-class=\"input-input input-validation-checker\" type=\"text\" class=\"input-text\"/>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_select_template\">\r\n    <div class=\"input-wrapper\">\r\n        <select data-class=\"input-select input-validation-checker\" class=\"input-select\"></select>\r\n    </div>\r\n\r\n</div>\r\n\r\n<div id=\"input_date_template\">\r\n    <div class=\"input-wrapper\">\r\n        <input type=\"date\" data-class=\"input-datetime\" class=\"input-date\">\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_datepicker_template\">\r\n    <div class=\"input-wrapper\">\r\n        <input type=\"text\" data-class=\"input-datepicker input-validation-checker\" class=\"input-date\"/>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_autosize_template\">\r\n    <div class=\"input-wrapper\">\r\n        <textarea  data-class=\"input-input input-validation-checker input-autosize\" class=\"input-text\"></textarea>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_radio_template\">\r\n    <div data-class=\"input-radio input-color-text\" class=\"input-radio-wrapper\">\r\n    <span>\r\n        <input type=\"radio\" class=\"input-radio\"data-class=\"input-radio-button\" />\r\n        <div class=\"input-radio-label\">\r\n            <!-- ko text: value --> <!-- /ko -->\r\n        </div>\r\n    </span>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_checkbox_template\">\r\n    <label class=\"input-checkbox-wrapper\">\r\n        <input type=\"checkbox\" class=\"input-checkbox-button\" data-class=\"input-checkbox-button input-validation-checker\">\r\n        <span class=\"input-checkbox-display\"></span>\r\n        <span class=\"input-checkbox-label\" data-bind=\"text: options.text\"></span>\r\n    </label>\r\n</div>\r\n\r\n<div id=\"input_checkbox_group_template\">\r\n    <div data-bind=\"css:$data.classes\">\r\n    <!-- ko foreach: values -->\r\n        <div class=\"pb10\">\r\n            <label class=\"input-checkbox-wrapper\">\r\n                <input type=\"checkbox\" data-class=\"input-checkbox-button-group\" class=\"input-checkbox-button\">\r\n                <span class=\"input-checkbox-display\"></span>\r\n                <span class=\"input-checkbox-label\" data-bind=\"text: text\" ></span>\r\n            </label>\r\n        </div>\r\n    <!-- /ko -->\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_autocomplete_template\">\r\n     <!-- ko if: mappedChildNodes().length === 0 -->\r\n    <div class=\"input-wrapper\">\r\n        <input data-class=\"input-autocomplete input-validation-checker\" class=\"input-text\"/>\r\n    </div>\r\n     <!-- /ko -->\r\n    <!-- ko if: mappedChildNodes().length !==  0-->\r\n        <!-- ko foreach: mappedChildNodes -->\r\n            <!-- ko template: 'metadata_item_template' -->\r\n            <!-- /ko -->\r\n        <!-- /ko -->\r\n    <!-- /ko -->\r\n\r\n</div>\r\n\r\n<div id=\"input_add_button_template\" class=\"add\">\r\n        <button class=\"fa fa-icon-add\" data-bind=\"click: input.add\">\r\n            <span class=\"button-text\">Add</span>\r\n        </button>\r\n</div>";
+	module.exports = "<div id=\"input_template\">\r\n    <div data-bind=\"css: $data.classes, visible: isShown\" class=\"input\">\r\n        <label data-class=\"input-labels input-color-text\" class=\"input-label\"></label>\r\n        <!-- ko if: $data.helpText -->\r\n            <i class=\"fa fa-info-circle info\">\r\n                <div class=\"tool-tip\" data-bind=\"text: $data.helpText\"></div>\r\n            </i>\r\n        <!-- /ko -->\r\n\r\n        <!-- ko template: 'input_' + inputType + '_template' -->\r\n        <!-- /ko -->\r\n        <span data-class=\"input-validation\"></span>\r\n        <span data-class=\"input-tooltip\"></span>\r\n\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_list_template\">\r\n    <label data-class=\"input-labels\" class=\"input-label\"></label>\r\n    <!-- ko template: 'input_' + inputType + '_template' -->\r\n    <!-- /ko -->\r\n</div>\r\n\r\n<div id=\"input_textLabel_template\">\r\n    <div class=\"input-label label-only\" data-class=\"input-labels-only\"></div>\r\n</div>\r\n\r\n<div id=\"input_text_template\">\r\n    <div class=\"input-wrapper\">\r\n        <input data-class=\"input-input input-validation-checker\" type=\"text\" class=\"input-text\"/>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_select_template\">\r\n    <div class=\"input-wrapper\">\r\n        <select data-class=\"input-select input-validation-checker\" class=\"input-select\"></select>\r\n    </div>\r\n\r\n</div>\r\n\r\n<div id=\"input_datepicker_template\">\r\n    <div class=\"input-wrapper\">\r\n        <input type=\"text\" data-class=\"input-datepicker input-validation-checker\" class=\"input-date\"/>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_autosize_template\">\r\n    <div class=\"input-wrapper\">\r\n        <textarea  data-class=\"input-input input-validation-checker input-autosize\" class=\"input-text\"></textarea>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_radio_template\">\r\n    <div data-class=\"input-radio input-color-text\" class=\"input-radio-wrapper\">\r\n    <span>\r\n        <input type=\"radio\" class=\"input-radio\"data-class=\"input-radio-button\" />\r\n        <div class=\"input-radio-label\">\r\n            <!-- ko text: value --> <!-- /ko -->\r\n        </div>\r\n    </span>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_checkbox_template\">\r\n    <label class=\"input-checkbox-wrapper\">\r\n        <input type=\"checkbox\" class=\"input-checkbox-button\" data-class=\"input-checkbox-button input-validation-checker\">\r\n        <span class=\"input-checkbox-display\"></span>\r\n        <span class=\"input-checkbox-label\" data-bind=\"text: options.text\"></span>\r\n    </label>\r\n</div>\r\n\r\n<div id=\"input_checkbox_group_template\">\r\n    <div data-bind=\"css:$data.classes\">\r\n    <!-- ko foreach: values -->\r\n        <div class=\"pb10\">\r\n            <label class=\"input-checkbox-wrapper\">\r\n                <input type=\"checkbox\" data-class=\"input-checkbox-button-group\" class=\"input-checkbox-button\">\r\n                <span class=\"input-checkbox-display\"></span>\r\n                <span class=\"input-checkbox-label\" data-bind=\"text: text\" ></span>\r\n            </label>\r\n        </div>\r\n    <!-- /ko -->\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_autocomplete_template\">\r\n     <!-- ko if: mappedChildNodes().length === 0 -->\r\n    <div class=\"input-wrapper\">\r\n        <input data-class=\"input-autocomplete input-validation-checker\" class=\"input-text\"/>\r\n    </div>\r\n     <!-- /ko -->\r\n    <!-- ko if: mappedChildNodes().length !==  0-->\r\n        <!-- ko foreach: mappedChildNodes -->\r\n            <!-- ko template: 'metadata_item_template' -->\r\n            <!-- /ko -->\r\n        <!-- /ko -->\r\n    <!-- /ko -->\r\n\r\n</div>\r\n\r\n<div id=\"input_add_button_template\" class=\"add\">\r\n        <button class=\"fa fa-icon-add\" data-bind=\"click: input.add\">\r\n            <span class=\"button-text\">Add</span>\r\n        </button>\r\n</div>";
 
 /***/ },
-/* 159 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-	"use strict";
-
-/***/ },
-/* 160 */,
-/* 161 */,
-/* 162 */,
-/* 163 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var _scalejs = __webpack_require__(3);
 	
+	var _scalejs2 = _interopRequireDefault(_scalejs);
+	
+	var _knockout = __webpack_require__(11);
+	
+	var _knockout2 = _interopRequireDefault(_knockout);
+	
+	var _pikaday = __webpack_require__(169);
+	
+	var _pikaday2 = _interopRequireDefault(_pikaday);
+	
+	var _moment = __webpack_require__(25);
+	
+	var _moment2 = _interopRequireDefault(_moment);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * TODO - description
+	 * @module datepicker
+	 */
+	
+	var clone = _scalejs2.default.object.clone;
+	
+	window.ko = _knockout2.default;
+	
+	function getTimezoneOffset(date) {
+	    date.setTime(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+	    return date;
+	}
+	
+	function parseDateExpression(ex) {
+	    if (!ex) {
+	        return;
+	    }
+	    var date;
+	
+	    if (Date.parse(ex)) {
+	        date = new Date(ex);
+	    }
+	
+	    if (ex === 'currentDate') {
+	        date = new Date();
+	    }
+	
+	    if (ex.indexOf('currentDate') !== -1) {
+	        var expression = ex.replace('currentDate', 'new Date().getDate()').replace('yr', '*365'),
+	            date = new Date(),
+	            ret = eval(expression);
+	
+	        date.setDate(ret);
+	        date;
+	    }
+	    date.setHours(0, 0, 0, 0);
+	    return date;
+	}
+	
+	function convertDateFormat(d) {
+	    return d ? d.substring(0, 2) + '/' + d.substring(2, 4) + '/' + d.substring(4) : '';
+	}
+	
+	_knockout2.default.bindingHandlers.datepicker = {
+	    init: function init(element, valueAccessor) {
+	        var date = clone(valueAccessor()),
+	            errorObservable = date.errorObservable,
+	            errorMessage = date.errorMessage || 'Date is disabled',
+	            yearRange,
+	            format,
+	            rawFormat,
+	            data,
+	            raw,
+	            maxDate = _knockout2.default.unwrap(date.maxDate),
+	            minDate = _knockout2.default.unwrap(date.minDate),
+	            picker,
+	            previousValue,
+	            disableDayFn,
+	            disableWeekends,
+	            day;
+	
+	        if (!_knockout2.default.isObservable(date.data)) {
+	            console.error('Datepicker data must be bound to an observable');
+	            return;
+	        }
+	
+	        data = date.data;
+	
+	        if (!_knockout2.default.isObservable(date.raw)) {
+	            raw = date.data;
+	        } else {
+	            raw = date.raw;
+	        }
+	
+	        date['field'] = element;
+	
+	        //defaults
+	        date['format'] = date['format'] || 'ddd, MMM DD YYYY';
+	        date['yearRange'] = date['yearRange'] || 100;
+	        //date['maxDate'] = date['maxDate'];
+	        //date['minDate'] = date['minDate'];
+	        rawFormat = date['rawFormat'] || undefined;
+	        date['disableDayFn'] = date['enabledDate'];
+	        date['disableWeekends'] = date['disableWeekends'];
+	        // because date object gets muated by pikaday we lose configurations
+	        // disableWeekday flag needed for manual user input
+	        disableWeekends = date.disableWeekends;
+	        //binding data to observable
+	        date['onSelect'] = function (d) {
+	            //data(d);
+	            raw(this.getMoment().format(rawFormat));
+	            errorObservable && errorObservable(null);
+	        };
+	
+	        minDate = parseDateExpression(minDate);
+	        maxDate = parseDateExpression(maxDate);
+	
+	        // remove minDate/maxDate from date picker as it wipes it out (use disableDatFn instead)
+	        delete date.minDate;
+	        delete date.maxDate;
+	
+	        function dateInRange(d) {
+	            var valid = true;
+	            if (minDate) {
+	                valid = minDate <= d;
+	            }
+	            if (maxDate) {
+	                valid = valid && maxDate >= d;
+	            }
+	            return !valid;
+	        }
+	
+	        if (date['disableDayFn']) {
+	            day = date['disableDayFn'];
+	            disableDayFn = function disableDayFn(d) {
+	                if (d.getDate() == day) {
+	                    return dateInRange(d);
+	                } else {
+	                    return true;
+	                }
+	            };
+	            date['disableDayFn'] = disableDayFn;
+	        } else {
+	            if (minDate || maxDate) {
+	                disableDayFn = dateInRange;
+	            }
+	            date['disableDayFn'] = dateInRange;
+	        }
+	
+	        /* observable setting of min/max date disabled for now till refactor
+	            if (ko.isObservable(maxDate)) {
+	                date.maxDate = maxDate();
+	                maxDate.subscribe(function (mx) {
+	                    var newDate = parseDateExpression(mx);
+	                    if (picker.getDate() > newDate) {
+	                        picker.setDate(null);
+	                    }
+	                    picker.setMaxDate(newDate);
+	                });
+	            }
+	            if (ko.isObservable(minDate)) {
+	                date.minDate = minDate();
+	                minDate.subscribe(function (mn) {
+	                    var newDate = parseDateExpression(mn);
+	                    if (picker.getDate() < newDate) {
+	                        picker.setDate(null);
+	                    }
+	                    picker.setMinDate(newDate);
+	                });
+	            }
+	            */
+	
+	        picker = new _pikaday2.default(date);
+	
+	        if (typeof data() === 'string') {
+	            // need to account for timezone offset before
+	            // date object returns from pikaday, else it's
+	            // off by one day
+	            var date = new Date(data());
+	            date = getTimezoneOffset(date);
+	            picker.setDate(date, true);
+	        } else {
+	            picker.setDate(data(), true);
+	        }
+	
+	        raw.subscribe(function (d) {
+	            if (typeof d === 'string') {
+	                var date = new Date(d);
+	                date = getTimezoneOffset(date);
+	                picker.setDate(date, true);
+	            } else {
+	                picker.setDate(d, true);
+	            }
+	        });
+	
+	        // this "workaround" is necessary for touch screens as pikaday has an issue with it
+	        // https://github.com/dbushell/Pikaday/issues/406
+	        if ('ontouchend' in document) {
+	            picker.el.addEventListener('mousedown', picker._onMouseDown, true);
+	        }
+	
+	        //prevent user keypresses
+	        // element.onkeydown = function (event) {
+	        //     event.preventDefault();
+	        // }
+	
+	        element.addEventListener('blur', function (event) {
+	            var dateObject;
+	            // prevent issues with selecting dropdown value on pikaday control
+	            // by returning if the user did not input a different value
+	            if (element.value === previousValue) {
+	                return;
+	            }
+	            // if the user removes the date, update the input value to blank
+	            if (element.value === '') {
+	                data('');
+	            }
+	            dateObject = new Date(element.value);
+	            // if the user enters a disabled date on the datepicker, set the customError messahe
+	            if (disableDayFn && disableDayFn(dateObject) || disableWeekends && [0, 6].indexOf(dateObject.getDay()) !== -1) {
+	                //element.value = previousValue; //uncomment if you want disable date to be removed automatically
+	                errorObservable && errorObservable(errorMessage);
+	                return;
+	            } else {
+	                errorObservable && errorObservable(null);
+	            }
+	            // store previous value, fixes bug with selecting year from dropdown
+	            previousValue = element.value;
+	            // finally, the user has updated the date and needs to be set
+	            picker.setDate(element.value);
+	        });
+	
+	        _knockout2.default.utils.domNodeDisposal.addDisposeCallback(element, function () {
+	            picker.destroy();
+	        });
+	    }
+	};
+
+/***/ },
+/* 169 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*!
+	 * Pikaday
+	 *
+	 * Copyright © 2014 David Bushell | BSD & MIT license | https://github.com/dbushell/Pikaday
+	 */
+	
+	(function (root, factory)
+	{
+	    'use strict';
+	
+	    var moment;
+	    if (true) {
+	        // CommonJS module
+	        // Load moment.js as an optional dependency
+	        try { moment = __webpack_require__(25); } catch (e) {}
+	        module.exports = factory(moment);
+	    } else if (typeof define === 'function' && define.amd) {
+	        // AMD. Register as an anonymous module.
+	        define(function (req)
+	        {
+	            // Load moment.js as an optional dependency
+	            var id = 'moment';
+	            try { moment = req(id); } catch (e) {}
+	            return factory(moment);
+	        });
+	    } else {
+	        root.Pikaday = factory(root.moment);
+	    }
+	}(this, function (moment)
+	{
+	    'use strict';
+	
+	    /**
+	     * feature detection and helper functions
+	     */
+	    var hasMoment = typeof moment === 'function',
+	
+	    hasEventListeners = !!window.addEventListener,
+	
+	    document = window.document,
+	
+	    sto = window.setTimeout,
+	
+	    addEvent = function(el, e, callback, capture)
+	    {
+	        if (hasEventListeners) {
+	            el.addEventListener(e, callback, !!capture);
+	        } else {
+	            el.attachEvent('on' + e, callback);
+	        }
+	    },
+	
+	    removeEvent = function(el, e, callback, capture)
+	    {
+	        if (hasEventListeners) {
+	            el.removeEventListener(e, callback, !!capture);
+	        } else {
+	            el.detachEvent('on' + e, callback);
+	        }
+	    },
+	
+	    fireEvent = function(el, eventName, data)
+	    {
+	        var ev;
+	
+	        if (document.createEvent) {
+	            ev = document.createEvent('HTMLEvents');
+	            ev.initEvent(eventName, true, false);
+	            ev = extend(ev, data);
+	            el.dispatchEvent(ev);
+	        } else if (document.createEventObject) {
+	            ev = document.createEventObject();
+	            ev = extend(ev, data);
+	            el.fireEvent('on' + eventName, ev);
+	        }
+	    },
+	
+	    trim = function(str)
+	    {
+	        return str.trim ? str.trim() : str.replace(/^\s+|\s+$/g,'');
+	    },
+	
+	    hasClass = function(el, cn)
+	    {
+	        return (' ' + el.className + ' ').indexOf(' ' + cn + ' ') !== -1;
+	    },
+	
+	    addClass = function(el, cn)
+	    {
+	        if (!hasClass(el, cn)) {
+	            el.className = (el.className === '') ? cn : el.className + ' ' + cn;
+	        }
+	    },
+	
+	    removeClass = function(el, cn)
+	    {
+	        el.className = trim((' ' + el.className + ' ').replace(' ' + cn + ' ', ' '));
+	    },
+	
+	    isArray = function(obj)
+	    {
+	        return (/Array/).test(Object.prototype.toString.call(obj));
+	    },
+	
+	    isDate = function(obj)
+	    {
+	        return (/Date/).test(Object.prototype.toString.call(obj)) && !isNaN(obj.getTime());
+	    },
+	
+	    isWeekend = function(date)
+	    {
+	        var day = date.getDay();
+	        return day === 0 || day === 6;
+	    },
+	
+	    isLeapYear = function(year)
+	    {
+	        // solution by Matti Virkkunen: http://stackoverflow.com/a/4881951
+	        return year % 4 === 0 && year % 100 !== 0 || year % 400 === 0;
+	    },
+	
+	    getDaysInMonth = function(year, month)
+	    {
+	        return [31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+	    },
+	
+	    setToStartOfDay = function(date)
+	    {
+	        if (isDate(date)) date.setHours(0,0,0,0);
+	    },
+	
+	    compareDates = function(a,b)
+	    {
+	        // weak date comparison (use setToStartOfDay(date) to ensure correct result)
+	        return a.getTime() === b.getTime();
+	    },
+	
+	    extend = function(to, from, overwrite)
+	    {
+	        var prop, hasProp;
+	        for (prop in from) {
+	            hasProp = to[prop] !== undefined;
+	            if (hasProp && typeof from[prop] === 'object' && from[prop] !== null && from[prop].nodeName === undefined) {
+	                if (isDate(from[prop])) {
+	                    if (overwrite) {
+	                        to[prop] = new Date(from[prop].getTime());
+	                    }
+	                }
+	                else if (isArray(from[prop])) {
+	                    if (overwrite) {
+	                        to[prop] = from[prop].slice(0);
+	                    }
+	                } else {
+	                    to[prop] = extend({}, from[prop], overwrite);
+	                }
+	            } else if (overwrite || !hasProp) {
+	                to[prop] = from[prop];
+	            }
+	        }
+	        return to;
+	    },
+	
+	    adjustCalendar = function(calendar) {
+	        if (calendar.month < 0) {
+	            calendar.year -= Math.ceil(Math.abs(calendar.month)/12);
+	            calendar.month += 12;
+	        }
+	        if (calendar.month > 11) {
+	            calendar.year += Math.floor(Math.abs(calendar.month)/12);
+	            calendar.month -= 12;
+	        }
+	        return calendar;
+	    },
+	
+	    /**
+	     * defaults and localisation
+	     */
+	    defaults = {
+	
+	        // bind the picker to a form field
+	        field: null,
+	
+	        // automatically show/hide the picker on `field` focus (default `true` if `field` is set)
+	        bound: undefined,
+	
+	        // position of the datepicker, relative to the field (default to bottom & left)
+	        // ('bottom' & 'left' keywords are not used, 'top' & 'right' are modifier on the bottom/left position)
+	        position: 'bottom left',
+	
+	        // automatically fit in the viewport even if it means repositioning from the position option
+	        reposition: true,
+	
+	        // the default output format for `.toString()` and `field` value
+	        format: 'YYYY-MM-DD',
+	
+	        // the initial date to view when first opened
+	        defaultDate: null,
+	
+	        // make the `defaultDate` the initial selected value
+	        setDefaultDate: false,
+	
+	        // first day of week (0: Sunday, 1: Monday etc)
+	        firstDay: 0,
+	
+	        // the minimum/earliest date that can be selected
+	        minDate: null,
+	        // the maximum/latest date that can be selected
+	        maxDate: null,
+	
+	        // number of years either side, or array of upper/lower range
+	        yearRange: 10,
+	
+	        // show week numbers at head of row
+	        showWeekNumber: false,
+	
+	        // used internally (don't config outside)
+	        minYear: 0,
+	        maxYear: 9999,
+	        minMonth: undefined,
+	        maxMonth: undefined,
+	
+	        startRange: null,
+	        endRange: null,
+	
+	        isRTL: false,
+	
+	        // Additional text to append to the year in the calendar title
+	        yearSuffix: '',
+	
+	        // Render the month after year in the calendar title
+	        showMonthAfterYear: false,
+	
+	        // how many months are visible
+	        numberOfMonths: 1,
+	
+	        // when numberOfMonths is used, this will help you to choose where the main calendar will be (default `left`, can be set to `right`)
+	        // only used for the first display or when a selected date is not visible
+	        mainCalendar: 'left',
+	
+	        // Specify a DOM element to render the calendar in
+	        container: undefined,
+	
+	        // internationalization
+	        i18n: {
+	            previousMonth : 'Previous Month',
+	            nextMonth     : 'Next Month',
+	            months        : ['January','February','March','April','May','June','July','August','September','October','November','December'],
+	            weekdays      : ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+	            weekdaysShort : ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+	        },
+	
+	        // Theme Classname
+	        theme: null,
+	
+	        // callback function
+	        onSelect: null,
+	        onOpen: null,
+	        onClose: null,
+	        onDraw: null
+	    },
+	
+	
+	    /**
+	     * templating functions to abstract HTML rendering
+	     */
+	    renderDayName = function(opts, day, abbr)
+	    {
+	        day += opts.firstDay;
+	        while (day >= 7) {
+	            day -= 7;
+	        }
+	        return abbr ? opts.i18n.weekdaysShort[day] : opts.i18n.weekdays[day];
+	    },
+	
+	    renderDay = function(opts)
+	    {
+	        if (opts.isEmpty) {
+	            return '<td class="is-empty"></td>';
+	        }
+	        var arr = [];
+	        if (opts.isDisabled) {
+	            arr.push('is-disabled');
+	        }
+	        if (opts.isToday) {
+	            arr.push('is-today');
+	        }
+	        if (opts.isSelected) {
+	            arr.push('is-selected');
+	        }
+	        if (opts.isInRange) {
+	            arr.push('is-inrange');
+	        }
+	        if (opts.isStartRange) {
+	            arr.push('is-startrange');
+	        }
+	        if (opts.isEndRange) {
+	            arr.push('is-endrange');
+	        }
+	        return '<td data-day="' + opts.day + '" class="' + arr.join(' ') + '">' +
+	                 '<button class="pika-button pika-day" type="button" ' +
+	                    'data-pika-year="' + opts.year + '" data-pika-month="' + opts.month + '" data-pika-day="' + opts.day + '">' +
+	                        opts.day +
+	                 '</button>' +
+	               '</td>';
+	    },
+	
+	    renderWeek = function (d, m, y) {
+	        // Lifted from http://javascript.about.com/library/blweekyear.htm, lightly modified.
+	        var onejan = new Date(y, 0, 1),
+	            weekNum = Math.ceil((((new Date(y, m, d) - onejan) / 86400000) + onejan.getDay()+1)/7);
+	        return '<td class="pika-week">' + weekNum + '</td>';
+	    },
+	
+	    renderRow = function(days, isRTL)
+	    {
+	        return '<tr>' + (isRTL ? days.reverse() : days).join('') + '</tr>';
+	    },
+	
+	    renderBody = function(rows)
+	    {
+	        return '<tbody>' + rows.join('') + '</tbody>';
+	    },
+	
+	    renderHead = function(opts)
+	    {
+	        var i, arr = [];
+	        if (opts.showWeekNumber) {
+	            arr.push('<th></th>');
+	        }
+	        for (i = 0; i < 7; i++) {
+	            arr.push('<th scope="col"><abbr title="' + renderDayName(opts, i) + '">' + renderDayName(opts, i, true) + '</abbr></th>');
+	        }
+	        return '<thead>' + (opts.isRTL ? arr.reverse() : arr).join('') + '</thead>';
+	    },
+	
+	    renderTitle = function(instance, c, year, month, refYear)
+	    {
+	        var i, j, arr,
+	            opts = instance._o,
+	            isMinYear = year === opts.minYear,
+	            isMaxYear = year === opts.maxYear,
+	            html = '<div class="pika-title">',
+	            monthHtml,
+	            yearHtml,
+	            prev = true,
+	            next = true;
+	
+	        for (arr = [], i = 0; i < 12; i++) {
+	            arr.push('<option value="' + (year === refYear ? i - c : 12 + i - c) + '"' +
+	                (i === month ? ' selected': '') +
+	                ((isMinYear && i < opts.minMonth) || (isMaxYear && i > opts.maxMonth) ? 'disabled' : '') + '>' +
+	                opts.i18n.months[i] + '</option>');
+	        }
+	        monthHtml = '<div class="pika-label">' + opts.i18n.months[month] + '<select class="pika-select pika-select-month" tabindex="-1">' + arr.join('') + '</select></div>';
+	
+	        if (isArray(opts.yearRange)) {
+	            i = opts.yearRange[0];
+	            j = opts.yearRange[1] + 1;
+	        } else {
+	            i = year - opts.yearRange;
+	            j = 1 + year + opts.yearRange;
+	        }
+	
+	        for (arr = []; i < j && i <= opts.maxYear; i++) {
+	            if (i >= opts.minYear) {
+	                arr.push('<option value="' + i + '"' + (i === year ? ' selected': '') + '>' + (i) + '</option>');
+	            }
+	        }
+	        yearHtml = '<div class="pika-label">' + year + opts.yearSuffix + '<select class="pika-select pika-select-year" tabindex="-1">' + arr.join('') + '</select></div>';
+	
+	        if (opts.showMonthAfterYear) {
+	            html += yearHtml + monthHtml;
+	        } else {
+	            html += monthHtml + yearHtml;
+	        }
+	
+	        if (isMinYear && (month === 0 || opts.minMonth >= month)) {
+	            prev = false;
+	        }
+	
+	        if (isMaxYear && (month === 11 || opts.maxMonth <= month)) {
+	            next = false;
+	        }
+	
+	        if (c === 0) {
+	            html += '<button class="pika-prev' + (prev ? '' : ' is-disabled') + '" type="button">' + opts.i18n.previousMonth + '</button>';
+	        }
+	        if (c === (instance._o.numberOfMonths - 1) ) {
+	            html += '<button class="pika-next' + (next ? '' : ' is-disabled') + '" type="button">' + opts.i18n.nextMonth + '</button>';
+	        }
+	
+	        return html += '</div>';
+	    },
+	
+	    renderTable = function(opts, data)
+	    {
+	        return '<table cellpadding="0" cellspacing="0" class="pika-table">' + renderHead(opts) + renderBody(data) + '</table>';
+	    },
+	
+	
+	    /**
+	     * Pikaday constructor
+	     */
+	    Pikaday = function(options)
+	    {
+	        var self = this,
+	            opts = self.config(options);
+	
+	        self._onMouseDown = function(e)
+	        {
+	            if (!self._v) {
+	                return;
+	            }
+	            e = e || window.event;
+	            var target = e.target || e.srcElement;
+	            if (!target) {
+	                return;
+	            }
+	
+	            if (!hasClass(target, 'is-disabled')) {
+	                if (hasClass(target, 'pika-button') && !hasClass(target, 'is-empty')) {
+	                    self.setDate(new Date(target.getAttribute('data-pika-year'), target.getAttribute('data-pika-month'), target.getAttribute('data-pika-day')));
+	                    if (opts.bound) {
+	                        sto(function() {
+	                            self.hide();
+	                            if (opts.field) {
+	                                opts.field.blur();
+	                            }
+	                        }, 100);
+	                    }
+	                }
+	                else if (hasClass(target, 'pika-prev')) {
+	                    self.prevMonth();
+	                }
+	                else if (hasClass(target, 'pika-next')) {
+	                    self.nextMonth();
+	                }
+	            }
+	            if (!hasClass(target, 'pika-select')) {
+	                // if this is touch event prevent mouse events emulation
+	                if (e.preventDefault) {
+	                    e.preventDefault();
+	                } else {
+	                    e.returnValue = false;
+	                    return false;
+	                }
+	            } else {
+	                self._c = true;
+	            }
+	        };
+	
+	        self._onChange = function(e)
+	        {
+	            e = e || window.event;
+	            var target = e.target || e.srcElement;
+	            if (!target) {
+	                return;
+	            }
+	            if (hasClass(target, 'pika-select-month')) {
+	                self.gotoMonth(target.value);
+	            }
+	            else if (hasClass(target, 'pika-select-year')) {
+	                self.gotoYear(target.value);
+	            }
+	        };
+	
+	        self._onInputChange = function(e)
+	        {
+	            var date;
+	
+	            if (e.firedBy === self) {
+	                return;
+	            }
+	            if (hasMoment) {
+	                date = moment(opts.field.value, opts.format);
+	                date = (date && date.isValid()) ? date.toDate() : null;
+	            }
+	            else {
+	                date = new Date(Date.parse(opts.field.value));
+	            }
+	            if (isDate(date)) {
+	              self.setDate(date);
+	            }
+	            if (!self._v) {
+	                self.show();
+	            }
+	        };
+	
+	        self._onInputFocus = function()
+	        {
+	            self.show();
+	        };
+	
+	        self._onInputClick = function()
+	        {
+	            self.show();
+	        };
+	
+	        self._onInputBlur = function()
+	        {
+	            // IE allows pika div to gain focus; catch blur the input field
+	            var pEl = document.activeElement;
+	            do {
+	                if (hasClass(pEl, 'pika-single')) {
+	                    return;
+	                }
+	            }
+	            while ((pEl = pEl.parentNode));
+	
+	            if (!self._c) {
+	                self._b = sto(function() {
+	                    self.hide();
+	                }, 50);
+	            }
+	            self._c = false;
+	        };
+	
+	        self._onClick = function(e)
+	        {
+	            e = e || window.event;
+	            var target = e.target || e.srcElement,
+	                pEl = target;
+	            if (!target) {
+	                return;
+	            }
+	            if (!hasEventListeners && hasClass(target, 'pika-select')) {
+	                if (!target.onchange) {
+	                    target.setAttribute('onchange', 'return;');
+	                    addEvent(target, 'change', self._onChange);
+	                }
+	            }
+	            do {
+	                if (hasClass(pEl, 'pika-single') || pEl === opts.trigger) {
+	                    return;
+	                }
+	            }
+	            while ((pEl = pEl.parentNode));
+	            if (self._v && target !== opts.trigger && pEl !== opts.trigger) {
+	                self.hide();
+	            }
+	        };
+	
+	        self.el = document.createElement('div');
+	        self.el.className = 'pika-single' + (opts.isRTL ? ' is-rtl' : '') + (opts.theme ? ' ' + opts.theme : '');
+	
+	        addEvent(self.el, 'mousedown', self._onMouseDown, true);
+	        addEvent(self.el, 'touchend', self._onMouseDown, true);
+	        addEvent(self.el, 'change', self._onChange);
+	
+	        if (opts.field) {
+	            if (opts.container) {
+	                opts.container.appendChild(self.el);
+	            } else if (opts.bound) {
+	                document.body.appendChild(self.el);
+	            } else {
+	                opts.field.parentNode.insertBefore(self.el, opts.field.nextSibling);
+	            }
+	            addEvent(opts.field, 'change', self._onInputChange);
+	
+	            if (!opts.defaultDate) {
+	                if (hasMoment && opts.field.value) {
+	                    opts.defaultDate = moment(opts.field.value, opts.format).toDate();
+	                } else {
+	                    opts.defaultDate = new Date(Date.parse(opts.field.value));
+	                }
+	                opts.setDefaultDate = true;
+	            }
+	        }
+	
+	        var defDate = opts.defaultDate;
+	
+	        if (isDate(defDate)) {
+	            if (opts.setDefaultDate) {
+	                self.setDate(defDate, true);
+	            } else {
+	                self.gotoDate(defDate);
+	            }
+	        } else {
+	            self.gotoDate(new Date());
+	        }
+	
+	        if (opts.bound) {
+	            this.hide();
+	            self.el.className += ' is-bound';
+	            addEvent(opts.trigger, 'click', self._onInputClick);
+	            addEvent(opts.trigger, 'focus', self._onInputFocus);
+	            addEvent(opts.trigger, 'blur', self._onInputBlur);
+	        } else {
+	            this.show();
+	        }
+	    };
+	
+	
+	    /**
+	     * public Pikaday API
+	     */
+	    Pikaday.prototype = {
+	
+	
+	        /**
+	         * configure functionality
+	         */
+	        config: function(options)
+	        {
+	            if (!this._o) {
+	                this._o = extend({}, defaults, true);
+	            }
+	
+	            var opts = extend(this._o, options, true);
+	
+	            opts.isRTL = !!opts.isRTL;
+	
+	            opts.field = (opts.field && opts.field.nodeName) ? opts.field : null;
+	
+	            opts.theme = (typeof opts.theme) === 'string' && opts.theme ? opts.theme : null;
+	
+	            opts.bound = !!(opts.bound !== undefined ? opts.field && opts.bound : opts.field);
+	
+	            opts.trigger = (opts.trigger && opts.trigger.nodeName) ? opts.trigger : opts.field;
+	
+	            opts.disableWeekends = !!opts.disableWeekends;
+	
+	            opts.disableDayFn = (typeof opts.disableDayFn) === 'function' ? opts.disableDayFn : null;
+	
+	            var nom = parseInt(opts.numberOfMonths, 10) || 1;
+	            opts.numberOfMonths = nom > 4 ? 4 : nom;
+	
+	            if (!isDate(opts.minDate)) {
+	                opts.minDate = false;
+	            }
+	            if (!isDate(opts.maxDate)) {
+	                opts.maxDate = false;
+	            }
+	            if ((opts.minDate && opts.maxDate) && opts.maxDate < opts.minDate) {
+	                opts.maxDate = opts.minDate = false;
+	            }
+	            if (opts.minDate) {
+	                this.setMinDate(opts.minDate);
+	            }
+	            if (opts.maxDate) {
+	                this.setMaxDate(opts.maxDate);
+	            }
+	
+	            if (isArray(opts.yearRange)) {
+	                var fallback = new Date().getFullYear() - 10;
+	                opts.yearRange[0] = parseInt(opts.yearRange[0], 10) || fallback;
+	                opts.yearRange[1] = parseInt(opts.yearRange[1], 10) || fallback;
+	            } else {
+	                opts.yearRange = Math.abs(parseInt(opts.yearRange, 10)) || defaults.yearRange;
+	                if (opts.yearRange > 100) {
+	                    opts.yearRange = 100;
+	                }
+	            }
+	
+	            return opts;
+	        },
+	
+	        /**
+	         * return a formatted string of the current selection (using Moment.js if available)
+	         */
+	        toString: function(format)
+	        {
+	            return !isDate(this._d) ? '' : hasMoment ? moment(this._d).format(format || this._o.format) : this._d.toDateString();
+	        },
+	
+	        /**
+	         * return a Moment.js object of the current selection (if available)
+	         */
+	        getMoment: function()
+	        {
+	            return hasMoment ? moment(this._d) : null;
+	        },
+	
+	        /**
+	         * set the current selection from a Moment.js object (if available)
+	         */
+	        setMoment: function(date, preventOnSelect)
+	        {
+	            if (hasMoment && moment.isMoment(date)) {
+	                this.setDate(date.toDate(), preventOnSelect);
+	            }
+	        },
+	
+	        /**
+	         * return a Date object of the current selection
+	         */
+	        getDate: function()
+	        {
+	            return isDate(this._d) ? new Date(this._d.getTime()) : null;
+	        },
+	
+	        /**
+	         * set the current selection
+	         */
+	        setDate: function(date, preventOnSelect)
+	        {
+	            if (!date) {
+	                this._d = null;
+	
+	                if (this._o.field) {
+	                    this._o.field.value = '';
+	                    fireEvent(this._o.field, 'change', { firedBy: this });
+	                }
+	
+	                return this.draw();
+	            }
+	            if (typeof date === 'string') {
+	                date = new Date(Date.parse(date));
+	            }
+	            if (!isDate(date)) {
+	                return;
+	            }
+	
+	            var min = this._o.minDate,
+	                max = this._o.maxDate;
+	
+	            if (isDate(min) && date < min) {
+	                date = min;
+	            } else if (isDate(max) && date > max) {
+	                date = max;
+	            }
+	
+	            this._d = new Date(date.getTime());
+	            setToStartOfDay(this._d);
+	            this.gotoDate(this._d);
+	
+	            if (this._o.field) {
+	                this._o.field.value = this.toString();
+	                fireEvent(this._o.field, 'change', { firedBy: this });
+	            }
+	            if (!preventOnSelect && typeof this._o.onSelect === 'function') {
+	                this._o.onSelect.call(this, this.getDate());
+	            }
+	        },
+	
+	        /**
+	         * change view to a specific date
+	         */
+	        gotoDate: function(date)
+	        {
+	            var newCalendar = true;
+	
+	            if (!isDate(date)) {
+	                return;
+	            }
+	
+	            if (this.calendars) {
+	                var firstVisibleDate = new Date(this.calendars[0].year, this.calendars[0].month, 1),
+	                    lastVisibleDate = new Date(this.calendars[this.calendars.length-1].year, this.calendars[this.calendars.length-1].month, 1),
+	                    visibleDate = date.getTime();
+	                // get the end of the month
+	                lastVisibleDate.setMonth(lastVisibleDate.getMonth()+1);
+	                lastVisibleDate.setDate(lastVisibleDate.getDate()-1);
+	                newCalendar = (visibleDate < firstVisibleDate.getTime() || lastVisibleDate.getTime() < visibleDate);
+	            }
+	
+	            if (newCalendar) {
+	                this.calendars = [{
+	                    month: date.getMonth(),
+	                    year: date.getFullYear()
+	                }];
+	                if (this._o.mainCalendar === 'right') {
+	                    this.calendars[0].month += 1 - this._o.numberOfMonths;
+	                }
+	            }
+	
+	            this.adjustCalendars();
+	        },
+	
+	        adjustCalendars: function() {
+	            this.calendars[0] = adjustCalendar(this.calendars[0]);
+	            for (var c = 1; c < this._o.numberOfMonths; c++) {
+	                this.calendars[c] = adjustCalendar({
+	                    month: this.calendars[0].month + c,
+	                    year: this.calendars[0].year
+	                });
+	            }
+	            this.draw();
+	        },
+	
+	        gotoToday: function()
+	        {
+	            this.gotoDate(new Date());
+	        },
+	
+	        /**
+	         * change view to a specific month (zero-index, e.g. 0: January)
+	         */
+	        gotoMonth: function(month)
+	        {
+	            if (!isNaN(month)) {
+	                this.calendars[0].month = parseInt(month, 10);
+	                this.adjustCalendars();
+	            }
+	        },
+	
+	        nextMonth: function()
+	        {
+	            this.calendars[0].month++;
+	            this.adjustCalendars();
+	        },
+	
+	        prevMonth: function()
+	        {
+	            this.calendars[0].month--;
+	            this.adjustCalendars();
+	        },
+	
+	        /**
+	         * change view to a specific full year (e.g. "2012")
+	         */
+	        gotoYear: function(year)
+	        {
+	            if (!isNaN(year)) {
+	                this.calendars[0].year = parseInt(year, 10);
+	                this.adjustCalendars();
+	            }
+	        },
+	
+	        /**
+	         * change the minDate
+	         */
+	        setMinDate: function(value)
+	        {
+	            setToStartOfDay(value);
+	            this._o.minDate = value;
+	            this._o.minYear  = value.getFullYear();
+	            this._o.minMonth = value.getMonth();
+	            this.draw();
+	        },
+	
+	        /**
+	         * change the maxDate
+	         */
+	        setMaxDate: function(value)
+	        {
+	            setToStartOfDay(value);
+	            this._o.maxDate = value;
+	            this._o.maxYear = value.getFullYear();
+	            this._o.maxMonth = value.getMonth();
+	            this.draw();
+	        },
+	
+	        setStartRange: function(value)
+	        {
+	            this._o.startRange = value;
+	        },
+	
+	        setEndRange: function(value)
+	        {
+	            this._o.endRange = value;
+	        },
+	
+	        /**
+	         * refresh the HTML
+	         */
+	        draw: function(force)
+	        {
+	            if (!this._v && !force) {
+	                return;
+	            }
+	            var opts = this._o,
+	                minYear = opts.minYear,
+	                maxYear = opts.maxYear,
+	                minMonth = opts.minMonth,
+	                maxMonth = opts.maxMonth,
+	                html = '';
+	
+	            if (this._y <= minYear) {
+	                this._y = minYear;
+	                if (!isNaN(minMonth) && this._m < minMonth) {
+	                    this._m = minMonth;
+	                }
+	            }
+	            if (this._y >= maxYear) {
+	                this._y = maxYear;
+	                if (!isNaN(maxMonth) && this._m > maxMonth) {
+	                    this._m = maxMonth;
+	                }
+	            }
+	
+	            for (var c = 0; c < opts.numberOfMonths; c++) {
+	                html += '<div class="pika-lendar">' + renderTitle(this, c, this.calendars[c].year, this.calendars[c].month, this.calendars[0].year) + this.render(this.calendars[c].year, this.calendars[c].month) + '</div>';
+	            }
+	
+	            this.el.innerHTML = html;
+	
+	            if (opts.bound) {
+	                if(opts.field.type !== 'hidden') {
+	                    sto(function() {
+	                        opts.trigger.focus();
+	                    }, 1);
+	                }
+	            }
+	
+	            if (typeof this._o.onDraw === 'function') {
+	                var self = this;
+	                sto(function() {
+	                    self._o.onDraw.call(self);
+	                }, 0);
+	            }
+	        },
+	
+	        adjustPosition: function()
+	        {
+	            var field, pEl, width, height, viewportWidth, viewportHeight, scrollTop, left, top, clientRect;
+	
+	            if (this._o.container) return;
+	
+	            this.el.style.position = 'absolute';
+	
+	            field = this._o.trigger;
+	            pEl = field;
+	            width = this.el.offsetWidth;
+	            height = this.el.offsetHeight;
+	            viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+	            viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+	            scrollTop = window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop;
+	
+	            if (typeof field.getBoundingClientRect === 'function') {
+	                clientRect = field.getBoundingClientRect();
+	                left = clientRect.left + window.pageXOffset;
+	                top = clientRect.bottom + window.pageYOffset;
+	            } else {
+	                left = pEl.offsetLeft;
+	                top  = pEl.offsetTop + pEl.offsetHeight;
+	                while((pEl = pEl.offsetParent)) {
+	                    left += pEl.offsetLeft;
+	                    top  += pEl.offsetTop;
+	                }
+	            }
+	
+	            // default position is bottom & left
+	            if ((this._o.reposition && left + width > viewportWidth) ||
+	                (
+	                    this._o.position.indexOf('right') > -1 &&
+	                    left - width + field.offsetWidth > 0
+	                )
+	            ) {
+	                left = left - width + field.offsetWidth;
+	            }
+	            if ((this._o.reposition && top + height > viewportHeight + scrollTop) ||
+	                (
+	                    this._o.position.indexOf('top') > -1 &&
+	                    top - height - field.offsetHeight > 0
+	                )
+	            ) {
+	                top = top - height - field.offsetHeight;
+	            }
+	
+	            this.el.style.left = left + 'px';
+	            this.el.style.top = top + 'px';
+	        },
+	
+	        /**
+	         * render HTML for a particular month
+	         */
+	        render: function(year, month)
+	        {
+	            var opts   = this._o,
+	                now    = new Date(),
+	                days   = getDaysInMonth(year, month),
+	                before = new Date(year, month, 1).getDay(),
+	                data   = [],
+	                row    = [];
+	            setToStartOfDay(now);
+	            if (opts.firstDay > 0) {
+	                before -= opts.firstDay;
+	                if (before < 0) {
+	                    before += 7;
+	                }
+	            }
+	            var cells = days + before,
+	                after = cells;
+	            while(after > 7) {
+	                after -= 7;
+	            }
+	            cells += 7 - after;
+	            for (var i = 0, r = 0; i < cells; i++)
+	            {
+	                var day = new Date(year, month, 1 + (i - before)),
+	                    isSelected = isDate(this._d) ? compareDates(day, this._d) : false,
+	                    isToday = compareDates(day, now),
+	                    isEmpty = i < before || i >= (days + before),
+	                    isStartRange = opts.startRange && compareDates(opts.startRange, day),
+	                    isEndRange = opts.endRange && compareDates(opts.endRange, day),
+	                    isInRange = opts.startRange && opts.endRange && opts.startRange < day && day < opts.endRange,
+	                    isDisabled = (opts.minDate && day < opts.minDate) ||
+	                                 (opts.maxDate && day > opts.maxDate) ||
+	                                 (opts.disableWeekends && isWeekend(day)) ||
+	                                 (opts.disableDayFn && opts.disableDayFn(day)),
+	                    dayConfig = {
+	                        day: 1 + (i - before),
+	                        month: month,
+	                        year: year,
+	                        isSelected: isSelected,
+	                        isToday: isToday,
+	                        isDisabled: isDisabled,
+	                        isEmpty: isEmpty,
+	                        isStartRange: isStartRange,
+	                        isEndRange: isEndRange,
+	                        isInRange: isInRange
+	                    };
+	
+	                row.push(renderDay(dayConfig));
+	
+	                if (++r === 7) {
+	                    if (opts.showWeekNumber) {
+	                        row.unshift(renderWeek(i - before, month, year));
+	                    }
+	                    data.push(renderRow(row, opts.isRTL));
+	                    row = [];
+	                    r = 0;
+	                }
+	            }
+	            return renderTable(opts, data);
+	        },
+	
+	        isVisible: function()
+	        {
+	            return this._v;
+	        },
+	
+	        show: function()
+	        {
+	            if (!this._v) {
+	                removeClass(this.el, 'is-hidden');
+	                this._v = true;
+	                this.draw();
+	                if (this._o.bound) {
+	                    addEvent(document, 'click', this._onClick);
+	                    this.adjustPosition();
+	                }
+	                if (typeof this._o.onOpen === 'function') {
+	                    this._o.onOpen.call(this);
+	                }
+	            }
+	        },
+	
+	        hide: function()
+	        {
+	            var v = this._v;
+	            if (v !== false) {
+	                if (this._o.bound) {
+	                    removeEvent(document, 'click', this._onClick);
+	                }
+	                this.el.style.position = 'static'; // reset
+	                this.el.style.left = 'auto';
+	                this.el.style.top = 'auto';
+	                addClass(this.el, 'is-hidden');
+	                this._v = false;
+	                if (v !== undefined && typeof this._o.onClose === 'function') {
+	                    this._o.onClose.call(this);
+	                }
+	            }
+	        },
+	
+	        /**
+	         * GAME OVER
+	         */
+	        destroy: function()
+	        {
+	            this.hide();
+	            removeEvent(this.el, 'mousedown', this._onMouseDown, true);
+	            removeEvent(this.el, 'touchend', this._onMouseDown, true);
+	            removeEvent(this.el, 'change', this._onChange);
+	            if (this._o.field) {
+	                removeEvent(this._o.field, 'change', this._onInputChange);
+	                if (this._o.bound) {
+	                    removeEvent(this._o.trigger, 'click', this._onInputClick);
+	                    removeEvent(this._o.trigger, 'focus', this._onInputFocus);
+	                    removeEvent(this._o.trigger, 'blur', this._onInputBlur);
+	                }
+	            }
+	            if (this.el.parentNode) {
+	                this.el.parentNode.removeChild(this.el);
+	            }
+	        }
+	
+	    };
+	
+	    return Pikaday;
+	
+	}));
+
+
+/***/ },
+/* 170 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 171 */,
+/* 172 */,
+/* 173 */,
+/* 174 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+	"use strict";
+
+/***/ },
+/* 175 */,
+/* 176 */,
+/* 177 */,
+/* 178 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _scalejs = __webpack_require__(10);
+	
 	var _scalejs2 = __webpack_require__(22);
 	
-	var _storeViewModel = __webpack_require__(164);
+	var _storeViewModel = __webpack_require__(179);
 	
 	var _storeViewModel2 = _interopRequireDefault(_storeViewModel);
 	
-	var _store = __webpack_require__(165);
+	var _store = __webpack_require__(180);
 	
 	var _store2 = _interopRequireDefault(_store);
 	
@@ -58592,7 +62237,7 @@
 	});
 
 /***/ },
-/* 164 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58602,8 +62247,7 @@
 	});
 	
 	exports.default = function (node) {
-	    var noticeboard = _scalejs2.default.noticeboard.global,
-	        keyMap = node.keyMap || {},
+	    var keyMap = node.keyMap || {},
 	        storeKey = node.storeKey,
 	        dataSourceEndpoint = node.dataSourceEndpoint,
 	        options = node.options || {},
@@ -58648,7 +62292,7 @@
 	
 	    if (node.id) {
 	        //setup refresh receiver if store has id
-	        subs.push((0, _scalejs3.receive)(node.id + '.refresh', function () {
+	        subs.push((0, _scalejs2.receive)(node.id + '.refresh', function () {
 	            fetchData();
 	        }));
 	    }
@@ -58656,25 +62300,26 @@
 	    return {
 	        dispose: function dispose() {
 	            subs.forEach(function (sub) {
-	                sub.unsubscribe();
+	                sub.dispose();
 	            });
 	        }
 	    };
 	};
 	
-	var _scalejs = __webpack_require__(130);
+	var _scalejs = __webpack_require__(143);
 	
-	var _scalejs2 = _interopRequireDefault(_scalejs);
+	var noticeboard = _interopRequireWildcard(_scalejs);
 	
-	var _dataservice = __webpack_require__(133);
+	var _dataservice = __webpack_require__(144);
 	
 	var _dataservice2 = _interopRequireDefault(_dataservice);
 	
-	var _scalejs3 = __webpack_require__(136);
+	var _scalejs2 = __webpack_require__(132);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	/*global define, dataservice, sandbox */
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
 	;
 	
 	//TODO: Rename results to resultsKey
@@ -58707,10 +62352,110 @@
 	 */
 
 /***/ },
-/* 165 */
+/* 180 */
 /***/ function(module, exports) {
 
 	module.exports = "<div id=\"store_template\">\r\n</div>";
+
+/***/ },
+/* 181 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _scalejs = __webpack_require__(10);
+	
+	var _scalejs2 = __webpack_require__(22);
+	
+	var _templateViewModel = __webpack_require__(182);
+	
+	var _templateViewModel2 = _interopRequireDefault(_templateViewModel);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	(0, _scalejs2.registerViewModels)({
+	    template: _templateViewModel2.default
+	});
+
+/***/ },
+/* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = templateViewModel;
+	
+	var _scalejs = __webpack_require__(22);
+	
+	var _scalejs2 = __webpack_require__(10);
+	
+	var _lodash = __webpack_require__(23);
+	
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
+	var _knockout = __webpack_require__(11);
+	
+	var _knockout2 = _interopRequireDefault(_knockout);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function templateViewModel(node) {
+	    var observable = _knockout2.default.observable,
+	        merge = _lodash2.default.merge,
+	        data = observable(node.data || {}),
+	        context = node.options && node.options.createContext ? { metadata: [], data: data } : this,
+	        createViewModel = _scalejs.createViewModel.bind(context),
+	        // passes context
+	    createViewModels = _scalejs.createViewModels.bind(context),
+	        // passes context
+	    // properties
+	    isShown = observable(node.visible !== false),
+	
+	    //visible = observable(),
+	    actionNode = _lodash2.default.cloneDeep(node.action),
+	        action,
+	        mappedChildNodes,
+	        registeredTemplates = (0, _scalejs2.getRegisteredTemplates)();
+	
+	    if (node.template && !registeredTemplates[node.template]) {
+	        console.error('Template not registered ', node.template);
+	        node.template = 'metadata_default_template';
+	    }
+	
+	    mappedChildNodes = createViewModels(node.children || []);
+	
+	    if (actionNode) {
+	        action = createViewModel(actionNode);
+	    } else {
+	        action = { action: function action() {} };
+	    }
+	
+	    if (node.dataSourceEndpoint) {
+	        // create a callback object that the ajaxAction knows how to use.
+	        // this is the alternative to the lously coupled nextactions[] || error actions.
+	        var callback = {
+	            callback: function callback(err, results) {
+	                if (err) {
+	                    console.log('ajax request error', err);
+	                    return;
+	                }
+	                data(results);
+	            }
+	        };
+	        createViewModel(node.dataSourceEndpoint).action(callback);
+	    }
+	
+	    return merge(node, {
+	        mappedChildNodes: mappedChildNodes,
+	        action: action,
+	        data: data,
+	        isShown: isShown,
+	        context: this
+	    });
+	}
 
 /***/ }
 /******/ ]);
