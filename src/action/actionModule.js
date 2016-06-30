@@ -1,4 +1,4 @@
-import core from 'scalejs.core';
+import { extend } from 'lodash';
 import { registerTemplates, registerBindings } from 'scalejs.mvvm';
 import { registerViewModels } from 'scalejs.metadataFactory';
 
@@ -10,7 +10,7 @@ import actionTemplates from './action.html';
 let registeredActions = {};
 
 function registerActions(actions) {
-    core.object.extend(registeredActions, actions);
+    extend(registeredActions, actions);
 }
 
 function getRegisteredActions() {
