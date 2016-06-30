@@ -1,4 +1,4 @@
-import core from 'scalejs.core';
+import { evaluate } from 'scalejs.expression-jsep';
 import ko from 'knockout';
 import _ from 'lodash';
 import 'knockout.validation';
@@ -23,11 +23,11 @@ import 'knockout.validation';
                 validator = this;
             // option 1: params[0] is not an array so it is just the term
             if(!Array.isArray(params[0])) {
-                return core.expression.evaluate.apply(null, params);
+                return evaluate.apply(null, params);
             }
             // option 2: params[0] is an array so it is many terms
             return params[0].every(function (e) {
-                var isValid = core.expression.evaluate.call(null, e.term, getValue);
+                var isValid = evaluate.call(null, e.term, getValue);
                 if(!isValid) {
                     validator.message = e.message;
                 }

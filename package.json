@@ -69,7 +69,7 @@
     "moment": "^2.13.0",
     "mustache": "^2.2.1",
     "scalejs": ">=0.4.1",
-    "scalejs.expression-jsep": "0.0.4",
+    "scalejs.expression-jsep": ">=0.0.4",
     "scalejs.inputmask": ">=1.0.1",
     "scalejs.messagebus": ">=1.0.4",
     "scalejs.metadataFactory": ">=0.1.8",
