@@ -1,10 +1,14 @@
 'use strict';
 
-var _scalejs = require('scalejs.sandbox');
+var _scalejs = require('scalejs.metadataFactory');
 
-var _scalejs2 = _interopRequireDefault(_scalejs);
+var _actionModule = require('../actionModule');
 
-var _scalejs3 = require('scalejs.mvvm');
+var _scalejs2 = require('scalejs');
+
+var _dataservice = require('dataservice');
+
+var _dataservice2 = _interopRequireDefault(_dataservice);
 
 var _mustache = require('mustache');
 
@@ -14,25 +18,14 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _dataservice = require('dataservice');
-
-var _dataservice2 = _interopRequireDefault(_dataservice);
-
-var _actionModule = require('../actionModule');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var has = _scalejs2.default.object.has,
-    get = _scalejs2.default.object.get,
-    merge = _lodash2.default.merge,
-    is = _scalejs2.default.type.is;
 
 function ajax(options, args) {
     var data = this.data && this.data(),
         target = options.target,
         optionData = options.data || {},
-        uri = _mustache2.default.render(options.target.uri, merge(data, optionData)),
-        sendAllData = get(options, 'target.options.type') === 'POST' || get(options, 'target.options.type') === 'PUT' && !target.data,
+        uri = _mustache2.default.render(options.target.uri, (0, _lodash.merge)(data, optionData)),
+        sendAllData = (0, _scalejs2.get)(options, 'target.options.type') === 'POST' || (0, _scalejs2.get)(options, 'target.options.type') === 'PUT' && !target.data,
         contextValue = void 0,
         context = this,
         callback = args && args.callback,
@@ -45,14 +38,14 @@ function ajax(options, args) {
             var receiverKey = k,
                 supplierKey = k,
                 value = void 0;
-            if (is(k, 'object')) {
+            if ((0, _scalejs2.is)(k, 'object')) {
                 Object.keys(k).forEach(function (key) {
                     receiverKey = key;
                     supplierKey = k[key];
                 });
             }
 
-            if (!has(data[supplierKey])) {
+            if (!(0, _scalejs2.has)(data[supplierKey])) {
                 console.warn('Data key missing from data', supplierKey);
                 o[receiverKey] = null;
                 return o;
@@ -91,9 +84,8 @@ function ajax(options, args) {
                 results: results
             };
 
-            item.options = merge(response, item.options);
-            var createViewModel = _scalejs2.default.metadataFactory.createViewModel.bind(context);
-            createViewModel(item).action();
+            item.options = (0, _lodash.merge)(response, item.options);
+            _scalejs.createViewModel.call(context, item).action();
         });
 
         if (callback) {
@@ -101,7 +93,7 @@ function ajax(options, args) {
         }
     };
 
-    _dataservice2.default.ajax(merge(target, { uri: uri }), nextAction);
+    _dataservice2.default.ajax((0, _lodash.merge)(target, { uri: uri }), nextAction);
 }
 
 (0, _actionModule.registerActions)({ ajax: ajax });
