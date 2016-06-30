@@ -78,7 +78,12 @@ describe('inputViewModel test', function () {
     });
 
     describe('inputViewModel tests for select types', function () {
-        it('test for select types');
+        it('creates the selectViewModel', function () {
+            let select = createViewModel(merge(node, {
+                inputType: 'select'
+            }));
+            expect(select).to.have.property('filterValues');
+        });
     });
 
     describe('inputViewModel tests for datepicker types', function () {
@@ -98,7 +103,7 @@ describe('inputViewModel test', function () {
     });
 
     describe('inputViewModel tests for autocomplete types', function () {
-        it('test for autocomplete types', function () {
+        it('creates the autocompleteViewModel', function () {
             let autocompleteViewModel = createViewModel(merge(node, {
                 inputType: 'autocomplete'
             }));

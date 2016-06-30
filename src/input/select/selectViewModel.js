@@ -1,15 +1,7 @@
-import sandbox from 'scalejs.sandbox';
+import { observable, observableArray, computed } from 'knockout';    
+import { evaluate } from 'scalejs.expression-jsep';
+import { has, get, is } from 'scalejs';
 import _ from 'lodash';
-import {
-    observable,
-    observableArray,
-    computed
-} from 'scalejs.mvvm';    
-    
-    var evaluate = sandbox.expression.evaluate,
-        has = sandbox.object.has,
-        get = sandbox.object.get,
-        is = sandbox.type.is;
 
     /**
      *  select is a type of input that lets the 
@@ -50,6 +42,11 @@ import {
             currentFilter = observable(),
             values = observableArray(),
             computedValues;
+
+        if(!options.values) {
+            console.warn('select input type being used without values');
+            options.values = [];
+        }
                 
         /** 
          * Helper function to check if the array has the value
