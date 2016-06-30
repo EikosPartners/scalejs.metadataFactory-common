@@ -1,30 +1,20 @@
-/*global define, ko, core, view, binding */
-import core from 'scalejs.core';
-import ko from 'knockout';
-import view from './action.html';
-import binding from './actionBindings.js';
-import 'scalejs.mvvm';
+import { createViewModel as createVM } from 'scalejs.metadataFactory';
 import { getRegisteredActions } from './actionModule';
+import { observable, unwrap } from 'knockout';
 import { notify } from 'scalejs.messagebus';
-
-let merge = core.object.merge,
-    observable = ko.observable,
-    unwrap = ko.unwrap,
-    has = core.object.has;
-
-core.mvvm.registerTemplates(view);
-core.mvvm.registerBindings(binding);
+import { merge, has } from 'scalejs';
+import { extend } from 'lodash';
 
 export default function actionViewModel(node) {
     let registeredActions = getRegisteredActions(),
         context = this,        
         text = node.text || node.options.text,
-        createViewModel = core.metadataFactory.createViewModel.bind(context),
+        createViewModel = createVM.bind(context),
         validate = node.validate,
         options = node.options || {},
         actionType = node.actionType,
         actions = {},
-        mergedActions = core.object.extend(actions, registeredActions),
+        mergedActions = extend(actions, registeredActions),
         actionFunc = mergedActions[actionType] && mergedActions[actionType].bind(context) || null ,
         isShown = observable(true),
         disabled = observable(has(options.disabled) ? options.disabled : false);
