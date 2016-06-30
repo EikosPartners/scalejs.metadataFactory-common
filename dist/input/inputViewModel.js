@@ -21,6 +21,10 @@ var _scalejs = require('scalejs.sandbox');
 
 var _scalejs2 = _interopRequireDefault(_scalejs);
 
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 var _moment = require('moment');
 
 var _moment2 = _interopRequireDefault(_moment);
@@ -28,10 +32,6 @@ var _moment2 = _interopRequireDefault(_moment);
 var _knockout = require('knockout');
 
 var _knockout2 = _interopRequireDefault(_knockout);
-
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
 
 var _scalejs3 = require('scalejs.mvvm');
 
@@ -300,7 +300,7 @@ function inputViewModel(node) {
 
     // Mixin the viewModel specific to the inputType
     if (inputTypes[node.inputType]) {
-        extend(viewmodel, inputTypes[node.inputType].call(context, node, viewmodel));
+        (0, _lodash.extend)(viewmodel, inputTypes[node.inputType].call(context, node, viewmodel));
     }
 
     // Checkbox underlying value is Array because of knockout, maybe refactor to a custom binding?

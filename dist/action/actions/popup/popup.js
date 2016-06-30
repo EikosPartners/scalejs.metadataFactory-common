@@ -1,26 +1,26 @@
 'use strict';
 
-var _scalejs = require('scalejs.sandbox');
+var _scalejs = require('scalejs.mvvm');
 
-var _scalejs2 = _interopRequireDefault(_scalejs);
+var _scalejs2 = require('scalejs.metadataFactory');
 
-var _scalejs3 = require('scalejs.metadataFactory');
+var _actionModule = require('../../actionModule');
 
-var _scalejs4 = require('scalejs.mvvm');
+var _scalejs3 = require('scalejs.messagebus');
+
+var _scalejs4 = require('scalejs');
 
 var _scalejs5 = require('scalejs.popup');
 
 var _scalejs6 = _interopRequireDefault(_scalejs5);
 
-var _scalejs7 = require('scalejs.messagebus');
+var _mustache = require('mustache');
+
+var _mustache2 = _interopRequireDefault(_mustache);
 
 var _knockout = require('knockout');
 
 var _knockout2 = _interopRequireDefault(_knockout);
-
-var _mustache = require('mustache');
-
-var _mustache2 = _interopRequireDefault(_mustache);
 
 var _popupBindings = require('./popupBindings');
 
@@ -30,11 +30,8 @@ var _popup = require('./popup.html');
 
 var _popup2 = _interopRequireDefault(_popup);
 
-var _actionModule = require('../../actionModule');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var merge = _scalejs2.default.object.merge;
 var popupRoot = _scalejs6.default.popupRoot;
 
 function popupAction(options) {
@@ -48,7 +45,7 @@ function popupAction(options) {
 
     actions = (options.actions || []).map(function (action) {
         action.type = 'action';
-        return _scalejs3.createViewModel.call(context, action);
+        return _scalejs2.createViewModel.call(context, action);
     });
 
     data = this && this.data && this.data();
@@ -58,11 +55,12 @@ function popupAction(options) {
     }
 
     if (options.hidePopupAction) {
-        onHidePopup = _scalejs3.createViewModel.call(context, options.hidePopupAction).action;
+        onHidePopup = _scalejs2.createViewModel.call(context, options.hidePopupAction).action;
     }
 
     modal = typeof options.modal === 'undefined' || typeof options.modal === 'boolean' ? options.modal : evaluate(options.modal, this.getValue);
-    merged = merge(options, {
+
+    merged = (0, _scalejs4.merge)(options, {
         title: options.title,
         message: options.message,
         template: options.template,
@@ -74,13 +72,13 @@ function popupAction(options) {
     });
 
     _scalejs6.default.onHidePopup(merged.onHidePopup);
-    _scalejs6.default.renderPopup((0, _scalejs4.template)(merged.wrapperTemplate || 'popup_default_wrapper_template', {
+    _scalejs6.default.renderPopup((0, _scalejs.template)(merged.wrapperTemplate || 'popup_default_wrapper_template', {
         hidePopup: _scalejs6.default.hidePopup,
         title: merged.title || 'Popup',
         modal: merged.modal || false,
         popupContent: {
             name: merged.template || 'popup_default_region_template',
-            data: merge(merged, {
+            data: (0, _scalejs4.merge)(merged, {
                 hidePopup: _scalejs6.default.hidePopup
             })
         }
@@ -109,7 +107,7 @@ function init() {
 
 init();
 
-(0, _scalejs4.registerBindings)(_popupBindings2.default);
-(0, _scalejs4.registerTemplates)(_popup2.default);
+(0, _scalejs.registerBindings)(_popupBindings2.default);
+(0, _scalejs.registerTemplates)(_popup2.default);
 (0, _actionModule.registerActions)({ popup: popupAction, closePopup: closePopup });
 //# sourceMappingURL=popup.js.map

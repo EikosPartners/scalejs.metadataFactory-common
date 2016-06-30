@@ -5,13 +5,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getRegisteredActions = exports.registerActions = undefined;
 
-var _scalejs = require('scalejs.core');
+var _lodash = require('lodash');
 
-var _scalejs2 = _interopRequireDefault(_scalejs);
+var _scalejs = require('scalejs.mvvm');
 
-var _scalejs3 = require('scalejs.mvvm');
-
-var _scalejs4 = require('scalejs.metadataFactory');
+var _scalejs2 = require('scalejs.metadataFactory');
 
 var _actionViewModel = require('./actionViewModel');
 
@@ -30,16 +28,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var registeredActions = {};
 
 function registerActions(actions) {
-    _scalejs2.default.object.extend(registeredActions, actions);
+    (0, _lodash.extend)(registeredActions, actions);
 }
 
 function getRegisteredActions() {
     return registeredActions;
 }
 
-(0, _scalejs3.registerBindings)(_actionBindings2.default);
-(0, _scalejs3.registerTemplates)(_action2.default);
-(0, _scalejs4.registerViewModels)({ action: _actionViewModel2.default });
+(0, _scalejs.registerBindings)(_actionBindings2.default);
+(0, _scalejs.registerTemplates)(_action2.default);
+(0, _scalejs2.registerViewModels)({ action: _actionViewModel2.default });
 
 exports.registerActions = registerActions;
 exports.getRegisteredActions = getRegisteredActions;

@@ -11,28 +11,17 @@ var _scalejs2 = require('scalejs.mvvm');
 
 var _lodash = require('lodash');
 
-var _lodash2 = _interopRequireDefault(_lodash);
-
 var _knockout = require('knockout');
 
-var _knockout2 = _interopRequireDefault(_knockout);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 function templateViewModel(node) {
-    var observable = _knockout2.default.observable,
-        merge = _lodash2.default.merge,
-        data = observable(node.data || {}),
+    var data = (0, _knockout.observable)(node.data || {}),
         context = node.options && node.options.createContext ? { metadata: [], data: data } : this,
         createViewModel = _scalejs.createViewModel.bind(context),
         // passes context
     createViewModels = _scalejs.createViewModels.bind(context),
         // passes context
-    // properties
-    isShown = observable(node.visible !== false),
-
-    //visible = observable(),
-    actionNode = _lodash2.default.cloneDeep(node.action),
+    isShown = (0, _knockout.observable)(node.visible !== false),
+        actionNode = (0, _lodash.cloneDeep)(node.action),
         action,
         mappedChildNodes,
         registeredTemplates = (0, _scalejs2.getRegisteredTemplates)();
@@ -65,7 +54,7 @@ function templateViewModel(node) {
         createViewModel(node.dataSourceEndpoint).action(callback);
     }
 
-    return merge(node, {
+    return (0, _lodash.merge)(node, {
         mappedChildNodes: mappedChildNodes,
         action: action,
         data: data,

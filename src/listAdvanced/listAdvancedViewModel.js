@@ -2,7 +2,7 @@
 import sandbox from 'scalejs.sandbox';
 import ko from 'knockout';
 import { notify } from 'scalejs.messagebus';
-import { createViewModel } from 'scalejs.metadataFactory';
+import { createViewModel as createVM } from 'scalejs.metadataFactory';
 
     // the list advanced component provides advanced features over the base list
     // - Headers (TBD) and Footers (partially done)
@@ -112,7 +112,7 @@ import { createViewModel } from 'scalejs.metadataFactory';
     }
 
     export default function (node) {
-        var createViewModel = createViewModel.bind(this),
+        var createViewModel = createVM.bind(this),
             context = this,
             itemDictionary = observable({}),
             listViewModel = createViewModel(merge({ id: node.id }, node.list)), // pass along id

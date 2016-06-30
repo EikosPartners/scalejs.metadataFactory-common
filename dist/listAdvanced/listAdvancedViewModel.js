@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (node) {
-    var createViewModel = createViewModel.bind(this),
+    var createViewModel = _scalejs4.createViewModel.bind(this),
         context = this,
         itemDictionary = observable({}),
         listViewModel = createViewModel(merge({ id: node.id }, node.list)),

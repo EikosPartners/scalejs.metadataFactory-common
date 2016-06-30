@@ -5,9 +5,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = autocompleteViewModel;
 
-var _scalejs = require('scalejs.sandbox');
+var _knockout = require('knockout');
 
-var _scalejs2 = _interopRequireDefault(_scalejs);
+var _scalejs = require('scalejs.metadataFactory');
+
+var _scalejs2 = require('scalejs.expression-jsep');
+
+var _scalejs3 = require('scalejs');
 
 var _dataservice = require('dataservice');
 
@@ -17,26 +21,13 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _knockout = require('knockout');
-
-var _knockout2 = _interopRequireDefault(_knockout);
-
-var _scalejs3 = require('scalejs.mvvm');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// imports
-var evaluate = _scalejs2.default.expression.evaluate,
-    merge = _scalejs2.default.object.merge,
-    has = _scalejs2.default.object.has,
-    is = _scalejs2.default.type.is; /*global define,sandbox */
-
 
 function autocompleteViewModel(node, inputViewModel) {
     var context = this,
         dataSourceEndpoint = node.dataSourceEndpoint,
         keyMap = node.keyMap || {},
-        createViewModels = _scalejs2.default.metadataFactory.createViewModels.bind(this),
+        createViewModels = _scalejs.createViewModels.bind(this),
 
     // inputViewModel
     inputValue = inputViewModel.inputValue,
@@ -47,8 +38,8 @@ function autocompleteViewModel(node, inputViewModel) {
         isShown = inputViewModel.isShown,
 
     // props
-    autocompleteSource = (0, _scalejs3.observableArray)(),
-        mappedChildNodes = (0, _scalejs3.observableArray)(),
+    autocompleteSource = (0, _knockout.observableArray)(),
+        mappedChildNodes = (0, _knockout.observableArray)(),
         sourceArray,
         validations,
         options = node.options || {},
@@ -63,11 +54,11 @@ function autocompleteViewModel(node, inputViewModel) {
             //collect data from each node
             //note: works well for multi input children..
             return mappedChildNodes().reduce(function (obj, childNode) {
-                return merge(obj, childNode.getValue && childNode.getValue());
+                return (0, _scalejs3.merge)(obj, childNode.getValue && childNode.getValue());
             }, {});
         }
         if (node.children) {
-            if (has(inputValue()) && inputValue() !== '') {
+            if ((0, _scalejs3.has)(inputValue()) && inputValue() !== '') {
                 item = _lodash2.default.find(autocompleteSource(), { value: inputValue() });
                 if (item) {
                     return item.original;
@@ -83,9 +74,9 @@ function autocompleteViewModel(node, inputViewModel) {
     }
 
     function setValue(data) {
-        var value = is(data, 'object') && has(data.value) ? data.value : data,
+        var value = (0, _scalejs3.is)(data, 'object') && (0, _scalejs3.has)(data.value) ? data.value : data,
             d;
-        if (is(value, 'object')) {
+        if ((0, _scalejs3.is)(value, 'object')) {
             var label = (Array.isArray(keyMap.textKey) ? keyMap.textKey : [keyMap.textKey]).map(function (k) {
                 return value[k];
             }).join(keyMap.delimiter || ' / ');
@@ -134,7 +125,7 @@ function autocompleteViewModel(node, inputViewModel) {
                 return;
             }
             contextDataObject[dataSourceEndpoint.data.fromContext] = contextData;
-            dataSourceEndpoint.data = merge(dataSourceEndpoint.data, contextDataObject);
+            dataSourceEndpoint.data = (0, _scalejs3.merge)(dataSourceEndpoint.data, contextDataObject);
         }
         _dataservice2.default.ajax(dataSourceEndpoint, function (error, data) {
             if (error) {
@@ -153,7 +144,7 @@ function autocompleteViewModel(node, inputViewModel) {
                     } : d[node.id]; //todo: remove this and add mapping!
                 });
                 autocompleteSource(mapAutocompleteSource(_lodash2.default.uniqBy(mappedData, function (item) {
-                    return item ? has(item, 'value') ? item.value : item : '';
+                    return item ? (0, _scalejs3.has)(item, 'value') ? item.value : item : '';
                 }).filter(Boolean))); // remove empty values
             } else {
                     sourceArray = data.SearchResults;
@@ -163,7 +154,7 @@ function autocompleteViewModel(node, inputViewModel) {
     }
 
     function getAutocompleteSourceFromContext() {
-        var source = evaluate(node.autocompleteSource.fromArray, context.getValue);
+        var source = (0, _scalejs2.evaluate)(node.autocompleteSource.fromArray, context.getValue);
 
         // storing source array before any mapping
         sourceArray = source;
@@ -183,7 +174,7 @@ function autocompleteViewModel(node, inputViewModel) {
     }
 
     function childSetReadonly(mappedNodes) {
-        var nodes = (0, _scalejs3.unwrap)(mappedNodes);
+        var nodes = (0, _knockout.unwrap)(mappedNodes);
         nodes.forEach(function (child) {
             if (child.setReadonly) {
                 child.setReadonly(readonly());
@@ -199,7 +190,7 @@ function autocompleteViewModel(node, inputViewModel) {
     }
 
     function validateChildNodes(childNodes) {
-        return (0, _scalejs3.unwrap)(childNodes).reduce(function (isInvalid, curr) {
+        return (0, _knockout.unwrap)(childNodes).reduce(function (isInvalid, curr) {
             if (curr.validate && typeof curr.validate === 'function') {
                 return curr.validate() || isInvalid;
             } else {
@@ -218,7 +209,7 @@ function autocompleteViewModel(node, inputViewModel) {
     }
 
     if (dataSourceEndpoint) {
-        subs.push((0, _scalejs3.computed)(getAutocompleteSource));
+        subs.push((0, _knockout.computed)(getAutocompleteSource));
     }
 
     if (Array.isArray(node.autocompleteSource)) {
@@ -227,7 +218,7 @@ function autocompleteViewModel(node, inputViewModel) {
     }
 
     if (node.autocompleteSource && !Array.isArray(node.autocompleteSource)) {
-        subs.push((0, _scalejs3.computed)(getAutocompleteSourceFromContext).extend({ deferred: true }));
+        subs.push((0, _knockout.computed)(getAutocompleteSourceFromContext).extend({ deferred: true }));
     }
 
     if (!options.addNew) {
@@ -265,7 +256,7 @@ function autocompleteViewModel(node, inputViewModel) {
             });
         }
 
-        computedSource = (0, _scalejs3.computed)({
+        computedSource = (0, _knockout.computed)({
             read: function read() {
                 var selectedItems = _lodash2.default.difference(context.unique[node.id](), [inputValue()]).map(function (item) {
                     return {
@@ -292,7 +283,7 @@ function autocompleteViewModel(node, inputViewModel) {
     });
 
     if (node.children) {
-        subs.push((0, _scalejs3.computed)(function () {
+        subs.push((0, _knockout.computed)(function () {
             if (mappedChildNodes().length) {
                 //todo - refactor this so that we arent making so many assumptions..?
                 inputValue(itemMapper(mappedChildNodes()[0].getValue()).value);

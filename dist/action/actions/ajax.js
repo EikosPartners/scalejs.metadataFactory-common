@@ -24,8 +24,8 @@ function ajax(options, args) {
     var data = this.data && this.data(),
         target = options.target,
         optionData = options.data || {},
-        uri = _mustache2.default.render(options.target.uri, (0, _lodash.merge)(data, optionData)),
-        sendAllData = (0, _scalejs2.get)(options, 'target.options.type') === 'POST' || (0, _scalejs2.get)(options, 'target.options.type') === 'PUT' && !target.data,
+        uri = _mustache2.default.render(options.target.uri, (0, _scalejs2.merge)(data, optionData)),
+        sendAllData = !target.data && !options.sendDataKeys && ((0, _scalejs2.get)(options, 'target.options.type') === 'POST' || (0, _scalejs2.get)(options, 'target.options.type') === 'PUT'),
         contextValue = void 0,
         context = this,
         callback = args && args.callback,
@@ -84,7 +84,7 @@ function ajax(options, args) {
                 results: results
             };
 
-            item.options = (0, _lodash.merge)(response, item.options);
+            item.options = (0, _scalejs2.merge)(response, item.options);
             _scalejs.createViewModel.call(context, item).action();
         });
 
@@ -93,7 +93,7 @@ function ajax(options, args) {
         }
     };
 
-    _dataservice2.default.ajax((0, _lodash.merge)(target, { uri: uri }), nextAction);
+    _dataservice2.default.ajax((0, _scalejs2.merge)(target, { uri: uri }), nextAction);
 }
 
 (0, _actionModule.registerActions)({ ajax: ajax });

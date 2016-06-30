@@ -5,21 +5,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = adapterViewModel;
 
-var _scalejs = require('scalejs.sandbox');
-
-var _scalejs2 = _interopRequireDefault(_scalejs);
-
-var _lodash = require('lodash');
-
 var _knockout = require('knockout');
+
+var _scalejs = require('scalejs.metadataFactory');
+
+var _scalejs2 = require('scalejs.messagebus');
 
 var _dataservice = require('dataservice');
 
 var _dataservice2 = _interopRequireDefault(_dataservice);
 
-var _scalejs3 = require('scalejs.messagebus');
+var _lodash = require('lodash');
 
-var _scalejs4 = require('scalejs.metadataFactory');
+var _scalejs3 = require('scalejs');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -86,9 +84,7 @@ i.e. plugin to adapter context with other components
  * }
  */
 function adapterViewModel(node) {
-    var // props
-    get = _scalejs2.default.object.get,
-        dictionary = (0, _knockout.observable)({}),
+    var dictionary = (0, _knockout.observable)({}),
         // dictionary of nodes with an id
     data = (0, _knockout.observable)({}),
         // data of dictionary contents
@@ -103,7 +99,7 @@ function adapterViewModel(node) {
         updated = false,
         subs = [],
         dataSyncSubscription = void 0,
-        plugins = node.plugins ? _scalejs4.createViewModels.call(context, node.plugins) : [],
+        plugins = node.plugins ? _scalejs.createViewModels.call(context, node.plugins) : [],
         contextPlugins = {};
 
     plugins.forEach(function (plugin) {
@@ -160,7 +156,7 @@ function adapterViewModel(node) {
                 count++;
 
                 if (!error) {
-                    resultsByKey = keyMap.resultsKey ? get(results, keyMap.resultsKey) : results;
+                    resultsByKey = keyMap.resultsKey ? (0, _scalejs3.get)(results, keyMap.resultsKey) : results;
                     // optional: keyMap.dataKey path to extend dataObject on
                     if (keyMap.dataKey) {
                         newDataObject[keyMap.dataKey] = resultsByKey;
@@ -173,7 +169,7 @@ function adapterViewModel(node) {
                 if (count === dataSourceEndpointArray.length) {
                     updateData(dataObject);
                     if (!mappedChildNodes().length) {
-                        mappedChildNodes(_scalejs4.createViewModels.call(context, node.children || []));
+                        mappedChildNodes(_scalejs.createViewModels.call(context, node.children || []));
                     }
                 }
             });
@@ -201,7 +197,7 @@ function adapterViewModel(node) {
     }
 
     if (!node.lazy) {
-        mappedChildNodes(_scalejs4.createViewModels.call(context, node.children || []));
+        mappedChildNodes(_scalejs.createViewModels.call(context, node.children || []));
     }
 
     // update dictionary if mappedChildNodes of a node updates
@@ -222,7 +218,7 @@ function adapterViewModel(node) {
     }
 
     // listen for 'refresh' event
-    subs.push((0, _scalejs3.receive)(node.id + '.refresh', function (options) {
+    subs.push((0, _scalejs2.receive)(node.id + '.refresh', function (options) {
         fetchData(options);
     }));
 

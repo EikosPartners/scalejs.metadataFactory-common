@@ -13,7 +13,7 @@ var _dataservice = require('dataservice');
 
 var _dataservice2 = _interopRequireDefault(_dataservice);
 
-var _lodash = require('lodash');
+var _scalejs3 = require('scalejs');
 
 var _knockout = require('knockout');
 
@@ -51,7 +51,7 @@ function globalNavigation(node) {
 
     _scalejs2.navigation.init(node.initial || 0);
 
-    return (0, _lodash.merge)(node, {
+    return (0, _scalejs3.merge)(node, {
         navLinks: navLinks,
         activeLink: activeLink
     });
