@@ -1,26 +1,17 @@
-import autocompleteViewModel from './autocomplete/autocompleteViewModel';
-import selectViewModel from './select/selectViewModel';
+import { observable, observableArray, computed } from 'knockout';
+import { createViewModel } from 'scalejs.metadataFactory';
+import { evaluate } from 'scalejs.expression-jsep';
+import { has, get, is, merge } from 'scalejs';
 import dataservice from 'dataservice';
-import sandbox from 'scalejs.sandbox';
 import { extend } from 'lodash';
 import moment from 'moment';
 import ko from 'knockout';
 import _ from 'lodash';
 
-import {
-    observable,
-    observableArray,
-    computed
-} from 'scalejs.mvvm';
+import autocompleteViewModel from './autocomplete/autocompleteViewModel';
+import selectViewModel from './select/selectViewModel';
 
-var evaluate = sandbox.expression.evaluate,
-    has = sandbox.object.has,
-    get = sandbox.object.get,
-    is = sandbox.type.is,
-    merge = sandbox.object.merge;
-
-
-var inputTypes = {
+let inputTypes = {
     autocomplete: autocompleteViewModel,
     select: selectViewModel
 }
@@ -80,7 +71,7 @@ export default function inputViewModel(node) {
         computedValueExpression, //Needed?
         registeredAction, //Needed?
 
-        // move out to sandbox?
+        // move out to utility?
         formatters = {
             dateFormatter: dateFormatter
         },
@@ -284,7 +275,7 @@ export default function inputViewModel(node) {
 
     // Is this needed in the common? Should it be a plugin/mixin?
     if (options.registered) {
-        registeredAction = sandbox.metadataFactory.createViewModel.call(this, {
+        registeredAction = createViewModel.call(this, {
             type: 'action',
             actionType: 'ajax',
             options: merge(options.registered, { data: {} })
@@ -392,7 +383,6 @@ export default function inputViewModel(node) {
             if (viewmodel.dispose) {
                 viewmodel.dispose();
             }
-            //sandbox.utils.disposalAll(subs)(); TODO
             (subs || []).forEach(function (sub) {
                 sub.dispose && sub.dispose();
             });
@@ -410,7 +400,6 @@ export default function inputViewModel(node) {
     //- revisit and de-tangle bindings
     //- refactor validations so that the tooltip works without inputText wrapper in the inputType template
     //- remove knockout require
-    //- move dataservice to sandbox
     //- move tooltip/helpText in options
     //- move tooltip into pattern object (if pattern is true, use message from validation obj)
     //

@@ -1,12 +1,7 @@
-/*global define, sandbox, autocomplete, format */
-/*jslint sloppy: true*/
-import sandbox from 'scalejs.sandbox';
+import { merge, has} from 'scalejs';
 import * as format from 'js-format'; // TODO: update to es6 with named export
 
-//import 'knockout-jqautocomplete'; TODO: Fix this dependency DS
-
-var merge = sandbox.object.merge,
-    has = sandbox.object.has;
+//import 'knockout-jqautocomplete'; TODO: Fix this dependency DS 
 
 export default {
     'input-input': function () {
