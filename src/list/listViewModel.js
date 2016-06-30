@@ -1,9 +1,9 @@
-/*global define, sandbox, _, ko*/
-import sandbox from 'scalejs.sandbox';
-import _ from 'lodash';
-import ko from 'knockout';
+import { observable, observableArray, computed, unwrap } from 'knockout';
 import { createViewModel } from 'scalejs.metadataFactory';
-
+import { evaluate } from 'scalejs.expression-jsep';
+import * as noticeboard from 'scalejs.noticeboard';
+import { merge, has, is } from 'scalejs';
+import _ from 'lodash';
 
     // todo: revisit comments below
     // listViewModel is a component which manages a simple list
@@ -31,19 +31,10 @@ import { createViewModel } from 'scalejs.metadataFactory';
      *  The id of the list becomes the key in the data for all the children of the list.
      *
      */
-    var observable = sandbox.mvvm.observable,
-        observableArray = sandbox.mvvm.observableArray,
-        evaluate = sandbox.expression.evaluate,
-        computed = sandbox.mvvm.computed,
-        merge = sandbox.object.merge,
-        unwrap = ko.unwrap,
-        has = sandbox.object.has,
-        is = sandbox.type.is,
-        noticeboard = sandbox.noticeboard.global,
-        listItems = {
-            DELETE: del,
-            DELETE_FLAG: deleteFlag
-        };
+    let listItems = {
+        DELETE: del,
+        DELETE_FLAG: deleteFlag
+    };
 
     function del(itemDef) {
         var context = this;
@@ -84,8 +75,8 @@ import { createViewModel } from 'scalejs.metadataFactory';
             rows = observableArray(),
             options = node.options || {},
             isShown = observable(true),
-            context = this,
-            readonly = observable((context.readOnly && context.readonly()) || false), //initialize to the context's state as determined by the form generally
+            context = this || {},
+            readonly = observable((context.readonly && context.readonly()) || false), //initialize to the context's state as determined by the form generally
             deleteRows = observable(options.deleteRows !== false),
             minRequiredRows = 0,
             showRemoveButton,
