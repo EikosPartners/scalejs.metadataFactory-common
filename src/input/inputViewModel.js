@@ -252,6 +252,8 @@ export default function inputViewModel(node) {
     // Mixin the viewModel specific to the inputType
     if (inputTypes[node.inputType]) {
         extend(viewmodel, inputTypes[node.inputType].call(context, node, viewmodel));
+    } else {
+        console.error("No inputType was found", node.inputType);
     }
 
     // Checkbox underlying value is Array because of knockout, maybe refactor to a custom binding?

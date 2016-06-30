@@ -15,10 +15,18 @@
     <div data-bind="metadataFactory: inputJSON"></div>
     <script>
         var inputJSON = {
-            "type": "input",
-            "inputType": "datepicker",
-            "label": "datepicker"
-        }
+                      "id": "Autocomplete",
+                      "type": "input",
+                      "inputType": "autocomplete",
+                      "label": "Autocomplete",
+                      "autocompleteSource": [
+                            "stressball",
+                            "gumball",
+                            "hairball",
+                            "tossball"
+                            
+                      ]
+                }
     </script>
 
     <script src="./build/bundle.js"></script>
