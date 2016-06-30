@@ -1,9 +1,9 @@
-import sandbox from 'scalejs.sandbox';
-import {merge, extend} from 'lodash';
 import { observable, observableArray, computed, unwrap } from 'knockout';
-import dataservice from 'dataservice';
-import { receive, notify } from 'scalejs.messagebus';
 import { createViewModels } from 'scalejs.metadataFactory';
+import { receive, notify } from 'scalejs.messagebus';
+import dataservice from 'dataservice';
+import { merge, extend } from 'lodash';
+import { get } from 'scalejs';
 
     /* TODO:
     In PJSON, we used readonly, errors, etc. We need a way to do that outside of adapter
@@ -68,9 +68,7 @@ import { createViewModels } from 'scalejs.metadataFactory';
      * }
      */
     export default function adapterViewModel(node) {
-        let // props
-            get = sandbox.object.get,
-            dictionary = observable({}), // dictionary of nodes with an id
+        let dictionary = observable({}), // dictionary of nodes with an id
             data = observable({}), // data of dictionary contents
             context = {
                 metadata: node.children,
