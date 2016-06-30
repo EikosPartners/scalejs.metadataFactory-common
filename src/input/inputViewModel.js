@@ -2,6 +2,7 @@ import autocompleteViewModel from './autocomplete/autocompleteViewModel';
 import selectViewModel from './select/selectViewModel';
 import dataservice from 'dataservice';
 import sandbox from 'scalejs.sandbox';
+import { extend } from 'lodash';
 import moment from 'moment';
 import ko from 'knockout';
 import _ from 'lodash';

@@ -1,6 +1,7 @@
 
 import { registerViewModels, createViewModel, createViewModels } from 'scalejs.metadataFactory';
 import { createMetadataDomStub } from 'utils';
+import { merge } from 'scalejs';
 import ko from 'knockout';
 import _ from 'lodash';
 import 'chai';
@@ -33,17 +34,11 @@ describe('inputViewModel test', function () {
         });
 
         domStub = createMetadataDomStub(node);
-
     });
 
-    after(function () {
-        //domStub.dispose();
-    });
-
-    it('renders value and label', function (done) {
+    it('renders value and label', function () {
         expect(domStub.node.querySelector('input').value).equals(testValue);
         expect(domStub.node.querySelector('label').innerHTML).equals(testLabel);
-        done();
     })
 
     it('updates value from user input', function (done) {
@@ -54,10 +49,11 @@ describe('inputViewModel test', function () {
                 done();
             });
         input.value = 'new';
+        // EG: what is this?
         input.dispatchEvent(new Event('change')); // fire event to notify ko of update
     });
 
-    it('adds inactive attributes for readonly types', function (done) {
+    it('adds inactive attributes for readonly types', function () {
         let testNode = _.merge(node, {
             "options": {
                 "readonly": true
@@ -69,59 +65,44 @@ describe('inputViewModel test', function () {
         expect(input.hasAttribute('readonly')).to.be.true;
         expect(input.hasAttribute('disabled')).to.be.true;
         testStub.dispose();
-        done();
-
     });
 
-    it.skip('toggles inactive attributes on readonly updates', function(done) {
-        done();
-    });
+    it('toggles inactive attributes on readonly updates');
 
     describe('inputViewModel tests for text types', function () {
-        it.skip('does something for text inputs', function (done) {
-            done();
-        });
+        it('does something for text inputs');
     });
 
     describe('inputViewModel tests for list types', function () {
-        it.skip('test for list types', function (done) {
-            done();
-        });
+        it('test for list types');
     });
 
     describe('inputViewModel tests for select types', function () {
-        it.skip('test for select types', function (done) {
-            done();
-        });
+        it('test for select types');
     });
 
     describe('inputViewModel tests for datepicker types', function () {
-        it.skip('test for datepicker types', function (done) {
-            done();
-        });
+        it('test for datepicker types');
     });
 
     describe('inputViewModel tests for autosize types', function () {
-        it.skip('test for autosize types', function (done) {
-            done();
-        });
+        it('test for autosize types');
     });
 
     describe('inputViewModel tests for radio types', function () {
-        it.skip('test for radio types', function (done) {
-            done();
-        });
+        it('test for radio types');
     });
 
     describe('inputViewModel tests for checkbox types', function () {
-        it.skip('test for checkbox types', function (done) {
-            done();
-        });
+        it('test for checkbox types');
     });
 
     describe('inputViewModel tests for autocomplete types', function () {
-        it.skip('test for autocomplete types', function (done) {
-            done();
+        it('test for autocomplete types', function () {
+            let autocompleteViewModel = createViewModel(merge(node, {
+                inputType: 'autocomplete'
+            }));
+            expect(autocompleteViewModel).to.have.property('autocompleteSource');
         });
     });
 });
