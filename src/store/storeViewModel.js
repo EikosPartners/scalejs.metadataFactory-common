@@ -1,8 +1,7 @@
-/*global define, dataservice, sandbox */
-import sandbox from 'scalejs.sandbox';
+import * as noticeboard from 'scalejs.noticeboard';
 import dataservice from 'dataservice';
 import { receive } from 'scalejs.messagebus';
-    
+
     //TODO: Rename results to resultsKey
 
     /**
@@ -32,8 +31,7 @@ import { receive } from 'scalejs.messagebus';
      *  Map the results from the ajax call with this key
      */
     export default function (node) {
-        var noticeboard = sandbox.noticeboard.global,
-            keyMap = node.keyMap || {},
+        var keyMap = node.keyMap || {},
             storeKey = node.storeKey,
             dataSourceEndpoint = node.dataSourceEndpoint,
             options = node.options || {},
@@ -85,9 +83,8 @@ import { receive } from 'scalejs.messagebus';
         return {
                 dispose: function () {
                 subs.forEach(function (sub) {
-                    sub.unsubscribe();
+                    sub.dispose();
                 });
             }
         }
     };
-

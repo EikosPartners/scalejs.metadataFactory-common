@@ -17,13 +17,15 @@ var _dataservice = require('dataservice');
 
 var _dataservice2 = _interopRequireDefault(_dataservice);
 
-var _scalejs3 = require('scalejs.messagebus');
+var _scalejs3 = require('scalejs.mvvm');
 
-var _scalejs4 = require('scalejs.metadataFactory');
+var _scalejs4 = require('scalejs.messagebus');
+
+var _scalejs5 = require('scalejs.metadataFactory');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/* TODO: 
+/* TODO:
 In PJSON, we used readonly, errors, etc. We need a way to do that outside of adapter
 i.e. plugin to adapter context with other components
 */
@@ -55,8 +57,13 @@ i.e. plugin to adapter context with other components
  *  Options for the ajax call
  * @param {array} node.children
  *  The json configuration for children nodes which will be mapped to view models and kept track of from the adapter
+ * @param {array} [node.plugins]
+ *  The json configuration for plugins which will be accessible from getValue function, based upon type
  *
  * @property {array} mappedChildNodes the mapped children nodes
+ * @property {observable} data the data retrieved from dataSourceEndpoint and tracked from children
+ * @property {object} contextPlugins an object that contains the plugins which have been added to the adapter context
+ * @property {context} the context for the adapter (which can be utilized in a custom template)
  * @property {function} dispose the dispose function for all internal subs
  *
  * @example
@@ -80,20 +87,18 @@ i.e. plugin to adapter context with other components
  *      ]
  * }
  */
+/*global define,ko,sandbox,dataservice */
 function adapterViewModel(node) {
     var // imports
-    observable = _scalejs2.default.mvvm.observable,
-        observableArray = _scalejs2.default.mvvm.observableArray,
-        unwrap = _knockout2.default.unwrap,
-        computed = _scalejs2.default.mvvm.computed,
+    unwrap = _knockout2.default.unwrap,
         merge = _scalejs2.default.object.merge,
         get = _scalejs2.default.object.get,
         extend = _scalejs2.default.object.extend,
 
     // props
-    dictionary = observable({}),
+    dictionary = (0, _scalejs3.observable)({}),
         // dictionary of nodes with an id
-    data = observable({}),
+    data = (0, _scalejs3.observable)({}),
         // data of dictionary contents
     context = {
         metadata: node.children,
@@ -102,10 +107,16 @@ function adapterViewModel(node) {
         dictionary: dictionary,
         data: data
     },
-        mappedChildNodes = observableArray(),
+        mappedChildNodes = (0, _scalejs3.observableArray)(),
         updated = false,
         subs = [],
-        dataSyncSubscription = void 0;
+        dataSyncSubscription = void 0,
+        plugins = node.plugins ? _scalejs5.createViewModels.call(context, node.plugins) : [],
+        contextPlugins = {};
+
+    plugins.forEach(function (plugin) {
+        contextPlugins[plugin.type] = plugin;
+    });
 
     // recursive function which parses through nodes and adds nodes with an id to dictionary
     function createDictionary(nodes) {
@@ -125,7 +136,7 @@ function adapterViewModel(node) {
 
     // keep the data current if the node value changed with dataSyncDescription
     function syncDataDictionary() {
-        dataSyncSubscription = computed(function () {
+        dataSyncSubscription = (0, _scalejs3.computed)(function () {
             var dict = dictionary();
             Object.keys(dict).forEach(function (id) {
                 if (dict[id].getValue) {
@@ -170,7 +181,7 @@ function adapterViewModel(node) {
                 if (count === dataSourceEndpointArray.length) {
                     updateData(dataObject);
                     if (!mappedChildNodes().length) {
-                        mappedChildNodes(_scalejs4.createViewModels.call(context, node.children || []));
+                        mappedChildNodes(_scalejs5.createViewModels.call(context, node.children || []));
                     }
                 }
             });
@@ -191,15 +202,18 @@ function adapterViewModel(node) {
             return dataValue;
         }
 
+        if (contextPlugins && contextPlugins[id]) {
+            return contextPlugins[id]();
+        }
         return context.parentContext.getValue(id);
     }
 
     if (!node.lazy) {
-        mappedChildNodes(_scalejs4.createViewModels.call(context, node.children || []));
+        mappedChildNodes(_scalejs5.createViewModels.call(context, node.children || []));
     }
 
     // update dictionary if mappedChildNodes of a node updates
-    computed(function () {
+    (0, _scalejs3.computed)(function () {
         updated = false;
         createDictionary(mappedChildNodes());
         if (updated) {
@@ -216,19 +230,20 @@ function adapterViewModel(node) {
     }
 
     // listen for 'refresh' event
-    subs.push((0, _scalejs3.receive)(node.id + '.refresh', function (options) {
+    subs.push((0, _scalejs4.receive)(node.id + '.refresh', function (options) {
         fetchData(options);
     }));
 
     return merge(node, {
         mappedChildNodes: mappedChildNodes,
         data: data,
+        contextPlugins: contextPlugins,
+        context: context,
         dispose: function dispose() {
             subs.forEach(function (sub) {
-                sub.unsubscribe(); // should be DISPOSE!
+                sub.dispose();
             });
         }
     });
-} /*global define,ko,sandbox,dataservice */
-;
+};
 //# sourceMappingURL=adapterViewModel.js.map

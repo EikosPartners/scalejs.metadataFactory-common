@@ -1,0 +1,16 @@
+<div id="template_test_template">
+    <div class="test-title" data-bind="css: $data.classes, text:$data.title"></div>
+    <div class="test-class-binding" data-class="template-test"></div>
+</div>
+<div id="template_test_children_template">
+      <div data-bind="template: { name: 'metadata_items_template', data: mappedChildNodes}"></div>
+</div>
+<div id="template_test_one">
+    <div class="test-one">one</div>
+</div>
+<div id="template_test_two">
+    <div class="test-two" >two</div>
+</div>
+<div id="no_template">
+    <div data-bind={text: JSON.stringify($data)} ></div>
+</div>

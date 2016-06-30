@@ -1,16 +1,17 @@
 {
   "name": "scalejs.metadatafactory-common",
-  "version": "1.0.1",
+  "version": "1.0.13",
   "description": "Common scalejs.metadatafactory modules",
   "main": "dist/scalejs.metadataFactory-common.js",
   "scripts": {
     "build": "babel src --presets babel-preset-es2015 --out-dir dist --source-maps && npm run copy",
-    "copy": "copyup src/**/*.html dist",
+    "copy": "copyup src/**/*.html dist && copyup src/**/*.scss dist && copyup src/**/images/*.svg dist && copyup src/**/images/*.png dist",
     "doc": "jsdoc -d ./doc/ src/ -r",
     "test": "karma start test/karma_config/karma.config.js",
     "test-travis": "karma start test/karma_config/karma.config.travis.js",
     "test-coverage": "rimraf test/coverage && karma start test/karma_config/karma.config.coverage.js",
-    "build-sample": "webpack --config webpack.sample.config.js"
+    "build-sample": "webpack --config webpack.sample.config.js",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "babel-cli": "^6.9.0",
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.9.0",
+    "bluebird": "^3.4.1",
     "chai": "^3.5.0",
     "copyfiles": "^0.2.1",
     "css-loader": "^0.23.1",
@@ -46,23 +48,32 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
     "mocha": "^2.5.3",
+    "mocha-waitsfor": "^1.0.0",
     "node-sass": "^3.8.0",
     "phantomjs-prebuilt": "^2.1.7",
     "rimraf": "^2.5.2",
     "sass-loader": "^3.2.0",
+    "source-map-loader": "^0.1.5",
     "style-loader": "^0.13.1",
-    "webpack": "^1.13.1",
-    "source-map-loader": "^0.1.5"
+    "webpack": "^1.13.1"
   },
   "dependencies": {
-    "knockout": "^3.4.0",
-    "lodash": "^4.13.1",
-    "scalejs": "latest",
-    "scalejs.messagebus": "latest",
-    "scalejs.metadataFactory": "latest",
-    "scalejs.mvvm": "latest",
-    "scalejs.noticeboard": "latest",
+    "jquery": "^3.0.0",
     "js-format": "git+https://github.com/tsu-complete/js-format.git",
-    "knockout.validation": "git+https://github.com/EikosPartners/Knockout-Validation.git"
+    "knockout": "^3.4.0",
+    "knockout.validation": "git+https://github.com/EikosPartners/Knockout-Validation.git",
+    "ko-bindings": "^1.0.3",
+    "lodash": "^4.13.1",
+    "pikaday": "^1.4.0",
+    "moment": "^2.13.0",
+    "mustache": "^2.2.1",
+    "scalejs": ">=0.4.1",
+    "scalejs.expression-jsep": "0.0.4",
+    "scalejs.inputmask": ">=1.0.1",
+    "scalejs.messagebus": ">=1.0.4",
+    "scalejs.metadataFactory": ">=0.1.8",
+    "scalejs.mvvm": ">=1.0.1",
+    "scalejs.navigation": ">=0.0.1",
+    "scalejs.noticeboard": ">=0.0.1"
   }
 }

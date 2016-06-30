@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/setValue/setValueModule.js"],"names":[],"mappings":";;AAAA;;AACA;;;;;;AAEI,iCAAmB;AACf;AADe,CAAnB","file":"setValueModule.js","sourcesContent":["import { registerViewModels } from 'scalejs.metadataFactory';\nimport setValueViewModel from './setValueViewModel';\n    \n    registerViewModels({\n        setValue: setValueViewModel\n    });"]}

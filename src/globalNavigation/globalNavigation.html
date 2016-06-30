@@ -1,0 +1,17 @@
+<div id="globalNavigation_template">
+    <div class="nav-inner  viewport" data-class="globalNavlinks">
+        <div data-bind="css: { on: $data === $parent.activeLink() }">
+            <div>
+                <div>
+                    <button data-bind="text: navText, click: function() {
+                                if($data.default) {
+                                    setRoute($data.default);
+                                } else {
+                                    navigate();
+                                }
+                            }" class="navlink af_goLink">My Dashboard</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

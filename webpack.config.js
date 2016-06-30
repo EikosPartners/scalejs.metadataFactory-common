@@ -19,7 +19,7 @@ module.exports = {
                 loader: 'babel-loader',
                 test: [
                     path.join(__dirname, 'src/'),
-                    path.join(__dirname, 'test')
+                    path.join(__dirname, 'test/')
                 ],
                 exclude: /\.html?$/,
                 query: {
@@ -34,6 +34,16 @@ module.exports = {
                 test: /\.json$/,
                 loader: 'json-loader'
             },
+            {
+                test: /\.scss$/,
+                loader: 'style-loader!css-loader!autoprefixer-loader!sass-loader'
+            },
+            {
+                test: /\.woff|\.woff2|\.svg|.eot|\.png|\.jpg|\.ttf/,
+                loader: 'url?prefix=font/&limit=10000'
+            }
         ]
-    }
+
+    },
+    devtool: 'source-map'
 }

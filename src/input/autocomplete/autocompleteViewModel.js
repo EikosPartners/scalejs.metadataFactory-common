@@ -3,16 +3,19 @@ import sandbox from 'scalejs.sandbox';
 import dataservice from 'dataservice';
 import _ from 'lodash';
 import ko from 'knockout';
+
+import {
+    observable,
+    observableArray,
+    computed,
+    unwrap
+} from 'scalejs.mvvm';
         
         // imports
-        var observable = sandbox.mvvm.observable,
-            observableArray = sandbox.mvvm.observableArray,
-            computed = sandbox.mvvm.computed,
-            evaluate = sandbox.expression.evaluate,
+        var evaluate = sandbox.expression.evaluate,
             merge = sandbox.object.merge,
             has = sandbox.object.has,
-            is = sandbox.type.is,
-            unwrap = ko.unwrap;
+            is = sandbox.type.is;
 
         export default function autocompleteViewModel(node, inputViewModel) {
             var context = this,
