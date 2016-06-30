@@ -11,8 +11,10 @@ import popupBindings from './popupBindings';
 import popupTemplates from './popup.html';
 
 let popupRoot = popup.popupRoot;
+let initialized = false
 
 function popupAction(options) {
+    if (!initialized) { init(); }
     let context = this,
         message = {},
         onHidePopup, actions, data, modal, merged;
@@ -70,6 +72,7 @@ function closePopup() {
 }
 
 function init() {
+    initialized = true;
     let popupDiv = document.querySelector('*[data-bind="render: popupRoot"], *[data-bind="render:popupRoot"]');
     if (!popupDiv) {
         let att = document.createAttribute('data-bind');
@@ -80,8 +83,6 @@ function init() {
     }
     ko.applyBindings({popupRoot}, popupDiv);
 }
-
-init();
 
 registerBindings(popupBindings);
 registerTemplates(popupTemplates);
