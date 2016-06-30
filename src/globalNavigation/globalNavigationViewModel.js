@@ -1,14 +1,13 @@
-import sandbox from 'scalejs.sandbox';
 import { getRegisteredTypes } from 'scalejs.metadataFactory';
-import {navigation, layout} from 'scalejs.navigation';
-import ko from 'knockout';
+import { navigation, layout } from 'scalejs.navigation';
 import dataservice from 'dataservice';
+import { merge } from 'lodash';
+import ko from 'knockout';
 
 export default function globalNavigation(node) {
     var routes = ko.observableArray(node.routes),
-    merge = sandbox.object.merge,
-    navLinks = navigation.navLinks,
-    activeLink = navigation.activeLink;
+        navLinks = navigation.navLinks,
+        activeLink = navigation.activeLink;
 
     function walkGetTypes(nodes) {
         return (nodes || [])
