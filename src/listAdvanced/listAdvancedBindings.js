@@ -1,6 +1,4 @@
-/*global define, sandbox, _ */
-/*jslint sloppy: true*/
-import sandbox from 'scalejs.sandbox';
+import { createViewModels } from 'scalejs.metadataFactory';
 import _ from 'lodash';
     function sticky( _el ){
         _el.style.transform = "translateY("+this.scrollTop+"px)";
@@ -46,7 +44,7 @@ import _ from 'lodash';
                 return;
             }
 
-            groupActionViewModels = sandbox.metadataFactory.createViewModels.call({
+            groupActionViewModels = createViewModels.call({
                 metadata: [],
                 getValue: function (id) {
                     if (id === 'group') {
