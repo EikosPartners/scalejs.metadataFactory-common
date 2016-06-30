@@ -1,7 +1,7 @@
 import { getRegisteredTypes } from 'scalejs.metadataFactory';
 import { navigation, layout } from 'scalejs.navigation';
 import dataservice from 'dataservice';
-import { merge } from 'lodash';
+import { merge } from 'scalejs';
 import ko from 'knockout';
 
 export default function globalNavigation(node) {

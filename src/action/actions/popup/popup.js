@@ -1,17 +1,16 @@
-import sandbox from 'scalejs.sandbox';
-import { createViewModel } from 'scalejs.metadataFactory';
 import { registerTemplates, registerBindings, template } from 'scalejs.mvvm';
-import popup from 'scalejs.popup';
+import { createViewModel } from 'scalejs.metadataFactory';
+import { registerActions } from '../../actionModule';
 import { notify } from 'scalejs.messagebus';
-import ko from 'knockout';
+import { merge } from 'scalejs';
+import popup from 'scalejs.popup';
 import mustache from 'mustache';
+import ko from 'knockout'
 
 import popupBindings from './popupBindings';
 import popupTemplates from './popup.html';
-import { registerActions } from '../../actionModule';
 
-const merge = sandbox.object.merge;
-let   popupRoot = popup.popupRoot;
+let popupRoot = popup.popupRoot;
 
 function popupAction(options) {
     let context = this,
@@ -34,6 +33,7 @@ function popupAction(options) {
     }
 
     modal = typeof options.modal === 'undefined' || typeof options.modal === 'boolean' ? options.modal : evaluate(options.modal, this.getValue);
+
     merged = merge(options, {
         title: options.title,
         message: options.message,

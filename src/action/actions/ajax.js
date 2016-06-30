@@ -1,9 +1,8 @@
 import { createViewModel } from 'scalejs.metadataFactory';
 import { registerActions } from '../actionModule';
-import { get, is, has } from 'scalejs';
+import { get, is, has, merge } from 'scalejs';
 import dataservice from 'dataservice';
 import mustache from 'mustache';
-import { merge } from 'lodash';
 import _ from 'lodash';
 
 function ajax(options, args) {
