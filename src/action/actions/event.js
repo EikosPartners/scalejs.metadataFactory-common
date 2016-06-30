@@ -1,12 +1,9 @@
-import sandbox from 'scalejs.sandbox';
 import { notify } from 'scalejs.messagebus';
+import { unwrap } from 'knockout';
+import { merge } from 'scalejs';
 import ko from 'knockout';
 
 import { registerActions } from '../actionModule';
-
-//imports
-const unwrap = ko.unwrap,
-      merge = sandbox.object.merge;
 
 function event(options) {
     let data = unwrap(this && this.data);
@@ -26,5 +23,5 @@ function event(options) {
     // }
 }
 
-registerActions({event});
+registerActions({ event });
 
