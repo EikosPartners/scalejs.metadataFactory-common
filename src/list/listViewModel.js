@@ -2,6 +2,7 @@
 import sandbox from 'scalejs.sandbox';
 import _ from 'lodash';
 import ko from 'knockout';
+import { createViewModel } from 'scalejs.metadataFactory';
 
 
     // todo: revisit comments below
@@ -211,7 +212,7 @@ import ko from 'knockout';
                     }
                     return ret;
                 } else {
-                    return sandbox.metadataFactory.createViewModel.call(rowContext, item);
+                    return createViewModel.call(rowContext, item);
                 }
             });
 

@@ -17,6 +17,8 @@ var _knockout = require('knockout');
 
 var _knockout2 = _interopRequireDefault(_knockout);
 
+var _scalejs3 = require('scalejs.metadataFactory');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // todo: revisit comments below
@@ -45,6 +47,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *  The id of the list becomes the key in the data for all the children of the list.
  *
  */
+/*global define, sandbox, _, ko*/
 var observable = _scalejs2.default.mvvm.observable,
     observableArray = _scalejs2.default.mvvm.observableArray,
     evaluate = _scalejs2.default.expression.evaluate,
@@ -57,8 +60,7 @@ var observable = _scalejs2.default.mvvm.observable,
     listItems = {
     DELETE: del,
     DELETE_FLAG: deleteFlag
-}; /*global define, sandbox, _, ko*/
-
+};
 
 function del(itemDef) {
     var context = this;
@@ -231,7 +233,7 @@ function listViewModel(node) {
                 }
                 return ret;
             } else {
-                return _scalejs2.default.metadataFactory.createViewModel.call(rowContext, item);
+                return _scalejs3.createViewModel.call(rowContext, item);
             }
         });
 
