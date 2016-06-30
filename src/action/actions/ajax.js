@@ -1,15 +1,10 @@
-import sandbox from 'scalejs.sandbox';
-import { createViewModel } from 'scalejs.mvvm';
-import mustache from 'mustache';
-import _ from 'lodash';
-import dataservice from 'dataservice';
-
+import { createViewModel } from 'scalejs.metadataFactory';
 import { registerActions } from '../actionModule';
-
-const has = sandbox.object.has,
-      get = sandbox.object.get,
-      merge = _.merge,
-      is = sandbox.type.is;
+import { get, is, has } from 'scalejs';
+import dataservice from 'dataservice';
+import mustache from 'mustache';
+import { merge } from 'lodash';
+import _ from 'lodash';
 
 function ajax(options, args) {
     let data = this.data && this.data(),
@@ -72,8 +67,7 @@ function ajax(options, args) {
             };
 
             item.options = merge(response, item.options);
-            let createViewModel = sandbox.metadataFactory.createViewModel.bind(context);
-            createViewModel(item).action();
+            createViewModel.call(context, item).action();
         });
 
         if (callback) {
