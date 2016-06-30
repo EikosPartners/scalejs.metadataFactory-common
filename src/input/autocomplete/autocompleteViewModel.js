@@ -1,5 +1,5 @@
 import { observable, observableArray, computed, unwrap } from 'knockout';
-import { createViewModels as createVMs } from 'scalejs.metadataFactory';
+import { createViewModels as createViewModelsUnbound } from 'scalejs.metadataFactory';
 import { evaluate } from 'scalejs.expression-jsep';
 import { merge, has, is } from 'scalejs';
 import dataservice from 'dataservice';
@@ -9,7 +9,7 @@ import _ from 'lodash';
         var context = this,
             dataSourceEndpoint = node.dataSourceEndpoint,
             keyMap = node.keyMap || {},
-            createViewModels = createVMs.bind(this),
+            createViewModels = createViewModelsUnbound.bind(this),
             // inputViewModel
             inputValue = inputViewModel.inputValue,
             subs = inputViewModel.subs,

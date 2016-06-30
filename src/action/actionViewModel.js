@@ -1,4 +1,4 @@
-import { createViewModel as createVM } from 'scalejs.metadataFactory';
+import { createViewModel as createViewModelUnbound } from 'scalejs.metadataFactory';
 import { getRegisteredActions } from './actionModule';
 import { observable, unwrap } from 'knockout';
 import { notify } from 'scalejs.messagebus';
@@ -9,7 +9,7 @@ export default function actionViewModel(node) {
     let registeredActions = getRegisteredActions(),
         context = this,        
         text = node.text || node.options.text,
-        createViewModel = createVM.bind(context),
+        createViewModel = createViewModelUnbound.bind(context),
         validate = node.validate,
         options = node.options || {},
         actionType = node.actionType,
