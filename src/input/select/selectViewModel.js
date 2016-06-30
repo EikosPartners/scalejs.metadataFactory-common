@@ -39,7 +39,7 @@ import {
      */
     export default function selectViewModel(node, inputViewModel) {
         var context = this,
-            options = node.options || {},
+            options = node.options || { values: [] },
             // inputViewModel
             inputValue = inputViewModel.inputValue,            
             mapItem = inputViewModel.mapItem,

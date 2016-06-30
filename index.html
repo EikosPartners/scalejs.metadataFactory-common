@@ -13,14 +13,15 @@
 <body>
 
     <div data-bind="metadataFactory: inputJSON"></div>
-    <script>
+    <script src="./build/bundle.js"></script>
+        <script>
         var inputJSON = {
             "type": "input",
-            "inputType": "datepicker"
+            "inputType": "select"
         }
-    </script>
 
-    <script src="./build/bundle.js"></script>
+        ko.applyBindings();
+    </script>
 </body>
 
 </html>
