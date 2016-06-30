@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (node) {
-    var createViewModel = _scalejs2.default.metadataFactory.createViewModel.bind(this),
+    var createViewModel = createViewModel.bind(this),
         context = this,
         itemDictionary = observable({}),
         listViewModel = createViewModel(merge({ id: node.id }, node.list)),
@@ -178,12 +178,15 @@ var _knockout2 = _interopRequireDefault(_knockout);
 
 var _scalejs3 = require('scalejs.messagebus');
 
+var _scalejs4 = require('scalejs.metadataFactory');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // the list advanced component provides advanced features over the base list
 // - Headers (TBD) and Footers (partially done)
 // - ListItems such as ADD and EMPTY
 // - GroupBy
+/*global define, sandbox, ko */
 var evaluate = _scalejs2.default.expression.evaluate,
     computed = _scalejs2.default.mvvm.computed,
     is = _scalejs2.default.type.is,
@@ -201,7 +204,6 @@ var evaluate = _scalejs2.default.expression.evaluate,
 };
 
 // creates the Add ViewModel from the add def
-/*global define, sandbox, ko */
 function add(addDef, list) {
     return merge({
         template: 'list_advanced_add_item_template',

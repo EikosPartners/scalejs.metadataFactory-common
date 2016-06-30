@@ -39,12 +39,12 @@ var popupRoot = _scalejs6.default.popupRoot;
 
 function popupAction(options) {
     var context = this,
+        message = {},
         onHidePopup = void 0,
         actions = void 0,
         data = void 0,
         modal = void 0,
-        merged = void 0,
-        message = {};
+        merged = void 0;
 
     actions = (options.actions || []).map(function (action) {
         action.type = 'action';
@@ -52,37 +52,9 @@ function popupAction(options) {
     });
 
     data = this && this.data && this.data();
-    message.data = data;
 
-    if (data && options.message) {
-        (function () {
-            if (!Array.isArray(data)) {
-                data = [data];
-            }
-            // check for selected items with unique ids in message
-            var selectedItems = options.message.match(/{{(selectedItems:[^{}]+)}}/g);
-            if (selectedItems) {
-                console.warn('Please refactor selected items message rendering out of popupAction', options);
-
-                // replace {{selectedItems:[uniqueID]}} with {{selectedItems}} for mustache rendering key
-                options.message = options.message.replace(selectedItems[0], '{{selectedItems}}');
-
-                // create array of unique ids for selected values, ie ["poolNum", "PoolStatusCode"]
-                selectedItems = selectedItems.map(function (item) {
-                    return item.slice(item.indexOf(':') + 1, -2);
-                }).join().split(',');
-
-                // add data values to selectedItems key for rendering
-                message.selectedItems = data.map(function (datum) {
-                    return selectedItems.reduce(function (prev, curr) {
-                        return prev + datum[curr] + ' ';
-                    }, '');
-                });
-            }
-            options.message = _mustache2.default.render(options.message, message);
-        })();
-    } else if (!options.message) {
-        options.message = '';
+    if (options.message) {
+        options.message = _mustache2.default.render(options.message, data || {});
     }
 
     if (options.hidePopupAction) {
@@ -101,7 +73,6 @@ function popupAction(options) {
         context: this
     });
 
-    //notify('showPopup',merged);
     _scalejs6.default.onHidePopup(merged.onHidePopup);
     _scalejs6.default.renderPopup((0, _scalejs4.template)(merged.wrapperTemplate || 'popup_default_wrapper_template', {
         hidePopup: _scalejs6.default.hidePopup,

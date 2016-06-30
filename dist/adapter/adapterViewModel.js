@@ -9,19 +9,17 @@ var _scalejs = require('scalejs.sandbox');
 
 var _scalejs2 = _interopRequireDefault(_scalejs);
 
-var _knockout = require('knockout');
+var _lodash = require('lodash');
 
-var _knockout2 = _interopRequireDefault(_knockout);
+var _knockout = require('knockout');
 
 var _dataservice = require('dataservice');
 
 var _dataservice2 = _interopRequireDefault(_dataservice);
 
-var _scalejs3 = require('scalejs.mvvm');
+var _scalejs3 = require('scalejs.messagebus');
 
-var _scalejs4 = require('scalejs.messagebus');
-
-var _scalejs5 = require('scalejs.metadataFactory');
+var _scalejs4 = require('scalejs.metadataFactory');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -87,18 +85,12 @@ i.e. plugin to adapter context with other components
  *      ]
  * }
  */
-/*global define,ko,sandbox,dataservice */
 function adapterViewModel(node) {
-    var // imports
-    unwrap = _knockout2.default.unwrap,
-        merge = _scalejs2.default.object.merge,
-        get = _scalejs2.default.object.get,
-        extend = _scalejs2.default.object.extend,
-
-    // props
-    dictionary = (0, _scalejs3.observable)({}),
+    var // props
+    get = _scalejs2.default.object.get,
+        dictionary = (0, _knockout.observable)({}),
         // dictionary of nodes with an id
-    data = (0, _scalejs3.observable)({}),
+    data = (0, _knockout.observable)({}),
         // data of dictionary contents
     context = {
         metadata: node.children,
@@ -107,11 +99,11 @@ function adapterViewModel(node) {
         dictionary: dictionary,
         data: data
     },
-        mappedChildNodes = (0, _scalejs3.observableArray)(),
+        mappedChildNodes = (0, _knockout.observableArray)(),
         updated = false,
         subs = [],
         dataSyncSubscription = void 0,
-        plugins = node.plugins ? _scalejs5.createViewModels.call(context, node.plugins) : [],
+        plugins = node.plugins ? _scalejs4.createViewModels.call(context, node.plugins) : [],
         contextPlugins = {};
 
     plugins.forEach(function (plugin) {
@@ -129,14 +121,14 @@ function adapterViewModel(node) {
             }
             // add children to dictionary if getValue function is not exposed
             if (!node.getValue) {
-                createDictionary(unwrap(node.mappedChildNodes) || []);
+                createDictionary((0, _knockout.unwrap)(node.mappedChildNodes) || []);
             }
         });
     }
 
     // keep the data current if the node value changed with dataSyncDescription
     function syncDataDictionary() {
-        dataSyncSubscription = (0, _scalejs3.computed)(function () {
+        dataSyncSubscription = (0, _knockout.computed)(function () {
             var dict = dictionary();
             Object.keys(dict).forEach(function (id) {
                 if (dict[id].getValue) {
@@ -175,13 +167,13 @@ function adapterViewModel(node) {
                     } else {
                         newDataObject = resultsByKey;
                     }
-                    extend(dataObject, newDataObject);
+                    (0, _lodash.extend)(dataObject, newDataObject);
                 }
 
                 if (count === dataSourceEndpointArray.length) {
                     updateData(dataObject);
                     if (!mappedChildNodes().length) {
-                        mappedChildNodes(_scalejs5.createViewModels.call(context, node.children || []));
+                        mappedChildNodes(_scalejs4.createViewModels.call(context, node.children || []));
                     }
                 }
             });
@@ -209,11 +201,11 @@ function adapterViewModel(node) {
     }
 
     if (!node.lazy) {
-        mappedChildNodes(_scalejs5.createViewModels.call(context, node.children || []));
+        mappedChildNodes(_scalejs4.createViewModels.call(context, node.children || []));
     }
 
     // update dictionary if mappedChildNodes of a node updates
-    (0, _scalejs3.computed)(function () {
+    (0, _knockout.computed)(function () {
         updated = false;
         createDictionary(mappedChildNodes());
         if (updated) {
@@ -230,11 +222,11 @@ function adapterViewModel(node) {
     }
 
     // listen for 'refresh' event
-    subs.push((0, _scalejs4.receive)(node.id + '.refresh', function (options) {
+    subs.push((0, _scalejs3.receive)(node.id + '.refresh', function (options) {
         fetchData(options);
     }));
 
-    return merge(node, {
+    return (0, _lodash.merge)(node, {
         mappedChildNodes: mappedChildNodes,
         data: data,
         contextPlugins: contextPlugins,
