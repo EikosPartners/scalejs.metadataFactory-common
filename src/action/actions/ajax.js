@@ -10,7 +10,7 @@ function ajax(options, args) {
         target = options.target,
         optionData = options.data || {},
         uri = mustache.render(options.target.uri, merge(data, optionData)),
-        sendAllData = get(options, 'target.options.type') === 'POST' || get(options, 'target.options.type') === 'PUT' && !target.data,
+        sendAllData = !target.data && !options.sendDataKeys && (get(options, 'target.options.type') === 'POST' || get(options, 'target.options.type') === 'PUT'),
         contextValue,
         context = this,
         callback = args && args.callback,

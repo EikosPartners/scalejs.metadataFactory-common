@@ -17,7 +17,7 @@ function mockAjax(request, callback) {
     setTimeout(() => {
         if (request.uri) {
             if (get(request, 'options.type') === 'POST' || get(request, 'options.type') === 'PUT') {
-                callback(null, { Status: 'SUCCESS' });
+                callback(null, { Status: 'SUCCESS', Original: request.data });
             } else {
                 callback(null, testData[request.uri]);
             }

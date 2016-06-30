@@ -239,8 +239,9 @@ describe('actionModule test', function () {
                 "message": "Test {{message}}"
             }
         };
-        this.data = ko.observable({ message: "Message" });
-        let action = createViewModel.call(this, node);
+
+        let data = ko.observable({ message: "Message" });
+        let action = createViewModel.call({data}, node);
         action.action();
         expect(document.querySelector('.popup-message').innerHTML).to.equal('Test Message');
     });
@@ -314,7 +315,7 @@ describe('actionModule test', function () {
             }
         };
 
-        let action = createViewModel.call(this, node);
+        let action = createViewModel.call({}, node);
 
         receive('ajax.response', function (params) {
             expect('success').to.equal(params);
@@ -358,7 +359,7 @@ describe('actionModule test', function () {
             }
         };
 
-        let action = createViewModel.call(this, node);
+        let action = createViewModel.call({}, node);
 
         receive('ajax.response1', function (params) {
             expect('failure').to.equal(params);
@@ -377,6 +378,10 @@ describe('actionModule test', function () {
                     "uri": "test",
                     "options": {
                         "type": "POST"
+                    },
+                    "data": {
+                        "test": "test",
+                        "test1": "test1"
                     }
                 },
                 "nextActions": [
@@ -385,30 +390,97 @@ describe('actionModule test', function () {
                         "actionType": "event",
                         "options": {
                             "target": "ajax.response2",
-                            "paramsKey": "response.data",
-                            "params": "success"
+                            "paramsKey": "results"
                         }
                     }
-                ],
-                "data": {
-                    "test": "test",
-                    "test1": "test1"
-                }
+                ]
             }
         };
-        // let c = {
-        //     callback: function(err, data) {
-        //         console.log(data);
-        //         done();
-        //     }
-        // },
 
         receive('ajax.response2', function (params) {
-            console.log('PARAMS --> ',params);
+            expect(params.Original.test).to.equal('test');
+            expect(params.Original.test1).to.equal('test1');
             done();
             action = null;
         });
-        let action = createViewModel.call(this, node);
+        let action = createViewModel.call({}, node);
+        action.action();
+    });
+
+    it('creats ajax action with data from context', function (done){
+        const node = {
+            "type": "action",
+            "actionType": "ajax",
+            "options": {
+                "target": {
+                    "uri": "test",
+                    "options": {
+                        "type": "POST"
+                    }
+                },
+                "nextActions": [
+                    {
+                        "type": "action",
+                        "actionType": "event",
+                        "options": {
+                            "target": "ajax.response3",
+                            "paramsKey": "results"
+                        }
+                    }
+                ]
+            }
+        };
+
+        let data = ko.observable({test: "test", test1: "test1"});
+        let action = createViewModel.call({data}, node);
+
+        receive('ajax.response3', function (params) {
+            expect(params.Original.test).to.equal('test');
+            expect(params.Original.test1).to.equal('test1');
+            done();
+            action = null;
+        });
+
+        action.action();
+    });
+
+    it('creates ajax action with data from selected keys', function (done) {
+        const node = {
+            "type": "action",
+            "actionType": "ajax",
+            "options": {
+                "sendDataKeys": [
+                    "test"
+                ],
+                "target": {
+                    "uri": "test",
+                    "options": {
+                        "type": "POST"
+                    }
+                },
+                "nextActions": [
+                    {
+                        "type": "action",
+                        "actionType": "event",
+                        "options": {
+                            "target": "ajax.response4",
+                            "paramsKey": "results"
+                        }
+                    }
+                ]
+            }
+        };
+
+        let data = ko.observable({test: "test", test1: "test1"});
+        let action = createViewModel.call({data}, node);
+
+        receive('ajax.response4', function (params) {
+            expect(params.Original.test).to.equal('test');
+            expect(params.Original.test1).to.equal(undefined);
+            done();
+            action = null;
+        });
+
         action.action();
     });
 });
