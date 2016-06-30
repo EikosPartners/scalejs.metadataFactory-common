@@ -1,8 +1,7 @@
-/*global define,ko,sandbox,dataservice */
 import sandbox from 'scalejs.sandbox';
-import ko from 'knockout';
+import {merge, extend} from 'lodash';
+import { observable, observableArray, computed, unwrap } from 'knockout';
 import dataservice from 'dataservice';
-import { observable, observableArray, computed } from 'scalejs.mvvm';
 import { receive, notify } from 'scalejs.messagebus';
 import { createViewModels } from 'scalejs.metadataFactory';
 
@@ -69,12 +68,8 @@ import { createViewModels } from 'scalejs.metadataFactory';
      * }
      */
     export default function adapterViewModel(node) {
-        let // imports
-            unwrap = ko.unwrap,
-            merge = sandbox.object.merge,
+        let // props
             get = sandbox.object.get,
-            extend = sandbox.object.extend,
-            // props
             dictionary = observable({}), // dictionary of nodes with an id
             data = observable({}), // data of dictionary contents
             context = {
