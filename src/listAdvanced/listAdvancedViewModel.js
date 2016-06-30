@@ -1,28 +1,19 @@
-/*global define, sandbox, ko */
-import sandbox from 'scalejs.sandbox';
-import ko from 'knockout';
-import { notify } from 'scalejs.messagebus';
+import { computed, unwrap, observable, observableArray, pureComputed } from 'knockout';
 import { createViewModel as createViewModelUnbound } from 'scalejs.metadataFactory';
+import { evaluate } from 'scalejs.expression-jsep';
+import { notify } from 'scalejs.messagebus';
+import { is, has, merge } from 'scalejs';
 
     // the list advanced component provides advanced features over the base list
     // - Headers (TBD) and Footers (partially done)
     // - ListItems such as ADD and EMPTY
     // - GroupBy
-    var evaluate = sandbox.expression.evaluate,
-        computed = sandbox.mvvm.computed,
-        is = sandbox.type.is,
-        has = sandbox.object.has,
-        unwrap = ko.unwrap,
-        observable = sandbox.mvvm.observable,
-        observableArray = sandbox.mvvm.observableArray,
-        merge = sandbox.object.merge,
-        pureComputed = ko.pureComputed,
-        listItems = {
+    let listItems = {
             ADD: add,
             EMPTY: empty,
             TEXT: text,
             TOTAL: total
-        }
+        };
 
     // creates the Add ViewModel from the add def
     function add(addDef, list) {
@@ -91,7 +82,7 @@ import { createViewModel as createViewModelUnbound } from 'scalejs.metadataFacto
                 }, totalDef.options)
             },
             // use input view model for instant formatting/validation
-            totalViewModel = sandbox.metadataFactory.createViewModel.call(this, totalJson),
+            totalViewModel = createViewModelUnbound.call(this, totalJson),
             total = computed(function () {
                 return list.rows().reduce(function (sum, row) {
                     return sum + Number(row[totalDef.field]() || 0) // get the value for field
@@ -148,7 +139,7 @@ import { createViewModel as createViewModelUnbound } from 'scalejs.metadataFacto
                     if (listItems[item.type]) {
                         return listItems[item.type].call(context, item, listViewModel);
                     } else {
-                        return sandbox.metadataFactory.createViewModel.call({
+                        return createViewModelUnbound.call({
                             metadata: context.metadata,
                             getValue: function (id) {
                                 var item = itemDictionary()[id];
