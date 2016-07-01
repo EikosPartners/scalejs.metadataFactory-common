@@ -252,4 +252,23 @@ describe('inputViewModel test', function () {
 
         });
     });
+
+    describe('validation engine tests', function () {
+         it('expression validation', function () {
+             let input = createViewModel({
+                 "type": "input",
+                 "inputType": "text",
+                 "options": {
+                     "validations": {
+                         "expression": {
+                             "params": "true === false",
+                             "message": "invalid"
+                         }
+                     }
+                 }
+             });
+ 
+             expect(input.error()).to.equal('invalid');
+         });
+     });
 });
