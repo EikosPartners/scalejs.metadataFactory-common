@@ -1,6 +1,6 @@
 {
   "name": "scalejs.metadatafactory-common",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "description": "Common scalejs.metadatafactory modules",
   "main": "dist/scalejs.metadataFactory-common.js",
   "scripts": {

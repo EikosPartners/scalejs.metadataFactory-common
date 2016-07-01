@@ -365,6 +365,8 @@ describe('actionModule test', function () {
             action.action();
         });
 
+        it('creates ajax action with data from a single key');
+        
         it('creates ajax action with data from selected keys', function (done) {
             const node = {
                 "type": "action",

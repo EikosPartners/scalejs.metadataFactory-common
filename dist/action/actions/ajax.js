@@ -33,6 +33,8 @@ function ajax(options, args) {
 
     if (sendAllData) {
         target.data = this.data();
+    } else if (options.sendDataKey) {
+        target.data = data[options.sendDataKey];
     } else if (Array.isArray(options.sendDataKeys)) {
         target.data = options.sendDataKeys.reduce(function (o, k) {
             var receiverKey = k,
