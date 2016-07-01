@@ -3,6 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
 exports.default = inputViewModel;
 
 var _knockout = require('knockout');
@@ -77,7 +80,7 @@ function inputViewModel(node) {
 
     // attributes
     disabled = (0, _knockout.observable)(!!options.disabled),
-        readonly = (0, _knockout.observable)(!!options.readonly),
+        readonly = deriveReadonly(options.readonly),
         maxlength = validations && validations.maxLength,
 
 
@@ -265,6 +268,26 @@ function inputViewModel(node) {
         }
     }
 
+    function deriveReadonly(readonlyParam) {
+        if ((0, _scalejs3.is)(readonlyParam, 'string')) {
+            var _ret = function () {
+                var override = (0, _knockout.observable)();
+                return {
+                    v: (0, _knockout.computed)({
+                        read: function read() {
+                            return (0, _scalejs3.has)(override()) ? override() : (0, _scalejs2.evaluate)(readonlyParam, context.getValue);
+                        },
+                        write: function write(value) {
+                            override(value);
+                        }
+                    })
+                };
+            }();
+
+            if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+        }
+        return (0, _knockout.observable)(!!readonlyParam);
+    }
     /*
      * Utils (can be Refactored to common)
      */
@@ -299,10 +322,7 @@ function inputViewModel(node) {
     // Mixin the viewModel specific to the inputType
     if (inputTypes[node.inputType]) {
         (0, _lodash.extend)(viewmodel, inputTypes[node.inputType].call(context, node, viewmodel));
-    } else {
-        console.error("No inputType was found", node.inputType);
     }
-
     // Checkbox underlying value is Array because of knockout, maybe refactor to a custom binding?
     if (node.inputType === 'checkbox') {
         values.subscribe(function (newValues) {

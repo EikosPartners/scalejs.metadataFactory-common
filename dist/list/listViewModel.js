@@ -195,6 +195,13 @@ function listViewModel(node) {
             if ((0, _scalejs4.has)(item)) {
                 return (0, _knockout.unwrap)(item);
             }
+
+            var prop = rowContext[id];
+
+            if ((0, _scalejs4.has)(prop)) {
+                return (0, _knockout.unwrap)(prop);
+            }
+
             return context.getValue(id);
         };
 
