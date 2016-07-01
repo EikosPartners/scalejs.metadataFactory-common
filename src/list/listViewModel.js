@@ -171,6 +171,13 @@ import _ from 'lodash';
                 if (has(item)) {
                     return unwrap(item);
                 }
+
+                let prop = rowContext[id];
+
+                if (has(prop)) {
+                    return unwrap(prop);
+                }
+
                 return context.getValue(id);
             }
 

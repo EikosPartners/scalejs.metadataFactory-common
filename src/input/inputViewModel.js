@@ -44,7 +44,7 @@ export default function inputViewModel(node) {
 
         // attributes
         disabled = observable(!!options.disabled),
-        readonly = observable(!!options.readonly),
+        readonly = deriveReadonly(options.readonly),
         maxlength = validations && validations.maxLength,
 
         // patterns
@@ -219,6 +219,22 @@ export default function inputViewModel(node) {
         }
     }
 
+    function deriveReadonly(readonlyParam) {
+        if (is(readonlyParam, 'string')) {
+            let override = observable();
+            return computed({
+                read: function () {
+                    return has(override()) ? 
+                        override() 
+                        : evaluate(readonlyParam, context.getValue);
+                },
+                write: function (value) {
+                    override(value);
+                }
+            });
+        }
+        return observable(!!readonlyParam);
+    }
     /*
      * Utils (can be Refactored to common)
      */
