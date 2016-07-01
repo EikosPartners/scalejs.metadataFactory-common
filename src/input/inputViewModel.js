@@ -334,6 +334,34 @@ export default function inputViewModel(node) {
             context.getValue
         ]
     }
+
+    if (options.unique && node.inputType !== 'autocomplete') {            
+        inputValue.subscribe(function (oldValue) {
+            context.unique[node.id].remove(oldValue);
+        }, null, 'beforeChange');
+            
+        inputValue.subscribe(function (newValue) {
+            if(context.deleteFlag && context.deleteFlag()) { return; }
+            context.unique[node.id].push(newValue);
+        });
+
+        if(context.deleteFlag) {
+            context.deleteFlag.subscribe(function(deleted) {
+                if (deleted) {
+                    context.unique[node.id].remove(inputValue());
+                }
+            });
+        }
+
+        context.unique[node.id].subscribe(function (values) {
+            var occurances = values.filter(function (value) {
+                return value === inputValue();
+            }).length;
+
+            customError(occurances > 1 ? 'Identifier must be unique' : undefined);
+        })
+    }
+
     if (viewmodel.validations) {
         validations = merge(validations, viewmodel.validations);
     }
@@ -405,6 +433,10 @@ export default function inputViewModel(node) {
             (subs || []).forEach(function (sub) {
                 sub.dispose && sub.dispose();
             });
+            
+            if (options.unique) {
+                context.unique[node.id].remove(inputValue());
+            }
         }
     });
 };

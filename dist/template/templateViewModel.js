@@ -46,6 +46,7 @@ function templateViewModel(node) {
             callback: function callback(err, results) {
                 if (err) {
                     console.log('ajax request error', err);
+                    data(err);
                     return;
                 }
                 data(results);

@@ -64,10 +64,10 @@ function autocompleteViewModel(node, inputViewModel) {
                     return item.original;
                 }
                 return objectValue;
-                console.warn('Cant find value: ' + inputValue() + ' in autocompleteSource in node', node);
+                //console.warn('Cant find value: ' + inputValue() + ' in autocompleteSource in node', node);
             } else {
-                return null;
-            }
+                    return null;
+                }
         }
         //ret[keyMap.valueKey] = inputValue();
         return inputValue();

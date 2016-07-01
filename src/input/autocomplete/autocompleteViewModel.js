@@ -42,7 +42,7 @@ import _ from 'lodash';
                     item = _.find(autocompleteSource(), {value: inputValue() });
                     if (item) { return item.original}
                     return objectValue;
-                    console.warn('Cant find value: ' + inputValue() + ' in autocompleteSource in node', node);
+                    //console.warn('Cant find value: ' + inputValue() + ' in autocompleteSource in node', node);
                 } else {
                     return null;
                 }

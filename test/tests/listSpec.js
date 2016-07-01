@@ -14,7 +14,8 @@ describe('listModule test', function () {
             "type": "list"
         });
         expect(list).to.have.property('rows');
-    })
+    });
+
     it('tests readonly listViewModel item functionality with isNew', function () {
         const list = createViewModels([{
             "type": "list",
@@ -41,7 +42,8 @@ describe('listModule test', function () {
 
         expect(list.rows()).to.have.length(2);
         expect(list.rows()[0].items()[0].context.getValue('isNew')).to.equal(true);
-        expect(list.rows()[0].items()[0].readonly()).to.equal(true);
-        
+        expect(list.rows()[0].items()[0].readonly()).to.equal(true);        
     });
+
+    it('tests unique');
 });
