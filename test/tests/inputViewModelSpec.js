@@ -17,7 +17,6 @@ let expect = chai.expect,
 
 
 const node = {
-
     "type": "input",
     "inputType": "text",
     "label": testLabel,
@@ -223,6 +222,14 @@ describe('inputViewModel test', function () {
     });
 
     describe('inputViewModel tests for autocomplete types', function () {
+
+        it('creates autocompleteViewModel', function () {    
+            let autocompleteViewModel = createViewModel(_.merge(node, {
+                inputType: 'autocomplete'
+            }));
+            expect(autocompleteViewModel).to.have.property('autocompleteSource');
+        });
+
         it('test for autocomplete types', function (done) {
             const autoCompNode = {
                   "id": "Autocomplete",
