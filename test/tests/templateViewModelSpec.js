@@ -81,7 +81,30 @@ describe('templateViewModel test', function () {
         expect(domStub.node.querySelector('.test-two').innerHTML).equals("two");
         done();
     });
+    it('the template has datasource that return an error', function (done) {
+        const node = {
+            "type": "template",
+            "template": "template_test_children_template",
+            "dataSourceEndpoint": {
+                "type": "action",
+                "actionType": "ajax",
+                "options": {
+                    "target": {
+                        "uri": "error-endpoint"
+                    }
+                }
+            }
+        };
+        domStub = createMetadataDomStub(node);
+        let subscription = domStub.data[0].data.subscribe(data => {
+            should.exist(data);
+            subscription.dispose();
+            done();
+        });
 
+        // call the no-op action 
+        domStub.data[0].action.action();
+    });
     it('the template has datasource', function (done) {
         const node = {
             "type": "template",
