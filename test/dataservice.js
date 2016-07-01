@@ -1,11 +1,10 @@
+import { get, merge } from 'scalejs';
 import _ from 'lodash';
-import sandbox from 'scalejs.sandbox';
 import adapter from 'test/data/adapter_data.json';
 import store from 'test/data/store_data.json';
 import setValue from 'test/data/adapterSetValue_data.json';
 
-const get = sandbox.object.get,
-      timeout = 100;
+const timeout = 100;
 
 let testData = {},
     o = {};
