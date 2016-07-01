@@ -4,6 +4,8 @@ import { registerViewModels } from 'scalejs.metadataFactory';
 import listAdvancedViewModel from './listAdvancedViewModel';
 import listAdvancedBindings from './listAdvancedBindings';
 import listAdvancedTemplates from './listAdvanced.html';
+import './listAdvanced.scss';
+import 'ko-bindings/clickOff';
 
 
     registerBindings(listAdvancedBindings);

@@ -10,7 +10,7 @@ module.exports = {
         alias: {
             // scalejs
             'scalejs.core': path.join(__dirname, 'node_modules/scalejs/dist/scalejs.core.js'),
-            'scalejs.sandbox': path.join(__dirname, 'node_modules/scalejs/dist/scalejs.sandbox.js')        
+            'scalejs.sandbox': path.join(__dirname, 'node_modules/scalejs/dist/scalejs.sandbox.js')
         }
     },
     module: {
@@ -37,6 +37,10 @@ module.exports = {
             {
                 test: /\.scss$/,
                 loader: 'style-loader!css-loader!autoprefixer-loader!sass-loader'
+            },
+            {
+                test: /\.css$/,
+                loader: 'style-loader!css-loader!autoprefixer-loader'
             },
             {
                 test: /\.woff|\.woff2|\.svg|.eot|\.png|\.jpg|\.ttf/,

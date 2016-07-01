@@ -16,6 +16,10 @@ var _listAdvanced = require('./listAdvanced.html');
 
 var _listAdvanced2 = _interopRequireDefault(_listAdvanced);
 
+require('./listAdvanced.scss');
+
+require('ko-bindings/clickOff');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (0, _scalejs.registerBindings)(_listAdvancedBindings2.default);

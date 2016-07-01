@@ -5,22 +5,17 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = selectViewModel;
 
-var _scalejs = require('scalejs.sandbox');
+var _knockout = require('knockout');
 
-var _scalejs2 = _interopRequireDefault(_scalejs);
+var _scalejs = require('scalejs.expression-jsep');
+
+var _scalejs2 = require('scalejs');
 
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _scalejs3 = require('scalejs.mvvm');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var evaluate = _scalejs2.default.expression.evaluate,
-    has = _scalejs2.default.object.has,
-    get = _scalejs2.default.object.get,
-    is = _scalejs2.default.type.is;
 
 /**
  *  select is a type of input that lets the 
@@ -50,7 +45,7 @@ var evaluate = _scalejs2.default.expression.evaluate,
  */
 function selectViewModel(node, inputViewModel) {
     var context = this,
-        options = node.options || {},
+        options = node.options || { values: [] },
 
     // inputViewModel
     inputValue = inputViewModel.inputValue,
@@ -59,10 +54,15 @@ function selectViewModel(node, inputViewModel) {
         subs = inputViewModel.subs,
 
     // props           
-    addBlank = !has(options.addBlank) || options.addBlank,
-        currentFilter = (0, _scalejs3.observable)(),
-        values = (0, _scalejs3.observableArray)(),
+    addBlank = !(0, _scalejs2.has)(options.addBlank) || options.addBlank,
+        currentFilter = (0, _knockout.observable)(),
+        values = (0, _knockout.observableArray)(),
         computedValues;
+
+    if (!options.values) {
+        console.warn('select input type being used without values');
+        options.values = [];
+    }
 
     /** 
      * Helper function to check if the array has the value
@@ -71,9 +71,9 @@ function selectViewModel(node, inputViewModel) {
      * @param           value       The value to check in array
      */
     function arrayHasValue(valuesArr, valueOrObjectToCheck) {
-        var valueToCheck = get(valueOrObjectToCheck, 'value', valueOrObjectToCheck);
+        var valueToCheck = (0, _scalejs2.get)(valueOrObjectToCheck, 'value', valueOrObjectToCheck);
         return valuesArr.some(function (value) {
-            return get(value, 'value', value) === valueToCheck;
+            return (0, _scalejs2.get)(value, 'value', value) === valueToCheck;
         });
     }
 
@@ -87,7 +87,7 @@ function selectViewModel(node, inputViewModel) {
     function unshiftToValues(valuesArr, value) {
         var hasValue = arrayHasValue(valuesArr, value);
 
-        if (!hasValue && has(value) && value != '') {
+        if (!hasValue && (0, _scalejs2.has)(value) && value != '') {
             valuesArr.unshift({
                 text: format(value),
                 value: value
@@ -102,7 +102,7 @@ function selectViewModel(node, inputViewModel) {
      */
     function setValuesFromOptionsArray() {
         values((addBlank ? [''] : []).concat(options.values.slice()).map(function (val) {
-            return is(val, 'string') ? { text: val, value: val } : val;
+            return (0, _scalejs2.is)(val, 'string') ? { text: val, value: val } : val;
         }));
     }
 
@@ -112,10 +112,10 @@ function selectViewModel(node, inputViewModel) {
      */
     function setValuesFromOptionsObject() {
         // create a sub to subscribe to changes in values
-        subs.push((0, _scalejs3.computed)(function () {
+        subs.push((0, _knockout.computed)(function () {
             var value = inputValue.peek(),
-                newValues = (evaluate(options.values.fromArray, context.getValue) || []).filter(function (item) {
-                return has(item);
+                newValues = ((0, _scalejs.evaluate)(options.values.fromArray, context.getValue) || []).filter(function (item) {
+                return (0, _scalejs2.has)(item);
             }).map(mapItem(options.values));
 
             newValues = (addBlank || newValues.length === 0 ? [{ text: '', value: '' }] : []).concat(newValues);
@@ -131,7 +131,7 @@ function selectViewModel(node, inputViewModel) {
      * @param {object|value}    data    Either an object with a value or the value to be set
      */
     function setValue(data) {
-        var value = is(data, 'object') && data.hasOwnProperty('value') ? data.value : data;
+        var value = (0, _scalejs2.is)(data, 'object') && data.hasOwnProperty('value') ? data.value : data;
         values(unshiftToValues(values(), value));
         inputValue(value);
     }
@@ -164,7 +164,7 @@ function selectViewModel(node, inputViewModel) {
     /**
      * If currentFilter is defined, return only values which match
      */
-    computedValues = (0, _scalejs3.computed)({
+    computedValues = (0, _knockout.computed)({
         read: function read() {
             if (!currentFilter()) {
                 return values();

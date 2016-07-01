@@ -16,7 +16,19 @@
                 <!-- /ko -->
             </tr>
             <tbody>
-                <!-- ko template: {name: 'list_table_row_template', foreach: rows } -->
+                <!-- ko foreach: rows  -->
+                    <!-- ko if: !deleteFlag() -->
+                    <tr data-class="list-advanced-row-editable">
+                        <!-- ko foreach: items -->
+                            <!-- ko if: !$data.hidden -->
+                                <td class="cell" data-class="list-advanced-cell">
+                                    <!-- ko template: 'metadata_item_template'-->
+                                    <!-- /ko -->
+                                </td>
+                            <!-- /ko -->
+                        <!-- /ko -->
+                    </tr>
+                    <!-- /ko -->
                 <!-- /ko -->
                 <tr class="row-no-data">
                     <td class="cell" data-bind="attr: { colspan: headerItems.length }">No data available.</td>

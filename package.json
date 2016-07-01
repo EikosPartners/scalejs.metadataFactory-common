@@ -59,15 +59,17 @@
     "webpack": "^1.13.1"
   },
   "dependencies": {
+    "autoprefixer-loader": "^3.2.0",
     "jquery": "^3.0.0",
     "js-format": "git+https://github.com/tsu-complete/js-format.git",
     "knockout": "^3.4.0",
     "knockout.validation": "git+https://github.com/EikosPartners/Knockout-Validation.git",
     "ko-bindings": "^1.0.3",
     "lodash": "^4.13.1",
-    "pikaday": "^1.4.0",
     "moment": "^2.13.0",
     "mustache": "^2.2.1",
+    "pikaday": "^1.4.0",
+    "sass-loader": "^3.2.3",
     "scalejs": ">=0.4.1",
     "scalejs.expression-jsep": ">=0.0.4",
     "scalejs.inputmask": ">=1.0.1",
@@ -76,6 +78,7 @@
     "scalejs.mvvm": ">=1.0.1",
     "scalejs.navigation": ">=0.0.1",
     "scalejs.noticeboard": ">=0.0.1",
-    "scalejs.popup": ">=0.0.1"
+    "scalejs.popup": ">=0.0.1",
+    "style-loader": "^0.13.1"
   }
 }

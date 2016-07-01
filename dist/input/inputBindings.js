@@ -100,12 +100,6 @@ exports.default = {
                     } : null
                 }
             },
-            //disabled: disabled
-            //Note: pasing disabled to the jquery autocomplete control might have unexpected behaviour
-            //the options get passed straight thru to the jquery autocomplete
-            //if disabled changes, will the binding be re-initialized? Not sure
-            //this is why i created this issue to ask the creator of bindings
-            //https://github.com/rniemeyer/knockout-classBindingProvider/issues/23
             attr: {
                 readonly: this.readonly(),
                 'data-id': this.id
