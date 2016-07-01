@@ -1,5 +1,5 @@
 <div id="action_popup_template">
-    <h2 data-bind="text: message"></h2>
+    <span class="popup-message" data-bind="text: $data.message"></span>
     <!-- ko foreach: actions -->
         <button data-class="action-popup-action" class="btn btn-default-primary"></button>
     <!-- /ko -->
@@ -10,7 +10,7 @@
 </div>
 
 <div id="popup_default_region_template">
-    <span data-bind="text: message"></span>
+    <span class="popup-message" data-bind="text: $data.message"></span>
 </div>
 
 <div id="popup_default_wrapper_template">

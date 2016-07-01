@@ -228,10 +228,14 @@ function inputViewModel(node) {
     }
 
     function setCheckboxListValue(data) {
-        if (Array.isArray(data.value)) {
-            inputValue(data.value);
-        } else if (data.value !== null && data.value !== undefined) {
-            inputValue([data.value]);
+        if (data && data.value) {
+            console.warn('Using depricated setValue { value: <> } interface. Please update code.');
+        }
+        if (Array.isArray(data)) {
+            inputValue(data);
+        } else if (data !== null && data !== undefined) {
+            console.warn('Setting a checkbox list with a non-array value. Converting to array...');
+            inputValue([data]);
         } else {
             inputValue([]);
         }
