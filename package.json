@@ -1,6 +1,6 @@
 {
   "name": "scalejs.metadatafactory-common",
-  "version": "1.0.18",
+  "version": "1.0.17",
   "description": "Common scalejs.metadatafactory modules",
   "main": "dist/scalejs.metadataFactory-common.js",
   "scripts": {
@@ -64,7 +64,7 @@
     "jquery-ui": "^1.10.5",
     "js-format": "git+https://github.com/tsu-complete/js-format.git",
     "knockout": "^3.4.0",
-    "knockout-jqautocomplete": "git+https://github.com/EikosPartners/knockout-jqAutocomplete",
+    "knockout-jqautocomplete": "^0.4.4",
     "knockout.validation": "git+https://github.com/EikosPartners/Knockout-Validation.git",
     "ko-bindings": "^1.0.3",
     "lodash": "^4.13.1",
