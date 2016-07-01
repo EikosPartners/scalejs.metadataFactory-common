@@ -1,8 +1,6 @@
 'use strict';
 
-var _scalejs = require('scalejs.core');
-
-var _scalejs2 = _interopRequireDefault(_scalejs);
+var _scalejs = require('scalejs.expression-jsep');
 
 var _knockout = require('knockout');
 
@@ -36,11 +34,11 @@ _knockout2.default.validation.rules['expression'] = {
             validator = this;
         // option 1: params[0] is not an array so it is just the term
         if (!Array.isArray(params[0])) {
-            return _scalejs2.default.expression.evaluate.apply(null, params);
+            return _scalejs.evaluate.apply(null, params);
         }
         // option 2: params[0] is an array so it is many terms
         return params[0].every(function (e) {
-            var isValid = _scalejs2.default.expression.evaluate.call(null, e.term, getValue);
+            var isValid = _scalejs.evaluate.call(null, e.term, getValue);
             if (!isValid) {
                 validator.message = e.message;
             }

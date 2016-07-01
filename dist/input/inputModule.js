@@ -8,6 +8,14 @@ require('./validation/validationEngine');
 
 require('scalejs.inputmask');
 
+var _autocompleteViewModel = require('./autocomplete/autocompleteViewModel');
+
+var _autocompleteViewModel2 = _interopRequireDefault(_autocompleteViewModel);
+
+var _selectViewModel = require('./select/selectViewModel');
+
+var _selectViewModel2 = _interopRequireDefault(_selectViewModel);
+
 var _inputViewModel = require('./inputViewModel');
 
 var _inputViewModel2 = _interopRequireDefault(_inputViewModel);

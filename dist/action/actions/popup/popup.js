@@ -33,8 +33,12 @@ var _popup2 = _interopRequireDefault(_popup);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var popupRoot = _scalejs6.default.popupRoot;
+var initialized = false;
 
 function popupAction(options) {
+    if (!initialized) {
+        init();
+    }
     var context = this,
         message = {},
         onHidePopup = void 0,
@@ -94,6 +98,7 @@ function closePopup() {
 }
 
 function init() {
+    initialized = true;
     var popupDiv = document.querySelector('*[data-bind="render: popupRoot"], *[data-bind="render:popupRoot"]');
     if (!popupDiv) {
         var att = document.createAttribute('data-bind');
@@ -104,8 +109,6 @@ function init() {
     }
     _knockout2.default.applyBindings({ popupRoot: popupRoot }, popupDiv);
 }
-
-init();
 
 (0, _scalejs.registerBindings)(_popupBindings2.default);
 (0, _scalejs.registerTemplates)(_popup2.default);

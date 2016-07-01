@@ -5,10 +5,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (node) {
-    var createViewModel = _scalejs4.createViewModel.bind(this),
+    var createViewModel = _scalejs.createViewModel.bind(this),
         context = this,
-        itemDictionary = observable({}),
-        listViewModel = createViewModel(merge({ id: node.id }, node.list)),
+        itemDictionary = (0, _knockout.observable)({}),
+        listViewModel = createViewModel((0, _scalejs4.merge)({ id: node.id }, node.list)),
         // pass along id
     headers = (node.headers || []).map(function (header) {
         return {
@@ -43,7 +43,7 @@ exports.default = function (node) {
             if (listItems[item.type]) {
                 return listItems[item.type].call(context, item, listViewModel);
             } else {
-                return _scalejs2.default.metadataFactory.createViewModel.call({
+                return _scalejs.createViewModel.call({
                     metadata: context.metadata,
                     getValue: function getValue(id) {
                         var item = itemDictionary()[id];
@@ -65,9 +65,9 @@ exports.default = function (node) {
         });
 
         // creates expression binding for visible
-        if (has(footer.visible)) {
-            visible = is(footer.visible, 'boolean') ? footer.visible : pureComputed(function () {
-                return evaluate(footer.visible, function (id) {
+        if ((0, _scalejs4.has)(footer.visible)) {
+            visible = (0, _scalejs4.is)(footer.visible, 'boolean') ? footer.visible : (0, _knockout.pureComputed)(function () {
+                return (0, _scalejs2.evaluate)(footer.visible, function (id) {
                     if (id === 'list') {
                         return listViewModel.rows() || [];
                     }
@@ -91,13 +91,13 @@ exports.default = function (node) {
             });
         }
 
-        return merge(footer, {
+        return (0, _scalejs4.merge)(footer, {
             items: items,
             visible: visible
         });
     }),
         groups,
-        visibleRows = observableArray(),
+        visibleRows = (0, _knockout.observableArray)(),
         viewmodel,
         showInfinite;
 
@@ -116,10 +116,10 @@ exports.default = function (node) {
 
     // will group the nodes based on groupby prop
     if (node.groupBy) {
-        groups = computed(function () {
+        groups = (0, _knockout.computed)(function () {
             var groupDict = {};
             listViewModel.rows().forEach(function (row) {
-                var group = unwrap(row[node.groupBy]);
+                var group = (0, _knockout.unwrap)(row[node.groupBy]);
                 groupDict[group] = groupDict[group] || [];
                 groupDict[group].push(row);
             });
@@ -141,14 +141,14 @@ exports.default = function (node) {
 
         showInfinite = function showInfinite() {
             listViewModel.rows(listViewModel.rows().slice(0, 20));
-            (0, _scalejs3.notify)('showPopup', merge(viewmodel, {
+            (0, _scalejs3.notify)('showPopup', (0, _scalejs4.merge)(viewmodel, {
                 template: 'listAdvanced_infinite_template',
                 disableHasFocus: true
             }));
         };
     }
 
-    viewmodel = merge(node, {
+    viewmodel = (0, _scalejs4.merge)(node, {
         setReadonly: listViewModel.setReadonly,
         getValue: listViewModel.getValue,
         setValue: listViewModel.setValue,
@@ -168,35 +168,21 @@ exports.default = function (node) {
     return viewmodel;
 };
 
-var _scalejs = require('scalejs.sandbox');
-
-var _scalejs2 = _interopRequireDefault(_scalejs);
-
 var _knockout = require('knockout');
 
-var _knockout2 = _interopRequireDefault(_knockout);
+var _scalejs = require('scalejs.metadataFactory');
+
+var _scalejs2 = require('scalejs.expression-jsep');
 
 var _scalejs3 = require('scalejs.messagebus');
 
-var _scalejs4 = require('scalejs.metadataFactory');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _scalejs4 = require('scalejs');
 
 // the list advanced component provides advanced features over the base list
 // - Headers (TBD) and Footers (partially done)
 // - ListItems such as ADD and EMPTY
 // - GroupBy
-/*global define, sandbox, ko */
-var evaluate = _scalejs2.default.expression.evaluate,
-    computed = _scalejs2.default.mvvm.computed,
-    is = _scalejs2.default.type.is,
-    has = _scalejs2.default.object.has,
-    unwrap = _knockout2.default.unwrap,
-    observable = _scalejs2.default.mvvm.observable,
-    observableArray = _scalejs2.default.mvvm.observableArray,
-    merge = _scalejs2.default.object.merge,
-    pureComputed = _knockout2.default.pureComputed,
-    listItems = {
+var listItems = {
     ADD: add,
     EMPTY: empty,
     TEXT: text,
@@ -205,7 +191,7 @@ var evaluate = _scalejs2.default.expression.evaluate,
 
 // creates the Add ViewModel from the add def
 function add(addDef, list) {
-    return merge({
+    return (0, _scalejs4.merge)({
         template: 'list_advanced_add_item_template',
         text: 'Add',
         add: function add() {
@@ -245,14 +231,14 @@ function add(addDef, list) {
 
 // creates an empty space in table
 function empty(emptyDef, base) {
-    return merge({
+    return (0, _scalejs4.merge)({
         template: 'list_advanced_empty_item_template',
         cellClasses: 'empty'
     }, emptyDef);
 }
 
 function text(textDef, base) {
-    return merge({
+    return (0, _scalejs4.merge)({
         template: 'list_advanced_text_item_template'
     }, textDef);
 }
@@ -265,14 +251,14 @@ function total(totalDef, list) {
         inputType: 'text',
         label: 'Total',
         cellClasses: totalDef.cellClasses,
-        options: merge({
+        options: (0, _scalejs4.merge)({
             readonly: true
         }, totalDef.options)
     },
 
     // use input view model for instant formatting/validation
-    totalViewModel = _scalejs2.default.metadataFactory.createViewModel.call(this, totalJson),
-        total = computed(function () {
+    totalViewModel = _scalejs.createViewModel.call(this, totalJson),
+        total = (0, _knockout.computed)(function () {
         return list.rows().reduce(function (sum, row) {
             return sum + Number(row[totalDef.field]() || 0); // get the value for field
         }, 0);

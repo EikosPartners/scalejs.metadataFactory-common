@@ -5,21 +5,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = inputViewModel;
 
-var _autocompleteViewModel = require('./autocomplete/autocompleteViewModel');
+var _knockout = require('knockout');
 
-var _autocompleteViewModel2 = _interopRequireDefault(_autocompleteViewModel);
+var _knockout2 = _interopRequireDefault(_knockout);
 
-var _selectViewModel = require('./select/selectViewModel');
+var _scalejs = require('scalejs.metadataFactory');
 
-var _selectViewModel2 = _interopRequireDefault(_selectViewModel);
+var _scalejs2 = require('scalejs.expression-jsep');
+
+var _scalejs3 = require('scalejs');
 
 var _dataservice = require('dataservice');
 
 var _dataservice2 = _interopRequireDefault(_dataservice);
-
-var _scalejs = require('scalejs.sandbox');
-
-var _scalejs2 = _interopRequireDefault(_scalejs);
 
 var _lodash = require('lodash');
 
@@ -29,19 +27,15 @@ var _moment = require('moment');
 
 var _moment2 = _interopRequireDefault(_moment);
 
-var _knockout = require('knockout');
+var _autocompleteViewModel = require('./autocomplete/autocompleteViewModel');
 
-var _knockout2 = _interopRequireDefault(_knockout);
+var _autocompleteViewModel2 = _interopRequireDefault(_autocompleteViewModel);
 
-var _scalejs3 = require('scalejs.mvvm');
+var _selectViewModel = require('./select/selectViewModel');
+
+var _selectViewModel2 = _interopRequireDefault(_selectViewModel);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var evaluate = _scalejs2.default.expression.evaluate,
-    has = _scalejs2.default.object.has,
-    get = _scalejs2.default.object.get,
-    is = _scalejs2.default.type.is,
-    merge = _scalejs2.default.object.merge;
 
 var inputTypes = {
     autocomplete: _autocompleteViewModel2.default,
@@ -60,38 +54,38 @@ function inputViewModel(node) {
 
 
     // values which can be chosen from
-    values = (0, _scalejs3.observableArray)(Array.isArray(options.values) ? options.values : []),
+    values = (0, _knockout.observableArray)(Array.isArray(options.values) ? options.values : []),
 
 
     // Depricated?
-    isShown = (0, _scalejs3.observable)(!node.hidden),
+    isShown = (0, _knockout.observable)(!node.hidden),
 
 
     // 2-way binding with state of focus
-    hasFocus = (0, _scalejs3.observable)(),
+    hasFocus = (0, _knockout.observable)(),
 
 
     // 1-way binding with state of hover           
-    hover = (0, _scalejs3.observable)(),
+    hover = (0, _knockout.observable)(),
 
 
     // validations
     validations = options.validations || null,
         required = validations ? validations.required : false,
-        customError = (0, _scalejs3.observable)(),
+        customError = (0, _knockout.observable)(),
 
 
     // attributes
-    disabled = (0, _scalejs3.observable)(!!options.disabled),
-        readonly = (0, _scalejs3.observable)(!!options.readonly),
+    disabled = (0, _knockout.observable)(!!options.disabled),
+        readonly = (0, _knockout.observable)(!!options.readonly),
         maxlength = validations && validations.maxLength,
 
 
     // patterns
     pattern = options.pattern === true ? getPattern() : options.pattern,
-        tooltipShown = (0, _scalejs3.observable)(false),
+        tooltipShown = (0, _knockout.observable)(false),
         //for patterns
-    shake = (0, _scalejs3.observable)(false),
+    shake = (0, _knockout.observable)(false),
 
 
     //specific datepicker
@@ -119,7 +113,7 @@ function inputViewModel(node) {
     registeredAction,
         //Needed?
 
-    // move out to sandbox?
+    // move out to utility?
     formatters = {
         dateFormatter: dateFormatter
     },
@@ -144,7 +138,7 @@ function inputViewModel(node) {
     }
 
     function setValue(data) {
-        var value = is(data, 'object') ? data.value : data,
+        var value = (0, _scalejs3.is)(data, 'object') ? data.value : data,
             // TODO: Refactor - should only accept "value", not "data".
         wasModifed = inputValue.isModified();
 
@@ -213,7 +207,7 @@ function inputViewModel(node) {
      */
 
     function assignDate(value, params) {
-        if (!is(params, 'object')) {
+        if (!(0, _scalejs3.is)(params, 'object')) {
             console.error('Assign date only supports object params', params);
             return;
         }
@@ -249,11 +243,11 @@ function inputViewModel(node) {
     function createInputValue() {
         // checkboxList can have multiple answers so make it an array
         if (node.inputType === 'checkboxList') {
-            return (0, _scalejs3.observableArray)(options.value || []);
+            return (0, _knockout.observableArray)(options.value || []);
         } else {
             // if there is no initial value, set it to empty string,
             // so that isModified does not get triggered for empty dropdowns
-            return (0, _scalejs3.observable)(has(options.value) ? options.value : '');
+            return (0, _knockout.observable)((0, _scalejs3.has)(options.value) ? options.value : '');
         }
     }
 
@@ -301,6 +295,8 @@ function inputViewModel(node) {
     // Mixin the viewModel specific to the inputType
     if (inputTypes[node.inputType]) {
         (0, _lodash.extend)(viewmodel, inputTypes[node.inputType].call(context, node, viewmodel));
+    } else {
+        console.error("No inputType was found", node.inputType);
     }
 
     // Checkbox underlying value is Array because of knockout, maybe refactor to a custom binding?
@@ -328,10 +324,10 @@ function inputViewModel(node) {
 
     // Is this needed in the common? Should it be a plugin/mixin?
     if (options.registered) {
-        registeredAction = _scalejs2.default.metadataFactory.createViewModel.call(this, {
+        registeredAction = _scalejs.createViewModel.call(this, {
             type: 'action',
             actionType: 'ajax',
-            options: merge(options.registered, { data: {} })
+            options: (0, _scalejs3.merge)(options.registered, { data: {} })
         });
 
         inputValue.subscribe(function (newValue) {
@@ -347,7 +343,7 @@ function inputViewModel(node) {
                             var node = context.dictionary && context.dictionary()[key];
                             if (node && node.update) {
                                 node.update(data[key]);
-                            } else if (context.data && has(data[key], 'value')) {
+                            } else if (context.data && (0, _scalejs3.has)(data[key], 'value')) {
                                 context.data()[key] = data[key].value;
                             }
                         });
@@ -359,23 +355,23 @@ function inputViewModel(node) {
 
     // TODO: Clean up validation Code
     // add validations to the inputvalue
-    validations = merge(_lodash2.default.cloneDeep(options.validations), { customError: customError });
+    validations = (0, _scalejs3.merge)(_lodash2.default.cloneDeep(options.validations), { customError: customError });
     if (validations.expression) {
         validations.expression.params = [options.validations.expression.message ? options.validations.expression.term : options.validations.expression, context.getValue];
     }
     if (viewmodel.validations) {
-        validations = merge(validations, viewmodel.validations);
+        validations = (0, _scalejs3.merge)(validations, viewmodel.validations);
     }
     inputValue = inputValue.extend(validations);
 
     // allows us to set values on an input from expression
     // usecase: issuerId coming from noticeboard
     if (options.valueExpression) {
-        computedValueExpression = (0, _scalejs3.computed)(function () {
+        computedValueExpression = (0, _knockout.computed)(function () {
             if (options.allowSet === false) {
                 inputValue(); // re-eval when inputValue is set
             }
-            return evaluate(options.valueExpression, context.getValue);
+            return (0, _scalejs2.evaluate)(options.valueExpression, context.getValue);
         });
         setValue(computedValueExpression());
         computedValueExpression.subscribe(setValue(value));
@@ -383,7 +379,7 @@ function inputViewModel(node) {
     }
 
     // Insert Zeros Option?
-    if (get(options, 'pattern.alias') === 'percent') {
+    if ((0, _scalejs3.get)(options, 'pattern.alias') === 'percent') {
         inputValue.subscribe(function (value) {
             if (value && isFinite(Number(value))) {
                 inputValue(Number(value).toFixed(3));
@@ -397,7 +393,7 @@ function inputViewModel(node) {
         }, 1000);
     });
 
-    return merge(node, viewmodel, {
+    return (0, _scalejs3.merge)(node, viewmodel, {
         inputValue: inputValue,
         visibleMessage: visibleMessage,
         customError: customError,
@@ -430,7 +426,6 @@ function inputViewModel(node) {
             if (viewmodel.dispose) {
                 viewmodel.dispose();
             }
-            //sandbox.utils.disposalAll(subs)(); TODO
             (subs || []).forEach(function (sub) {
                 sub.dispose && sub.dispose();
             });
@@ -446,7 +441,6 @@ function inputViewModel(node) {
 //- revisit and de-tangle bindings
 //- refactor validations so that the tooltip works without inputText wrapper in the inputType template
 //- remove knockout require
-//- move dataservice to sandbox
 //- move tooltip/helpText in options
 //- move tooltip into pattern object (if pattern is true, use message from validation obj)
 //

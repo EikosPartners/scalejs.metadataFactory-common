@@ -4,18 +4,13 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _scalejs = require('scalejs.sandbox');
-
-var _scalejs2 = _interopRequireDefault(_scalejs);
+var _scalejs = require('scalejs.metadataFactory');
 
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/*global define, sandbox, _ */
-/*jslint sloppy: true*/
 
 function sticky(_el) {
     _el.style.transform = "translateY(" + this.scrollTop + "px)";
@@ -61,7 +56,7 @@ exports.default = {
             return;
         }
 
-        groupActionViewModels = _scalejs2.default.metadataFactory.createViewModels.call({
+        groupActionViewModels = _scalejs.createViewModels.call({
             metadata: [],
             getValue: function getValue(id) {
                 if (id === 'group') {

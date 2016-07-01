@@ -1,3 +1,10 @@
+$table-border-gray: #e0e0e0;
+$table-header-border-gray: #969696;
+$table-footer-border-gray: #969696;
+$highlight-yellow: #fff8d4;
+$validated-green: green;
+$dark-gray: #7d7d7d;
+
 .list-form-padding {
     padding: 0 11px;
 }
@@ -80,11 +87,11 @@
 	}
 	.header-cell {
 		&.sorting-asc {
-			background: url("../images/icon-sort-asc.svg") no-repeat center right 10px;
+			background: url("./images/icon-sort-asc.svg") no-repeat center right 10px;
     		background-color: $dark-gray;
 		}
 		&.sorting-desc {
-			background: url("../images/icon-sort-desc.svg") no-repeat center right 10px;
+			background: url("./images/icon-sort-desc.svg") no-repeat center right 10px;
     		background-color: $dark-gray;
 		}
 		background-color: $dark-gray;

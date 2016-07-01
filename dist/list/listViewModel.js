@@ -5,21 +5,25 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = listViewModel;
 
-var _scalejs = require('scalejs.sandbox');
+var _knockout = require('knockout');
 
-var _scalejs2 = _interopRequireDefault(_scalejs);
+var _scalejs = require('scalejs.metadataFactory');
+
+var _scalejs2 = require('scalejs.expression-jsep');
+
+var _scalejs3 = require('scalejs.noticeboard');
+
+var noticeboard = _interopRequireWildcard(_scalejs3);
+
+var _scalejs4 = require('scalejs');
 
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _knockout = require('knockout');
-
-var _knockout2 = _interopRequireDefault(_knockout);
-
-var _scalejs3 = require('scalejs.metadataFactory');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 // todo: revisit comments below
 // listViewModel is a component which manages a simple list
@@ -47,24 +51,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *  The id of the list becomes the key in the data for all the children of the list.
  *
  */
-/*global define, sandbox, _, ko*/
-var observable = _scalejs2.default.mvvm.observable,
-    observableArray = _scalejs2.default.mvvm.observableArray,
-    evaluate = _scalejs2.default.expression.evaluate,
-    computed = _scalejs2.default.mvvm.computed,
-    merge = _scalejs2.default.object.merge,
-    unwrap = _knockout2.default.unwrap,
-    has = _scalejs2.default.object.has,
-    is = _scalejs2.default.type.is,
-    noticeboard = _scalejs2.default.noticeboard.global,
-    listItems = {
+var listItems = {
     DELETE: del,
     DELETE_FLAG: deleteFlag
 };
 
 function del(itemDef) {
     var context = this;
-    return merge(itemDef, {
+    return (0, _scalejs4.merge)(itemDef, {
         id: undefined,
         template: {
             name: 'list_del_template',
@@ -77,7 +71,7 @@ function deleteFlag(itemDef) {
     var context = this;
     // the id will be the propertu
     // getValue - return if it was deleted or not
-    return context.isNew ? del.call(context, itemDef) : merge(context, {
+    return context.isNew ? del.call(context, itemDef) : (0, _scalejs4.merge)(context, {
         template: 'list_del_flag_template',
         getValue: function getValue() {
             return context.deleteFlag() ? "T" : "F";
@@ -96,21 +90,21 @@ function deleteFlag(itemDef) {
 
 function listViewModel(node) {
     var keyMap = node.keyMap || {},
-        rows = observableArray(),
+        rows = (0, _knockout.observableArray)(),
         options = node.options || {},
-        isShown = observable(true),
-        context = this,
-        readonly = observable(context.readOnly && context.readonly() || false),
+        isShown = (0, _knockout.observable)(true),
+        context = this || {},
+        readonly = (0, _knockout.observable)(context.readonly && context.readonly() || false),
         //initialize to the context's state as determined by the form generally
-    deleteRows = observable(options.deleteRows !== false),
+    deleteRows = (0, _knockout.observable)(options.deleteRows !== false),
         minRequiredRows = 0,
         showRemoveButton,
 
     // addButtonContext = node.addButtonContext,
-    mappedChildNodes = observableArray(),
-        data = observable(node.data),
+    mappedChildNodes = (0, _knockout.observableArray)(),
+        data = (0, _knockout.observable)(node.data),
         unique = {},
-        visibleRows = observableArray(),
+        visibleRows = (0, _knockout.observableArray)(),
         scrolled,
         initialData = _lodash2.default.cloneDeep(node.data) || [];
 
@@ -126,9 +120,9 @@ function listViewModel(node) {
     // called on each add
     // or when data is set with initial values
     function rowViewModel(initialValues, isNew) {
-        var items = observableArray(),
+        var items = (0, _knockout.observableArray)(),
             // observable array to hold the items in the row
-        itemDictionary = observable({}),
+        itemDictionary = (0, _knockout.observable)({}),
             // observable dictionary to hold the items and other properties
         rowContext = {
             metadata: context.metadata, // reference to the parent metadata
@@ -136,8 +130,8 @@ function listViewModel(node) {
             unique: unique,
             isNew: isNew,
             itemDictionary: itemDictionary,
-            editMode: observable(false), //for styling - maybe better if called isActiveRow
-            deleteFlag: observable(false)
+            editMode: (0, _knockout.observable)(false), //for styling - maybe better if called isActiveRow
+            deleteFlag: (0, _knockout.observable)(false)
         },
             row = {},
             // the row itself
@@ -145,16 +139,16 @@ function listViewModel(node) {
             rowReadonly;
 
         // initialize row readonly as the list's state
-        rowContext.readonly = observable(readonly());
+        rowContext.readonly = (0, _knockout.observable)(readonly());
 
         // rowReadonly - string to run thrown expression parser to show/hide rows
-        if (is(options.rowReadonly, 'string')) {
-            rowReadonly = computed(function () {
+        if ((0, _scalejs4.is)(options.rowReadonly, 'string')) {
+            rowReadonly = (0, _knockout.computed)(function () {
                 if (rowContext.readonly && rowContext.readonly()) {
                     return true; //if readonly is true on context, then row is readonly
                 }
                 // else, eval the expression to determine if the row is readonly
-                return evaluate(options.rowReadonly, function (id) {
+                return (0, _scalejs2.evaluate)(options.rowReadonly, function (id) {
                     var item = itemDictionary()[id];
                     if (item && item.getValue) {
                         return item.getValue();
@@ -172,7 +166,7 @@ function listViewModel(node) {
         }
 
         // accurately calculates the index of the row in the list
-        rowContext.index = computed(function () {
+        rowContext.index = (0, _knockout.computed)(function () {
             return rows().indexOf(row);
         });
 
@@ -198,8 +192,8 @@ function listViewModel(node) {
             }
 
             // if the item doesnt have getValue, return itself
-            if (has(item)) {
-                return unwrap(item);
+            if ((0, _scalejs4.has)(item)) {
+                return (0, _knockout.unwrap)(item);
             }
             return context.getValue(id);
         };
@@ -210,7 +204,7 @@ function listViewModel(node) {
             // add readonly computed to the item before passing it to input
             // input will use the already defined observable if it exists
             // but, if the input already has readonly set on it, dont get readonly from row..
-            if (rowReadonly && item.input && !has(item.input.readonly)) {
+            if (rowReadonly && item.input && !(0, _scalejs4.has)(item.input.readonly)) {
                 item.input.readonly = rowReadonly;
             }
 
@@ -219,7 +213,7 @@ function listViewModel(node) {
                     console.error('Cannot set unique on item without id');
                 } else if (!unique[item.id]) {
                     //only create once
-                    unique[item.id] = observableArray();
+                    unique[item.id] = (0, _knockout.observableArray)();
                 }
             }
 
@@ -227,13 +221,13 @@ function listViewModel(node) {
             if (listItems[item.type]) {
                 var ret = listItems[item.type].call(rowContext, item);
                 if (item.visible) {
-                    ret.visible = computed(function () {
-                        return evaluate(item.visible, rowContext.getValue);
+                    ret.visible = (0, _knockout.computed)(function () {
+                        return (0, _scalejs2.evaluate)(item.visible, rowContext.getValue);
                     });
                 }
                 return ret;
             } else {
-                return _scalejs3.createViewModel.call(rowContext, item);
+                return _scalejs.createViewModel.call(rowContext, item);
             }
         });
 
@@ -254,12 +248,12 @@ function listViewModel(node) {
         // also add each item's inputValue directly on the row
         // this is for MemberExpressions to work properly (list[0].Status)
         itemDictionary(itemViewModels.reduce(function (dict, item) {
-            if (has(item.id)) {
+            if ((0, _scalejs4.has)(item.id)) {
                 dict[item.id] = item;
                 row[item.id] = item.inputValue;
             }
             return dict;
-        }, merge(initialValues || {}))); // just in case some data doesnt have a column, keep it in the item dict
+        }, (0, _scalejs4.merge)(initialValues || {}))); // just in case some data doesnt have a column, keep it in the item dict
 
         // TODO: ItemDict or Row? which one is better?
         // rowVM
@@ -329,7 +323,7 @@ function listViewModel(node) {
 
                 if (item.getValue) {
                     dataObj[item.id] = item.getValue();
-                } else if (has(item) && item.type !== 'DELETE') {
+                } else if ((0, _scalejs4.has)(item) && item.type !== 'DELETE') {
                     dataObj[itemKey] = item;
                 }
                 return dataObj;
@@ -392,7 +386,7 @@ function listViewModel(node) {
     }
 
     // only show remove button if rows is greater than min req rows
-    showRemoveButton = computed(function () {
+    showRemoveButton = (0, _knockout.computed)(function () {
         return rows().length > minRequiredRows;
     });
 
@@ -418,7 +412,7 @@ function listViewModel(node) {
     // will "remove" mapped child nodes if the list is hidden
     // this is required for validations to work properly
     // todo: remove this workaround and implement validation on list itself
-    computed(function () {
+    (0, _knockout.computed)(function () {
         if (isShown()) {
             mappedChildNodes(rows().filter(function (row) {
                 return !row.deleteFlag();
@@ -451,7 +445,7 @@ function listViewModel(node) {
         };
     }
 
-    return merge(node, {
+    return (0, _scalejs4.merge)(node, {
         add: add,
         rows: node.infinite ? visibleRows : rows,
         allRows: rows,

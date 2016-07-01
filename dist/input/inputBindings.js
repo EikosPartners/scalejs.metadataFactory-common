@@ -4,9 +4,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _scalejs = require('scalejs.sandbox');
-
-var _scalejs2 = _interopRequireDefault(_scalejs);
+var _scalejs = require('scalejs');
 
 var _jsFormat = require('js-format');
 
@@ -14,16 +12,9 @@ var format = _interopRequireWildcard(_jsFormat);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 // TODO: update to es6 with named export
 
 //import 'knockout-jqautocomplete'; TODO: Fix this dependency DS
-
-/*global define, sandbox, autocomplete, format */
-/*jslint sloppy: true*/
-var merge = _scalejs2.default.object.merge,
-    has = _scalejs2.default.object.has;
 
 exports.default = {
     'input-input': function inputInput() {
@@ -106,7 +97,7 @@ exports.default = {
             },
             hasFocus: !disableHasFocus && this.hasFocus,
             validationElement: false,
-            showAllAuto: has(this.options.showAllSearch) ? this.options.showAllSearch : '',
+            showAllAuto: (0, _scalejs.has)(this.options.showAllSearch) ? this.options.showAllSearch : '',
             disable: disabled // use knockout disable binding - its sufficient. See "showAllAuto" binding for more details
         };
     },
