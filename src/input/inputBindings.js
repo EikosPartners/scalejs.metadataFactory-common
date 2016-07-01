@@ -1,6 +1,6 @@
 import { merge, has} from 'scalejs';
 import * as format from 'js-format';
-import 'knockout-jqautocomplete';
+import 'knockout-jqautocomplete/build/knockout-jqAutocomplete';
 import 'ko-bindings/showAllAuto';
 
 export default {
