@@ -1,6 +1,7 @@
 
 import { registerViewModels, createViewModel, createViewModels } from 'scalejs.metadataFactory';
 import { createMetadataDomStub } from 'utils';
+import { merge } from 'scalejs';
 import ko from 'knockout';
 import _ from 'lodash';
 import 'chai';
@@ -38,9 +39,9 @@ describe('inputViewModel test', function () {
 
     });
 
-    after(function () {
-        //domStub.dispose();
-    });
+    // after(function () {
+    //     //domStub.dispose();
+    // });
 
     it('renders value and label', function (done) {
         expect(domStub.node.querySelector('input').value).equals(testValue);
@@ -56,6 +57,7 @@ describe('inputViewModel test', function () {
                 done();
             });
         input.value = 'new';
+        // EG: what is this?
         input.dispatchEvent(new Event('change')); // fire event to notify ko of update
     });
 
@@ -242,6 +244,12 @@ describe('inputViewModel test', function () {
             // expect(testDomStubAuto.data[0].inputType).equals('autocomplete');
             // expect(testDomStubAuto.data[0].autocompleteSource[0].equals('stressball'));
             done();
+            
+            // let autocompleteViewModel = createViewModel(merge(node, {
+            //     inputType: 'autocomplete'
+            // }));
+            // expect(autocompleteViewModel).to.have.property('autocompleteSource');
+
         });
     });
 });

@@ -1,7 +1,7 @@
 import { merge, has} from 'scalejs';
-import * as format from 'js-format'; // TODO: update to es6 with named export
-
-//import 'knockout-jqautocomplete'; TODO: Fix this dependency DS 
+import * as format from 'js-format';
+import 'knockout-jqautocomplete';
+import 'ko-bindings/showAllAuto';
 
 export default {
     'input-input': function () {
