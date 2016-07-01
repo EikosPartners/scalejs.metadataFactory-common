@@ -5,7 +5,7 @@ import listAdvancedViewModel from './listAdvancedViewModel';
 import listAdvancedBindings from './listAdvancedBindings';
 import listAdvancedTemplates from './listAdvanced.html';
 import './listAdvanced.scss';
-import 'ko-bindings/clickOff';
+import 'ko-bindings/clickoff';
 
 
     registerBindings(listAdvancedBindings);

@@ -10,11 +10,11 @@ var _jsFormat = require('js-format');
 
 var format = _interopRequireWildcard(_jsFormat);
 
+require('knockout-jqautocomplete');
+
+require('ko-bindings/showAllAuto');
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-// TODO: update to es6 with named export
-
-//import 'knockout-jqautocomplete'; TODO: Fix this dependency DS
 
 exports.default = {
     'input-input': function inputInput() {
