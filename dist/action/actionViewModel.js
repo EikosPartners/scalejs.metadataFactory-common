@@ -20,10 +20,11 @@ var _lodash = require('lodash');
 function actionViewModel(node) {
     var registeredActions = (0, _actionModule.getRegisteredActions)(),
         context = this,
-        text = node.text || node.options.text,
-        createViewModel = _scalejs.createViewModel.bind(context),
-        validate = node.validate,
         options = node.options || {},
+        text = node.text || options.text,
+        // TODO: Options are meant for specific types. Why are we checking options?
+    createViewModel = _scalejs.createViewModel.bind(context),
+        validate = node.validate,
         actionType = node.actionType,
         actions = {},
         mergedActions = (0, _lodash.extend)(actions, registeredActions),

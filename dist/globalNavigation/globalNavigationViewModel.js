@@ -51,9 +51,18 @@ function globalNavigation(node) {
 
     _scalejs2.navigation.init(node.initial || 0);
 
+    routes.subscribe(function (oldRoutes) {
+        oldRoutes.forEach(function (routeOptions) {
+            _scalejs2.navigation.removeNav(routeOptions.text);
+        });
+    }, null, 'beforeChange');
+
     return (0, _scalejs3.merge)(node, {
         navLinks: navLinks,
-        activeLink: activeLink
+        activeLink: activeLink,
+        dispose: function dispose() {
+            routes([]);
+        }
     });
 }
 //# sourceMappingURL=globalNavigationViewModel.js.map

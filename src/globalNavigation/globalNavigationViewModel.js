@@ -34,8 +34,17 @@ export default function globalNavigation(node) {
 
     navigation.init(node.initial || 0);
 
+    routes.subscribe(function (oldRoutes) {
+        oldRoutes.forEach(routeOptions => {
+            navigation.removeNav(routeOptions.text);
+        });
+    }, null, 'beforeChange');
+
     return merge(node, {
         navLinks: navLinks,
-        activeLink: activeLink
+        activeLink: activeLink,
+        dispose: function () {
+            routes([]);
+        }
     });
 }
