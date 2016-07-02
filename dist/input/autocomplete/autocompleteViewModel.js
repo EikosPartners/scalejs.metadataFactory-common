@@ -23,6 +23,8 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//TODO: Refactor multi-input functionality out or to its own viewmodel
+
 function autocompleteViewModel(node, inputViewModel) {
     var context = this,
         dataSourceEndpoint = node.dataSourceEndpoint,

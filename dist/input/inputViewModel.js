@@ -60,7 +60,7 @@ function inputViewModel(node) {
     values = (0, _knockout.observableArray)(Array.isArray(options.values) ? options.values : []),
 
 
-    // Depricated?
+    // Depricated? //TODO: Yes isShown is depricated in favor of rendered
     isShown = (0, _knockout.observable)(!node.hidden),
 
 
@@ -175,6 +175,7 @@ function inputViewModel(node) {
         return !inputValue.isValid() && isShown() && this.rendered() && inputValue.severity() === 1;
     }
 
+    // TODO: How to allow for custom visible message specific to project?
     function visibleMessage() {
         // returns the message to be displayed (based on validations)
         var inputMessage,
@@ -324,6 +325,7 @@ function inputViewModel(node) {
         (0, _lodash.extend)(viewmodel, inputTypes[node.inputType].call(context, node, viewmodel));
     }
     // Checkbox underlying value is Array because of knockout, maybe refactor to a custom binding?
+    // TODO: ^ not sure if this is correct anymore. Checkbox may accept true/false - need to investigate
     if (node.inputType === 'checkbox') {
         values.subscribe(function (newValues) {
             if (newValues.indexOf(options.checked) !== -1) {
@@ -418,8 +420,7 @@ function inputViewModel(node) {
     }
     inputValue = inputValue.extend(validations);
 
-    // allows us to set values on an input from expression
-    // usecase: issuerId coming from noticeboard
+    // Allows us to set values on an input from expression
     if (options.valueExpression) {
         computedValueExpression = (0, _knockout.computed)(function () {
             if (options.allowSet === false) {
@@ -432,7 +433,7 @@ function inputViewModel(node) {
         subs.push(computedValueExpression);
     }
 
-    // Insert Zeros Option?
+    // TODO: make into insert zeros option?
     if ((0, _scalejs3.get)(options, 'pattern.alias') === 'percent') {
         inputValue.subscribe(function (value) {
             if (value && isFinite(Number(value))) {
@@ -498,11 +499,7 @@ function inputViewModel(node) {
 //- createJSDocs
 //- revisit and de-tangle bindings
 //- refactor validations so that the tooltip works without inputText wrapper in the inputType template
-//- remove knockout require
 //- move tooltip/helpText in options
-//- move tooltip into pattern object (if pattern is true, use message from validation obj)
-//
-// ...add more refactor session goals here!
 
 /**
  *  input is the component to use when accepting user-input.
@@ -517,18 +514,22 @@ function inputViewModel(node) {
  *  By specifying an "id" on your input, you are automatically adding your input's data to the data context model.
  * @param {object} node.options
  *  The options pertaining to your specific inputType
+ * @param {boolean|string} [node.rendered=true]
+ *  Boolean or expression to render the input (or not)
  * @param {array} [node.options.values]
  *  The values that can be chosen from for inputTypes that have selections (e.g. radio, checkboxList)
- * @param {boolean} [node.hidden=false]
- *  Whether or not to hide the input
  * @param {object} [node.options.validations]
  *  KO validations object to validate the inputValue
  * @param {boolean} [node.options.validations.required]
  *  Required validation for ko - also will show * next to label indicating it is required
- * @param {boolean} [node.options.disabled]
- *  Disables the input
+ * @param {boolean|string} [node.options.readonly=false]
+ *  Boolean or expression to set the input as readonly
+ * @param {boolean} [node.options.disabled]np
+ *  Disables the input (different from readonly)
  * @param {object|string|boolean} [node.options.pattern]
  *  Sets an inputmask for the input. If a string, this is the mask. If an object, gets passed as is.
  *  If boolean = true, uses pattern validation.
+ * @param {boolean} [node.options.vertical=false]
+ *  For multi-option types (e.g. checkboxList, radio), sets the display to block if true for the options
  */
 //# sourceMappingURL=inputViewModel.js.map
