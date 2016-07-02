@@ -1,8 +1,8 @@
 <div id="input_template">
-    <div data-bind="css: $data.classes, visible: isShown" class="input">
+    <div data-bind="css: $data.classes" class="input">
         <label data-class="input-labels input-color-text" class="input-label"></label>
         <!-- ko if: $data.helpText -->
-            <i class="fa fa-info-circle info">
+            <i class="fa fa-info-circle info"> <!--TODO: image icon -->
                 <div class="tool-tip" data-bind="text: $data.helpText"></div>
             </i>
         <!-- /ko -->
@@ -11,19 +11,15 @@
         <!-- /ko -->
         <span data-class="input-validation"></span>
         <span data-class="input-tooltip"></span>
-
     </div>
 </div>
 
-<div id="input_list_template">
-    <label data-class="input-labels" class="input-label"></label>
-    <!-- ko template: 'input_' + inputType + '_template' -->
-    <!-- /ko -->
-</div>
-
+<!-- TODO: Need this? -->
 <div id="input_textLabel_template">
     <div class="input-label label-only" data-class="input-labels-only"></div>
 </div>
+
+<!-- TODO: Do we need input-wrapper around every template?-->
 
 <div id="input_text_template">
     <div class="input-wrapper">
@@ -52,8 +48,8 @@
 
 <div id="input_radio_template">
     <div data-class="input-radio input-color-text" class="input-radio-wrapper">
-    <span>
-        <input type="radio" class="input-radio"data-class="input-radio-button" />
+    <span data-bind="style: { display: $parent.options.vertical ? 'block' : 'inline-block' }">
+        <input type="radio" class="input-radio" data-class="input-radio-button" />
         <div class="input-radio-label">
             <!-- ko text: value --> <!-- /ko -->
         </div>
@@ -69,16 +65,14 @@
     </label>
 </div>
 
-<div id="input_checkbox_group_template">
+<div id="input_checkboxList_template">
     <div data-bind="css:$data.classes">
     <!-- ko foreach: values -->
-        <div class="pb10">
-            <label class="input-checkbox-wrapper">
-                <input type="checkbox" data-class="input-checkbox-button-group" class="input-checkbox-button">
-                <span class="input-checkbox-display"></span>
-                <span class="input-checkbox-label" data-bind="text: text" ></span>
-            </label>
-        </div>
+        <label class="input-checkbox-wrapper" data-bind="style: { display: $parent.options.vertical ? 'block' : 'inline-block' }">
+            <input type="checkbox" data-class="input-checkbox-button-group" class="input-checkbox-button">
+            <span class="input-checkbox-display"></span>
+            <span class="input-checkbox-label" data-bind="text: text" ></span>
+        </label>
     <!-- /ko -->
     </div>
 </div>
@@ -98,8 +92,9 @@
 
 </div>
 
+<!-- TODO: Why do we need this? -->
 <div id="input_add_button_template" class="add">
-        <button class="fa fa-icon-add" data-bind="click: input.add">
-            <span class="button-text">Add</span>
-        </button>
+    <button class="fa fa-icon-add" data-bind="click: input.add">
+        <span class="button-text">Add</span>
+    </button>
 </div>

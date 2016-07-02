@@ -12,14 +12,29 @@ $dark-gray: #7d7d7d;
 $chartreuse: #B2BB1E;
 $error-red: #CE0000;
 
-//input styles variables
+//input styles variables - colors
+$input-focus-box-shadow-color: $chartreuse;
 $input-warning-box-shadow-color: #E87400;
+$input-error-box-shadow-color: $error-red;
 $input-background-color-main: white;
+
+//input styles variables - fonts
 $input-font-family-main: "Gotham Light", sans-serif;
+
+//input styles variables - sizes
 $input-width-main: calc(100% - 20px);
 $input-select-height: 26px;
-$input-font-size-main: 12px;
+$input-height: 12px;
+$input-label-font-size: 12px;
+$input-font-size: 13px;
 
+//input styles variables - box shadow size
+$input-box-shadow: 0 0 0 1px;
+$input-focused-box-shadow1: 0px 0px 0px 2px;
+$input-focused-box-shadow2: -2px 0px 0px 2px;
+
+//input styles variables - padding
+$input-padding: 7px 0 7px 7px;
 
 //validation styles variables
 $validation-message-unread-background-color: #FEFCD3;
@@ -34,21 +49,21 @@ $validaiton-message-before-border: 10px solid transparent;
 
 .input-styles {
     font-family: $font-medium;
-    font-size: 13px;
+    font-size: $input-font-size;
     color: $darker-gray;
-    box-shadow: 0 0 0 1px $gray;
+    box-shadow: $input-box-shadow $gray;
     border: none;
     margin-top: 5px;
     &:focus {
         outline: none;
-        box-shadow: 0px 0px 0px 2px $chartreuse,
-                    -2px 0px 0px 2px $chartreuse;
+        box-shadow: $input-focused-box-shadow1 $input-focus-box-shadow-color,
+                    $input-focused-box-shadow2 $input-focus-box-shadow-color;
     }
     &.error, &:focus.error {
-       box-shadow: 0px 0px 0px 2px $error-red !important;
+       box-shadow: $input-focused-box-shadow1 $input-error-box-shadow-color !important;
     }
     &.warning, &:focus.warning {
-       box-shadow: 0px 0px 0px 2px $input-warning-box-shadow-color !important;
+       box-shadow: $input-focused-box-shadow1 $input-warning-box-shadow-color !important;
     }
     &[readonly="true"], &[disabled="true"] {
         box-shadow: none;
@@ -66,15 +81,15 @@ $validaiton-message-before-border: 10px solid transparent;
 
 .input-text-styles {
     text-overflow: ellipsis;
-    padding: 7px 0 7px 7px;
+    padding: $input-padding;
     width: $input-width-main;
-    height: 12px;
+    height: $input-height;
     &::-ms-clear { // remove IE x icon
         display: none;
     }
     &.error, &.warning {
         &[readonly="true"], &[readonly="true"]:focus {
-            padding: 7px 0 7px 7px;
+            padding: $input-padding;
         }
     }
 }
@@ -119,7 +134,7 @@ $validaiton-message-before-border: 10px solid transparent;
 
 .input-label-styles {
   font-family: $font-light;
-    font-size: $input-font-size-main;
+    font-size: $input-label-font-size;
     color: $dark-gray;
 }
 
@@ -148,7 +163,7 @@ $validaiton-message-before-border: 10px solid transparent;
 }
 
 .input-radio-wrapper {
-    font-size: $input-font-size-main;
+    font-size: $input-label-font-size;
     vertical-align: top;
 
     span {
@@ -201,7 +216,8 @@ $validaiton-message-before-border: 10px solid transparent;
     .input-checkbox-button {
         opacity: 0;
         &:focus + .input-checkbox-display {
-            box-shadow: 0px 0px 0px 2px $chartreuse, -2px 0px 0px 2px $chartreuse;
+            box-shadow: $input-focused-box-shadow1 $input-focus-box-shadow-color, 
+                        $input-focused-box-shadow2 $input-focus-box-shadow-color;
         }
         &:checked + .input-checkbox-display:after {
             opacity: 1;
@@ -224,7 +240,7 @@ $validaiton-message-before-border: 10px solid transparent;
     }
     .input-checkbox-label {
         font-family: $font-medium;
-        font-size: $input-font-size-main;
+        font-size: $input-label-font-size;
         color: $dark-gray;
         white-space: nowrap;
     }
@@ -242,7 +258,7 @@ $validaiton-message-before-border: 10px solid transparent;
             height: 20px;
             width: 70px;
             font-family: $input-font-family-main;
-            font-size: $input-font-size-main;
+            font-size: $input-label-font-size;
             color: $darker-gray;
         }
     }
@@ -304,7 +320,7 @@ textarea.input-text {
         > div.title {
             float: left;
             font-family: $font-medium;
-            font-size: $input-font-size-main;
+            font-size: $input-label-font-size;
             color: $darker-gray;
             font-weight: 700;
         }
@@ -321,6 +337,7 @@ textarea.input-text {
   }
 }
 
+// TODO: Move below out to Validation component
 .validation-message-box {
     border: 2px solid $error-red;
     margin-bottom: 15px;
@@ -340,7 +357,7 @@ textarea.input-text {
         }
     }
     .validation-message {
-        font-size: $input-font-size-main;
+        font-size: $input-label-font-size;
         margin-top: 5px;
         cursor: pointer;
         @extend .message;
@@ -357,70 +374,70 @@ textarea.input-text {
     }
 }
 
-    div.input-wrapper, .input-checkbox-wrapper { 
-        &:hover + span.validation-message {
-            display: inline-block;
-        }
-    }
-    span.validation-message.tooltip {
+div.input-wrapper, .input-checkbox-wrapper { 
+    &:hover + span.validation-message {
         display: inline-block;
     }
+}
+span.validation-message.tooltip {
+    display: inline-block;
+}
 
-    span.validation-message {
-        display: none;
-        float: left;
-        font-size: $input-font-size-main;
-        color: white;
-        position: absolute;
-        height: auto;
-        width: 150px;
-        border-radius: 7px;
-        padding: 10px;
-        top: 60px;
-        z-index: $validation-message-z-index;
-        margin-left: calc(100% - 210px);
+span.validation-message {
+    display: none;
+    float: left;
+    font-size: $input-label-font-size;
+    color: white;
+    position: absolute;
+    height: auto;
+    width: 150px;
+    border-radius: 7px;
+    padding: 10px;
+    top: 60px;
+    z-index: $validation-message-z-index;
+    margin-left: calc(100% - 210px);
 
-        &.tooltip {
-            background-color: $validation-message-validated-color;
-
-            &:before {
-                border-bottom:10px solid $validation-message-validated-color;
-            }
-        }
-
-        &.error {
-            background-color: $error-red;
-
-            &:before {
-                border-bottom:10px solid $error-red;
-            }
-        }
-
-        &.warning {
-            background-color: $validation-message-warning-color;
-
-            &:before {
-                border-bottom:10px solid $validation-message-warning-color;
-            }
-        }
-        
-        &.validated {
-            background-color: $validation-message-validated-color;
-
-            &:before {
-                border-bottom:10px solid $validation-message-validated-color;
-            }
-        }
-
+    &.tooltip {
+        background-color: $validation-message-validated-color;
 
         &:before {
-            position: absolute;
-            content: "";
-            width: 0;
-            height: 0;
-            border-left: $validaiton-message-before-border;
-            border-right: $validaiton-message-before-border;
-            left: 75px;
-            top: -10px;
+            border-bottom:10px solid $validation-message-validated-color;
         }
     }
+
+    &.error {
+        background-color: $error-red;
+
+        &:before {
+            border-bottom:10px solid $error-red;
+        }
+    }
+
+    &.warning {
+        background-color: $validation-message-warning-color;
+
+        &:before {
+            border-bottom:10px solid $validation-message-warning-color;
+        }
+    }
+    
+    &.validated {
+        background-color: $validation-message-validated-color;
+
+        &:before {
+            border-bottom:10px solid $validation-message-validated-color;
+        }
+    }
+
+
+    &:before {
+        position: absolute;
+        content: "";
+        width: 0;
+        height: 0;
+        border-left: $validaiton-message-before-border;
+        border-right: $validaiton-message-before-border;
+        left: 75px;
+        top: -10px;
+    }
+}

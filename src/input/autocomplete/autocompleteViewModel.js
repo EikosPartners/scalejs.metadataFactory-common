@@ -5,6 +5,9 @@ import { merge, has, is } from 'scalejs';
 import dataservice from 'dataservice';
 import _ from 'lodash';
 
+
+//TODO: Refactor multi-input functionality out or to its own viewmodel
+
     export default function autocompleteViewModel(node, inputViewModel) {
         var context = this,
             dataSourceEndpoint = node.dataSourceEndpoint,
