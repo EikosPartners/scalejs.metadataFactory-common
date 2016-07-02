@@ -7,11 +7,11 @@ import { extend } from 'lodash';
 
 export default function actionViewModel(node) {
     let registeredActions = getRegisteredActions(),
-        context = this,        
-        text = node.text || node.options.text,
+        context = this,      
+        options = node.options || {},  
+        text = node.text || options.text, // TODO: Options are meant for specific types. Why are we checking options?
         createViewModel = createViewModelUnbound.bind(context),
         validate = node.validate,
-        options = node.options || {},
         actionType = node.actionType,
         actions = {},
         mergedActions = extend(actions, registeredActions),
