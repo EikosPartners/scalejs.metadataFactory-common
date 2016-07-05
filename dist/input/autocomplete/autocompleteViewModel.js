@@ -68,8 +68,8 @@ function autocompleteViewModel(node, inputViewModel) {
                 return objectValue;
                 //console.warn('Cant find value: ' + inputValue() + ' in autocompleteSource in node', node);
             } else {
-                    return null;
-                }
+                return null;
+            }
         }
         //ret[keyMap.valueKey] = inputValue();
         return inputValue();
@@ -149,9 +149,9 @@ function autocompleteViewModel(node, inputViewModel) {
                     return item ? (0, _scalejs3.has)(item, 'value') ? item.value : item : '';
                 }).filter(Boolean))); // remove empty values
             } else {
-                    sourceArray = data.SearchResults;
-                    autocompleteSource(mapAutocompleteSource(data.SearchResults));
-                }
+                sourceArray = data.SearchResults;
+                autocompleteSource(mapAutocompleteSource(data.SearchResults));
+            }
         });
     }
 
