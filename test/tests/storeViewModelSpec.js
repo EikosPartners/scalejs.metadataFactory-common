@@ -1,4 +1,4 @@
-import * as noticeboard from 'scalejs.noticeboard';
+import noticeboard from 'scalejs.noticeboard';
 import storeViewModel from 'store/storeViewModel';
 import { registerViewModels, createViewModel, createViewModels } from 'scalejs.metadataFactory';
 import _ from 'lodash';

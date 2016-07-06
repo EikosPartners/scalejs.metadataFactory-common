@@ -1,7 +1,7 @@
 import { observable, observableArray, computed, unwrap } from 'knockout';
 import { createViewModel } from 'scalejs.metadataFactory';
 import { evaluate } from 'scalejs.expression-jsep';
-import * as noticeboard from 'scalejs.noticeboard';
+import noticeboard from 'scalejs.noticeboard';
 import { merge, has, is } from 'scalejs';
 import _ from 'lodash';
 

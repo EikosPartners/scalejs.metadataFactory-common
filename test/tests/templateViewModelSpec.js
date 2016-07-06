@@ -1,5 +1,5 @@
 import 'chai';
-import * as noticeboard from 'scalejs.noticeboard';
+import noticeboard from 'scalejs.noticeboard';
 import { registerViewModels, createViewModel, createViewModels } from 'scalejs.metadataFactory';
 import { registerTemplates, registerBindings } from 'scalejs.mvvm';
 import { createMetadataDomStub } from 'utils';

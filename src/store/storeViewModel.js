@@ -1,4 +1,4 @@
-import * as noticeboard from 'scalejs.noticeboard';
+import noticeboard from 'scalejs.noticeboard';
 import dataservice from 'dataservice';
 import { receive } from 'scalejs.messagebus';
 
