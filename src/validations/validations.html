@@ -1,0 +1,18 @@
+<div id="validations_template">
+    <div data-bind="css: $data.classes, style: $data.styles">
+        <section class="validation-message-box" data-class="validation-show-section">
+            <div class="validation-message-header">
+                <span data-class="validation-show-messages">
+                    <span class="validation-header-text">All Errors and Warnings</span>
+                    <span class="validation-header-text" data-bind="text: '(' + visibleMessages().length + ')'"></span>
+                </span>
+            </div>
+                <div data-class="validation-message-list">
+                    <div class="validation-message" data-class="validation-message">
+                        <span class="fa" data-class=validation-severity-css"></span>
+                        <span data-bind="text: message"></span>
+                    </div>
+                </div>
+        </section>
+    </div>
+</div>

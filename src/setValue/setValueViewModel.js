@@ -1,6 +1,5 @@
 import ko from 'knockout';
 
-
 export default function setValueViewModel(node) {
     let context = this;
 

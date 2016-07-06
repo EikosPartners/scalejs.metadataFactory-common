@@ -38,9 +38,9 @@ describe('inputViewModel test', function () {
 
     });
 
-    // after(function () {
-    //     //domStub.dispose();
-    // });
+    after(function () {
+        domStub.dispose();
+    });
 
     it('renders value and label', function (done) {
         expect(domStub.node.querySelector('input').value).equals(testValue);
