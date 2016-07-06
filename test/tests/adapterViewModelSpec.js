@@ -4,6 +4,7 @@ import { registerViewModels, createViewModel, createViewModels } from 'scalejs.m
 import ko from 'knockout';
 import _ from 'lodash';
 import 'chai';
+import { notify } from 'scalejs.messagebus';
 
 let expect = chai.expect,
     adapter;
@@ -11,6 +12,7 @@ let expect = chai.expect,
 
 const node = {
     "type": "adapter",
+    "id": "testAdapter",
     "children": [
         {
             "id": "A",
@@ -98,7 +100,7 @@ describe('adapterViewModel test', function () {
         expect(adapter.context.data()).to.have.property('B');
     });
 
-    it('fetches data from a  single dataSourceEndpoint', function (done) {
+    it('fetches data from a single dataSourceEndpoint', function (done) {
         let testJson = _.merge(node, {
             "dataSourceEndpoint": {
                 "uri": "adapter"
@@ -117,7 +119,7 @@ describe('adapterViewModel test', function () {
             });
     });
 
-    it('fetches data from a an array of dataSourceEndpoints', function (done) {
+    it('fetches data from an array of dataSourceEndpoints', function (done) {
         let testJson = _.merge(node, {
             "dataSourceEndpoint": [
                 {
@@ -167,7 +169,41 @@ describe('adapterViewModel test', function () {
 
     it('can lazily load children when data returns');
 
-    it('can be refreshed from an event');
+    it('can be refreshed from an event', function (done) {
+
+        let testJson = _.merge(node, {
+            "dataSourceEndpoint": {
+                "uri": "adapter"
+            }
+        });
+        let testAdapter = createViewModel(testJson);
+
+        let assertInitialValue = testAdapter.data.subscribe(data => {
+            expect(data).to.deep.equal({
+                A: 'updated_a',
+                B: 'updated_b'
+            });
+            assertInitialValue.dispose();
+        });
+
+        // change value of child
+        let children = ko.unwrap(testAdapter.mappedChildNodes);
+        children[0].setValue('Test');
+        expect(testAdapter.data()['A']).to.equal('Test');
+
+        let assertFinalValue = testAdapter.data.subscribe(data => {
+          expect(data).to.deep.equal({
+              A: 'updated_a',
+              B: 'updated_b'
+          });
+          assertFinalValue.dispose();
+          testAdapter.dispose();
+          done();
+        });
+
+        notify('testAdapter.refresh');
+
+    });
 
     it('[TODO] properly disposes of subscriptions');
 });
