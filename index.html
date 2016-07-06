@@ -12,24 +12,19 @@
 
 <body>
 
+        <script src="./build/bundle.js"></script>
+
     <div data-bind="metadataFactory: inputJSON"></div>
     <script>
         var inputJSON = {
                       "id": "Autocomplete",
                       "type": "input",
-                      "inputType": "autocomplete",
-                      "label": "Autocomplete",
-                      "autocompleteSource": [
-                            "stressball",
-                            "gumball",
-                            "hairball",
-                            "tossball"
-                            
-                      ]
+                      "inputType": "text",
+                      "label": "INPUT"
                 }
     </script>
 
-    <script src="./build/bundle.js"></script>
+
 </body>
 
 </html>

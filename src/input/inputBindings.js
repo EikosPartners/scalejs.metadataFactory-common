@@ -43,8 +43,7 @@ export default {
         var pattern,
             tooltipShown = this.tooltipShown,
             value = this.inputValue,
-            disabled = this.readonly() ? true : false,
-            addNew = this.options && this.options.addNew;
+            disabled = this.readonly() ? true : false;
         var disableHasFocus = ctx.$parents.filter(function (parent) {
             return parent.disableHasFocus;
         })[0];
@@ -67,22 +66,14 @@ export default {
                 source: this.autocompleteSource,
                 valueProp: 'value',
                 labelProp: 'label',
-                inputProp: this.inputProp || 'label',
-                options: {
-                    response: addNew ? function (event, ui) {
-                        ui.content.push({
-                            label: 'Add new',
-                            value: 'new',
-                            actual: 'new'
-                        });
-                    } : null,
+                inputProp: this.inputProp || 'label'
                     //disabled: disabled
                     //Note: pasing disabled to the jquery autocomplete control might have unexpected behaviour
                     //the options get passed straight thru to the jquery autocomplete
                     //if disabled changes, will the binding be re-initialized? Not sure
                     //this is why i created this issue to ask the creator of bindings
                     //https://github.com/rniemeyer/knockout-classBindingProvider/issues/23
-                }
+                
             },
             attr: {
                 readonly: this.readonly(),
@@ -99,17 +90,18 @@ export default {
             hover = this.hover,
             pattern;
 
-        if (typeof this.pattern === 'string') {
-            pattern = {
-                mask: this.pattern
-            };
-        } else if (this.pattern) {
-            pattern = this.pattern;
-        } else {
+        //when will datepicker be anything but a date? do we need the pattern?
+        // if (typeof this.pattern === 'string') {
+        //     pattern = {
+        //         mask: this.pattern
+        //     };
+        // } else if (this.pattern) {
+        //     pattern = this.pattern;
+        // } else {
             pattern = {
                 alias: 'date'
             };
-        }
+        // }
         pattern.autoUnmask = false; // do we still need?
         // pattern.insertMode = true;
 
