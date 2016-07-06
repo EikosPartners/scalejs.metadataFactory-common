@@ -209,11 +209,11 @@ describe('actionModule test', function () {
                 action = createViewModel(node);
 
             receive('series.response', function (params) {
-                expect('success ').to.equal(params);
+                expect(params).to.equal('success ');
             });
 
             receive('series.response1', function (params) {
-                expect('success ').to.equal(params);
+                expect(params).to.equal('success ');
                 done();
             });
 
@@ -307,7 +307,7 @@ describe('actionModule test', function () {
             let action = createViewModel.call({}, node);
 
             receive('ajax.response', function (params) {
-                expect('success').to.equal(params);
+                expect(params).to.equal('success');
                 done();
                 action = null;
             });
@@ -352,7 +352,7 @@ describe('actionModule test', function () {
             let action = createViewModel.call({}, node);
 
             receive('ajax.response1', function (params) {
-                expect('failure').to.equal(params);
+                expect(params).to.equal('failure');
                 done();
                 action = null;
             });
