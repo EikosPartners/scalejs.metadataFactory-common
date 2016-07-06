@@ -13,17 +13,15 @@ var _scalejs2 = require('scalejs.expression-jsep');
 
 var _scalejs3 = require('scalejs.noticeboard');
 
-var noticeboard = _interopRequireWildcard(_scalejs3);
+var _scalejs4 = _interopRequireDefault(_scalejs3);
 
-var _scalejs4 = require('scalejs');
+var _scalejs5 = require('scalejs');
 
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 // todo: revisit comments below
 // listViewModel is a component which manages a simple list
@@ -58,7 +56,7 @@ var listItems = {
 
 function del(itemDef) {
     var context = this;
-    return (0, _scalejs4.merge)(itemDef, {
+    return (0, _scalejs5.merge)(itemDef, {
         id: undefined,
         template: {
             name: 'list_del_template',
@@ -71,7 +69,7 @@ function deleteFlag(itemDef) {
     var context = this;
     // the id will be the propertu
     // getValue - return if it was deleted or not
-    return context.isNew ? del.call(context, itemDef) : (0, _scalejs4.merge)(context, {
+    return context.isNew ? del.call(context, itemDef) : (0, _scalejs5.merge)(context, {
         template: 'list_del_flag_template',
         getValue: function getValue() {
             return context.deleteFlag() ? "T" : "F";
@@ -142,7 +140,7 @@ function listViewModel(node) {
         rowContext.readonly = (0, _knockout.observable)(readonly());
 
         // rowReadonly - string to run thrown expression parser to show/hide rows
-        if ((0, _scalejs4.is)(options.rowReadonly, 'string')) {
+        if ((0, _scalejs5.is)(options.rowReadonly, 'string')) {
             rowReadonly = (0, _knockout.computed)(function () {
                 if (rowContext.readonly && rowContext.readonly()) {
                     return true; //if readonly is true on context, then row is readonly
@@ -192,13 +190,13 @@ function listViewModel(node) {
             }
 
             // if the item doesnt have getValue, return itself
-            if ((0, _scalejs4.has)(item)) {
+            if ((0, _scalejs5.has)(item)) {
                 return (0, _knockout.unwrap)(item);
             }
 
             var prop = rowContext[id];
 
-            if ((0, _scalejs4.has)(prop)) {
+            if ((0, _scalejs5.has)(prop)) {
                 return (0, _knockout.unwrap)(prop);
             }
 
@@ -211,7 +209,7 @@ function listViewModel(node) {
             // add readonly computed to the item before passing it to input
             // input will use the already defined observable if it exists
             // but, if the input already has readonly set on it, dont get readonly from row..
-            if (rowReadonly && item.input && !(0, _scalejs4.has)(item.input.readonly)) {
+            if (rowReadonly && item.input && !(0, _scalejs5.has)(item.input.readonly)) {
                 item.input.readonly = rowReadonly;
             }
 
@@ -255,12 +253,12 @@ function listViewModel(node) {
         // also add each item's inputValue directly on the row
         // this is for MemberExpressions to work properly (list[0].Status)
         itemDictionary(itemViewModels.reduce(function (dict, item) {
-            if ((0, _scalejs4.has)(item.id)) {
+            if ((0, _scalejs5.has)(item.id)) {
                 dict[item.id] = item;
                 row[item.id] = item.inputValue;
             }
             return dict;
-        }, (0, _scalejs4.merge)(initialValues || {}))); // just in case some data doesnt have a column, keep it in the item dict
+        }, (0, _scalejs5.merge)(initialValues || {}))); // just in case some data doesnt have a column, keep it in the item dict
 
         // TODO: ItemDict or Row? which one is better?
         // rowVM
@@ -330,7 +328,7 @@ function listViewModel(node) {
 
                 if (item.getValue) {
                     dataObj[item.id] = item.getValue();
-                } else if ((0, _scalejs4.has)(item) && item.type !== 'DELETE') {
+                } else if ((0, _scalejs5.has)(item) && item.type !== 'DELETE') {
                     dataObj[itemKey] = item;
                 }
                 return dataObj;
@@ -361,7 +359,7 @@ function listViewModel(node) {
 
             //if trackDiffChanges set to true store the original data to noticeboard
             if (node.trackDiffChanges) {
-                noticeboard.set(node.id, data());
+                _scalejs4.default.set(node.id, data());
             }
         } else {
             for (var i = 0; i < minRequiredRows; i++) {
@@ -452,7 +450,7 @@ function listViewModel(node) {
         };
     }
 
-    return (0, _scalejs4.merge)(node, {
+    return (0, _scalejs5.merge)(node, {
         add: add,
         rows: node.infinite ? visibleRows : rows,
         allRows: rows,

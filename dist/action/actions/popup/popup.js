@@ -106,8 +106,8 @@ function init() {
         popupDiv = document.createElement('div');
         popupDiv.setAttributeNode(att);
         document.body.insertBefore(popupDiv, document.body.lastChild.nextSibling);
+        _knockout2.default.applyBindings({ popupRoot: popupRoot }, popupDiv);
     }
-    _knockout2.default.applyBindings({ popupRoot: popupRoot }, popupDiv);
 }
 
 (0, _scalejs.registerBindings)(_popupBindings2.default);

@@ -43,14 +43,14 @@ exports.default = function (node) {
                     return obj;
                 }, {});
             }
-            noticeboard.setValue(storeKey, value);
+            _scalejs2.default.setValue(storeKey, value);
         });
     }
     fetchData(); //initial call
 
     if (node.id) {
         //setup refresh receiver if store has id
-        subs.push((0, _scalejs2.receive)(node.id + '.refresh', function () {
+        subs.push((0, _scalejs3.receive)(node.id + '.refresh', function () {
             fetchData();
         }));
     }
@@ -66,17 +66,15 @@ exports.default = function (node) {
 
 var _scalejs = require('scalejs.noticeboard');
 
-var noticeboard = _interopRequireWildcard(_scalejs);
+var _scalejs2 = _interopRequireDefault(_scalejs);
 
 var _dataservice = require('dataservice');
 
 var _dataservice2 = _interopRequireDefault(_dataservice);
 
-var _scalejs2 = require('scalejs.messagebus');
+var _scalejs3 = require('scalejs.messagebus');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 ;
 
