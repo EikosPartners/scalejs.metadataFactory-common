@@ -79,9 +79,10 @@ function init() {
         att.value = 'render: popupRoot';
         popupDiv = document.createElement('div');
         popupDiv.setAttributeNode(att);
-        document.body.insertBefore(popupDiv, document.body.lastChild.nextSibling)
+        document.body.insertBefore(popupDiv, document.body.lastChild.nextSibling);
+        ko.applyBindings({popupRoot}, popupDiv);
     }
-    ko.applyBindings({popupRoot}, popupDiv);
+    
 }
 
 registerBindings(popupBindings);
