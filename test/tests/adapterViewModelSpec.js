@@ -43,7 +43,8 @@ describe('adapterViewModel test', function () {
             adapter: adapterViewModel,
             test_input(node) {
                 let value = ko.observable(),
-                    error = ko.observable(true);
+                    error = ko.observable(true),
+                    context = this;
 
                 // using subscribe pattern
                 if (this.data && this.data.subscribe) {
@@ -53,6 +54,7 @@ describe('adapterViewModel test', function () {
                 }
 
                 return _.merge(node, {
+                    context,
                     getValue() {
                         return value();
                     },
@@ -101,7 +103,7 @@ describe('adapterViewModel test', function () {
     });
 
     it('fetches data from a single dataSourceEndpoint', function (done) {
-        let testJson = _.merge(node, {
+        let testJson = _.merge({}, node, {
             "dataSourceEndpoint": {
                 "uri": "adapter"
             }
@@ -120,7 +122,7 @@ describe('adapterViewModel test', function () {
     });
 
     it('fetches data from an array of dataSourceEndpoints', function (done) {
-        let testJson = _.merge(node, {
+        let testJson = _.merge({}, node, {
             "dataSourceEndpoint": [
                 {
                     "uri": "adapter_a",
@@ -151,8 +153,6 @@ describe('adapterViewModel test', function () {
             });
     });
 
-    it('[TODO] updates children with data');
-
     it('tracks data changes from its children', function (done) {
         let children = ko.unwrap(adapter.mappedChildNodes);
         children[0].setValue('Test');
@@ -167,11 +167,36 @@ describe('adapterViewModel test', function () {
         done();
     });
 
-    it('can lazily load children when data returns');
+    it('can lazily load children when data returns', function (done) {
+        let testJson = _.merge({}, node, {
+            "lazy": true,
+            "dataSourceEndpoint": [
+                {
+                    "uri": "adapter_a",
+                    "keyMap": {
+                        "resultsKey": "result",
+                        "dataKey": "A"
+                    }
+                },
+                {
+                    "uri": "adapter_b",
+                    "keyMap": {
+                        "resultsKey": "result",
+                        "dataKey": "B"
+                    }
+                }
+            ]
+        });
+
+        let testAdapter = createViewModel(testJson);
+        expect(testAdapter.mappedChildNodes().length).to.equal(0);
+        testAdapter.dispose();
+        done();
+    });
 
     it('can be refreshed from an event', function (done) {
 
-        let testJson = _.merge(node, {
+        let testJson = _.merge({}, node, {
             "dataSourceEndpoint": {
                 "uri": "adapter"
             }
@@ -205,5 +230,13 @@ describe('adapterViewModel test', function () {
 
     });
 
-    it('[TODO] properly disposes of subscriptions');
+    it('properly disposes of subscriptions');
+
+    it('adapter getValue returns correct value of child', function (done) {
+      let children = ko.unwrap(adapter.mappedChildNodes);
+      children[0].setValue('Test');
+
+      expect(children[0].context.getValue('A')).to.equal('Test');
+      done();
+    });
 });
