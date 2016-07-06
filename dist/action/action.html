@@ -1,15 +1,8 @@
 <div id="action_template">
-    <div data-bind="css: $data.classes, visible:isShown, clickOff: function () { options.dropdown && options.dropdown.showDropdown && options.dropdown.showDropdown(false) }" class="action-button-wrapper">
+    <div data-bind="css: $data.classes, visible:isShown" class="action-button-wrapper">
         <button data-class="action-button">
             <span data-bind="text: text"></span>
         </button>
-        <!-- ko if: actionType === 'dropdown' -->
-        <div class="drop-menu" data-bind="visible: options.dropdown.showDropdown, foreach: options.dropdown.items">
-            <!-- ko if: rendered -->
-                <a class="drop-menu-option" data-bind="click: function() { action(); $parent.options.dropdown.showDropdown(false); }, text: text"></a>
-            <!-- /ko -->
-        </div>
-        <!-- /ko -->
     </div>
 </div>
 

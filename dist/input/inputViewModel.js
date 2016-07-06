@@ -160,14 +160,14 @@ function inputViewModel(node) {
         }
     }
 
-    function update(data) {
-        if (data.hasOwnProperty('value')) {
-            setValue(data.value);
-        }
-        if (data.hasOwnProperty('ErrorMessage')) {
-            customError(data.ErrorMessage);
-        }
-    }
+    // function update(data) {
+    //     if (data.hasOwnProperty('value')) {
+    //         setValue(data.value);
+    //     }
+    //     if (data.hasOwnProperty('ErrorMessage')) {
+    //         customError(data.ErrorMessage);
+    //     }
+    // }
 
     function validate() {
         console.error('Relying on "this" for rendered in validate. REFACTOR');
@@ -349,35 +349,35 @@ function inputViewModel(node) {
     }
 
     // Is this needed in the common? Should it be a plugin/mixin?
-    if (options.registered) {
-        registeredAction = _scalejs.createViewModel.call(this, {
-            type: 'action',
-            actionType: 'ajax',
-            options: (0, _scalejs3.merge)(options.registered, { data: {} })
-        });
+    // if (options.registered) {
+    //     registeredAction = createViewModel.call(this, {
+    //         type: 'action',
+    //         actionType: 'ajax',
+    //         options: merge(options.registered, { data: {} })
+    //     });
 
-        inputValue.subscribe(function (newValue) {
-            registeredAction.options.data[node.id] = newValue; //our own sub gets called before context is updated
-            if (newValue !== '') {
-                registeredAction.action({
-                    callback: function callback(error, data) {
-                        Object.keys(data).forEach(function (key) {
-                            if (!context.dictionary && !context.data) {
-                                console.warn('Using a registered input when no data/dictionary available in context', node);
-                                return;
-                            }
-                            var node = context.dictionary && context.dictionary()[key];
-                            if (node && node.update) {
-                                node.update(data[key]);
-                            } else if (context.data && (0, _scalejs3.has)(data[key], 'value')) {
-                                context.data()[key] = data[key].value;
-                            }
-                        });
-                    }
-                });
-            }
-        });
-    }
+    //     inputValue.subscribe(function (newValue) {
+    //         registeredAction.options.data[node.id] = newValue; //our own sub gets called before context is updated
+    //         if (newValue !== '') {
+    //             registeredAction.action({
+    //                 callback: (error, data) => {
+    //                     Object.keys(data).forEach((key) => {
+    //                         if (!context.dictionary && !context.data) {
+    //                             console.warn('Using a registered input when no data/dictionary available in context', node);
+    //                             return;
+    //                         }
+    //                         var node = context.dictionary && context.dictionary()[key];
+    //                         if (node && node.update) {
+    //                             node.update(data[key]);
+    //                         } else if (context.data && has(data[key], 'value')) {
+    //                             context.data()[key] = data[key].value;
+    //                         }
+    //                     });
+    //                 }
+    //             });
+    //         }
+    //     });
+    // }
 
     // TODO: Clean up validation Code
     // add validations to the inputvalue
@@ -467,7 +467,7 @@ function inputViewModel(node) {
         shake: shake,
         options: options,
         setValue: setValue,
-        update: update,
+        // update,
         context: this,
         error: inputValue.error,
 

@@ -1,0 +1,115 @@
+//fonts
+$font-medium: 'Arial', sans-serif;
+$font-light: 'Arial', sans-serif;
+
+//z-index
+
+//colors
+$error-red: #CE0000;
+$warning-orange: #E87400;
+$validated-green: green;
+$green: #A3A309;
+
+.validation-message-box {
+    border: 2px solid $error-red;
+    margin-bottom: 15px;
+    padding: 15px;
+
+    .fa-caret-down {
+        color: $error-red;
+        padding-right: 10px;
+    }
+    .validation-message-header {
+        font-family: $font-medium;
+        color: $error-red;
+        
+        .validation-header-text {
+            font-family: $font-medium;
+            font-size: 14px;
+        }
+    }
+    .validation-message {
+        font-size: 12px;
+        margin-top: 5px;
+        cursor: pointer;
+
+        &.error {
+            color: $error-red;
+        }
+        &.warning {
+            color: $warning-orange;
+        }
+        &.validated {
+            color: $validated-green;
+        }
+    }
+}
+
+    div.input-wrapper, .input-checkbox-wrapper { 
+        &:hover + span.validation-message {
+            display: inline-block;
+        }
+    }
+    span.validation-message.tooltip {
+        display: inline-block;
+    }
+
+    span.validation-message {
+        display: none;
+        float: left;
+        font-size: 12px;
+        color: white;
+        position: absolute;
+        height: auto;
+        width: 150px;
+        border-radius: 7px;
+        padding: 10px;
+        top: 60px;
+        z-index: 2;
+        margin-left: calc(100% - 210px);
+
+        &.tooltip {
+            background-color: $green;
+
+            &:before {
+                border-bottom:10px solid $green;
+            }
+        }
+
+        &.error {
+            background-color: $error-red;
+
+            &:before {
+                border-bottom:10px solid $error-red;
+            }
+        }
+
+        &.warning {
+            background-color: $warning-orange;
+
+            &:before {
+                border-bottom:10px solid $warning-orange;
+            }
+        }
+        
+        &.validated {
+            background-color: $validated-green;
+
+            &:before {
+                border-bottom:10px solid $validated-green;
+            }
+        }
+
+
+        &:before {
+            position: absolute;
+            content: "";
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            left: 75px;
+            top: -10px;
+        }
+    }
+

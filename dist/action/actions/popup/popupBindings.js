@@ -12,8 +12,13 @@ exports.default = {
 
         return {
             click: function click() {
-                hidePopup();
-                this.action();
+                if (!this.options.hideAfter) {
+                    hidePopup();
+                    this.action();
+                } else {
+                    this.action();
+                    hidePopup();
+                }
             },
             text: this.text,
             css: classes
