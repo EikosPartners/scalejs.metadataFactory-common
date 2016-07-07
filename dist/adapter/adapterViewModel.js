@@ -93,7 +93,8 @@ function adapterViewModel(node) {
         parentContext: this,
         getValue: getValue,
         dictionary: dictionary,
-        data: data
+        data: data,
+        id: node.id
     },
         mappedChildNodes = (0, _knockout.observableArray)(),
         updated = false,

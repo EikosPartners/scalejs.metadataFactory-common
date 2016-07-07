@@ -24,7 +24,7 @@ function validationsViewModel(node) {
         showValidationMessages = _knockout2.default.observable(true),
         context = this;
 
-    subs.push((0, _scalejs2.receive)(context.parentContext.metadata[0].id + '.validate', function (actionObj) {
+    subs.push((0, _scalejs2.receive)(context.id + '.validate', function (actionObj) {
         isInvalid = _validate(_.values(context.dictionary()));
         if (!isInvalid) {
             actionObj && actionObj.successCallback(actionObj.options);

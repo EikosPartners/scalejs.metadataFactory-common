@@ -1,0 +1,36 @@
+<div id="accordion_template">
+
+    <div data-bind="css: $data.classes, visible: isShown">
+    <!-- ko class: accordion-sections -->
+        <!-- ko if: $data.rendered -->
+        <header class="accordion-header fa" data-class="accordion-header">
+            <span class="header-text" data-class="accordion-header-text"></span>
+            <span class="error-text" data-class="accordion-header-error-text"></span>
+            <!-- ko template: { name: $data.header.headerTemplate || $parent.headerTemplate || "accordion_default_header_template", data: $data.header } -->
+            <!-- /ko -->
+    </header>
+    <section data-bind="slideVisible: visible,
+                        template: { name: 'metadata_item_template', data: $data }"
+             class="inner-accordion"></section>
+    <!-- /ko -->
+    <!-- /ko -->
+    </div>
+</div>
+
+<div id="accordion_info_header_template">
+    <span class="header-preview-bg">
+        <span class="header-preview-text" data-class="accordion-header-preview-text"></span>
+    </span>
+    <!-- ko if: $data.helpText -->
+        <i class="fa fa-info-circle info">
+            <div class="tool-tip" data-bind="text: $data.helpText"></div>
+        </i>
+    <!-- /ko -->
+</div>
+
+<div id="accordion_control_header_template">
+    <i class="fa fa-compress action" data-class="accordion-collapse-all">
+    </i>
+    <i class="fa fa-expand action" data-class="accordion-expand-all">
+    </i>
+</div>

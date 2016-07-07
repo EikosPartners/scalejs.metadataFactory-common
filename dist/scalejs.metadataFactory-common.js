@@ -1,5 +1,7 @@
 'use strict';
 
+require('./accordion/accordionModule');
+
 require('./action/actionModule');
 
 require('./adapter/adapterModule');
