@@ -15,18 +15,16 @@ _.merge(testData, adapter, store, setValue);
 function mockAjax(request, callback) {
     setTimeout(() => {
         if (request.uri) {
-             
-            if(request.uri === 'error-endpoint1'){
+
+            if(request.uri === 'error-endpoint'){
                 callback({Status: 'Error', message: 'Error'});
-            } else if(request.uri === 'error-endpoint'){
-                    callback('Error', { Status: 'ERROR' });
             } else if (get(request, 'options.type') === 'POST' || get(request, 'options.type') === 'PUT') {
                 callback(null, { Status: 'SUCCESS', Original: request.data });
             } else {
                 callback(null, testData[request.uri]);
             }
         } else {
-            callback({Status: 'Error', message: 'Error'}, { Status: 'ERROR' });
+            callback({Status: 'Error', message: 'Error'});
         }
     }, timeout);
 }

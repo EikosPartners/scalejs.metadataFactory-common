@@ -52,7 +52,7 @@ describe('storeViewModel test', function () {
             },
             "storeKey": "storeResultKeyError",
             "dataSourceEndpoint": {
-                "uri": "error-endpoint1"
+                "uri": "error-endpoint"
             }
         }),
             testStore = createViewModel(testJson),
@@ -71,7 +71,7 @@ describe('storeViewModel test', function () {
     });
     it('refresh the store', function (done) {
         let key = 'storeResult';
-        
+
         // take the content of the noticeboard, change the value
         noticeboard.setValue(key, undefined);
 
@@ -88,7 +88,7 @@ describe('storeViewModel test', function () {
         });
         // refresh the data and it should revert back to original values
         notify('store.refresh');
-        
+
 
     });
 
