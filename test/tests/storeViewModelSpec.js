@@ -1,6 +1,7 @@
 import noticeboard from 'scalejs.noticeboard';
 import storeViewModel from 'store/storeViewModel';
 import { registerViewModels, createViewModel, createViewModels } from 'scalejs.metadataFactory';
+import { notify } from 'scalejs.messagebus';
 import _ from 'lodash';
 import 'chai';
 
@@ -43,6 +44,52 @@ describe('storeViewModel test', function () {
                 subscription.dispose();
             }
         });
+    });
+    it('tests when there is an endpoint error', function (done) {
+        let testJson = _.merge(node, {
+            "keyMap": {
+                "resultsKey": "results"
+            },
+            "storeKey": "storeResultKeyError",
+            "dataSourceEndpoint": {
+                "uri": "error-endpoint"
+            }
+        }),
+            testStore = createViewModel(testJson),
+            subscription = noticeboard.subscribe('storeResultKeyError', function (value) {
+                if (value) {
+                    expect(value).to.deep.equal(
+                        { Status: 'Error', message: 'Error' }
+                    );
+                    subscription.dispose();
+                    testStore.dispose();
+                    done();
+
+                }
+            });
+
+    });
+    it('refresh the store', function (done) {
+        let key = 'storeResult';
+        
+        // take the content of the noticeboard, change the value
+        noticeboard.setValue(key, undefined);
+
+        let refreshSubscription = noticeboard.subscribe(key, function (value) {
+            if (value) {
+                expect(value).to.deep.equal({
+                    "A": "store_a",
+                    "B": "store_b"
+                });
+                refreshSubscription.dispose();
+                done();
+            }
+
+        });
+        // refresh the data and it should revert back to original values
+        notify('store.refresh');
+        
+
     });
 
     it('saves objects from endpoint with keymap', function (done) {
@@ -107,7 +154,7 @@ describe('storeViewModel test', function () {
                     testStore.dispose();
                     done();
                 }
-            });        
+            });
     });
 
     it('maps arrays to dictionaries with a resultsValueKey', function (done) {
@@ -137,7 +184,7 @@ describe('storeViewModel test', function () {
                     done();
                 }
             });
-        
+
     });
 
     it('maps and aggregates array values to dictionary', function (done) {
@@ -185,9 +232,9 @@ describe('storeViewModel test', function () {
                     done();
                 }
             });
-        
+
     });
-    
+
     it('returns early if storekey isnt specified', function (done) {
         // including this test for code coverage.
         let testJson = {

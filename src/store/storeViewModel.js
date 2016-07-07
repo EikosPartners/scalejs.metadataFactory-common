@@ -53,6 +53,7 @@ import { receive } from 'scalejs.messagebus';
             dataservice.ajax(dataSourceEndpoint, function (error, results) {
                 if (error) {
                     console.error('Error when retrieving data for node', node, error);
+                    noticeboard.setValue(storeKey, error);
                     return;
                 }
                 var value = keyMap.resultsKey ? results[keyMap.resultsKey] : results;
