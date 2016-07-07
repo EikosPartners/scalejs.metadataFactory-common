@@ -169,14 +169,6 @@ export default function inputViewModel(node) {
         setValue(newDate);
     }
 
-    function setDisabled(value) {
-        if (value === 'toggle') {
-            disabled(!disabled());
-            return;
-        }
-        disabled(value);
-    }
-
     function setReadonly(bool) {
         readonly(bool)
     }
@@ -405,7 +397,6 @@ export default function inputViewModel(node) {
         hover,
         datePlaceholder,
         assignDate,
-        setDisabled,
         isShown,
         required,
         readonly,

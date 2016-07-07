@@ -76,6 +76,24 @@ describe('inputViewModel test', function () {
 
     });
 
+    it('uses setReadonly to toggle input', function (done) {
+            const nodeSetReadOnly = {
+                "type": "input",
+                "inputType": "text",
+                "label": "Set Read Only"
+            };
+         
+         let setReadOnlyStub = createMetadataDomStub(nodeSetReadOnly);
+         let input = setReadOnlyStub.node.querySelector('input');
+
+         ko.dataFor(input).setReadonly(true);
+         expect(ko.dataFor(input).readonly()).equals(true);
+
+        setReadOnlyStub.dispose();
+        done();
+
+    });
+
     it('toggles inactive attributes on readonly updates', function(done) {
         let testNode = _.merge(node, {
             "options": {
@@ -146,7 +164,55 @@ describe('inputViewModel test', function () {
 
             let inputMaskStub = createMetadataDomStub(inputmaskNode);
             let input = inputMaskStub.node.querySelector('input');
-            console.log(inputMaskStub.data[0].options.pattern.mask);
+
+            expect(inputMaskStub.data[0].options.pattern.mask).equals('A{3}');
+            done();
+            inputMaskStub.dispose();
+
+        });
+    });
+
+    describe('inputViewModel tests getPattern function', function () {
+        it('gets and returns the pattern on an input', function(done) {
+
+            const getPatternNode = {
+                "type": "input",
+                "inputType": "text",
+                "label": "Get Pattern",
+                "options": {
+                    "pattern": true,
+                    "validations": {
+                        "pattern": {
+                            "params": "^[0-9]$"
+                        }
+                    }
+                }
+            };
+
+            let getPatternStub = createMetadataDomStub(getPatternNode);
+            let input = getPatternStub.node.querySelector('input');
+
+            expect(getPatternStub.data[0].pattern.alias).equals("Regex");
+
+            getPatternStub.dispose();
+            done();
+        
+        });
+
+        it('adds a pattern and input mask', function (done) {
+            let inputmaskNode = {
+                "type": "input",
+                "inputType": "text",
+                "label": "Input Mask",
+                "options": {
+                    "pattern": {
+                        "mask": "A{3}"
+                    }
+                }
+            }
+
+            let inputMaskStub = createMetadataDomStub(inputmaskNode);
+            let input = inputMaskStub.node.querySelector('input');
             expect(inputMaskStub.data[0].options.pattern.mask).equals('A{3}');
             done();
             inputMaskStub.dispose();
@@ -155,7 +221,7 @@ describe('inputViewModel test', function () {
     });
 
     describe('inputViewModel tests for select types', function () {
-        console.log("INSIDE SELECT");
+
         const nodeSelect = {
                     "type": "input",
                     "inputType": "select",
@@ -177,7 +243,7 @@ describe('inputViewModel test', function () {
 
         it('creates selectViewModel', function () {    
             let selectViewModel = createViewModel(nodeSelect);
-            console.log("select view model", selectViewModel);
+            // console.log("select view model", selectViewModel);
             // expect(selectViewModel).to.have.property('');
         });
 
@@ -203,20 +269,71 @@ describe('inputViewModel test', function () {
             const nodeDatePicker = {
                 "type": "input",
                 "inputType": "datepicker",
-                "label": "Date Picker"
+                "label": "Date Picker",
+                "options": {
+                    "minDate": "currentDate",
+                    "maxDate": "currentDate+3yr"
+                }
             }
+
 
             let testDomStubDP = createMetadataDomStub(nodeDatePicker);
             expect(testDomStubDP.data[0].inputType).equals('datepicker');
-            done();
             testDomStubDP.dispose();
+            done();
+        });
+        it('tests assigndate for datepicker types', function (done) {
+
+             const nodeDatePicker = {
+                "type": "input",
+                "inputType": "datepicker",
+                "label": "Date Picker",
+                "options": {
+                    "minDate": "currentDate",
+                    "maxDate": "currentDate+3yr"
+                }
+            };
+
+            let testDomStubDP = createMetadataDomStub(nodeDatePicker);
+            let input = testDomStubDP.node.querySelector('input');
+
+            ko.dataFor(input).assignDate("2016-03-01", {days: 14, months: 1});
+            expect(ko.dataFor(input).inputValue()).equals("2016-04-15");
+            testDomStubDP.dispose();
+            done();
+
+        });
+    });
+
+    describe('inputViewModel dateformatter function', function () {    
+        it.skip('tests dateformatter function', function (done) {
+
+             const nodeDateFormatter = {
+                "type": "input",
+                "inputType": "text",
+                "id": "Date Formatter",
+                "label": "Date Formatter",
+                "options": {
+                    "values": {
+                        "textFormatter": "dateFormatter"
+                    }
+                }
+            }
+
+            let input = createViewModel(nodeDateFormatter);
+            console.log("FORMATTER INPUT", input);
+            console.log("INPUT>FORMAT", input.format);
+            // console.log("INPUT FORMAT CALLED", input.format(09/09/9818));
+
+            expect(input.options.values.textFormatter).equals("dateFormatter");
+
+            done();
+
         });
     });
 
     describe('inputViewModel tests for autosize types', function () {
         it('test for autosize types', function (done) {
-
-            console.log("INPUT AUTOSIZE TEST");
 
             const autosizeNode = {
                 "type": "input",
@@ -286,13 +403,13 @@ describe('inputViewModel test', function () {
         });
     });
 
+
     describe('inputViewModel tests for autocomplete types', function () {
-        console.log("INSIDE AUTOCOMPLETE TEST");
+
         it('creates autocompleteViewModel', function () {    
             let autocompleteViewModel = createViewModel(_.merge(node, {
                 inputType: 'autocomplete'
             }));
-            console.log("autocomplete view model", autocompleteViewModel);
             expect(autocompleteViewModel).to.have.property('autocompleteSource');
         });
 
@@ -312,7 +429,7 @@ describe('inputViewModel test', function () {
                 }
 
             let testDomStubAuto = createMetadataDomStub(autoCompNode, 'container_new');
-            console.log("AUTOCOMPLETE", testDomStubAuto );
+            // console.log("AUTOCOMPLETE", testDomStubAuto );
 
             expect(testDomStubAuto.data[0].inputType).equals('autocomplete');
             expect(testDomStubAuto.data[0].autocompleteSource[0].equals('stressball'));
@@ -338,23 +455,65 @@ describe('inputViewModel test', function () {
              expect(input.error()).to.equal('invalid');
              done();
          });
-         it('tests the required validation', function (done) {
+
+         it('tests the required validation and error message', function (done) {
+             
              let newInput = createViewModel({
                  "type": "input",
+                 "label": "The Node",
                  "inputType": "text",
                  "options": {
                      "validations": {
                          "required": true
                      }
-                 }
-             });
+                  }
+                });
 
-             expect(newInput.options.validations.required).to.equal(true);
-             console.log("VALIDATION VIEW MODEL", newInput.validate());
+                let isValidated = newInput.validate();
+                expect(newInput.options.validations.required).to.equal(true);
+                expect(isValidated).to.equal(true);
+
+                // console.log("Validation INPUT", newInput);
+                // console.log("NEWINPUT VISISBlE MESSAGE", newInput.visibleMessage());
+                expect(newInput.visibleMessage().message).to.equal('The Node is invalid. This field is required.');
+
              done();
          });
 
      });
 
+    describe('inputViewModel tests for checkboxlist types', function () {
+            it('tests set checkbox list', function (done) {
+                console.log("INSIDE THE CHBXLIST");
+                    const checkboxListNode = {
+                        "type": "input",
+                        "inputType": "checkboxList",
+                        "template": "input_checkbox_group_template",
+                        "label": "CHECKBOXList",
+                        "id": "check box List",
+                        "options": {
+                            "values": [
+                                {
+                                    "text": "History",
+                                    "value": "History",
+                                    "checked": false
+                                }
+                            ]
+                        }
+                    }
+
+                let data = [1];
+
+                let setCHBXListStub = createViewModel(checkboxListNode);
+                setCHBXListStub.setValue(data);
+                console.log(setCHBXListStub.inputValue());
+                expect(setCHBXListStub.inputValue()[0]).equals(1);
+                done();
+                setCHBXListStub.dispose();
+            });
+        });
 
 });
+
+//dateformatter
+//valueexpression
