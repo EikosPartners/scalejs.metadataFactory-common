@@ -52,7 +52,7 @@ describe('storeViewModel test', function () {
             },
             "storeKey": "storeResultKeyError",
             "dataSourceEndpoint": {
-                "uri": "error-endpoint"
+                "uri": "error-endpoint1"
             }
         }),
             testStore = createViewModel(testJson),
