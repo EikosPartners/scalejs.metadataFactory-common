@@ -75,7 +75,8 @@ import { get } from 'scalejs';
                 parentContext: this,
                 getValue: getValue,
                 dictionary: dictionary,
-                data: data
+                data: data,
+                id: node.id
             },
             mappedChildNodes = observableArray(),
             updated = false,
