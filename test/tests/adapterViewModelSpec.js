@@ -239,4 +239,35 @@ describe('adapterViewModel test', function () {
       expect(children[0].context.getValue('A')).to.equal('Test');
       done();
     });
+
+    it('adapter getValue returns correct value of child before child is mapped', function (done) {
+      // adapterViewModel.js 170: how to test if getValue is only exposed on children, but children cannot be accessed if they are not mapped
+      // let testJson = _.merge({}, node, {
+      //     "lazy": true,
+      //     "dataSourceEndpoint": [
+      //         {
+      //             "uri": "adapter_a",
+      //             "keyMap": {
+      //                 "resultsKey": "result",
+      //                 "dataKey": "A"
+      //             }
+      //         },
+      //         {
+      //             "uri": "adapter_b",
+      //             "keyMap": {
+      //                 "resultsKey": "result",
+      //                 "dataKey": "B"
+      //             }
+      //         }
+      //     ]
+      // });
+      //
+      // let testAdapter = createViewModel(testJson);
+      // expect(testAdapter.mappedChildNodes().length).to.equal(0);
+      //
+      // let children = ko.unwrap(testAdapter.mappedChildNodes);
+      //
+      // expect(children[0].context.getValue('A')).to.equal('updated_a');
+      done();
+    });
 });

@@ -7,6 +7,7 @@ import _ from 'lodash';
 import 'chai';
 import 'input/inputModule';
 import inputViewModel from 'input/inputViewModel';
+import noticeboard from 'scalejs.noticeboard';
 
 
 
@@ -82,7 +83,7 @@ describe('inputViewModel test', function () {
                 "inputType": "text",
                 "label": "Set Read Only"
             };
-         
+
          let setReadOnlyStub = createMetadataDomStub(nodeSetReadOnly);
          let input = setReadOnlyStub.node.querySelector('input');
 
@@ -116,7 +117,7 @@ describe('inputViewModel test', function () {
     });
 
     it('has an inputType of text for the input', function (done) {
-            
+
             let input = domStub.node.querySelector('input'),
                 theInputType = ko.dataFor(input).inputType;
 
@@ -147,7 +148,7 @@ describe('inputViewModel test', function () {
             expect(newValue).equals("Cat");
             newDomStub.dispose();
             done();
-        
+
         });
 
         it('adds a pattern and input mask', function (done) {
@@ -196,7 +197,7 @@ describe('inputViewModel test', function () {
 
             getPatternStub.dispose();
             done();
-        
+
         });
 
         it('adds a pattern and input mask', function (done) {
@@ -241,24 +242,51 @@ describe('inputViewModel test', function () {
                     }
                 }
 
-        it('creates selectViewModel', function () {    
+        it('creates selectViewModel', function (done) {
             let selectViewModel = createViewModel(nodeSelect);
-            // console.log("select view model", selectViewModel);
-            // expect(selectViewModel).to.have.property('');
+            expect(selectViewModel).to.have.property('filterValues'); // selectViewModel adds 3 properties to inputViewModel one being filterValues
+            done();
         });
 
-
-
-        it.skip('has an inputType of select and has values in the dropdown', function (done) {
-        //why isn't select working?!?
-        //TESTs to make once select is working:
-        //looks for the values in the dropdown
-        //create select view model
+        it('has an inputType of select and has values in the dropdown', function (done) {
 
             let testStub = createMetadataDomStub(nodeSelect);
-            // expect(testStub.data[0].inputType).equals('select');
-            done();
+            expect(testStub.data[0].inputType).to.equal('select');
+
+            expect(testStub.data[0].values().length).to.equal(3);
+
             testStub.dispose();
+            done();
+        });
+
+        it('select setValue correctly sets inputValue', function (done) {
+
+            let selectViewModel = createViewModel(nodeSelect);
+            selectViewModel.setValue("Option 2");
+
+            expect(selectViewModel.inputValue()).to.equal('Option 2');
+
+            done();
+        });
+
+        it('select setValue adds value to options if not previously there', function (done) {
+
+            let selectViewModel = createViewModel(nodeSelect);
+            selectViewModel.setValue("Option 3");
+
+            let foundIndex = _.find(selectViewModel.values(), function (obj) {
+              return obj.value === "Option 3";
+            });
+
+            expect(foundIndex).to.not.equal(-1);
+
+            done();
+        });
+
+        it('sets values from option array provided', function (done) {
+          // should create adapter with select children
+          // potentially provide array into adapter or store
+          done();
         });
 
     });
@@ -305,7 +333,7 @@ describe('inputViewModel test', function () {
         });
     });
 
-    describe('inputViewModel dateformatter function', function () {    
+    describe('inputViewModel dateformatter function', function () {
         it.skip('tests dateformatter function', function (done) {
 
              const nodeDateFormatter = {
@@ -406,35 +434,91 @@ describe('inputViewModel test', function () {
 
     describe('inputViewModel tests for autocomplete types', function () {
 
-        it('creates autocompleteViewModel', function () {    
-            let autocompleteViewModel = createViewModel(_.merge(node, {
-                inputType: 'autocomplete'
-            }));
+        const autoCompNode = {
+          "id": "Autocomplete",
+          "type": "input",
+          "inputType": "autocomplete",
+          "template": "input_autocomplete_template",
+          "label": "Autocomplete"
+        }
+
+        it('creates autocompleteViewModel', function () {
+            let autocompleteJson = _.merge({}, autoCompNode,
+              {
+                  "autocompleteSource": [
+                      "stressball",
+                      "gumball",
+                      "hairball"
+                  ]
+              });
+
+            let autocompleteViewModel = createViewModel(autocompleteJson);
+
+            // what properties do we test here? all that are expected to be on viewmodel?
             expect(autocompleteViewModel).to.have.property('autocompleteSource');
+            expect(autocompleteViewModel).to.have.property('setReadonly');
+
         });
 
         it.skip('test for autocomplete types', function (done) {
-            const autoCompNode = {
-                  "id": "Autocomplete",
-                  "type": "input",
-                  "template": "input_autocomplete_template",
-                  "inputType": "autocomplete",
-                  "label": "Autocomplete",
-                  "autocompleteSource": [
-                        "stressball",
-                        "gumball",
-                        "hairball",
-                        "tossball"
-                    ]     
-                }
 
             let testDomStubAuto = createMetadataDomStub(autoCompNode, 'container_new');
             // console.log("AUTOCOMPLETE", testDomStubAuto );
 
             expect(testDomStubAuto.data[0].inputType).equals('autocomplete');
-            expect(testDomStubAuto.data[0].autocompleteSource[0].equals('stressball'));
+            expect(testDomStubAuto.data[0].autocompleteSource()[0].equals('stressball'));
             done();
         });
+
+        it('can get data from endpoint defined in node', function (done) {
+            let autocompleteJson = _.merge({}, autoCompNode,
+              {
+                  "dataSourceEndpoint": {
+                      "uri": "storeAggregateLookup"
+                  },
+                  "keyMap": {
+                      "dataKey": "lookup",
+                      "textKey": "key",
+                      "valueKey": "value"
+                  }
+              });
+
+            let autocompleteViewModel = createViewModel(autocompleteJson);
+
+            let subscription = autocompleteViewModel.autocompleteSource.subscribe((newVal) => {
+                expect(newVal.length).to.equal(4);
+                subscription.dispose();
+                done();
+            });
+        });
+
+        it('can source values from store', function (done) {
+            noticeboard.set("test", [
+              {
+                "key": "store_a",
+                "value": "store_b"
+              },
+              {
+                "key": "store_a_2",
+                "value": "store_b_2"
+              },
+              {
+                "key": "store_a_2",
+                "value": "new store_b_2"
+              }
+            ]);
+            let JSON = [
+              _.merge({}, autoCompNode, {
+                  "autocompleteSource": {
+                      "fromArray": "store.test"
+                  }
+              })
+            ];
+            let viewModels = createViewModels(JSON);
+            expect(viewModels[0].autocompleteSource()).to.equal("")
+            done();
+        })
+
     });
 
     describe('validation engine tests', function () {
@@ -457,7 +541,7 @@ describe('inputViewModel test', function () {
          });
 
          it('tests the required validation and error message', function (done) {
-             
+
              let newInput = createViewModel({
                  "type": "input",
                  "label": "The Node",
