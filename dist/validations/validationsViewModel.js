@@ -11,7 +11,7 @@ var _knockout2 = _interopRequireDefault(_knockout);
 
 var _scalejs = require('scalejs');
 
-var _scalejs2 = require('scalejs.messageBus');
+var _scalejs2 = require('scalejs.messagebus');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

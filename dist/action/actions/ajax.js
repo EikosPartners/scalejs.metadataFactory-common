@@ -10,6 +10,8 @@ var _dataservice = require('dataservice');
 
 var _dataservice2 = _interopRequireDefault(_dataservice);
 
+var _knockout = require('knockout');
+
 var _mustache = require('mustache');
 
 var _mustache2 = _interopRequireDefault(_mustache);
@@ -21,18 +23,20 @@ var _lodash2 = _interopRequireDefault(_lodash);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function ajax(options, args) {
-    var data = this.data && this.data(),
+    var context = this,
+        data = context.data && (0, _knockout.unwrap)(context.data),
         target = options.target,
         optionData = options.data || {},
         uri = _mustache2.default.render(options.target.uri, (0, _scalejs2.merge)(data, optionData)),
-        sendAllData = !target.data && !options.sendDataKeys && ((0, _scalejs2.get)(options, 'target.options.type') === 'POST' || (0, _scalejs2.get)(options, 'target.options.type') === 'PUT'),
         contextValue = void 0,
-        context = this,
         callback = args && args.callback,
         nextAction = void 0;
 
-    if (sendAllData) {
-        target.data = this.data();
+    if (target.data) {
+        //will skip rest of else if's if we have target.data
+        target.data = target.data;
+    } else if (options.sendDataFromKey) {
+        target.data = data[options.sendDataFromKey];
     } else if (Array.isArray(options.sendDataKeys)) {
         target.data = options.sendDataKeys.reduce(function (o, k) {
             var receiverKey = k,
@@ -58,17 +62,17 @@ function ajax(options, args) {
             o[receiverKey] = value;
             return o;
         }, {});
+    } else if ((0, _scalejs2.get)(options, 'target.options.type') === 'POST' || (0, _scalejs2.get)(options, 'target.options.type') === 'PUT') {
+        target.data = data;
     } else {
-        target.data = target.data || {};
+        target.data = {};
     }
 
     nextAction = function nextAction(error, results) {
         var opts = options ? _lodash2.default.cloneDeep(options) : {},
-            err = error ? results : null; // handle 200ok but still an error
+            err = error ? error : null;
 
         ((err ? opts.errorActions : opts.nextActions) || []).forEach(function (item) {
-            // ROB & DRAISY - overwrite the errorAction's message with message from server
-            // todo: revisit and refactor.
             if (err && opts.errorActions) {
                 opts.errorActions.forEach(function (errorAction) {
                     if (errorAction.options.message && error.message) {

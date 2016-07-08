@@ -28,7 +28,7 @@ function setValueViewModel(node) {
             node.setValue(data[node.id]); //pass as object with value key?
         }
         (_knockout2.default.unwrap(node.mappedChildNodes) || []).forEach(function (node) {
-            setValue(node, data, clear);
+            _setValue(node, data, clear);
         });
     }
 };

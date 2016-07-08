@@ -41,7 +41,6 @@ function autocompleteViewModel(node, inputViewModel) {
 
     // props
     autocompleteSource = (0, _knockout.observableArray)(),
-        mappedChildNodes = (0, _knockout.observableArray)(),
         sourceArray,
         validations,
         options = node.options || {},
@@ -49,58 +48,6 @@ function autocompleteViewModel(node, inputViewModel) {
         computedSource,
         itemMapper = mapItem(keyMap),
         objectValue;
-
-    function getValue() {
-        var item;
-        if (mappedChildNodes() && mappedChildNodes().length) {
-            //collect data from each node
-            //note: works well for multi input children..
-            return mappedChildNodes().reduce(function (obj, childNode) {
-                return (0, _scalejs3.merge)(obj, childNode.getValue && childNode.getValue());
-            }, {});
-        }
-        if (node.children) {
-            if ((0, _scalejs3.has)(inputValue()) && inputValue() !== '') {
-                item = _lodash2.default.find(autocompleteSource(), { value: inputValue() });
-                if (item) {
-                    return item.original;
-                }
-                return objectValue;
-                //console.warn('Cant find value: ' + inputValue() + ' in autocompleteSource in node', node);
-            } else {
-                return null;
-            }
-        }
-        //ret[keyMap.valueKey] = inputValue();
-        return inputValue();
-    }
-
-    function setValue(data) {
-        var value = (0, _scalejs3.is)(data, 'object') && (0, _scalejs3.has)(data.value) ? data.value : data,
-            d;
-        if ((0, _scalejs3.is)(value, 'object')) {
-            var label = (Array.isArray(keyMap.textKey) ? keyMap.textKey : [keyMap.textKey]).map(function (k) {
-                return value[k];
-            }).join(keyMap.delimiter || ' / ');
-            inputValue(label);
-
-            objectValue = value;
-
-            if (!value[options.autocompleteId] && !_lodash2.default.find(autocompleteSource(), { value: inputValue() })) {
-                mappedChildNodes(createViewModels(node.children));
-                // todo: Refacctor because assuming too much about children, not generic enough
-                mappedChildNodes().forEach(function (child) {
-                    child.mappedChildNodes.forEach(function (childNode) {
-                        if (childNode.setValue && childNode.id) {
-                            childNode.setValue(value[childNode.id]);
-                        }
-                    });
-                });
-            }
-            return;
-        }
-        inputValue(value);
-    }
 
     function mapAutocompleteSource(source) {
         return source.map(function (src) {
@@ -116,19 +63,6 @@ function autocompleteViewModel(node, inputViewModel) {
     }
 
     function getAutocompleteSource() {
-        var contextData,
-            contextDataObject = {};
-
-        if (dataSourceEndpoint.data && dataSourceEndpoint.data.fromContext) {
-            contextData = context.getValue(dataSourceEndpoint.data.fromContext);
-            if (contextData === '') {
-                autocompleteSource([]);
-                inputValue('');
-                return;
-            }
-            contextDataObject[dataSourceEndpoint.data.fromContext] = contextData;
-            dataSourceEndpoint.data = (0, _scalejs3.merge)(dataSourceEndpoint.data, contextDataObject);
-        }
         _dataservice2.default.ajax(dataSourceEndpoint, function (error, data) {
             if (error) {
                 console.error('Data retrieval failure', error);
@@ -175,40 +109,9 @@ function autocompleteViewModel(node, inputViewModel) {
         }
     }
 
-    function childSetReadonly(mappedNodes) {
-        var nodes = (0, _knockout.unwrap)(mappedNodes);
-        nodes.forEach(function (child) {
-            if (child.setReadonly) {
-                child.setReadonly(readonly());
-            } else if (child.mappedChildNodes) {
-                childSetReadonly(child.mappedChildNodes);
-            }
-        });
-    }
-
-    function setReadonly(bool) {
-        readonly(bool);
-        childSetReadonly(mappedChildNodes);
-    }
-
-    function validateChildNodes(childNodes) {
-        return (0, _knockout.unwrap)(childNodes).reduce(function (isInvalid, curr) {
-            if (curr.validate && typeof curr.validate === 'function') {
-                return curr.validate() || isInvalid;
-            } else {
-                return validateChildNodes(curr.mappedChildNodes || []) || isInvalid;
-            }
-        }, false);
-    }
-    // validates the input by setting isModified to true
-    // returns true if the input has an error
-    function validate() {
-        inputValue.isModified(true);
-        if (mappedChildNodes().length) {
-            return validateChildNodes(mappedChildNodes);
-        }
-        return !inputValue.isValid() && isShown() && this.rendered() && inputValue.severity() === 1;
-    }
+    // function setReadonly(bool) {
+    //     readonly(bool);
+    // }
 
     if (dataSourceEndpoint) {
         subs.push((0, _knockout.computed)(getAutocompleteSource));
@@ -274,33 +177,10 @@ function autocompleteViewModel(node, inputViewModel) {
         }).extend({ deferred: true });
     }
 
-    inputValue.subscribe(function (value) {
-        if (value === 'new' && node.children) {
-            var multi = createViewModels(node.children);
-            // todo - this is very hardcoded, fix
-            multi[0].isVisible(true);
-            multi[0].mappedChildNodes[0].hasFocus && multi[0].mappedChildNodes[0].hasFocus(true);
-            mappedChildNodes(multi);
-        }
-    });
-
-    if (node.children) {
-        subs.push((0, _knockout.computed)(function () {
-            if (mappedChildNodes().length) {
-                //todo - refactor this so that we arent making so many assumptions..?
-                inputValue(itemMapper(mappedChildNodes()[0].getValue()).value);
-            }
-        }));
-    }
-
     return {
         autocompleteSource: unique ? computedSource : autocompleteSource,
-        mappedChildNodes: mappedChildNodes,
-        getValue: node.children ? getValue : null,
-        setValue: node.children ? setValue : null,
         validations: validations,
-        validate: node.children ? validate : undefined,
-        setReadonly: setReadonly,
+        // setReadonly: setReadonly,
         dispose: function dispose() {
             if (unique) {
                 context.unique[node.id].remove(inputValue());

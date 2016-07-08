@@ -219,14 +219,6 @@ function inputViewModel(node) {
         setValue(newDate);
     }
 
-    function setDisabled(value) {
-        if (value === 'toggle') {
-            disabled(!disabled());
-            return;
-        }
-        disabled(value);
-    }
-
     function setReadonly(bool) {
         readonly(bool);
     }
@@ -456,7 +448,6 @@ function inputViewModel(node) {
         hover: hover,
         datePlaceholder: datePlaceholder,
         assignDate: assignDate,
-        setDisabled: setDisabled,
         isShown: isShown,
         required: required,
         readonly: readonly,

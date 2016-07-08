@@ -27,6 +27,7 @@ exports.default = function (node) {
         _dataservice2.default.ajax(dataSourceEndpoint, function (error, results) {
             if (error) {
                 console.error('Error when retrieving data for node', node, error);
+                _scalejs2.default.setValue(storeKey, error);
                 return;
             }
             var value = keyMap.resultsKey ? results[keyMap.resultsKey] : results;
