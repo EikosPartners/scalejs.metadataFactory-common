@@ -17,7 +17,7 @@ export default function setValueViewModel(node) {
             node.setValue(data[node.id]); //pass as object with value key?
         }
         (ko.unwrap(node.mappedChildNodes) || []).forEach(function (node) {
-            setValue(node, data, clear);
+            _setValue(node, data, clear);
         });
     }
 };

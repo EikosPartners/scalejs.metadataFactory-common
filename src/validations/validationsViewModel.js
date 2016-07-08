@@ -1,6 +1,6 @@
 import ko from 'knockout';
 import { merge } from 'scalejs';
-import { receive } from 'scalejs.messageBus';
+import { receive } from 'scalejs.messagebus';
 
 export default function validationsViewModel(node) {
     let unwrap = ko.unwrap,
