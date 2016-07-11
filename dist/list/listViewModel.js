@@ -104,7 +104,8 @@ function listViewModel(node) {
         unique = {},
         visibleRows = (0, _knockout.observableArray)(),
         scrolled,
-        initialData = _lodash2.default.cloneDeep(node.data) || [];
+        initialData = _lodash2.default.cloneDeep(node.data) || [],
+        addButtonRendered = (0, _scalejs5.is)(node.addButtonRendered, 'string') ? (0, _knockout.computed)(_scalejs2.evaluate.bind(null, node.addButtonRendered, context.getValue)) : (0, _knockout.observable)(node.addButtonRendered !== false);
 
     function setReadonly(bool) {
         readonly(bool); //sets readonly state of the list
@@ -463,7 +464,8 @@ function listViewModel(node) {
         readonly: readonly,
         deleteRows: deleteRows,
         lastRow: lastRow,
-        setReadonly: setReadonly
+        setReadonly: setReadonly,
+        addButtonRendered: addButtonRendered
     });
 };
 //# sourceMappingURL=listViewModel.js.map

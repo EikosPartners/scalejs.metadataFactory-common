@@ -33,6 +33,13 @@ define({
         return {
             click: ctx.$parents[1].add
         };
+    },
+    'list-add-rendered': function listAddRendered() {
+        var rendered = this.list.addButtonRendered;
+
+        return {
+            visible: rendered()
+        };
     }
 });
 //# sourceMappingURL=listBindings.js.map
