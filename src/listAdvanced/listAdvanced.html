@@ -1,7 +1,7 @@
 <div id="listAdvanced_template">
     <div data-class="classes-binding">
-        <header data-bind="if: !list.readonly()">
-            <div class="add">
+        <header>
+            <div class="add" data-class="list-add-rendered">
                 <button class="fa fa-icon-add" data-bind="click:  list.add.bind(null, null, true)">
                     <span class="button-text">Add</span>
                 </button>
@@ -94,7 +94,7 @@ therefore lots of work-arounds needed to be put in place for fixed header stylin
                 <!-- /ko -->
             </tbody>
         </table>
-        <div data-bind="if: !list.readonly()">
+        <div data-class="list-add-rendered">
             <button class="fa fa-icon-add" data-bind="click: list.add.bind(null, null)">
                 <span class="button-text">Add</span>
             </button>

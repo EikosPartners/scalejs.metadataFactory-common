@@ -86,7 +86,10 @@ import _ from 'lodash';
             unique = {},
             visibleRows = observableArray(),
             scrolled,
-            initialData = _.cloneDeep(node.data) || [];
+            initialData = _.cloneDeep(node.data) || [],
+            addButtonRendered = is(node.addButtonRendered, 'string') ? 
+                computed(evaluate.bind(null, node.addButtonRendered, context.getValue)) 
+                : observable(node.addButtonRendered !== false);
 
         function setReadonly (bool) {
           readonly(bool); //sets readonly state of the list
@@ -444,6 +447,7 @@ import _ from 'lodash';
             readonly: readonly,
             deleteRows: deleteRows,
             lastRow: lastRow,
-            setReadonly: setReadonly
+            setReadonly: setReadonly,
+            addButtonRendered: addButtonRendered
         });
     };
