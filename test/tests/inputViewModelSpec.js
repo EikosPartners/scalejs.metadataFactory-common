@@ -286,6 +286,100 @@ describe('inputViewModel test', function () {
         it('sets values from option array provided', function (done) {
           // should create adapter with select children
           // potentially provide array into adapter or store
+          noticeboard.set("test", [
+            {
+              "key": "store_a",
+              "value": "store_b"
+            },
+            {
+              "key": "store_a_2",
+              "value": "store_b_2"
+            },
+            {
+              "key": "store_a_2",
+              "value": "new store_b_2"
+            }
+          ]);
+
+          let selectJSON = _.assign({}, nodeSelect, {
+              "options": {
+                  "values": {
+                      "fromArray": "store.test",
+                      "textKey": "key",
+                      "valueKey": "value"
+                  }
+              }
+          });
+          let selectViewModel = createViewModels([selectJSON])[0];
+
+          expect(selectViewModel.values()).to.deep.equal([
+            {
+              "text": "",
+              "value": ""
+            },
+            {
+              "text": "store_a",
+              "value": "store_b",
+              "original": {
+                "key": "store_a",
+                "value": "store_b"
+              }
+            },
+            {
+              "text": "store_a_2",
+              "value": "store_b_2",
+              "original": {
+                "key": "store_a_2",
+                "value": "store_b_2"
+              }
+            },
+            {
+              "text": "store_a_2",
+              "value": "new store_b_2",
+              "original": {
+                "key": "store_a_2",
+                "value": "new store_b_2"
+              }
+            }
+          ]);
+
+          done();
+        });
+
+        it('filters values', function (done) {
+          noticeboard.set("test", [
+            {
+              "key": "store_a",
+              "value": "store_b"
+            },
+            {
+              "key": "store_a_2",
+              "value": "store_b_2"
+            }
+          ]);
+
+          let selectJSON = _.assign({}, nodeSelect, {
+              "options": {
+                  "values": {
+                      "fromArray": "store.test",
+                      "textKey": "key",
+                      "valueKey": "value"
+                  }
+              }
+          });
+          let selectViewModel = createViewModels([selectJSON])[0];
+          selectViewModel.filterValues(["store_b"])
+          expect(selectViewModel.values()).to.deep.equal([
+            {
+              "text": "store_a",
+              "value": "store_b",
+              "original": {
+                "key": "store_a",
+                "value": "store_b"
+              }
+            }
+          ]);
+
           done();
         });
 
