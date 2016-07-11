@@ -373,10 +373,10 @@ function listViewModel(node) {
     // or re-inits if data is empty or invalid
     function setValue(newData) {
         // reverse the data because adding now unshifts the rows.
-        if (Array.isArray(newData.value) && !options.push) {
-            newData.value.reverse();
+        if (Array.isArray(newData) && !options.push) {
+            newData.reverse();
         }
-        data(newData.value || initialData || []);
+        data(newData || initialData || []);
         initialize();
     }
 
@@ -397,7 +397,7 @@ function listViewModel(node) {
 
     // get data from data parent if exists
     if (context.data && !options.subscribeToData) {
-        console.warn('Please make sure you get the Data from form and setValue or set node.subscribeToData to true! Removing data-subscribe as a default', node);
+        console.warn('Please make sure you get the Data from setValue or set node.subscribeToData to true! Removing data-subscribe as a default', node);
     }
     if (options.subscribeToData && context.data) {
         if (context.data()[node.id]) {

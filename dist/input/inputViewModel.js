@@ -421,7 +421,10 @@ function inputViewModel(node) {
             return (0, _scalejs2.evaluate)(options.valueExpression, context.getValue);
         });
         setValue(computedValueExpression());
-        computedValueExpression.subscribe(setValue(value));
+        computedValueExpression.subscribe(function (value) {
+            setValue(value);
+        });
+
         subs.push(computedValueExpression);
     }
 
