@@ -495,28 +495,27 @@ describe('actionModule test', function () {
     });
 
     describe('popup action tests', function () {
-
+        const nodeOpen = {
+                    "type": "action",
+                    "actionType": "popup",
+                    "options": {
+                        "title": "Test Title"
+                    }
+                },
+                nodeClose = {
+                    "type": "action",
+                    "actionType": "closePopup",
+                    "text": "close"
+                };
         it('regiseter the popup and closePopup action', function () {
             expect(getRegisteredActions()).to.have.property('popup');
             expect(getRegisteredActions()).to.have.property('closePopup');
         });
 
         it('creates and closes the popup', function () {
-            const node = {
-                "type": "action",
-                "actionType": "popup",
-                "options": {
-                    "title": "Test Title",
-                    "message": "Test Popup"
-                }
-            },
-                node2 = {
-                    "type": "action",
-                    "actionType": "closePopup",
-                    "text": "close"
-                };
-            let action = createViewModel(node);
-            let closeAction = createViewModel(node2);
+
+            const action = createViewModel(merge({}, nodeOpen, {"options": { "message": "Test Message"}})),
+                  closeAction = createViewModel(nodeClose);
 
             //open the popup
             action.action();
@@ -528,29 +527,48 @@ describe('actionModule test', function () {
         });
 
         it('creates a popup with a data message and closes the popup', function () {
-            const node = {
-                "type": "action",
-                "actionType": "popup",
-                "options": {
-                    "title": "Test Title",
-                    "message": "Test {{message}}"
-                }
-            };
-
             let data = ko.observable({ message: "Message" });
-            let action = createViewModel.call({data}, node);
+            const action = createViewModel.call({data}, merge({}, nodeOpen, { "options": { "message": "Test {{message}}" } }));
+
             action.action();
             expect(document.querySelector('.popup-message').innerHTML).to.equal('Test Message');
         });
 
         it('creates a action popup and completes an event as an actions property', function (done) {
-            const node = {
-                "type": "action",
-                "actionType": "popup",
+            const action = createViewModel(merge({}, nodeOpen, {
+                    "options": {
+                        "template": "action_popup_template",
+                        "message": "Test Message",
+                        "actions": [
+                            {
+                                "type": "action",
+                                "actionType": "event",
+                                "options": {
+                                    "target": "actionsTest",
+                                    "params": {
+                                        "test": "passing test"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                })),
+                sub = receive('actionsTest', function (params) {
+                    expect(params.test).to.equal('passing test');
+                    sub.dispose();
+                    done();
+                });
+
+            action.action();
+            document.querySelector('.btn.btn-default-primary').click();
+        });
+
+        it('creates a action popup and completes an event as an actions property w/ hideAfter', function (done) {
+            const action = createViewModel(merge({}, nodeOpen, {
                 "options": {
                     "template": "action_popup_template",
-                    "title": "Test",
-                    "message": "Test",
+                    "message": "Test Message",
+                    "hideAfter": true,
                     "actions": [
                         {
                             "type": "action",
@@ -564,50 +582,11 @@ describe('actionModule test', function () {
                         }
                     ]
                 }
-            };
-
-            let action = createViewModel(node);
-
-            receive('actionsTest', function (params) {
+            })),
+            sub = receive('actionsTest', function (params) {
                 expect(params.test).to.equal('passing test');
+                sub.dispose();
                 done();
-                action = null;
-            });
-
-            action.action();
-            document.querySelector('.btn.btn-default-primary').click();
-        });
-
-        it('creates a action popup and completes an event as an actions property w/ hideAfter', function (done) {
-            const node = {
-                "type": "action",
-                "actionType": "popup",
-                "options": {
-                    "template": "action_popup_template",
-                    "title": "Test",
-                    "message": "Test",
-                    "hideAfter": true,
-                    "actions": [
-                        {
-                            "type": "action",
-                            "actionType": "event",
-                            "options": {
-                                "target": "actionsTest1",
-                                "params": {
-                                    "test": "passing test"
-                                }
-                            }
-                        }
-                    ]
-                }
-            };
-
-            let action = createViewModel(node);
-
-            receive('actionsTest1', function (params) {
-                expect(params.test).to.equal('passing test');
-                done();
-                action = null;
             });
 
             action.action();
