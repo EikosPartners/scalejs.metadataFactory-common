@@ -16,9 +16,19 @@ import 'action/actions/popup/popup';
 
 
 describe('actionModule test', function () {
-
     it('registers the action viewModel', function () {
         expect(getRegisteredTypes()).to.include('action');
+    });
+
+    it('creates an imporper action', function() {
+        const node = {
+                "type": "action",
+                "actionType": "deosntExist"
+             },
+             action = createViewModel(node);
+
+        action.action();
+        expect(getRegisteredTypes()).to.not.include('doesntExist');
     });
 
     describe('event action tests', function () {
@@ -133,8 +143,8 @@ describe('actionModule test', function () {
             testAction = createMetadataDomStub(action);
             expect(document.querySelector('.fa-foo')).to.not.equal(undefined);
             done();
-               
-    });
+
+        });
 
         it('event with immediate action', function (done){
             const sub = receive('eventTest', function(params) {
@@ -176,66 +186,69 @@ describe('actionModule test', function () {
     });
 
     describe('series action tests', function () {
+        const node = {
+            "type": "action",
+            "actionType": "series",
+            "options": {
+                "actions": [
+                    {
+                        "type": "action",
+                        "actionType": "event",
+                        "options": {
+                            "target": "seriesTest",
+                            "params": "success "
+                        }
+                    },
+                    {
+                        "type": "action",
+                        "actionType": "event",
+                        "options": {
+                            "target": "seriesTest1",
+                            "params": "success "
+                        }
+                    }
+                ]
+            }
+        };
 
         it('registers the series action', function () {
             expect(getRegisteredActions()).to.have.property('series');
         });
 
         it('series with 2 events', function (done) {
-            const node = {
-                    "type": "action",
-                    "actionType": "series",
-                    "options": {
-                        "actions": [
-                            {
-                                "type": "action",
-                                "actionType": "event",
-                                "options": {
-                                    "target": "series.response",
-                                    "params": "success "
-                                }
-                            },
-                            {
-                                "type": "action",
-                                "actionType": "event",
-                                "options": {
-                                    "target": "series.response1",
-                                    "params": "success "
-                                }
-                            }
-                        ]
-                    }
-                },
-                action = createViewModel(node);
+            const action = createViewModel(node);
+            let subs = [];
 
-            receive('series.response', function (params) {
+            subs.push(receive('seriesTest', function (params) {
                 expect(params).to.equal('success ');
-            });
+                subs[0].dispose();
+            }));
 
-            receive('series.response1', function (params) {
+            subs.push(receive('seriesTest1', function (params) {
                 expect(params).to.equal('success ');
+                subs[1].dispose();
                 done();
-            });
+            }));
 
             action.action();
         });
     });
 
     describe('route action tests', function () {
+        const node = {
+            "type": "action",
+            "actionType": "route",
+            "options": {
+                "target": "routeTest",
+            }
+        };
 
         it('registers the route action', function () {
             expect(getRegisteredActions()).to.have.property('route');
         });
 
         it('sets route', function () {
-            const node = {
-                    "type": "action",
-                    "actionType": "route",
-                    "options": {
-                        "target": "routeTest",
-                    }
-                },
-            	action = createViewModel(node);
+            const action = createViewModel(node);
 
             action.action();
             expect(getCurrent().url).to.equal('routeTest');
@@ -243,20 +256,16 @@ describe('actionModule test', function () {
         });
 
         it('sets route with params and data', function () {
-            const node = {
-                    "type": "action",
-                    "actionType": "route",
-                    "options": {
-                        "target": "routeTest",
-                        "params": {
-                            "uniqueId": "{{id}}"
-                        },
-                        "data": {
-                            "id": "test"
-                        }
+            const action = createViewModel(merge(node,{
+                "options": {
+                    "params": {
+                        "uniqueId": "{{id}}"
+                    },
+                    "data": {
+                        "id": "test"
                     }
-                },
-                action = createViewModel(node);
+                }
+            }));
 
             action.action();
             expect(getCurrent().url).to.equal('routeTest/?uniqueId=test');

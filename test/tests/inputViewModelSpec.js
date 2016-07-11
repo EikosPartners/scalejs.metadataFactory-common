@@ -492,7 +492,7 @@ describe('inputViewModel test', function () {
             });
         });
 
-        it('can source values from store', function (done) {
+        it.skip('can source values from store', function (done) {
             noticeboard.set("test", [
               {
                 "key": "store_a",
