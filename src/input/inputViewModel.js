@@ -34,7 +34,7 @@ export default function inputViewModel(node) {
         // 2-way binding with state of focus
         hasFocus = observable(),
 
-        // 1-way binding with state of hover            
+        // 1-way binding with state of hover
         hover = observable(),
 
         // validations
@@ -58,7 +58,7 @@ export default function inputViewModel(node) {
             return placeholder;
         }),
 
-        // custom setValue functions for input types                        
+        // custom setValue functions for input types
         setValueFuncs = {
             checkboxList: setCheckboxListValue
         },
@@ -97,7 +97,7 @@ export default function inputViewModel(node) {
     function setValue(data) {
         var value = is(data, 'object') ? data.value : data,  // TODO: Refactor - should only accept "value", not "data".
             wasModifed = inputValue.isModified();
-           
+
          // uses setValueFunc if defined, else updates inputValue
         if (setValueFuncs[node.inputType]) {
             setValueFuncs[node.inputType](data);
@@ -217,8 +217,8 @@ export default function inputViewModel(node) {
             let override = observable();
             return computed({
                 read: function () {
-                    return has(override()) ? 
-                        override() 
+                    return has(override()) ?
+                        override()
                         : evaluate(readonlyParam, context.getValue);
                 },
                 write: function (value) {
@@ -240,14 +240,14 @@ export default function inputViewModel(node) {
         var textKey = Array.isArray(mapper.textKey) ? mapper.textKey : [mapper.textKey],
             valueKey = Array.isArray(mapper.valueKey) ? mapper.valueKey : [mapper.valueKey],
             textFormatter = formatters[mapper.textFormatter] || _.identity,
-            delimeter = mapper.delimeter || ' / ';
+            delimiter = mapper.delimeter || ' / ';
 
         return function (val) {
             return {
                 text: textFormatter(
-                    textKey.map((k) => { val[k]; }).join(delimiter)
+                    textKey.map((k) => { return val[k]; }).join(delimiter)
                 ),
-                value: valueKey.map((k) => { return val[k]; }).join(delimeter),
+                value: valueKey.map((k) => { return val[k]; }).join(delimiter),
                 original: val
             }
         }
@@ -317,7 +317,7 @@ export default function inputViewModel(node) {
     //     });
     // }
 
-    // TODO: Clean up validation Code 
+    // TODO: Clean up validation Code
     // add validations to the inputvalue
     validations = merge(_.cloneDeep(options.validations), { customError: customError });
     if (validations.expression) {
@@ -329,11 +329,11 @@ export default function inputViewModel(node) {
         ]
     }
 
-    if (options.unique && node.inputType !== 'autocomplete') {            
+    if (options.unique && node.inputType !== 'autocomplete') {
         inputValue.subscribe(function (oldValue) {
             context.unique[node.id].remove(oldValue);
         }, null, 'beforeChange');
-            
+
         inputValue.subscribe(function (newValue) {
             if(context.deleteFlag && context.deleteFlag()) { return; }
             context.unique[node.id].push(newValue);
@@ -411,7 +411,7 @@ export default function inputViewModel(node) {
         context: this,
         error: inputValue.error,
 
-        // Mixin-Overrides        
+        // Mixin-Overrides
         getValue: viewmodel.getValue || getValue,
         values: viewmodel.values || values,
         setReadonly: viewmodel.setReadonly || setReadonly,
@@ -424,7 +424,7 @@ export default function inputViewModel(node) {
             (subs || []).forEach(function (sub) {
                 sub.dispose && sub.dispose();
             });
-            
+
             if (options.unique) {
                 context.unique[node.id].remove(inputValue());
             }
@@ -435,7 +435,7 @@ export default function inputViewModel(node) {
 
 
     // implements an input of type
-    // text, select, date, radio, checkbox, checkboxList   
+    // text, select, date, radio, checkbox, checkboxList
 
     //TODO: Refactor Session
     //- createJSDocs

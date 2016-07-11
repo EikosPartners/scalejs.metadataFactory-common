@@ -511,13 +511,43 @@ describe('inputViewModel test', function () {
               _.merge({}, autoCompNode, {
                   "autocompleteSource": {
                       "fromArray": "store.test"
+                  },
+                  "keyMap": {
+                      "dataKey": "test",
+                      "textKey": "key",
+                      "valueKey": "value"
                   }
               })
             ];
             let viewModels = createViewModels(JSON);
-            expect(viewModels[0].autocompleteSource()).to.equal("")
+            expect(viewModels[0].autocompleteSource()).to.deep.equal([
+              {
+                "label": "store_a",
+                "value": "store_b",
+                "original": {
+                  "key": "store_a",
+                  "value": "store_b"
+                }
+              },
+              {
+                "label": "store_a_2",
+                "value": "store_b_2",
+                "original": {
+                  "key": "store_a_2",
+                  "value": "store_b_2"
+                }
+              },
+              {
+                "label": "store_a_2",
+                "value": "new store_b_2",
+                "original": {
+                  "key": "store_a_2",
+                  "value": "new store_b_2"
+                }
+              }
+            ]);
             done();
-        })
+        });
 
     });
 
