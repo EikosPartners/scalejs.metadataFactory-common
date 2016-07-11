@@ -2,7 +2,7 @@ import { getRegisteredTypes, registerViewModels, createViewModel, createViewMode
 import { getCurrent, setRoute } from 'scalejs.navigation';
 import { createMetadataDomStub } from 'utils';
 import { receive } from 'scalejs.messagebus';
-import { merge } from 'scalejs';
+import { merge } from 'lodash';
 import ko from 'knockout';
 import 'chai';
 
@@ -57,7 +57,7 @@ describe('actionModule test', function () {
         });
 
         it('event with params', function (done) {
-            const action = createViewModel(merge(node, {
+            const action = createViewModel(merge({}, node, {
                 "options": {
                     "params": {
                         "test": "passing test"
@@ -75,7 +75,7 @@ describe('actionModule test', function () {
         });
 
         it('event with paramsKey', function (done) {
-            const action = createViewModel(merge(node, {
+            const action = createViewModel(merge({}, node, {
                 "options": {
                     "paramsKey": "foo",
                     "foo": {
@@ -94,7 +94,7 @@ describe('actionModule test', function () {
         });
 
         it('event with both params and paramsKey', function (done) {
-            const action = createViewModel(merge(node, {
+            const action = createViewModel(merge({}, node, {
                 "options": {
                     "paramsKey": "foo",
                     "params": {
@@ -117,7 +117,7 @@ describe('actionModule test', function () {
         });
 
         it('event with button click', function (done){
-            const action = merge(node, {
+            const action = merge({}, node, {
                 "icon": "foo",
                 "options": {
                     "params": {
@@ -137,7 +137,7 @@ describe('actionModule test', function () {
         });
 
         it('create action button with icon', function (done){
-            const action = merge(node, {
+            const action = merge({}, node, {
                 "icon": "foo"
             }),
             testAction = createMetadataDomStub(action);
@@ -152,7 +152,7 @@ describe('actionModule test', function () {
                 sub.dispose();
                 done();
             }),
-            action = createViewModel(merge(node, {
+            action = createViewModel(merge({}, node, {
                 "immediate": true,
                 "options": {
                     "params": {
@@ -163,7 +163,7 @@ describe('actionModule test', function () {
         });
 
         it('event with validate', function(done){
-            const action = createViewModel(merge(node, {
+            const action = createViewModel(merge({}, node, {
                 "validate": "eventValidate",
                 "options": {
                     "params": {
@@ -256,7 +256,7 @@ describe('actionModule test', function () {
         });
 
         it('sets route with params and data', function () {
-            const action = createViewModel(merge(node,{
+            const action = createViewModel(merge({}, node, {
                 "options": {
                     "params": {
                         "uniqueId": "{{id}}"
@@ -274,296 +274,224 @@ describe('actionModule test', function () {
     });
 
     describe('ajax action tests', function () {
+        const nodeGET = {
+            "type": "action",
+            "actionType": "ajax",
+            "options": {
+                "target": {
+                    "uri": "store",
+                    "options": {
+                        "type": "get"
+                    }
+                },
+                "nextActions": [
+                    {
+                        "type": "action",
+                        "actionType": "event",
+                        "options": {
+                            "target": "ajaxTest",
+                            "params": "success"
+                        }
+                    }
+                ],
+                "errorActions": [
+                    {
+                        "type": "action",
+                        "actionType": "event",
+                        "options": {
+                            "target": "ajaxTestError",
+                            "params": "failure"
+                        }
+                    }
+                ]
+            }
+        },
+        nodePOST = {
+            "type": "action",
+            "actionType": "ajax",
+            "options": {
+                "target": {
+                    "uri": "test",
+                    "options": {
+                        "type": "POST"
+                    }
+                }
+            }
+        };
 
         it('registers the ajax action', function () {
             expect(getRegisteredActions()).to.have.property('ajax');
         });
 
         it('creates a get ajax action', function (done) {
-            const node = {
-                "type": "action",
-                "actionType": "ajax",
-                "options": {
-                    "target": {
-                        "uri": "store",
-                        "options": {
-                            "type": "get"
-                        }
-                    },
-                    "nextActions": [
-                        {
-                            "type": "action",
-                            "actionType": "event",
-                            "options": {
-                                "target": "ajax.response",
-                                "params": "success"
-                            }
-                        }
-                    ],
-                    "errorActions": [
-                        {
-                            "type": "action",
-                            "actionType": "event",
-                            "options": {
-                                "target": "ajax.response",
-                                "params": "failure"
-                            }
-                        }
-                    ]
-                }
-            };
-
-            let action = createViewModel.call({}, node);
-
-            receive('ajax.response', function (params) {
-                expect(params).to.equal('success');
-                done();
-                action = null;
-            });
+            const action = createViewModel.call({}, nodeGET),
+                  sub = receive('ajaxTest', function (params) {
+                    expect(params).to.equal('success');
+                    sub.dispose();
+                    done();
+                });
             action.action();
         });
 
         it('creates an ajax get action and fails', function (done) {
-            const node = {
-                "type": "action",
-                "actionType": "ajax",
-                "options": {
-                    "target": {
-                        "uri": "",
-                        "options": {
-                            "type": "get"
+            const action = createViewModel.call({}, merge({}, nodeGET, {
+                    "options": {
+                        "target": {
+                            "uri": ""
                         }
-                    },
-                    "nextActions": [
-                        {
-                            "type": "action",
-                            "actionType": "event",
-                            "options": {
-                                "target": "ajax.response1",
-                                "params": "success"
-                            }
-                        }
-                    ],
-                    "errorActions": [
-                        {
-                            "type": "action",
-                            "actionType": "event",
-                            "options": {
-                                "message": "error",
-                                "target": "ajax.response1",
-                                "params": "failure"
-                            }
-                        }
-                    ]
-                }
-            };
-
-            let action = createViewModel.call({}, node);
-
-            receive('ajax.response1', function (params) {
-                expect(params).to.equal('failure');
-                done();
-                action = null;
-            });
+                    }
+                 })),
+                 sub = receive('ajaxTestError', function (params) {
+                    expect(params).to.equal('failure');
+                    sub.dispose();
+                    done();
+                 });
             action.action();
         });
 
         it('creates an ajax post action', function (done) {
-            const node = {
-                "type": "action",
-                "actionType": "ajax",
-                "options": {
-                    "target": {
-                        "uri": "test",
-                        "options": {
-                            "type": "POST"
-                        },
-                        "data": {
-                            "test": "test",
-                            "test1": "test1"
-                        }
-                    },
-                    "nextActions": [
-                        {
-                            "type": "action",
-                            "actionType": "event",
-                            "options": {
-                                "target": "ajax.response2",
-                                "paramsKey": "results"
+            const action = createViewModel.call({}, merge({}, nodePOST, {
+                 "options": {
+                        "target": {
+                            "data": {
+                                "test": "test",
+                                "test1": "test1"
                             }
-                        }
-                    ]
-                }
-            };
-
-            receive('ajax.response2', function (params) {
-                expect(params.Original.test).to.equal('test');
-                expect(params.Original.test1).to.equal('test1');
-                done();
-                action = null;
-            });
-            let action = createViewModel.call({}, node);
+                        },
+                        "nextActions": [
+                            {
+                                "type": "action",
+                                "actionType": "event",
+                                "options": {
+                                    "target": "ajaxTest",
+                                    "paramsKey": "results"
+                                }
+                            }
+                        ]
+                    }
+                })),
+                sub = receive('ajaxTest', function (params) {
+                    expect(params.Original.test).to.equal('test');
+                    expect(params.Original.test1).to.equal('test1');
+                    sub.dispose();
+                    done();
+                });
             action.action();
         });
 
         it('creats ajax action with data from context', function (done){
-            const node = {
-                "type": "action",
-                "actionType": "ajax",
-                "options": {
-                    "target": {
-                        "uri": "test",
-                        "options": {
-                            "type": "POST"
-                        }
-                    },
-                    "nextActions": [
-                        {
-                            "type": "action",
-                            "actionType": "event",
-                            "options": {
-                                "target": "ajax.response3",
-                                "paramsKey": "results"
-                            }
-                        }
-                    ]
-                }
-            };
-
             let data = ko.observable({test: "test", test1: "test1"});
-            let action = createViewModel.call({data}, node);
-
-            receive('ajax.response3', function (params) {
-                expect(params.Original.test).to.equal('test');
-                expect(params.Original.test1).to.equal('test1');
-                done();
-                action = null;
-            });
+            const action = createViewModel.call({data}, merge({}, nodePOST, {
+                    "options": {
+                        "nextActions": [
+                            {
+                                "type": "action",
+                                "actionType": "event",
+                                "options": {
+                                    "target": "ajaxTest",
+                                    "paramsKey": "results"
+                                }
+                            }
+                        ]
+                    }
+                })),
+                sub = receive('ajaxTest', function (params) {
+                    expect(params.Original.test).to.equal('test');
+                    expect(params.Original.test1).to.equal('test1');
+                    sub.dispose();
+                    done();
+                });
 
             action.action();
         });
 
         it('creates ajax action with data from selected keys', function (done) {
-            const node = {
-                "type": "action",
-                "actionType": "ajax",
-                "options": {
-                    "sendDataKeys": [
-                        "test"
-                    ],
-                    "target": {
-                        "uri": "test",
-                        "options": {
-                            "type": "POST"
-                        }
-                    },
-                    "nextActions": [
-                        {
-                            "type": "action",
-                            "actionType": "event",
-                            "options": {
-                                "target": "ajax.response4",
-                                "paramsKey": "results"
-                            }
-                        }
-                    ]
-                }
-            };
-
             let data = ko.observable({test: "test", test1: "test1"});
-            let action = createViewModel.call({data}, node);
-
-            receive('ajax.response4', function (params) {
-                expect(params.Original.test).to.equal('test');
-                expect(params.Original.test1).to.equal(undefined);
-                done();
-                action = null;
-            });
+            const action = createViewModel.call({data}, merge({}, nodePOST, {
+                    "options": {
+                        "sendDataKeys": [
+                            "test"
+                        ],
+                        "nextActions": [
+                            {
+                                "type": "action",
+                                "actionType": "event",
+                                "options": {
+                                    "target": "ajaxTest",
+                                    "paramsKey": "results"
+                                }
+                            }
+                        ]
+                    }
+                })),
+                sub = receive('ajaxTest', function (params) {
+                    expect(params.Original.test).to.equal('test');
+                    expect(params.Original.test1).to.equal(undefined);
+                    sub.dispose();
+                    done();
+                });
 
             action.action();
         });
 
         it('creates ajax action with data from selected keys and remaps key', function (done) {
-            const node = {
-                "type": "action",
-                "actionType": "ajax",
-                "options": {
-                    "sendDataKeys": [
-                        { "newTest": "test" }
-                    ],
-                    "target": {
-                        "uri": "test",
-                        "options": {
-                            "type": "POST"
-                        }
-                    },
-                    "nextActions": [
-                        {
-                            "type": "action",
-                            "actionType": "event",
-                            "options": {
-                                "target": "ajax.response5",
-                                "paramsKey": "results"
-                            }
-                        }
-                    ]
-                }
-            };
-
             let data = ko.observable({test: "test", test1: "test1"});
-            let action = createViewModel.call({data}, node);
-
-            receive('ajax.response5', function (params) {
-                expect(params.Original.newTest).to.equal('test');
-                expect(params.Original.test1).to.equal(undefined);
-                done();
-                action = null;
-            });
+            const action = createViewModel.call({data}, merge({}, nodePOST, {
+                    "options": {
+                        "sendDataKeys": [
+                            { "newTest": "test" }
+                        ],
+                        "nextActions": [
+                            {
+                                "type": "action",
+                                "actionType": "event",
+                                "options": {
+                                    "target": "ajaxTest",
+                                    "paramsKey": "results"
+                                }
+                            }
+                        ]
+                    }
+                })),
+                sub = receive('ajaxTest', function (params) {
+                    expect(params.Original.newTest).to.equal('test');
+                    expect(params.Original.test1).to.equal(undefined);
+                    sub.dispose();
+                    done();
+                });
 
             action.action();
         });
 
         it('creates ajax action with data from selected keys and remaps key with incorrect keys', function (done) {
-            const node = {
-                "type": "action",
-                "actionType": "ajax",
-                "options": {
-                    "sendDataKeys": [
-                        { "newTest": "test2" }
-                    ],
-                    "target": {
-                        "uri": "test",
-                        "options": {
-                            "type": "POST"
-                        }
-                    },
-                    "nextActions": [
-                        {
-                            "type": "action",
-                            "actionType": "event",
-                            "options": {
-                                "target": "ajax.response6",
-                                "paramsKey": "results"
-                            }
-                        }
-                    ]
-                }
-            };
-
             let data = ko.observable({test: "test", test1: "test1"});
-            let action = createViewModel.call({data}, node);
-
-            receive('ajax.response6', function (params) {
-                expect(params.Original.newTest).to.equal(null);
-                expect(params.Original.test).to.equal(undefined);
-                expect(params.Original.test1).to.equal(undefined);
-                done();
-                action = null;
-            });
+            const action = createViewModel.call({data}, merge({}, nodePOST, {
+                    "options": {
+                        "sendDataKeys": [
+                            { "newTest": "test2" }
+                        ],
+                        "nextActions": [
+                            {
+                                "type": "action",
+                                "actionType": "event",
+                                "options": {
+                                    "target": "ajax.response6",
+                                    "paramsKey": "results"
+                                }
+                            }
+                        ]
+                    }
+                })),
+                sub = receive('ajax.response6', function (params) {
+                    expect(params.Original.newTest).to.equal(null);
+                    expect(params.Original.test).to.equal(undefined);
+                    expect(params.Original.test1).to.equal(undefined);
+                    sub.dispose();
+                    done();
+                });
 
             action.action();
         });
-
     });
 
     describe('popup action tests', function () {
