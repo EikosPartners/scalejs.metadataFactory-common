@@ -492,6 +492,8 @@ describe('actionModule test', function () {
 
             action.action();
         });
+
+        it('calls action twice with updated data'); // todo: imp this test to make sure mutations dont occur
     });
 
     describe('popup action tests', function () {
