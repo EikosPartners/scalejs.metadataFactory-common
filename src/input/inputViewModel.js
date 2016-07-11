@@ -370,7 +370,10 @@ export default function inputViewModel(node) {
             return evaluate(options.valueExpression, context.getValue);
         });
         setValue(computedValueExpression());
-        computedValueExpression.subscribe(setValue(value));
+        computedValueExpression.subscribe(function(value){
+            setValue(value)
+        });
+
         subs.push(computedValueExpression)
     }
 

@@ -163,7 +163,7 @@ describe('inputViewModel test', function () {
             done();
         
         });
-    });    
+    });
 
     describe('inputViewModel inputmask and pattern', function () {
         it('adds a pattern and input mask', function (done) {
@@ -212,6 +212,33 @@ describe('inputViewModel test', function () {
             expect(getPatternStub.data[0].pattern.alias).equals("Regex");
 
             getPatternStub.dispose();
+            done();
+        
+        });
+    });
+
+    describe('inputViewModel tests percent pattern function', function () {
+        it('has a pattern.alias of percent', function(done) {
+
+            const aliasPercentNode = {
+                "type": "input",
+                "inputType": "text",
+                "label": "Percent Alias Pattern",
+                "id": "PercentAliasPattern",
+                "options": {
+                    "value": 3,
+                    "pattern": {
+                        "alias": "percent"
+                    }
+                }
+            };
+
+            let aliasPercentStub = createMetadataDomStub(aliasPercentNode);
+            let aliasValue = aliasPercentStub.node.querySelector('input');
+
+            ko.dataFor(aliasValue).setValue(2);
+            expect(aliasValue.value).equals('2.000');
+            aliasPercentStub.dispose();
             done();
         
         });
@@ -728,25 +755,25 @@ describe('inputViewModel test', function () {
 
     describe('inputViewModel tests for value expressions', function () {
         //Figure out why the there is no context when node has valueExpression and validations
-        it.skip('tests for value expression', function (done) {
-
+        it('tests for value expression', function (done) {
+            console.log("INSIDE THE VALUE EXPRESSION TEST");
             let valExpNode = {
              "type": "input",                 
              "inputType": "text",
              "label": "VALUE EXPRESSION NODE",
              "id": "TheValueExpressionID",
              "options": {
-                "_value": "3",
-                "valueExpression": "3" 
-              }
+                "valueExpression": "_.indexOf([1,2,3], 2)"
+             }
             }
 
-            let valExpDomStub = createViewModel(valExpNode);
-            console.log("VALEXPRESSION DOM", valExpDomStub);
-            console.log("THIS IS THE CONTEXT");
+            let valExpDomStub = createMetadataDomStub(valExpNode);
+            let theInputValue = valExpDomStub.node.querySelector('input').value;
+            expect(theInputValue).equals('1');
 
             valExpDomStub.dispose();
             done();
+
         });
     });
 
