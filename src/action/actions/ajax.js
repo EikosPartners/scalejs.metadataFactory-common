@@ -9,7 +9,7 @@ import _ from 'lodash';
 function ajax(options, args) {
     let context = this,
         data = context.data && unwrap(context.data),
-        target = options.target,
+        target = _.cloneDeep(options.target), // to prevent mutations to underlying object
         optionData = options.data || {},
         uri = mustache.render(options.target.uri, merge(data, optionData)),
         contextValue,

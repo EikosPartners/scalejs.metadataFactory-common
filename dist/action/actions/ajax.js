@@ -25,8 +25,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function ajax(options, args) {
     var context = this,
         data = context.data && (0, _knockout.unwrap)(context.data),
-        target = options.target,
-        optionData = options.data || {},
+        target = _lodash2.default.cloneDeep(options.target),
+        // to prevent mutations to underlying object
+    optionData = options.data || {},
         uri = _mustache2.default.render(options.target.uri, (0, _scalejs2.merge)(data, optionData)),
         contextValue = void 0,
         callback = args && args.callback,

@@ -68,7 +68,7 @@ function inputViewModel(node) {
     hasFocus = (0, _knockout.observable)(),
 
 
-    // 1-way binding with state of hover           
+    // 1-way binding with state of hover
     hover = (0, _knockout.observable)(),
 
 
@@ -98,7 +98,7 @@ function inputViewModel(node) {
     }),
 
 
-    // custom setValue functions for input types                       
+    // custom setValue functions for input types
     setValueFuncs = {
         checkboxList: setCheckboxListValue
     },
@@ -293,16 +293,16 @@ function inputViewModel(node) {
         var textKey = Array.isArray(mapper.textKey) ? mapper.textKey : [mapper.textKey],
             valueKey = Array.isArray(mapper.valueKey) ? mapper.valueKey : [mapper.valueKey],
             textFormatter = formatters[mapper.textFormatter] || _lodash2.default.identity,
-            delimeter = mapper.delimeter || ' / ';
+            delimiter = mapper.delimeter || ' / ';
 
         return function (val) {
             return {
                 text: textFormatter(textKey.map(function (k) {
-                    val[k];
+                    return val[k];
                 }).join(delimiter)),
                 value: valueKey.map(function (k) {
                     return val[k];
-                }).join(delimeter),
+                }).join(delimiter),
                 original: val
             };
         };
@@ -462,7 +462,7 @@ function inputViewModel(node) {
         context: this,
         error: inputValue.error,
 
-        // Mixin-Overrides       
+        // Mixin-Overrides
         getValue: viewmodel.getValue || getValue,
         values: viewmodel.values || values,
         setReadonly: viewmodel.setReadonly || setReadonly,
@@ -484,7 +484,7 @@ function inputViewModel(node) {
 };
 
 // implements an input of type
-// text, select, date, radio, checkbox, checkboxList  
+// text, select, date, radio, checkbox, checkboxList
 
 //TODO: Refactor Session
 //- createJSDocs
