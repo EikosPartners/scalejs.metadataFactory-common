@@ -48,7 +48,7 @@
 
 <div id="input_radio_template">
     <div data-class="input-radio input-color-text" class="input-radio-wrapper">
-        <label>
+        <label data-bind="css: $data.classes">
             <span data-bind="style: { display: $parent.options.vertical ? 'block' : 'inline-block' }">
         <input type="radio" class="input-radio" data-class="input-radio-button" />
         <div class="input-radio-label">
