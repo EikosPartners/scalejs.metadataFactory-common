@@ -87,6 +87,10 @@ describe('validationsViewModel test', function () {
         done();
     });
 
+    it.skip('toggle show/hide validation messages',function(done){});
+    it.skip('show validation message with Error Severity',function(done){});
+    it.skip('show validation message with Warning Severity',function(done){});
+
 });
 
 

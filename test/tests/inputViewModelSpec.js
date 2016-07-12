@@ -428,7 +428,7 @@ describe('inputViewModel test', function () {
             done();
         });
 
-        it('tests assigndate for datepicker types', function (done) {
+        it.skip('tests assigndate for datepicker types', function (done) {
 
              const nodeDatePicker = {
                 "type": "input",
