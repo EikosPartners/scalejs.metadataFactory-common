@@ -2,7 +2,7 @@
     <div data-bind="css: $data.classes" class="input">
         <label data-class="input-labels input-color-text" class="input-label"></label>
         <!-- ko if: $data.helpText -->
-            <i class="fa fa-info-circle info"> <!--TODO: image icon -->
+        <i class="fa fa-info-circle info"> <!--TODO: image icon -->
                 <div class="tool-tip" data-bind="text: $data.helpText"></div>
             </i>
         <!-- /ko -->
@@ -23,7 +23,7 @@
 
 <div id="input_text_template">
     <div class="input-wrapper">
-        <input data-class="input-input input-validation-checker" type="text" class="input-text"/>
+        <input data-class="input-input input-validation-checker" type="text" class="input-text" />
     </div>
 </div>
 
@@ -36,24 +36,26 @@
 
 <div id="input_datepicker_template">
     <div class="input-wrapper">
-        <input type="text" data-class="input-datepicker input-validation-checker" class="input-date"/>
+        <input type="text" data-class="input-datepicker input-validation-checker" class="input-date" />
     </div>
 </div>
 
 <div id="input_autosize_template">
     <div class="input-wrapper">
-        <textarea  data-class="input-input input-validation-checker input-autosize" class="input-text"></textarea>
+        <textarea data-class="input-input input-validation-checker input-autosize" class="input-text"></textarea>
     </div>
 </div>
 
 <div id="input_radio_template">
     <div data-class="input-radio input-color-text" class="input-radio-wrapper">
-    <span data-bind="style: { display: $parent.options.vertical ? 'block' : 'inline-block' }">
+        <label>
+            <span data-bind="style: { display: $parent.options.vertical ? 'block' : 'inline-block' }">
         <input type="radio" class="input-radio" data-class="input-radio-button" />
         <div class="input-radio-label">
             <!-- ko text: value --> <!-- /ko -->
         </div>
     </span>
+        </label>
     </div>
 </div>
 
@@ -67,27 +69,27 @@
 
 <div id="input_checkboxList_template">
     <div data-bind="css:$data.classes">
-    <!-- ko foreach: values -->
+        <!-- ko foreach: values -->
         <label class="input-checkbox-wrapper" data-bind="style: { display: $parent.options.vertical ? 'block' : 'inline-block' }">
             <input type="checkbox" data-class="input-checkbox-button-group" class="input-checkbox-button">
             <span class="input-checkbox-display"></span>
-            <span class="input-checkbox-label" data-bind="text: text" ></span>
+            <span class="input-checkbox-label" data-bind="text: text"></span>
         </label>
-    <!-- /ko -->
+        <!-- /ko -->
     </div>
 </div>
 
 <div id="input_autocomplete_template">
-     <!-- ko if: mappedChildNodes().length === 0 -->
+    <!-- ko if: mappedChildNodes().length === 0 -->
     <div class="input-wrapper">
-        <input data-class="input-autocomplete input-validation-checker" class="input-text"/>
+        <input data-class="input-autocomplete input-validation-checker" class="input-text" />
     </div>
-     <!-- /ko -->
+    <!-- /ko -->
     <!-- ko if: mappedChildNodes().length !==  0-->
-        <!-- ko foreach: mappedChildNodes -->
-            <!-- ko template: 'metadata_item_template' -->
-            <!-- /ko -->
-        <!-- /ko -->
+    <!-- ko foreach: mappedChildNodes -->
+    <!-- ko template: 'metadata_item_template' -->
+    <!-- /ko -->
+    <!-- /ko -->
     <!-- /ko -->
 
 </div>
