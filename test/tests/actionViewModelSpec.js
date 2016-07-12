@@ -495,7 +495,7 @@ describe('actionModule test', function () {
         });
 
         it('calls action twice with updated data'); // todo: imp this test to make sure mutations dont occur
-        it.skip('sends data from a key - sendDataFromKey'function(done){});
+        it.skip('sends data from a key - sendDataFromKey', function(done){});
     });
 
     describe('popup action tests', function () {
@@ -598,6 +598,6 @@ describe('actionModule test', function () {
         });
         it.skip('hideafter test', function(done){});
         it.skip('delay hide ', function(done){});
-        
+
     });
 });
