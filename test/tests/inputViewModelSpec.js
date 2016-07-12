@@ -44,7 +44,7 @@ describe('inputViewModel test', function () {
    // });
 
     it('renders value and label', function (done) {
-        console.log("THE THIS", this);
+
         expect(domStub.node.querySelector('input').value).equals(testValue);
         expect(domStub.node.querySelector('label').innerHTML).equals(testLabel);
         done();
@@ -430,7 +430,7 @@ describe('inputViewModel test', function () {
 
         it.skip('tests assigndate for datepicker types', function (done) {
 
-             const nodeDatePicker = {
+            const nodeDatePicker = {
                 "type": "input",
                 "inputType": "datepicker",
                 "label": "Date Picker",
@@ -447,7 +447,6 @@ describe('inputViewModel test', function () {
             expect(ko.dataFor(input).inputValue()).equals("04/15/2016");
             testDomStubDP.dispose();
             done();
-
         });
     });
 
@@ -528,20 +527,26 @@ describe('inputViewModel test', function () {
                 const checkboxNode = {
                     "type": "input",
                     "inputType": "checkbox",
+                    "template": "input_checkbox_template",
                     "label": "CHECKBOX",
                     "id": "check box",
                     "options": {
                         "text": "Hello",
-                        "checked": "true",
-                        "unchecked": "false"
+                        "checked": true,
+                        "unchecked": false,
+                        "value": true
                     }
                 }
 
             let testDomStubCB = createMetadataDomStub(checkboxNode);
 
             expect(testDomStubCB.data[0].inputType).equals('checkbox');
-            expect(testDomStubCB.data[0].options.checked).equals('true');
-            expect(testDomStubCB.data[0].options.unchecked).equals('false');
+            expect(testDomStubCB.data[0].options.checked).equals(true);
+            expect(testDomStubCB.data[0].options.unchecked).equals(false);
+
+            let input = testDomStubCB.node.querySelector('input');
+            let theCurrentValue = ko.dataFor(input).inputValue();
+            expect(theCurrentValue).equals(true);
             testDomStubCB.dispose();
             done();
         });
@@ -579,7 +584,6 @@ describe('inputViewModel test', function () {
         it.skip('test for autocomplete types', function (done) {
 
             let testDomStubAuto = createMetadataDomStub(autoCompNode, 'container_new');
-            // console.log("AUTOCOMPLETE", testDomStubAuto );
 
             expect(testDomStubAuto.data[0].inputType).equals('autocomplete');
             expect(testDomStubAuto.data[0].autocompleteSource()[0].equals('stressball'));
@@ -670,7 +674,7 @@ describe('inputViewModel test', function () {
     describe('inputViewModel tests for checkboxlist types', function () {
 
             it('tests set checkbox list', function (done) {
-                console.log("INSIDE THE CHBXLIST");
+
                     const checkboxListNode = {
                         "type": "input",
                         "inputType": "checkboxList",
@@ -692,15 +696,44 @@ describe('inputViewModel test', function () {
 
                 let setCHBXListStub = createViewModel(checkboxListNode);
                 setCHBXListStub.setValue(data);
-                console.log(setCHBXListStub.inputValue());
+
                 expect(setCHBXListStub.inputValue()[0]).equals(1);
                 setCHBXListStub.dispose();
                 done();
             });
+            it('tests set checkbox list', function (done) {
+                    const checkboxListNode2 = {
+                        "type": "input",
+                        "inputType": "checkboxList",
+                        "template": "input_checkbox_group_template",
+                        "label": "CHECKBOXList",
+                        "id": "check box List",
+                        "options": {
+                            "values": [
+                                {
+                                    "text": "History",
+                                    "value": "History",
+                                    "checked": false
+                                }
+                            ]
+                        }
+                    }
+
+                    let data = {
+                        "value": "1"
+                    }
+
+                    let setCHBXListStub = createViewModel(checkboxListNode2);
+                    setCHBXListStub.setValue(data);
+                    let theInputValue = setCHBXListStub.inputValue()[0].value;
+
+                    expect(theInputValue).equals('1');
+
+                    setCHBXListStub.dispose();
+                    done();
+            });
     });
 
-//Validation and ValueExpression nodes context not getting set
-//debug
     describe('validation engine tests', function () {
          it('tests validations and expressions', function (done) {
 
@@ -745,9 +778,33 @@ describe('inputViewModel test', function () {
                 expect(newInput.options.validations.required).to.equal(true);
                 expect(isValidated).to.equal(true);
 
-                // console.log("Validation INPUT", newInput);
-                // console.log("NEWINPUT VISISBlE MESSAGE", newInput.visibleMessage());
                 expect(newInput.visibleMessage().message).to.equal('Required Validation Node is invalid. This field is required.');
+                newInput.dispose();
+                done();
+         });
+         
+         it('tests an expression message', function (done) {
+             
+             let newRequired = {
+                 "type": "input",
+                 "id": "RequiredValidation",
+                 "label": "RequiredValidation",
+                 "inputType": "text",
+                 "options": {
+                     "validations": {
+                         "expression": {
+                            "params": "true === false",
+                            "message": "Required."
+                         }
+                     }
+                  }
+                }
+
+                let newInput = createViewModel(newRequired);
+                let isValidated = newInput.validate();
+
+                expect(newInput.error()).to.equal('Required.');
+                expect(newInput.visibleMessage().message).to.equal('RequiredValidation is required.');
                 newInput.dispose();
                 done();
          });
@@ -756,7 +813,7 @@ describe('inputViewModel test', function () {
     describe('inputViewModel tests for value expressions', function () {
         //Figure out why the there is no context when node has valueExpression and validations
         it('tests for value expression', function (done) {
-            console.log("INSIDE THE VALUE EXPRESSION TEST");
+
             let valExpNode = {
              "type": "input",                 
              "inputType": "text",
