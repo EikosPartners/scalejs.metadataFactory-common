@@ -121,4 +121,39 @@ describe('listAdvancedModule test', function () {
       done();
     });
 
+    it('list with unique input adds to context', function (done) {
+
+      const listJSON = {
+          "type": "listAdvanced",
+          "id": "testAdvancedList",
+          "list": {
+              "type": "list",
+              "label": "test",
+              "items": [
+                  {
+                      "id": "testInput",
+                      "type": "input",
+                      "inputType": "text",
+                      "options": {
+                          "unique": true
+                      }
+                  },
+                  {
+                      "type": "DELETE_FLAG",
+                      "visible": "!readonly",
+                      "id": "DeleteIndicator"
+                  }
+              ]
+          }
+      };
+
+      let listViewModel = createViewModels([listJSON])[0];
+
+      listViewModel.setValue([{ testInput: "testing" }]);
+
+      expect(listViewModel.rows()[0].items()[0].context.unique["testInput"]().length).to.equal(1);
+
+      done();
+    });
+
 });
