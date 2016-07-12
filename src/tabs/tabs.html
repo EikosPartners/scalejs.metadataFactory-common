@@ -1,0 +1,21 @@
+<div id="tabs_template">
+    <!-- ctx.$index -->
+    <div data-bind="css: $data.classes">
+        <div class="tabs">
+            <!-- ko foreach: tabs -->
+                <!-- ko template: { name: tabDef.template || 'tab_template' }-->
+                <!-- /ko -->
+            <!-- /ko -->
+        </div>
+        <div class="tabs-expander"></div>
+        <div data-bind="render: activeTabRegion"></div>
+    </div>
+</div>
+
+<div id="tab_template">
+    <div class="tabs-tab" data-class="tabs-tab">
+        <div class="tabs-tab-text" data-bind="text: tabName, css: { 'tab-pointer': !isActive() }"></div>
+        <div></div>
+        <i class="fa fa-icon-table-x-td" data-class="tabs-closeChild"></i>
+    </div>
+</div>

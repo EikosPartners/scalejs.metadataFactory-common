@@ -1,0 +1,65 @@
+.tabs {
+    z-index: 1;
+    clear: both;
+    padding: 20px 0 38px 0;
+    position: relative;
+
+    .tabs-tab {
+        float: left;
+        position: relative;
+
+        &.on {
+            box-shadow: 0 0 0 1px #424242;
+            font-size: 14px;
+        }
+
+        .tabs-tab-text {
+            padding: 10px 15px;
+            padding-bottom: 6px;
+            font-size: 14px;
+            color: #424242;
+            white-space: nowrap;
+            text-align: center;
+        }
+    }
+
+    .childTab {
+        &.on {
+            > div:nth-child(1) {
+                background-color: #424242;
+                padding-right: 30px;
+                padding-left: 21px;
+                color: white;
+            }
+        }
+    }
+
+    > .childActive > div:nth-child(1) {
+        padding-top: 8px;
+        padding-bottom: 8px;
+        padding-left: 20px;
+        padding-right: 20px;
+        box-shadow: 0 0 0 2px #424242;
+        font-size: 14px;
+    }
+}
+
+.tab-pointer {
+    cursor: pointer;
+}
+
+.tabs-expander {
+    z-index: 0;
+    margin-top: -5px;
+    margin-bottom: 15px;
+    border-top: 1px solid #CFD4D8;
+    position: relative;
+}
+
+
+
+
+
+
+
+
