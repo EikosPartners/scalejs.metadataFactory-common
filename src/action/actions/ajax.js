@@ -1,5 +1,6 @@
 import { createViewModel } from 'scalejs.metadataFactory';
 import { registerActions } from '../actionModule';
+import { getCurrent } from 'scalejs.navigation';
 import { get, is, has, merge } from 'scalejs';
 import dataservice from 'dataservice';
 import { unwrap } from 'knockout';
@@ -11,7 +12,7 @@ function ajax(options, args) {
         data = context.data && unwrap(context.data),
         target = _.cloneDeep(options.target), // to prevent mutations to underlying object
         optionData = options.data || {},
-        uri = mustache.render(options.target.uri, merge(data, optionData)),
+        uri = mustache.render(options.target.uri, merge(data, optionData, getCurrent().query)), //DS: temporary adding getCurrent for demo, replace with store
         contextValue,
         callback = args && args.callback,
         nextAction;

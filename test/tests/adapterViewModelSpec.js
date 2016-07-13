@@ -5,6 +5,8 @@ import ko from 'knockout';
 import _ from 'lodash';
 import 'chai';
 import { notify } from 'scalejs.messagebus';
+import 'action/actionModule';
+import 'action/actions/ajax';
 
 let expect = chai.expect,
     adapter;

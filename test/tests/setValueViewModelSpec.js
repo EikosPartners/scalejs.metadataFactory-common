@@ -3,6 +3,8 @@ import _ from 'lodash';
 import 'input/inputModule';
 import 'setValue/setValueModule';
 import 'adapter/adapterModule';
+import 'action/actionModule';
+import 'action/actions/ajax';
 import 'chai';
 
 let expect = chai.expect,

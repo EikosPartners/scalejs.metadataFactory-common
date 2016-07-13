@@ -4,7 +4,9 @@ var _scalejs = require('scalejs.metadataFactory');
 
 var _actionModule = require('../actionModule');
 
-var _scalejs2 = require('scalejs');
+var _scalejs2 = require('scalejs.navigation');
+
+var _scalejs3 = require('scalejs');
 
 var _dataservice = require('dataservice');
 
@@ -28,7 +30,7 @@ function ajax(options, args) {
         target = _lodash2.default.cloneDeep(options.target),
         // to prevent mutations to underlying object
     optionData = options.data || {},
-        uri = _mustache2.default.render(options.target.uri, (0, _scalejs2.merge)(data, optionData)),
+        uri = _mustache2.default.render(options.target.uri, (0, _scalejs3.merge)(data, optionData, (0, _scalejs2.getCurrent)())),
         contextValue = void 0,
         callback = args && args.callback,
         nextAction = void 0;
@@ -43,14 +45,14 @@ function ajax(options, args) {
             var receiverKey = k,
                 supplierKey = k,
                 value = void 0;
-            if ((0, _scalejs2.is)(k, 'object')) {
+            if ((0, _scalejs3.is)(k, 'object')) {
                 Object.keys(k).forEach(function (key) {
                     receiverKey = key;
                     supplierKey = k[key];
                 });
             }
 
-            if (!(0, _scalejs2.has)(data[supplierKey])) {
+            if (!(0, _scalejs3.has)(data[supplierKey])) {
                 console.warn('Data key missing from data', supplierKey);
                 o[receiverKey] = null;
                 return o;
@@ -63,7 +65,7 @@ function ajax(options, args) {
             o[receiverKey] = value;
             return o;
         }, {});
-    } else if ((0, _scalejs2.get)(options, 'target.options.type') === 'POST' || (0, _scalejs2.get)(options, 'target.options.type') === 'PUT') {
+    } else if ((0, _scalejs3.get)(options, 'target.options.type') === 'POST' || (0, _scalejs3.get)(options, 'target.options.type') === 'PUT') {
         target.data = data;
     } else {
         target.data = {};
@@ -89,7 +91,7 @@ function ajax(options, args) {
                 results: results
             };
 
-            item.options = (0, _scalejs2.merge)(response, item.options);
+            item.options = (0, _scalejs3.merge)(response, item.options);
             _scalejs.createViewModel.call(context, item).action();
         });
 
@@ -98,7 +100,7 @@ function ajax(options, args) {
         }
     };
 
-    _dataservice2.default.ajax((0, _scalejs2.merge)(target, { uri: uri }), nextAction);
+    _dataservice2.default.ajax((0, _scalejs3.merge)(target, { uri: uri }), nextAction);
 }
 
 (0, _actionModule.registerActions)({ ajax: ajax });
