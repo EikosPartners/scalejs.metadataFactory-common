@@ -30,8 +30,9 @@ function ajax(options, args) {
         target = _lodash2.default.cloneDeep(options.target),
         // to prevent mutations to underlying object
     optionData = options.data || {},
-        uri = _mustache2.default.render(options.target.uri, (0, _scalejs3.merge)(data, optionData, (0, _scalejs2.getCurrent)())),
-        contextValue = void 0,
+        uri = _mustache2.default.render(options.target.uri, (0, _scalejs3.merge)(data, optionData, (0, _scalejs2.getCurrent)().query)),
+        //DS: temporary adding getCurrent for demo, replace with store
+    contextValue = void 0,
         callback = args && args.callback,
         nextAction = void 0;
 

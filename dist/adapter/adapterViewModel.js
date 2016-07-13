@@ -149,28 +149,41 @@ function adapterViewModel(node) {
             dataObject = data();
 
         dataSourceEndpointArray.forEach(function (endpoint) {
-            _dataservice2.default.ajax(endpoint, function (error, results) {
-                var resultsByKey = void 0,
-                    keyMap = endpoint.keyMap || {},
-                    newDataObject = {};
+            if (endpoint.uri) {
+                console.warn('dataSourceEndpoint expects URI in "target". Please update your JSON to reflect the new syntax');
+                endpoint = (0, _lodash.merge)(endpoint, {
+                    target: endpoint
+                });
+            }
 
-                count++;
+            _scalejs.createViewModel.call(context, {
+                "type": "action",
+                "actionType": "ajax",
+                "options": endpoint
+            }).action({
+                callback: function callback(error, results) {
+                    var resultsByKey = void 0,
+                        keyMap = endpoint.keyMap || {},
+                        newDataObject = {};
 
-                if (!error) {
-                    resultsByKey = keyMap.resultsKey ? (0, _scalejs3.get)(results, keyMap.resultsKey) : results;
-                    // optional: keyMap.dataKey path to extend dataObject on
-                    if (keyMap.dataKey) {
-                        newDataObject[keyMap.dataKey] = resultsByKey;
-                    } else {
-                        newDataObject = resultsByKey;
+                    count++;
+
+                    if (!error) {
+                        resultsByKey = keyMap.resultsKey ? (0, _scalejs3.get)(results, keyMap.resultsKey) : results;
+                        // optional: keyMap.dataKey path to extend dataObject on
+                        if (keyMap.dataKey) {
+                            newDataObject[keyMap.dataKey] = resultsByKey;
+                        } else {
+                            newDataObject = resultsByKey;
+                        }
+                        (0, _lodash.extend)(dataObject, newDataObject);
                     }
-                    (0, _lodash.extend)(dataObject, newDataObject);
-                }
 
-                if (count === dataSourceEndpointArray.length) {
-                    updateData(dataObject);
-                    if (!mappedChildNodes().length) {
-                        mappedChildNodes(_scalejs.createViewModels.call(context, node.children || []));
+                    if (count === dataSourceEndpointArray.length) {
+                        updateData(dataObject);
+                        if (!mappedChildNodes().length) {
+                            mappedChildNodes(_scalejs.createViewModels.call(context, node.children || []));
+                        }
                     }
                 }
             });
