@@ -20,9 +20,13 @@ function renderParams(params, data) {
 
 function route(options) {
     let data = unwrap(options.data || (this && this.data)),
-        params = options.params ? renderParams(options.params, data) : undefined;
+        params;
+    if (options.params && options.paramsKey) {
+        data = merge(data, options[options.paramsKey]);
+    }
+    params = options.params ? renderParams(options.params, data) : undefined;
 
     setRoute(unwrap(options.target), params);
 }
 
-registerActions({route});
+registerActions({ route });
