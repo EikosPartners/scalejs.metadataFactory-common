@@ -28,7 +28,11 @@ function renderParams(params, data) {
 
 function route(options) {
     var data = (0, _knockout.unwrap)(options.data || this && this.data),
-        params = options.params ? renderParams(options.params, data) : undefined;
+        params = void 0;
+    if (options.params && options.paramsKey) {
+        data = (0, _scalejs2.merge)(data, options[options.paramsKey]);
+    }
+    params = options.params ? renderParams(options.params, data) : undefined;
 
     (0, _scalejs.setRoute)((0, _knockout.unwrap)(options.target), params);
 }
