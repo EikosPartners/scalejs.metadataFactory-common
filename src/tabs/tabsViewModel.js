@@ -195,7 +195,11 @@ import dataservice from 'dataservice';
             initialActiveTab.setActiveTab();
         } else if (!activeTabRegion().template) {
             // initialize to first tab if we havent routed to a specific tab
-            tabs[0].setActiveTab();
+            if (tabs[0].visible()) { //temp fix
+                tabs[0].setActiveTab();
+            } else {
+                tabs[1].setActiveTab();
+            }
         }
 
         // receive events to set active tab
