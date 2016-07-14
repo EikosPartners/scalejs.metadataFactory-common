@@ -6,7 +6,7 @@ import { observable } from 'knockout';
 
 
 export default function templateViewModel(node) {
-    var data = observable(node.data || {}),
+    var data = observable(node.hasOwnProperty('data') ? node.data : {}), // ability to override initial data
         context = node.options && node.options.createContext ? { metadata: [], data: data } : this,
         createViewModel = createViewModelUnbound.bind(context), // passes context
         createViewModels = createViewModelsUnbound.bind(context), // passes context
