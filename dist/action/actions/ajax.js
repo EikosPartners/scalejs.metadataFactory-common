@@ -8,11 +8,17 @@ var _scalejs2 = require('scalejs.navigation');
 
 var _scalejs3 = require('scalejs');
 
+var _scalejs4 = require('scalejs.noticeboard');
+
+var _scalejs5 = _interopRequireDefault(_scalejs4);
+
 var _dataservice = require('dataservice');
 
 var _dataservice2 = _interopRequireDefault(_dataservice);
 
 var _knockout = require('knockout');
+
+var _knockout2 = _interopRequireDefault(_knockout);
 
 var _mustache = require('mustache');
 
@@ -26,11 +32,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function ajax(options, args) {
     var context = this,
-        data = context.data && (0, _knockout.unwrap)(context.data),
+        data = context.data && _knockout2.default.unwrap(context.data),
         target = _lodash2.default.cloneDeep(options.target),
         // to prevent mutations to underlying object
     optionData = options.data || {},
-        uri = _mustache2.default.render(options.target.uri, (0, _scalejs3.merge)(data, optionData, (0, _scalejs2.getCurrent)().query)),
+        uri = _mustache2.default.render(options.target.uri, (0, _scalejs3.merge)(data, optionData, _knockout2.default.toJS(_scalejs5.default.dictionary()))),
         //DS: temporary adding getCurrent for demo, replace with store
     contextValue = void 0,
         callback = args && args.callback,

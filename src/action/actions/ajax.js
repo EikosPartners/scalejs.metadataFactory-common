@@ -2,17 +2,18 @@ import { createViewModel } from 'scalejs.metadataFactory';
 import { registerActions } from '../actionModule';
 import { getCurrent } from 'scalejs.navigation';
 import { get, is, has, merge } from 'scalejs';
+import noticeboard  from 'scalejs.noticeboard';
 import dataservice from 'dataservice';
-import { unwrap } from 'knockout';
+import ko from 'knockout';
 import mustache from 'mustache';
 import _ from 'lodash';
 
 function ajax(options, args) {
     let context = this,
-        data = context.data && unwrap(context.data),
+        data = context.data && ko.unwrap(context.data),
         target = _.cloneDeep(options.target), // to prevent mutations to underlying object
         optionData = options.data || {},
-        uri = mustache.render(options.target.uri, merge(data, optionData, getCurrent().query)), //DS: temporary adding getCurrent for demo, replace with store
+        uri = mustache.render(options.target.uri, merge(data, optionData, ko.toJS(noticeboard.dictionary()))), //DS: temporary adding noticeboard dict for demo, replace with rendered/getValue interface
         contextValue,
         callback = args && args.callback,
         nextAction;
