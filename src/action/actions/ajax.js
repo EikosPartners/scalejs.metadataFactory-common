@@ -13,7 +13,7 @@ function ajax(options, args) {
         data = context.data && ko.unwrap(context.data),
         target = _.cloneDeep(options.target), // to prevent mutations to underlying object
         optionData = options.data || {},
-        uri = mustache.render(options.target.uri, merge(data, optionData, ko.toJS(noticeboard.dictionary()))), //DS: temporary adding noticeboard dict for demo, replace with rendered/getValue interface
+        uri = mustache.render(options.target.uri, merge(data, optionData, getCurrent().query, ko.toJS(noticeboard.dictionary()))), //DS: temporary adding noticeboard dict for demo, replace with rendered/getValue interface
         contextValue,
         callback = args && args.callback,
         nextAction;

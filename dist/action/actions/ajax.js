@@ -36,8 +36,8 @@ function ajax(options, args) {
         target = _lodash2.default.cloneDeep(options.target),
         // to prevent mutations to underlying object
     optionData = options.data || {},
-        uri = _mustache2.default.render(options.target.uri, (0, _scalejs3.merge)(data, optionData, _knockout2.default.toJS(_scalejs5.default.dictionary()))),
-        //DS: temporary adding getCurrent for demo, replace with store
+        uri = _mustache2.default.render(options.target.uri, (0, _scalejs3.merge)(data, optionData, (0, _scalejs2.getCurrent)().query, _knockout2.default.toJS(_scalejs5.default.dictionary()))),
+        //DS: temporary adding noticeboard dict for demo, replace with rendered/getValue interface
     contextValue = void 0,
         callback = args && args.callback,
         nextAction = void 0;
