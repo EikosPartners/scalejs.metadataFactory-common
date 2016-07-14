@@ -14,8 +14,9 @@ var _lodash = require('lodash');
 var _knockout = require('knockout');
 
 function templateViewModel(node) {
-    var data = (0, _knockout.observable)(node.data || {}),
-        context = node.options && node.options.createContext ? { metadata: [], data: data } : this,
+    var data = (0, _knockout.observable)(node.hasOwnProperty('data') ? node.data : {}),
+        // ability to override initial data
+    context = node.options && node.options.createContext ? { metadata: [], data: data } : this,
         createViewModel = _scalejs.createViewModel.bind(context),
         // passes context
     createViewModels = _scalejs.createViewModels.bind(context),
