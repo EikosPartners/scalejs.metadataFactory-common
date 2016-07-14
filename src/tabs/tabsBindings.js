@@ -15,7 +15,7 @@ import { unwrap } from 'knockout';
             }
 
             return {
-                visible: visible && !isChild || this.isActive,
+                visible: visible && (!isChild || this.isActive),
                 css: {
                     on: this.isActive,
                     childActive: hasChild && nextTab.isActive,
