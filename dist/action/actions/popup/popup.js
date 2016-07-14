@@ -71,6 +71,7 @@ function popupAction(options) {
         actions: actions,
         modal: modal,
         options: options.children,
+        classes: options.classes,
         onHidePopup: onHidePopup,
         context: this
     });
@@ -80,6 +81,7 @@ function popupAction(options) {
         hidePopup: _scalejs6.default.hidePopup,
         title: merged.title || 'Popup',
         modal: merged.modal || false,
+        classes: merged.classes,
         popupContent: {
             name: merged.template || 'popup_default_region_template',
             data: (0, _scalejs4.merge)(merged, {
