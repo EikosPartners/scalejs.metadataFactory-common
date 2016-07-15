@@ -1,6 +1,6 @@
 'use strict';
 
-var _actionModule = require('../action/actionModule');
+var _actionModule = require('../actionModule');
 
 function redirect(options) {
     window.location.replace(options.target);
