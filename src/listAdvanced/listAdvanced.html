@@ -1,5 +1,5 @@
 <div id="listAdvanced_template">
-    <div data-class="classes-binding">
+    <div data-bind="css: $data.classes">
         <header>
             <div class="add" data-class="list-add-rendered">
                 <button class="fa fa-icon-add" data-bind="click:  list.add.bind(null, null, true)">
@@ -48,7 +48,7 @@
 <!-- Note to Developers: The infinte template is used within a popup
 therefore lots of work-arounds needed to be put in place for fixed header stylings-->
 <div id="listAdvanced_infinite_template">
-    <div class="table-viewport table-fixed-header" data-class="classes-binding">
+    <div class="table-viewport table-fixed-header" data-bind="css: $data.classes">
         <div class="table-header">
             <div class="add" data-bind="if: !list.readonly()">
                 <button class="fa fa-icon-add" style="float:none" data-bind="click:  list.add.bind(null, null, true)">
@@ -76,7 +76,7 @@ therefore lots of work-arounds needed to be put in place for fixed header stylin
 
 <!-- templates for groups -->
 <div id="listAdvanced_groups_template">
-     <div data-class="classes-binding">
+     <div data-bind="css: $data.classes">
         <table>
             <!-- ko template: { name: 'list_table_header_row_template', foreach: headers } -->
             <!-- /ko -->
