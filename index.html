@@ -15,14 +15,20 @@
     <div data-bind="metadataFactory: inputJSON"></div>
     <script>
         var inputJSON = {
-            "type": "input",
-            "inputType": "text",
-            "options": {
-                "pattern": {
-                    "alias": "percent"
-                }
+                "type": "input",
+                "inputType": "text",
+                "label": "FocusField",
+                "id": "FocusField",
+                "options": {
+                    "value": "hi",
+                     "validations": {
+                         "expression": {
+                             "params": "true === false",
+                             "message": "Very Invalid"
+                         }
+                     }
+                 }
             }
-        }
     </script>
     
     <script src="./build/bundle.js"></script>

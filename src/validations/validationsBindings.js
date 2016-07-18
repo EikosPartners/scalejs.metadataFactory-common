@@ -14,7 +14,7 @@ export default {
             css = visible ? 'fa fa-caret-down' : 'fa fa-caret-right';
         return {
             click: function () {
-                visible(!visible);
+                this.showValidationMessages(!visible);
             },
             css: css
         }

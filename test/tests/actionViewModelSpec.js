@@ -271,7 +271,6 @@ describe('actionModule test', function () {
             expect(getCurrent().url).to.equal('routeTest/?uniqueId=test');
             setRoute('');
         });
-        it.skip('test when params does not parse correctly.',function(done){});
     });
 
     describe('ajax action tests', function () {
@@ -495,7 +494,32 @@ describe('actionModule test', function () {
         });
 
         it('calls action twice with updated data'); // todo: imp this test to make sure mutations dont occur
-        it.skip('sends data from a key - sendDataFromKey', function(done){});
+        it('sends data from a key - sendDataFromKey', function(done){
+            let data = ko.observable({test7: "test7", test3: "test3"});
+            const action = createViewModel.call({data}, merge({}, nodePOST, {
+                "options": {
+                    "sendDataFromKey": "test7",
+                    "nextActions": [
+                        {
+                            "type": "action",
+                            "actionType": "event",
+                            "options": {
+                                "target": "ajaxTest",
+                                "paramsKey": "results"
+                            }
+                        }
+                    ]
+                }
+            })),
+            sub = receive('ajaxTest', function (params) {
+                expect(params.Original).equals("test7");
+                sub.dispose();
+                done();
+            });
+
+            action.action();
+        });
+
     });
 
     describe('popup action tests', function () {
@@ -539,10 +563,41 @@ describe('actionModule test', function () {
         });
 
         it('creates a action popup and completes an event as an actions property', function (done) {
+
             const action = createViewModel(merge({}, nodeOpen, {
                     "options": {
                         "template": "action_popup_template",
                         "message": "Test Message",
+                        "actions": [
+                            {
+                                "type": "action",
+                                "actionType": "event",
+                                "options": {
+                                    "target": "actionsTest",
+                                    "params": {
+                                        "test": "passing test"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                })),
+                sub = receive('actionsTest', function (params) {
+                    expect(params.test).to.equal('passing test');
+                    sub.dispose();
+                    done();
+                });
+            action.action();
+            document.querySelector('.btn.btn-default-primary').click();
+        });
+
+        it('creates a action popup and completes an event as an actions property w/ hideAfter', function (done) {
+
+                const action = createViewModel(merge({}, nodeOpen, {
+                    "options": {
+                        "template": "action_popup_template",
+                        "message": "Test Message",
+                        "hideAfter": true,
                         "actions": [
                             {
                                 "type": "action",
@@ -567,37 +622,35 @@ describe('actionModule test', function () {
             document.querySelector('.btn.btn-default-primary').click();
         });
 
-        it('creates a action popup and completes an event as an actions property w/ hideAfter', function (done) {
-            const action = createViewModel(merge({}, nodeOpen, {
-                "options": {
-                    "template": "action_popup_template",
-                    "message": "Test Message",
-                    "hideAfter": true,
-                    "actions": [
-                        {
-                            "type": "action",
-                            "actionType": "event",
-                            "options": {
-                                "target": "actionsTest",
-                                "params": {
-                                    "test": "passing test"
+        it('tests options.hideDelay', function(done){
+            console.log("inside hide delay");
+                const action = createViewModel(merge({}, nodeOpen, {
+                    "options": {
+                        "template": "action_popup_template",
+                        "message": "Test Message",
+                        "hideDelay": 1,
+                        "actions": [
+                            {
+                                "type": "action",
+                                "actionType": "event",
+                                "options": {
+                                    "target": "actionsTest",
+                                    "params": {
+                                        "test": "passing test"
+                                    }
                                 }
                             }
-                        }
-                    ]
-                }
-            })),
-            sub = receive('actionsTest', function (params) {
-                expect(params.test).to.equal('passing test');
-                sub.dispose();
-                done();
-            });
+                        ]
+                    }
+                }));
 
+            console.log("THIS IS THE ACTION", action);
+            expect(action.options.hideDelay).equals(1);
             action.action();
             document.querySelector('.btn.btn-default-primary').click();
+            done();
+
         });
-        it.skip('hideafter test', function(done){});
-        it.skip('delay hide ', function(done){});
 
     });
 });
