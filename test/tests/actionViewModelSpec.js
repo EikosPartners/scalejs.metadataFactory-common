@@ -519,7 +519,7 @@ describe('actionModule test', function () {
 
             action.action();
         });
-
+        it.skip('renders url from context and noticeboard');
     });
 
     describe('popup action tests', function () {
