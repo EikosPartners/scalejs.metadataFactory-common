@@ -2,8 +2,8 @@ import { observable, observableArray, computed, unwrap } from 'knockout';
 import { createViewModel, createViewModels } from 'scalejs.metadataFactory';
 import { receive, notify } from 'scalejs.messagebus';
 import dataservice from 'dataservice';
-import { merge, extend } from 'lodash';
-import { get } from 'scalejs';
+import { extend } from 'lodash';
+import { get, merge } from 'scalejs';
 
 /* TODO:
 In PJSON, we used readonly, errors, etc. We need a way to do that outside of adapter
@@ -213,6 +213,7 @@ export default function adapterViewModel(node) {
 
     // listen for 'refresh' event
     subs.push(receive(node.id + '.refresh', function(options) {
+        console.log('-->', node);
         fetchData(options);
     }));
 

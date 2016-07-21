@@ -1,9 +1,9 @@
 import { createViewModel as createViewModelUnbound,
     createViewModels as createViewModelsUnbound } from 'scalejs.metadataFactory'
 import { getRegisteredTemplates } from 'scalejs.mvvm'
-import { merge, cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash';
 import { observable } from 'knockout';
-
+import { merge } from 'scalejs';
 
 export default function templateViewModel(node) {
     var data = observable(node.hasOwnProperty('data') ? node.data : {}), // ability to override initial data

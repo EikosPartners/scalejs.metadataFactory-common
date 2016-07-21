@@ -7,6 +7,7 @@ import 'chai';
 import { notify } from 'scalejs.messagebus';
 import 'action/actionModule';
 import 'action/actions/ajax';
+import { merge } from 'scalejs';
 
 let expect = chai.expect,
     adapter;
@@ -55,7 +56,7 @@ describe('adapterViewModel test', function () {
                     });
                 }
 
-                return _.merge(node, {
+                return merge(node, {
                     context,
                     getValue() {
                         return value();
@@ -69,7 +70,7 @@ describe('adapterViewModel test', function () {
             test_parent(node) {
                 let mappedChildNodes = createViewModels.call(this, node.children || []);
 
-                return _.merge(node, {
+                return merge(node, {
                     mappedChildNodes
                 });
             },
@@ -199,6 +200,7 @@ describe('adapterViewModel test', function () {
     it('can be refreshed from an event', function (done) {
 
         let testJson = _.merge({}, node, {
+            "id": "refreshAdapter",
             "dataSourceEndpoint": {
                 "uri": "adapter"
             }
@@ -227,8 +229,8 @@ describe('adapterViewModel test', function () {
           testAdapter.dispose();
           done();
         });
-
-        notify('testAdapter.refresh');
+        // todo: find out why the other test wasnt disposed
+        notify('refreshAdapter.refresh');
 
     });
 

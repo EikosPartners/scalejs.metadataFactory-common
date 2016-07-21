@@ -6,6 +6,7 @@ import 'adapter/adapterModule';
 import 'action/actionModule';
 import 'action/actions/ajax';
 import 'chai';
+import { merge } from 'scalejs';
 
 let expect = chai.expect,
     adapterWithValue;
@@ -46,7 +47,7 @@ describe('setValueViewModel test', function () {
         registerViewModels({
             test_parent(node) {
                 let mappedChildNodes = createViewModels.call(this, node.children || []);
-                return _.merge(node, {
+                return merge(node, {
                     mappedChildNodes
                 });
             },
