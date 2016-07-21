@@ -155,9 +155,35 @@ describe('accordionModule test', function () {
 
             action.action();
         });
+        
+        it('toggle visibility using click',function(done){
+            let headers, sectionOne, sectionTwo, sectionOneVis, sectionTwoVis;
+            domStub = createMetadataDomStub(node);
+            headers = document.querySelectorAll('header.accordion-header');
+            sectionOne = document.querySelectorAll('.inner-accordion')[0].style.display;
+            sectionTwo = document.querySelectorAll('.inner-accordion')[1].style.display;
+            sectionOneVis = domStub.data[0].sections[0].visible;
+            sectionTwoVis = domStub.data[0].sections[1].visible;
+            expect(sectionOne).to.equal('');
+            expect(sectionTwo).to.equal('');
+            expect(sectionOneVis()).to.equal(true);
+            expect(sectionTwoVis()).to.equal(true);
+            headers[0].click();
+            headers[1].click();
+            
+            setTimeout(function(){
+                sectionOne = document.querySelectorAll('.inner-accordion')[0].style.display;
+                sectionTwo = document.querySelectorAll('.inner-accordion')[1].style.display;
+                expect(sectionOne).to.equal('none');
+                expect(sectionTwo).to.equal('none');
+                expect(sectionOneVis()).to.equal(false);
+                expect(sectionTwoVis()).to.equal(false);
+                done();
+            },200);
+        });
     });
 
-    it.skip('toggle Visibility using bindings',function(done){});
+    
     it.skip('expand all test',function(done){});
     it.skip('collapse all test',function(done){});
 
