@@ -271,6 +271,24 @@ describe('actionModule test', function () {
             expect(getCurrent().url).to.equal('routeTest/?uniqueId=test');
             setRoute('');
         });
+
+        it('sets route with params and data and fails', function () {
+            const action = createViewModel(merge({}, node, {
+                "options": {
+                    "params": {
+                        "uniqueId": "{{{id}}}"
+                    },
+                    "data": {
+                        "id": '"iminvalid"' //array causes exception we think
+                    }
+                }
+            }));
+
+            action.action();
+            //expect {{id}} to not be replaced because of failure
+            expect(getCurrent().url).to.equal('routeTest/?uniqueId=%7B%7B%7Bid%7D%7D%7D');
+            setRoute('');
+        });
     });
 
     describe('ajax action tests', function () {
