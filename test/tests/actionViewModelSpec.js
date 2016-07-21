@@ -1,6 +1,7 @@
 import { getRegisteredTypes, registerViewModels, createViewModel, createViewModels } from 'scalejs.metadataFactory';
 import { getCurrent, setRoute } from 'scalejs.navigation';
 import { createMetadataDomStub } from 'utils';
+import noticeboard from 'scalejs.noticeboard';
 import { receive } from 'scalejs.messagebus';
 import { merge } from 'lodash';
 import ko from 'knockout';
@@ -20,12 +21,12 @@ describe('actionModule test', function () {
         expect(getRegisteredTypes()).to.include('action');
     });
 
-    it('creates an imporper action', function() {
+    it('creates an improper action', function () {
         const node = {
-                "type": "action",
-                "actionType": "deosntExist"
-             },
-             action = createViewModel(node);
+            "type": "action",
+            "actionType": "doesntExist"
+        },
+            action = createViewModel(node);
 
         action.action();
         expect(getRegisteredTypes()).to.not.include('doesntExist');
@@ -116,70 +117,70 @@ describe('actionModule test', function () {
             action.action();
         });
 
-        it('event with button click', function (done){
+        it('event with button click', function (done) {
             const action = merge({}, node, {
                 "icon": "foo",
                 "options": {
                     "params": {
-                        "test" : "passing test"
+                        "test": "passing test"
                     }
                 }
             }),
-            sub = receive('eventTest', function(params) {
-                expect(params.test).to.equal('passing test');
-                testAction.dispose();
-                sub.dispose();
-                done();
-            }),
-            testAction = createMetadataDomStub(action);
+                sub = receive('eventTest', function (params) {
+                    expect(params.test).to.equal('passing test');
+                    testAction.dispose();
+                    sub.dispose();
+                    done();
+                }),
+                testAction = createMetadataDomStub(action);
 
             document.querySelector('.action-button-wrapper button').click();
         });
 
-        it('create action button with icon', function (done){
+        it('create action button with icon', function (done) {
             const action = merge({}, node, {
                 "icon": "foo"
             }),
-            testAction = createMetadataDomStub(action);
+                testAction = createMetadataDomStub(action);
             expect(document.querySelector('.fa-foo')).to.not.equal(undefined);
             done();
 
         });
 
-        it('event with immediate action', function (done){
-            const sub = receive('eventTest', function(params) {
+        it('event with immediate action', function (done) {
+            const sub = receive('eventTest', function (params) {
                 expect(params.test).to.equal('passing test');
                 sub.dispose();
                 done();
             }),
-            action = createViewModel(merge({}, node, {
-                "immediate": true,
-                "options": {
-                    "params": {
-                        "test" : "passing test"
+                action = createViewModel(merge({}, node, {
+                    "immediate": true,
+                    "options": {
+                        "params": {
+                            "test": "passing test"
+                        }
                     }
-                }
-            }));
+                }));
         });
 
-        it('event with validate', function(done){
+        it('event with validate', function (done) {
             const action = createViewModel(merge({}, node, {
                 "validate": "eventValidate",
                 "options": {
                     "params": {
-                        "test" : "passing test"
+                        "test": "passing test"
                     }
                 }
             })),
-            sub = receive('eventTest', function(params) {
-                expect(params.test).to.equal('passing test');
-                sub.dispose();
-                done();
-            }),
-            sub1 = receive('eventValidate', function (actionObj) {
-                actionObj.successCallback(actionObj.options);
-                sub1.dispose();
-            });
+                sub = receive('eventTest', function (params) {
+                    expect(params.test).to.equal('passing test');
+                    sub.dispose();
+                    done();
+                }),
+                sub1 = receive('eventValidate', function (actionObj) {
+                    actionObj.successCallback(actionObj.options);
+                    sub1.dispose();
+                });
 
             action.action();
         });
@@ -324,18 +325,18 @@ describe('actionModule test', function () {
                 ]
             }
         },
-        nodePOST = {
-            "type": "action",
-            "actionType": "ajax",
-            "options": {
-                "target": {
-                    "uri": "test",
-                    "options": {
-                        "type": "POST"
+            nodePOST = {
+                "type": "action",
+                "actionType": "ajax",
+                "options": {
+                    "target": {
+                        "uri": "test",
+                        "options": {
+                            "type": "POST"
+                        }
                     }
                 }
-            }
-        };
+            };
 
         it('registers the ajax action', function () {
             expect(getRegisteredActions()).to.have.property('ajax');
@@ -343,7 +344,7 @@ describe('actionModule test', function () {
 
         it('creates a get ajax action', function (done) {
             const action = createViewModel.call({}, nodeGET),
-                  sub = receive('ajaxTest', function (params) {
+                sub = receive('ajaxTest', function (params) {
                     expect(params).to.equal('success');
                     sub.dispose();
                     done();
@@ -353,41 +354,41 @@ describe('actionModule test', function () {
 
         it('creates an ajax get action and fails', function (done) {
             const action = createViewModel.call({}, merge({}, nodeGET, {
-                    "options": {
-                        "target": {
-                            "uri": ""
-                        }
+                "options": {
+                    "target": {
+                        "uri": ""
                     }
-                 })),
-                 sub = receive('ajaxTestError', function (params) {
+                }
+            })),
+                sub = receive('ajaxTestError', function (params) {
                     expect(params).to.equal('failure');
                     sub.dispose();
                     done();
-                 });
+                });
             action.action();
         });
 
         it('creates an ajax post action', function (done) {
             const action = createViewModel.call({}, merge({}, nodePOST, {
-                 "options": {
-                        "target": {
-                            "data": {
-                                "test": "test",
-                                "test1": "test1"
+                "options": {
+                    "target": {
+                        "data": {
+                            "test": "test",
+                            "test1": "test1"
+                        }
+                    },
+                    "nextActions": [
+                        {
+                            "type": "action",
+                            "actionType": "event",
+                            "options": {
+                                "target": "ajaxTest",
+                                "paramsKey": "results"
                             }
-                        },
-                        "nextActions": [
-                            {
-                                "type": "action",
-                                "actionType": "event",
-                                "options": {
-                                    "target": "ajaxTest",
-                                    "paramsKey": "results"
-                                }
-                            }
-                        ]
-                    }
-                })),
+                        }
+                    ]
+                }
+            })),
                 sub = receive('ajaxTest', function (params) {
                     expect(params.Original.test).to.equal('test');
                     expect(params.Original.test1).to.equal('test1');
@@ -397,22 +398,22 @@ describe('actionModule test', function () {
             action.action();
         });
 
-        it('creats ajax action with data from context', function (done){
-            let data = ko.observable({test: "test", test1: "test1"});
-            const action = createViewModel.call({data}, merge({}, nodePOST, {
-                    "options": {
-                        "nextActions": [
-                            {
-                                "type": "action",
-                                "actionType": "event",
-                                "options": {
-                                    "target": "ajaxTest",
-                                    "paramsKey": "results"
-                                }
+        it('creats ajax action with data from context', function (done) {
+            let data = ko.observable({ test: "test", test1: "test1" });
+            const action = createViewModel.call({ data }, merge({}, nodePOST, {
+                "options": {
+                    "nextActions": [
+                        {
+                            "type": "action",
+                            "actionType": "event",
+                            "options": {
+                                "target": "ajaxTest",
+                                "paramsKey": "results"
                             }
-                        ]
-                    }
-                })),
+                        }
+                    ]
+                }
+            })),
                 sub = receive('ajaxTest', function (params) {
                     expect(params.Original.test).to.equal('test');
                     expect(params.Original.test1).to.equal('test1');
@@ -424,24 +425,24 @@ describe('actionModule test', function () {
         });
 
         it('creates ajax action with data from selected keys', function (done) {
-            let data = ko.observable({test: "test", test1: "test1"});
-            const action = createViewModel.call({data}, merge({}, nodePOST, {
-                    "options": {
-                        "sendDataKeys": [
-                            "test"
-                        ],
-                        "nextActions": [
-                            {
-                                "type": "action",
-                                "actionType": "event",
-                                "options": {
-                                    "target": "ajaxTest",
-                                    "paramsKey": "results"
-                                }
+            let data = ko.observable({ test: "test", test1: "test1" });
+            const action = createViewModel.call({ data }, merge({}, nodePOST, {
+                "options": {
+                    "sendDataKeys": [
+                        "test"
+                    ],
+                    "nextActions": [
+                        {
+                            "type": "action",
+                            "actionType": "event",
+                            "options": {
+                                "target": "ajaxTest",
+                                "paramsKey": "results"
                             }
-                        ]
-                    }
-                })),
+                        }
+                    ]
+                }
+            })),
                 sub = receive('ajaxTest', function (params) {
                     expect(params.Original.test).to.equal('test');
                     expect(params.Original.test1).to.equal(undefined);
@@ -453,24 +454,24 @@ describe('actionModule test', function () {
         });
 
         it('creates ajax action with data from selected keys and remaps key', function (done) {
-            let data = ko.observable({test: "test", test1: "test1"});
-            const action = createViewModel.call({data}, merge({}, nodePOST, {
-                    "options": {
-                        "sendDataKeys": [
-                            { "newTest": "test" }
-                        ],
-                        "nextActions": [
-                            {
-                                "type": "action",
-                                "actionType": "event",
-                                "options": {
-                                    "target": "ajaxTest",
-                                    "paramsKey": "results"
-                                }
+            let data = ko.observable({ test: "test", test1: "test1" });
+            const action = createViewModel.call({ data }, merge({}, nodePOST, {
+                "options": {
+                    "sendDataKeys": [
+                        { "newTest": "test" }
+                    ],
+                    "nextActions": [
+                        {
+                            "type": "action",
+                            "actionType": "event",
+                            "options": {
+                                "target": "ajaxTest",
+                                "paramsKey": "results"
                             }
-                        ]
-                    }
-                })),
+                        }
+                    ]
+                }
+            })),
                 sub = receive('ajaxTest', function (params) {
                     expect(params.Original.newTest).to.equal('test');
                     expect(params.Original.test1).to.equal(undefined);
@@ -482,24 +483,24 @@ describe('actionModule test', function () {
         });
 
         it('creates ajax action with data from selected keys and remaps key with incorrect keys', function (done) {
-            let data = ko.observable({test: "test", test1: "test1"});
-            const action = createViewModel.call({data}, merge({}, nodePOST, {
-                    "options": {
-                        "sendDataKeys": [
-                            { "newTest": "test2" }
-                        ],
-                        "nextActions": [
-                            {
-                                "type": "action",
-                                "actionType": "event",
-                                "options": {
-                                    "target": "ajax.response6",
-                                    "paramsKey": "results"
-                                }
+            let data = ko.observable({ test: "test", test1: "test1" });
+            const action = createViewModel.call({ data }, merge({}, nodePOST, {
+                "options": {
+                    "sendDataKeys": [
+                        { "newTest": "test2" }
+                    ],
+                    "nextActions": [
+                        {
+                            "type": "action",
+                            "actionType": "event",
+                            "options": {
+                                "target": "ajax.response6",
+                                "paramsKey": "results"
                             }
-                        ]
-                    }
-                })),
+                        }
+                    ]
+                }
+            })),
                 sub = receive('ajax.response6', function (params) {
                     expect(params.Original.newTest).to.equal(null);
                     expect(params.Original.test).to.equal(undefined);
@@ -512,9 +513,9 @@ describe('actionModule test', function () {
         });
 
         it('calls action twice with updated data'); // todo: imp this test to make sure mutations dont occur
-        it('sends data from a key - sendDataFromKey', function(done){
-            let data = ko.observable({test7: "test7", test3: "test3"});
-            const action = createViewModel.call({data}, merge({}, nodePOST, {
+        it('sends data from a key - sendDataFromKey', function (done) {
+            let data = ko.observable({ test7: "test7", test3: "test3" });
+            const action = createViewModel.call({ data }, merge({}, nodePOST, {
                 "options": {
                     "sendDataFromKey": "test7",
                     "nextActions": [
@@ -529,39 +530,88 @@ describe('actionModule test', function () {
                     ]
                 }
             })),
-            sub = receive('ajaxTest', function (params) {
-                expect(params.Original).equals("test7");
-                sub.dispose();
-                done();
-            });
+                sub = receive('ajaxTest', function (params) {
+                    expect(params.Original).equals("test7");
+                    sub.dispose();
+                    done();
+                });
 
             action.action();
         });
-        it.skip('renders url from context and noticeboard');
+
+        it('renders ajax url from noticeboard', function (done) {
+            const node = {
+                "type": "action",
+                "actionType": "ajax",
+                "options": {
+                    "target": {
+                        "uri": "test/{{testValue}}"
+                    }
+                }
+            };
+            let action = createViewModel.call({}, node);
+            noticeboard.setValue('testValue', 'testURI');
+            action.action({
+                callback: function (err, data) {
+                    expect(data).to.deep.equal({
+                        "test": "success"
+                    });
+                    done();
+                }
+            });
+        });
+
+        it('renders ajax url from context', function (done) {
+            const node = {
+                "type": "action",
+                "actionType": "ajax",
+                "options": {
+                    "target": {
+                        "uri": "test/{{testContextValue}}"
+                    }
+                }
+            };
+            let contextData = {
+                data: {
+                    testContextValue: 'testContext'
+                }
+            },
+                action = createViewModel.call(contextData, node);
+
+            action.action.call(contextData, {
+                callback: function (err, data) {
+                    expect(data).to.deep.equal({
+                        "testContext": "success"
+                    });
+                    done();
+                }
+            });
+        });
+
     });
 
     describe('popup action tests', function () {
         const nodeOpen = {
-                    "type": "action",
-                    "actionType": "popup",
-                    "options": {
-                        "title": "Test Title"
-                    }
-                },
-                nodeClose = {
-                    "type": "action",
-                    "actionType": "closePopup",
-                    "text": "close"
-                };
-        it('regiseter the popup and closePopup action', function () {
+            "type": "action",
+            "actionType": "popup",
+            "options": {
+                "title": "Test Title"
+            }
+        },
+            nodeClose = {
+                "type": "action",
+                "actionType": "closePopup",
+                "text": "close"
+            };
+        it('register the popup and closePopup action', function () {
             expect(getRegisteredActions()).to.have.property('popup');
             expect(getRegisteredActions()).to.have.property('closePopup');
         });
 
         it('creates and closes the popup', function () {
 
-            const action = createViewModel(merge({}, nodeOpen, {"options": { "message": "Test Message"}})),
-                  closeAction = createViewModel(nodeClose);
+            const action = createViewModel(merge({}, nodeOpen, { "options": { "message": "Test Message" } })),
+                closeAction = createViewModel(nodeClose);
 
             //open the popup
             action.action();
@@ -574,7 +624,7 @@ describe('actionModule test', function () {
 
         it('creates a popup with a data message and closes the popup', function () {
             let data = ko.observable({ message: "Message" });
-            const action = createViewModel.call({data}, merge({}, nodeOpen, { "options": { "message": "Test {{message}}" } }));
+            const action = createViewModel.call({ data }, merge({}, nodeOpen, { "options": { "message": "Test {{message}}" } }));
 
             action.action();
             expect(document.querySelector('.popup-message').innerHTML).to.equal('Test Message');
@@ -583,23 +633,23 @@ describe('actionModule test', function () {
         it('creates a action popup and completes an event as an actions property', function (done) {
 
             const action = createViewModel(merge({}, nodeOpen, {
-                    "options": {
-                        "template": "action_popup_template",
-                        "message": "Test Message",
-                        "actions": [
-                            {
-                                "type": "action",
-                                "actionType": "event",
-                                "options": {
-                                    "target": "actionsTest",
-                                    "params": {
-                                        "test": "passing test"
-                                    }
+                "options": {
+                    "template": "action_popup_template",
+                    "message": "Test Message",
+                    "actions": [
+                        {
+                            "type": "action",
+                            "actionType": "event",
+                            "options": {
+                                "target": "actionsTest",
+                                "params": {
+                                    "test": "passing test"
                                 }
                             }
-                        ]
-                    }
-                })),
+                        }
+                    ]
+                }
+            })),
                 sub = receive('actionsTest', function (params) {
                     expect(params.test).to.equal('passing test');
                     sub.dispose();
@@ -611,25 +661,25 @@ describe('actionModule test', function () {
 
         it('creates a action popup and completes an event as an actions property w/ hideAfter', function (done) {
 
-                const action = createViewModel(merge({}, nodeOpen, {
-                    "options": {
-                        "template": "action_popup_template",
-                        "message": "Test Message",
-                        "hideAfter": true,
-                        "actions": [
-                            {
-                                "type": "action",
-                                "actionType": "event",
-                                "options": {
-                                    "target": "actionsTest",
-                                    "params": {
-                                        "test": "passing test"
-                                    }
+            const action = createViewModel(merge({}, nodeOpen, {
+                "options": {
+                    "template": "action_popup_template",
+                    "message": "Test Message",
+                    "hideAfter": true,
+                    "actions": [
+                        {
+                            "type": "action",
+                            "actionType": "event",
+                            "options": {
+                                "target": "actionsTest",
+                                "params": {
+                                    "test": "passing test"
                                 }
                             }
-                        ]
-                    }
-                })),
+                        }
+                    ]
+                }
+            })),
                 sub = receive('actionsTest', function (params) {
                     expect(params.test).to.equal('passing test');
                     sub.dispose();
@@ -640,27 +690,27 @@ describe('actionModule test', function () {
             document.querySelector('.btn.btn-default-primary').click();
         });
 
-        it('tests options.hideDelay', function(done){
+        it('tests options.hideDelay', function (done) {
             console.log("inside hide delay");
-                const action = createViewModel(merge({}, nodeOpen, {
-                    "options": {
-                        "template": "action_popup_template",
-                        "message": "Test Message",
-                        "hideDelay": 1,
-                        "actions": [
-                            {
-                                "type": "action",
-                                "actionType": "event",
-                                "options": {
-                                    "target": "actionsTest",
-                                    "params": {
-                                        "test": "passing test"
-                                    }
+            const action = createViewModel(merge({}, nodeOpen, {
+                "options": {
+                    "template": "action_popup_template",
+                    "message": "Test Message",
+                    "hideDelay": 1,
+                    "actions": [
+                        {
+                            "type": "action",
+                            "actionType": "event",
+                            "options": {
+                                "target": "actionsTest",
+                                "params": {
+                                    "test": "passing test"
                                 }
                             }
-                        ]
-                    }
-                }));
+                        }
+                    ]
+                }
+            }));
 
             console.log("THIS IS THE ACTION", action);
             expect(action.options.hideDelay).equals(1);

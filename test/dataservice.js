@@ -3,6 +3,7 @@ import _ from 'lodash';
 import adapter from 'test/data/adapter_data.json';
 import store from 'test/data/store_data.json';
 import setValue from 'test/data/adapterSetValue_data.json';
+import ajax from 'test/data/ajax_data.json';
 
 const timeout = 100;
 
@@ -10,7 +11,7 @@ let testData = {},
     o = {};
 
 
-_.merge(testData, adapter, store, setValue);
+_.merge(testData, adapter, store, setValue, ajax);
 
 function mockAjax(request, callback) {
     setTimeout(() => {
