@@ -51,7 +51,7 @@ describe('tabsModule test', function() {
             //  domStub.dispose();
         });
 
-        it('creates tabs and checks active tab', function(done) {
+        it.skip('creates tabs and checks active tab', function(done) {
             let tabs;
             domStub = createMetadataDomStub(node);
             tabs = domStub.node.querySelector('.tabs').children;
