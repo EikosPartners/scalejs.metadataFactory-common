@@ -157,8 +157,8 @@ describe('accordionModule test', function () {
         });
     });
 
-    it('toggle Visibility using bindings',function(done){});
-    it('expand all test',function(done){});
-    it('collapse all test',function(done){});
+    it.skip('toggle Visibility using bindings',function(done){});
+    it.skip('expand all test',function(done){});
+    it.skip('collapse all test',function(done){});
 
 });

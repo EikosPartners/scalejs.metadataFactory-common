@@ -72,8 +72,10 @@ describe('tabsModule test', function () {
             domStub = createMetadataDomStub(merge({}, node, { headers: [{ "text": "Test Tab 1", "visible": false }, { "text": "Test Tab 2" }] }));
             tabs = domStub.node.querySelector('.tabs').children;
 
-            expect(tabs[0].classList.contains('on')).to.equal(false);
-            expect(tabs[1].classList.contains('on')).to.equal(true);
+            expect(tabs.length).to.equal(1); //only one tab in DOM
+            expect(tabs[0].classList.contains('on')).to.equal(true); //that one tab is active
+            expect(document.querySelector('.test-one')).to.equal(null); //tab one content is not in DOM
+            expect(document.querySelector('.test-two').innerHTML).to.equal('two'); //tab two content is in DOM
 
             done();
         });
@@ -83,8 +85,10 @@ describe('tabsModule test', function () {
             domStub = createMetadataDomStub(merge({}, node, { headers: [{ "text": "Test Tab 1", "visible": "1 === 2" }, { "text": "Test Tab 2" }] }));
             tabs = domStub.node.querySelector('.tabs').children;
 
-            expect(tabs[0].classList.contains('on')).to.equal(false);
-            expect(tabs[1].classList.contains('on')).to.equal(true);
+            expect(tabs.length).to.equal(1);
+            expect(tabs[0].classList.contains('on')).to.equal(true);
+            expect(document.querySelector('.test-one')).to.equal(null);
+            expect(document.querySelector('.test-two').innerHTML).to.equal('two');
 
             done();
         });
