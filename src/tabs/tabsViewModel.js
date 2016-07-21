@@ -1,6 +1,6 @@
 import { createViewModel, createViewModels, createViewModel as createViewModelUnbound } from 'scalejs.metadataFactory';
 import { registerTemplates, registerBindings, template } from 'scalejs.mvvm';
-import { observable, observableArray, computed } from 'knockout';
+import { observable, observableArray, computed, unwrap } from 'knockout';
 import { getCurrent, setRoute } from 'scalejs.navigation';
 import { receive, notify } from 'scalejs.messagebus';
 import { evaluate } from 'scalejs.expression-jsep';
@@ -195,11 +195,13 @@ import dataservice from 'dataservice';
             initialActiveTab.setActiveTab();
         } else if (!activeTabRegion().template) {
             // initialize to first tab if we havent routed to a specific tab
-            if (tabs[0].visible()) { //temp fix
-                tabs[0].setActiveTab();
-            } else {
-                tabs[1].setActiveTab();
-            }
+            
+            // will set first visible tab to active tab
+            let initialTab = tabs.filter((tab) => {
+                return unwrap(tab.visible);
+            })[0];
+
+            initialTab && initialTab.setActiveTab();
         }
 
         // receive events to set active tab

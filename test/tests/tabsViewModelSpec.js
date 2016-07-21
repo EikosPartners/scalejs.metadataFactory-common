@@ -8,7 +8,7 @@ import template from './templateTest/templateTest.html';
 import 'template/templateModule';
 import 'tabs/tabsModule';
 
-describe('tabsModule test', function() {
+describe('tabsModule test', function () {
     before(function () {
         registerTemplates(
             template
@@ -48,10 +48,11 @@ describe('tabsModule test', function() {
         let domStub;
 
         afterEach(function () {
-            //  domStub.dispose();
+             domStub.dispose();
         });
 
-        it.skip('creates tabs and checks active tab', function(done) {
+
+        it('creates tabs and checks active tab', function (done) {
             let tabs;
             domStub = createMetadataDomStub(node);
             tabs = domStub.node.querySelector('.tabs').children;
@@ -60,6 +61,28 @@ describe('tabsModule test', function() {
             expect(tabs[1].classList.contains('on')).to.equal(false);
 
             tabs[1].click();
+            expect(tabs[0].classList.contains('on')).to.equal(false);
+            expect(tabs[1].classList.contains('on')).to.equal(true);
+
+            done();
+        });
+
+        it('creates tabs with first tab that is not visible and checks active tab', function (done) {
+            let tabs;
+            domStub = createMetadataDomStub(merge({}, node, { headers: [{ "text": "Test Tab 1", "visible": false }, { "text": "Test Tab 2" }] }));
+            tabs = domStub.node.querySelector('.tabs').children;
+
+            expect(tabs[0].classList.contains('on')).to.equal(false);
+            expect(tabs[1].classList.contains('on')).to.equal(true);
+
+            done();
+        });
+
+        it('creates tabs with first tab that is not visible (using expression) and checks active tab', function (done) {
+            let tabs;
+            domStub = createMetadataDomStub(merge({}, node, { headers: [{ "text": "Test Tab 1", "visible": "1 === 2" }, { "text": "Test Tab 2" }] }));
+            tabs = domStub.node.querySelector('.tabs').children;
+
             expect(tabs[0].classList.contains('on')).to.equal(false);
             expect(tabs[1].classList.contains('on')).to.equal(true);
 
