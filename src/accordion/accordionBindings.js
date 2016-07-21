@@ -1,8 +1,9 @@
 /*global define */
-import format from 'js-format';
+import format from 'js-format'; //todo move out
 import { computed } from 'knockout';
 import 'ko-bindings/slideVisible';
 
+    //todo move to advanced grid
     function aggregateValues(node) {
         var value;
         if (node.getValue) {
@@ -33,42 +34,15 @@ import 'ko-bindings/slideVisible';
         return value;
     }
     export default {
-        'accordion': function (ctx) {
-            return {
-                accordion: {
-                    itemsSource: this.sections,
-                    contentTemplate: 'form_self_template',
-                    headerPath: 'header',
-                    openPanel: 1
-                }
-            };
-        },
         'accordion-header': function (ctx) {
-            var error = false, warning = false;
-            if(this.visibleMessages().length) {
-                this.visibleMessages().forEach(function (err) {
-                    if(err.severity == 1) {
-                        error = true;
-                    } else {
-                        warning = true;
-                    }
-                });
-            }
-
             return {
                 click: this.toggleVisibility,
+                //todo this should be an SVG / class
                 css: {
                     'fa-caret-down': this.visible(),
-                    'fa-caret-right': !this.visible(),
-                    'error': error,
-                    'warning': warning
+                    'fa-caret-right': !this.visible()
                 }
 
-            }
-        },
-        'info': function (ctx){
-            return {
-                visible: ctx.$parent.options.showInfo
             }
         },
         'accordion-expand-all': function(ctx) {
@@ -87,6 +61,7 @@ import 'ko-bindings/slideVisible';
                 clickBubble: false
             }
         },
+        //todo move to advanced grid
         'accordion-header-preview-text': function(ctx) {
             var accordionChild = ctx.$parents[1].mappedChildNodes[ctx.$index()],
                 count = computed(function () {
@@ -101,39 +76,6 @@ import 'ko-bindings/slideVisible';
         'accordion-header-text': function (ctx) {
             return {
                 text: typeof this.header === 'string' ? this.header : this.header.text
-            }
-        },
-        'accordion-header-error-text': function (ctx) {
-            var text = '', errors = 0, warnings = 0;
-            if(this.visibleMessages().length) {
-                text += '('
-                this.visibleMessages().forEach(function (err) {
-                    if(err.severity == 1) {
-                        errors = errors + 1;
-                    } else {
-                        warnings = warnings + 1;
-                    }
-                });
-                if(errors) {
-                    text += errors + ' error';
-                    if(errors > 1) {
-                        text += 's';
-                    }
-                    if(warnings) {
-                        text+= ', ';
-                    }
-                }
-                if(warnings) {
-                    text += warnings + ' warning'
-                    if(warnings > 1) {
-                        text += 's';
-                    }
-                }
-                text += ')';
-            }
-
-            return {
-                text: text
             }
         },
         'accordion-sections': function () {

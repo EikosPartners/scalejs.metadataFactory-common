@@ -11,40 +11,18 @@ import { merge } from 'scalejs';
      * There is one child per section
      */
 
+    // TODO: add docs
     export default function (node, metadata) {
         var subs = [],
             createViewModels = createViewModelsUnbound.bind(this), //ensures context is passed
             options = node.options || {},
-            aggregateVisibleMessages = function (childNodes) {
-                return unwrap(childNodes).reduce(function (msgs, childNode) {
-                    var msg;
-
-                    if (childNode.visibleMessage) {
-                        msg = childNode.visibleMessage();
-                        if (msg) {
-                            msgs.push(msg);
-                            return msgs;
-                        }
-                    }
-                    msg = aggregateVisibleMessages(childNode.mappedChildNodes || []);
-                    msgs = msgs.concat(msg);
-
-                    return msgs;
-                }, []);
-            },
             mappedChildNodes,
             sections,
             isShown = observable(true);
 
         mappedChildNodes = createViewModels(node.children);
 
-        mappedChildNodes.forEach(function (node) {
-            node.visibleMessages = computed(function () {
-                var messages = aggregateVisibleMessages(node.mappedChildNodes);
-                return messages;
-            }).extend({ rateLimit: 50 });
-        });
-
+    
         sections = node.sections.map(function (section, index) {
             var visible = observable(options.openByDefault === false ? false : true);
             return merge(mappedChildNodes[index], {
