@@ -181,10 +181,54 @@ describe('accordionModule test', function () {
                 done();
             },200);
         });
+        it('collapse all test',function(done){
+            let close, sectionOne, sectionTwo, sectionOneVis, sectionTwoVis;  
+            domStub = createMetadataDomStub(merge({}, node, {headerTemplate: "accordion_control_header_template"}));
+            close = document.querySelector('.fa.fa-compress.action');
+            sectionOne = function() { return document.querySelectorAll('.inner-accordion')[0].style.display; };
+            sectionTwo = function() { return document.querySelectorAll('.inner-accordion')[1].style.display; };
+            sectionOneVis = domStub.data[0].sections[0].visible;
+            sectionTwoVis = domStub.data[0].sections[1].visible;
+            expect(sectionOne()).to.equal('');
+            expect(sectionTwo()).to.equal('');
+            expect(sectionOneVis()).to.equal(true);
+            expect(sectionTwoVis()).to.equal(true);
+            
+            close.click();
+
+            setTimeout(function(){
+                expect(sectionOne()).to.equal('none');
+                expect(sectionTwo()).to.equal('none');
+                expect(sectionOneVis()).to.equal(false);
+                expect(sectionTwoVis()).to.equal(false);
+                done();
+            }, 200);
+        });
+
+        it.skip('collapse all test',function(done){
+            let close, sectionOne, sectionTwo, sectionOneVis, sectionTwoVis;  
+            domStub = createMetadataDomStub(merge({}, node, {options: { openByDefault: false }, headerTemplate: "accordion_control_header_template"}));
+            open = document.querySelector('.fa.fa-expand.action');
+            sectionOne = function() { return document.querySelectorAll('.inner-accordion')[0].style.display; };
+            sectionTwo = function() { return document.querySelectorAll('.inner-accordion')[1].style.display; };
+            sectionOneVis = domStub.data[0].sections[0].visible;
+            sectionTwoVis = domStub.data[0].sections[1].visible;
+            expect(sectionOne()).to.equal('none');
+            expect(sectionTwo()).to.equal('none');
+            expect(sectionOneVis()).to.equal(false);
+            expect(sectionTwoVis()).to.equal(false);
+            
+            open.click();
+
+            setTimeout(function(){
+                expect(sectionOne()).to.equal('');
+                expect(sectionTwo()).to.equal('');
+                expect(sectionOneVis()).to.equal(true);
+                expect(sectionTwoVis()).to.equal(true);
+                done();
+            }, 100);
+        });    
     });
-
     
-    it.skip('expand all test',function(done){});
-    it.skip('collapse all test',function(done){});
-
+    
 });
