@@ -595,7 +595,8 @@ describe('actionModule test', function () {
             "type": "action",
             "actionType": "popup",
             "options": {
-                "title": "Test Title"
+                "title": "Test Title",
+                "classes": "popup-test-class"
             }
         },
             nodeClose = {
@@ -616,6 +617,7 @@ describe('actionModule test', function () {
             //open the popup
             action.action();
             expect(document.querySelector('#popup_header h1').innerHTML).to.equal('Test Title');
+            expect(document.querySelector('.popup-test-class')).to.exist;
 
             //close the popup
             closeAction.action();
