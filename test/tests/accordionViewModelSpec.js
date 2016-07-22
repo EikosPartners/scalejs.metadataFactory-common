@@ -155,7 +155,7 @@ describe('accordionModule test', function () {
 
             action.action();
         });
-        
+
         it('toggle visibility using click',function(done){
             let headers, sectionOne, sectionTwo, sectionOneVis, sectionTwoVis;
             domStub = createMetadataDomStub(node);
@@ -170,7 +170,7 @@ describe('accordionModule test', function () {
             expect(sectionTwoVis()).to.equal(true);
             headers[0].click();
             headers[1].click();
-            
+
             setTimeout(function(){
                 sectionOne = document.querySelectorAll('.inner-accordion')[0].style.display;
                 sectionTwo = document.querySelectorAll('.inner-accordion')[1].style.display;
@@ -182,7 +182,7 @@ describe('accordionModule test', function () {
             },200);
         });
         it('collapse all test',function(done){
-            let close, sectionOne, sectionTwo, sectionOneVis, sectionTwoVis;  
+            let close, sectionOne, sectionTwo, sectionOneVis, sectionTwoVis;
             domStub = createMetadataDomStub(merge({}, node, {headerTemplate: "accordion_control_header_template"}));
             close = document.querySelector('.fa.fa-compress.action');
             sectionOne = function() { return document.querySelectorAll('.inner-accordion')[0].style.display; };
@@ -193,7 +193,7 @@ describe('accordionModule test', function () {
             expect(sectionTwo()).to.equal('');
             expect(sectionOneVis()).to.equal(true);
             expect(sectionTwoVis()).to.equal(true);
-            
+
             close.click();
 
             setTimeout(function(){
@@ -205,8 +205,8 @@ describe('accordionModule test', function () {
             }, 200);
         });
 
-        it.skip('collapse all test',function(done){
-            let close, sectionOne, sectionTwo, sectionOneVis, sectionTwoVis;  
+        it('expand all test',function(done){
+            let close, sectionOne, sectionTwo, sectionOneVis, sectionTwoVis;
             domStub = createMetadataDomStub(merge({}, node, {options: { openByDefault: false }, headerTemplate: "accordion_control_header_template"}));
             open = document.querySelector('.fa.fa-expand.action');
             sectionOne = function() { return document.querySelectorAll('.inner-accordion')[0].style.display; };
@@ -217,7 +217,7 @@ describe('accordionModule test', function () {
             expect(sectionTwo()).to.equal('none');
             expect(sectionOneVis()).to.equal(false);
             expect(sectionTwoVis()).to.equal(false);
-            
+
             open.click();
 
             setTimeout(function(){
@@ -227,8 +227,8 @@ describe('accordionModule test', function () {
                 expect(sectionTwoVis()).to.equal(true);
                 done();
             }, 100);
-        });    
+        });
     });
-    
-    
+
+
 });
