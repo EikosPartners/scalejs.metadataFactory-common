@@ -52,11 +52,11 @@ function selectViewModel(node, inputViewModel) {
         mapItem = inputViewModel.mapItem,
         format = inputViewModel.format,
         subs = inputViewModel.subs,
+        values = inputViewModel.values,
 
     // props           
     addBlank = !(0, _scalejs2.has)(options.addBlank) || options.addBlank,
         currentFilter = (0, _knockout.observable)(),
-        values = (0, _knockout.observableArray)(),
         computedValues;
 
     if (!options.values) {

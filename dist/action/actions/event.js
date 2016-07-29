@@ -15,19 +15,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function event(options) {
     var data = (0, _knockout.unwrap)(this && this.data);
 
-    // if (options.before) {
-    //     invoke(options.before, {}, options.beforeOptions);
-    // }
-
     if (options.paramsKey) {
         options.params = (0, _scalejs2.merge)(options.params || {}, options[options.paramsKey]);
     }
-
     (0, _scalejs.notify)((0, _knockout.unwrap)(options.target), options.params);
-
-    // if (options.after) {
-    //     invoke(options.after, {}, options.afterOptions);
-    // }
 }
 
 (0, _actionModule.registerActions)({ event: event });

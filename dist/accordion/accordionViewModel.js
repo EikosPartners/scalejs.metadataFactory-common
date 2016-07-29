@@ -9,35 +9,11 @@ exports.default = function (node, metadata) {
         createViewModels = _scalejs.createViewModels.bind(this),
         //ensures context is passed
     options = node.options || {},
-        aggregateVisibleMessages = function aggregateVisibleMessages(childNodes) {
-        return (0, _knockout.unwrap)(childNodes).reduce(function (msgs, childNode) {
-            var msg;
-
-            if (childNode.visibleMessage) {
-                msg = childNode.visibleMessage();
-                if (msg) {
-                    msgs.push(msg);
-                    return msgs;
-                }
-            }
-            msg = aggregateVisibleMessages(childNode.mappedChildNodes || []);
-            msgs = msgs.concat(msg);
-
-            return msgs;
-        }, []);
-    },
         mappedChildNodes,
         sections,
         isShown = (0, _knockout.observable)(true);
 
     mappedChildNodes = createViewModels(node.children);
-
-    mappedChildNodes.forEach(function (node) {
-        node.visibleMessages = (0, _knockout.computed)(function () {
-            var messages = aggregateVisibleMessages(node.mappedChildNodes);
-            return messages;
-        }).extend({ rateLimit: 50 });
-    });
 
     sections = node.sections.map(function (section, index) {
         var visible = (0, _knockout.observable)(options.openByDefault === false ? false : true);
@@ -96,5 +72,6 @@ var _scalejs3 = require('scalejs');
  * There is one child per section
  */
 
+// TODO: add docs
 /*global define, ko*/
 //# sourceMappingURL=accordionViewModel.js.map

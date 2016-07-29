@@ -38,10 +38,10 @@ function autocompleteViewModel(node, inputViewModel) {
         hasFocus = inputViewModel.hasFocus,
         readonly = inputViewModel.readonly,
         isShown = inputViewModel.isShown,
+        autocompleteSource = inputViewModel.values,
 
     // props
-    autocompleteSource = (0, _knockout.observableArray)(),
-        sourceArray,
+    sourceArray,
         validations,
         options = node.options || {},
         unique = options.unique,

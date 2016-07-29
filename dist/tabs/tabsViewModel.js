@@ -97,12 +97,13 @@ exports.default = function (node, metadata) {
         initialActiveTab.setActiveTab();
     } else if (!activeTabRegion().template) {
         // initialize to first tab if we havent routed to a specific tab
-        if (tabs[0].visible()) {
-            //temp fix
-            tabs[0].setActiveTab();
-        } else {
-            tabs[1].setActiveTab();
-        }
+
+        // will set first visible tab to active tab
+        var initialTab = tabs.filter(function (tab) {
+            return (0, _knockout.unwrap)(tab.visible);
+        })[0];
+
+        initialTab && initialTab.setActiveTab();
     }
 
     // receive events to set active tab

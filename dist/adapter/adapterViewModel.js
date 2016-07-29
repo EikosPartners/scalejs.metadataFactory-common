@@ -151,7 +151,7 @@ function adapterViewModel(node) {
         dataSourceEndpointArray.forEach(function (endpoint) {
             if (endpoint.uri) {
                 console.warn('dataSourceEndpoint expects URI in "target". Please update your JSON to reflect the new syntax');
-                endpoint = (0, _lodash.merge)(endpoint, {
+                endpoint = (0, _scalejs3.merge)(endpoint, {
                     target: endpoint
                 });
             }
@@ -233,10 +233,11 @@ function adapterViewModel(node) {
 
     // listen for 'refresh' event
     subs.push((0, _scalejs2.receive)(node.id + '.refresh', function (options) {
+        console.log('-->', node);
         fetchData(options);
     }));
 
-    return (0, _lodash.merge)(node, {
+    return (0, _scalejs3.merge)(node, {
         mappedChildNodes: mappedChildNodes,
         data: data,
         contextPlugins: contextPlugins,

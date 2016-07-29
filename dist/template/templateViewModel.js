@@ -13,6 +13,8 @@ var _lodash = require('lodash');
 
 var _knockout = require('knockout');
 
+var _scalejs3 = require('scalejs');
+
 function templateViewModel(node) {
     var data = (0, _knockout.observable)(node.hasOwnProperty('data') ? node.data : {}),
         // ability to override initial data
@@ -56,7 +58,7 @@ function templateViewModel(node) {
         createViewModel(node.dataSourceEndpoint).action(callback);
     }
 
-    return (0, _lodash.merge)(node, {
+    return (0, _scalejs3.merge)(node, {
         mappedChildNodes: mappedChildNodes,
         action: action,
         data: data,

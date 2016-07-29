@@ -3,7 +3,9 @@
     <div data-bind="css: $data.classes">
         <div class="tabs">
             <!-- ko foreach: tabs -->
-                <!-- ko template: { name: tabDef.template || 'tab_template' }-->
+                <!-- ko if: visible -->
+                    <!-- ko template: { name: tabDef.template || 'tab_template' }-->
+                    <!-- /ko -->
                 <!-- /ko -->
             <!-- /ko -->
         </div>

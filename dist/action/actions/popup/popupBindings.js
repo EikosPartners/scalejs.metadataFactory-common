@@ -7,8 +7,11 @@ exports.default = {
     'action-popup-action': function actionPopupAction(ctx) {
         var hidePopup = ctx.$parents.filter(function (parent) {
             return parent.hidePopup;
-        })[0].hidePopup,
-            classes = this.classes || '';
+        })[0].hidePopup;
+        var classes = this.classes || '';
+        if (ctx.$parent.hideAfter) {
+            this.options.hideAfter = ctx.$parent.hideAfter;
+        }
 
         return {
             click: function click() {

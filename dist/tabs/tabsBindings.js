@@ -14,9 +14,7 @@ exports.default = {
             nextHeader,
             hasChild,
             isChild,
-            visible = (0, _knockout.unwrap)(this.visible);
-
-        isChild = this.tabDef.options && this.tabDef.options.isChild;
+            isChild = this.tabDef.options && this.tabDef.options.isChild;
 
         if (ctx.$index() + 1 < ctx.$parent.tabs.length) {
             nextTab = ctx.$parent.tabs[ctx.$index() + 1];
@@ -25,7 +23,7 @@ exports.default = {
         }
 
         return {
-            visible: visible && (!isChild || this.isActive),
+            visible: !isChild || this.isActive,
             css: {
                 on: this.isActive,
                 childActive: hasChild && nextTab.isActive,
@@ -34,7 +32,6 @@ exports.default = {
             click: this.setActiveTab.bind(null, null)
         };
     },
-
     'tabs-closeChild': function tabsCloseChild(ctx) {
         var isChild, parentTab;
 
