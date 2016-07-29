@@ -218,7 +218,7 @@ describe('inputViewModel test', function () {
     });
 
     describe('inputViewModel tests percent pattern function', function () {
-        it('has a pattern.alias of percent', function(done) {
+        it.skip('has a pattern.alias of percent', function(done) {
 
             const aliasPercentNode = {
                 "type": "input",

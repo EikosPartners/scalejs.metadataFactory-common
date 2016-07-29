@@ -37,10 +37,10 @@ import _ from 'lodash';
             mapItem = inputViewModel.mapItem,
             format = inputViewModel.format,
             subs = inputViewModel.subs,
+            values = inputViewModel.values,
             // props            
             addBlank = !has(options.addBlank) || options.addBlank,
             currentFilter = observable(),
-            values = observableArray(),
             computedValues;
 
         if(!options.values) {

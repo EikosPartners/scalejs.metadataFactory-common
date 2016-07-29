@@ -84,7 +84,8 @@ export default function inputViewModel(node) {
             hasFocus: hasFocus,
             format: format,
             subs: subs,
-            readonly: readonly
+            readonly: readonly,
+            values: values
         };
 
     /*
@@ -111,14 +112,17 @@ export default function inputViewModel(node) {
         if (!wasModifed) { inputValue.isModified(false); }
     }
 
-    // function update(data) {
-    //     if (data.hasOwnProperty('value')) {
-    //         setValue(data.value);
-    //     }
-    //     if (data.hasOwnProperty('ErrorMessage')) {
-    //         customError(data.ErrorMessage);
-    //     }
-    // }
+    function update(data) {
+        if (data.hasOwnProperty('value')) {
+            setValue(data.value);
+        }
+        if (data.hasOwnProperty('error')) {
+            customError(data.error);
+        }
+        if (data.hasOwnProperty('values')) {
+            values(data.values);
+        }
+    }
 
     function validate() {
         console.error('Relying on "this" for rendered in validate. REFACTOR');
@@ -287,35 +291,63 @@ export default function inputViewModel(node) {
     }
 
     // Is this needed in the common? Should it be a plugin/mixin?
-    // if (options.registered) {
-    //     registeredAction = createViewModel.call(this, {
-    //         type: 'action',
-    //         actionType: 'ajax',
-    //         options: merge(options.registered, { data: {} })
-    //     });
+    /*
+        how to define
+        {
+            type: 'input',
+            options: {
+                registered: {
+                    target: {
+                        uri: 'uri/here' <- requests an endpoint
+                    }
+                }
+            }
+        }
 
-    //     inputValue.subscribe(function (newValue) {
-    //         registeredAction.options.data[node.id] = newValue; //our own sub gets called before context is updated
-    //         if (newValue !== '') {
-    //             registeredAction.action({
-    //                 callback: (error, data) => {
-    //                     Object.keys(data).forEach((key) => {
-    //                         if (!context.dictionary && !context.data) {
-    //                             console.warn('Using a registered input when no data/dictionary available in context', node);
-    //                             return;
-    //                         }
-    //                         var node = context.dictionary && context.dictionary()[key];
-    //                         if (node && node.update) {
-    //                             node.update(data[key]);
-    //                         } else if (context.data && has(data[key], 'value')) {
-    //                             context.data()[key] = data[key].value;
-    //                         }
-    //                     });
-    //                 }
-    //             });
-    //         }
-    //     });
-    // }
+        data that gets sent
+        {
+            input_id: input_value
+        }
+
+        data that comes back 
+        {
+            input_to_update: {
+                values: [
+                    'value1'
+                ]
+            }
+        }
+    */
+
+    if (options.registered) {
+        registeredAction = createViewModel.call(this, {
+            type: 'action',
+            actionType: 'ajax',
+            options: merge(options.registered, { data: {} })
+        });
+
+        inputValue.subscribe(function (newValue) {
+            registeredAction.options.data[node.id] = newValue; //our own sub gets called before context is updated
+            if (newValue !== '') {
+                registeredAction.action({
+                    callback: (error, data) => {
+                        Object.keys(data).forEach((key) => {
+                            if (!context.dictionary && !context.data) {
+                                console.warn('Using a registered input when no data/dictionary available in context', node);
+                                return;
+                            }
+                            var node = context.dictionary && context.dictionary()[key];
+                            if (node && node.update) {
+                                node.update(data[key]);
+                            } else if (context.data && has(data[key], 'value')) {
+                                context.data()[key] = data[key].value;
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
 
     // TODO: Clean up validation Code
     // add validations to the inputvalue
@@ -410,7 +442,7 @@ export default function inputViewModel(node) {
         shake,
         options,
         setValue,
-        // update,
+        update,
         context: this,
         error: inputValue.error,
 

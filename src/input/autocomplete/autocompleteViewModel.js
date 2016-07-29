@@ -19,9 +19,9 @@ import _ from 'lodash';
             mapItem = inputViewModel.mapItem,
             hasFocus = inputViewModel.hasFocus,
             readonly = inputViewModel.readonly,
-            isShown = inputViewModel.isShown,
+            isShown = inputViewModel.isShown,            
+            autocompleteSource = inputViewModel.values,
             // props
-            autocompleteSource = observableArray(),
             sourceArray,
             validations,
             options = node.options || {},
