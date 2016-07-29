@@ -45,7 +45,7 @@ import _ from 'lodash';
         return merge(clonedItem, {
             id: undefined,
             template: {
-                name: clonedItem.template ||'list_del_template',
+                name: itemDef.template ||'list_del_template',
                 data: context
             }
         })

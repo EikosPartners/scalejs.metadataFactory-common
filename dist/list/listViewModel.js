@@ -55,11 +55,15 @@ var listItems = {
 };
 
 function del(itemDef) {
-    var context = this;
-    return (0, _scalejs5.merge)(itemDef, {
+    var context = this,
+        clonedItem = _lodash2.default.cloneDeep(itemDef);
+
+    delete clonedItem.template; // prevent scalejs merge issue
+
+    return (0, _scalejs5.merge)(clonedItem, {
         id: undefined,
         template: {
-            name: 'list_del_template',
+            name: clonedItem.template || 'list_del_template',
             data: context
         }
     });

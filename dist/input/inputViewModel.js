@@ -391,8 +391,6 @@ function inputViewModel(node) {
                             var node = context.dictionary && context.dictionary()[key];
                             if (node && node.update) {
                                 node.update(data[key]);
-                            } else if (context.data && (0, _scalejs3.has)(data[key], 'value')) {
-                                context.data()[key] = data[key].value;
                             }
                         });
                     }
