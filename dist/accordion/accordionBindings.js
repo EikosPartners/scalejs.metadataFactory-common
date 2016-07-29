@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; }; /*global define */
+//todo move out
+
+
 var _jsFormat = require('js-format');
 
 var _jsFormat2 = _interopRequireDefault(_jsFormat);
@@ -14,37 +18,39 @@ require('ko-bindings/slideVisible');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//todo move to advanced grid
-// function aggregateValues(node) {
-//     var value;
-//     if (node.getValue) {
-//         value = [].concat(node.getValue());
-//     } else if (node.mappedChildNodes) {
-//         value = node.mappedChildNodes.reduce(function (values, childNode) {
-//             var childValue = aggregateValues(childNode);
-//             if(childValue) {
-//                 values = values.concat(childValue);
-//             }
-//             return values;
-//         }, [])
-//     }
-//     // convert objects to strings
-//     value = value.map(function(value) {
-//         if(typeof value === 'object') {
-//             if (value.op) { delete value.op; } // we don't want to custom operators values in preview
-//             return value = Object.keys(value).map(function(key) {
-//                 if (Date.parse(value[key])) {
-//                     return format('MM/DD/YYYY', new Date(value[key]));
-//                 } else {
-//                     return value[key];
-//                 }
-//             }).join(' ');
-//         }
-//         return value;
-//     });
-//     return value;
-// }
-//todo move out
+//todo evaluate if should move to advanced grid?
+function aggregateValues(node) {
+    var value;
+    if (node.getValue) {
+        value = [].concat(node.getValue());
+    } else if (node.mappedChildNodes) {
+        value = node.mappedChildNodes.reduce(function (values, childNode) {
+            var childValue = aggregateValues(childNode);
+            if (childValue) {
+                values = values.concat(childValue);
+            }
+            return values;
+        }, []);
+    }
+    // convert objects to strings
+    value = value.map(function (value) {
+        if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
+            if (value.op) {
+                delete value.op;
+            } // we don't want to custom operators values in preview
+            return value = Object.keys(value).map(function (key) {
+                if (Date.parse(value[key])) {
+                    return (0, _jsFormat2.default)('MM/DD/YYYY', new Date(value[key]));
+                } else {
+                    return value[key];
+                }
+            }).join(' ');
+        }
+        return value;
+    });
+    return value;
+}
+
 exports.default = {
     'accordion-header': function accordionHeader(ctx) {
         return {
@@ -98,5 +104,5 @@ exports.default = {
             foreach: visibleSections
         };
     }
-}; /*global define */
+};
 //# sourceMappingURL=accordionBindings.js.map

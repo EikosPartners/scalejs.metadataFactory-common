@@ -11,9 +11,10 @@ $gray: #cfd4d8;
 $dark-gray: #7d7d7d;
 $chartreuse: #B2BB1E;
 $error-red: #CE0000;
+$yellow: #F3D30E;
 
 //input styles variables - colors
-$input-focus-box-shadow-color: $chartreuse;
+$input-focus-box-shadow-color: $yellow;
 $input-warning-box-shadow-color: #E87400;
 $input-error-box-shadow-color: $error-red;
 $input-background-color-main: white;
@@ -30,8 +31,8 @@ $input-font-size: 13px;
 
 //input styles variables - box shadow size
 $input-box-shadow: 0 0 0 1px;
-$input-focused-box-shadow1: 0px 0px 0px 2px;
-$input-focused-box-shadow2: -2px 0px 0px 2px;
+$input-focused-box-shadow1: 0 0 0 2px;
+$input-focused-box-shadow2: -2px 0 0 2px;
 
 //input styles variables - padding
 $input-padding: 7px 0 7px 7px;
@@ -84,6 +85,7 @@ $validaiton-message-before-border: 10px solid transparent;
     padding: $input-padding;
     width: $input-width-main;
     height: $input-height;
+    box-sizing: content-box;
     &::-ms-clear { // remove IE x icon
         display: none;
     }
@@ -95,8 +97,8 @@ $validaiton-message-before-border: 10px solid transparent;
 }
 
 .input-select-styles {
-    appearance: none;
-    padding: 0 25px 0 7px;
+    //appearance: none;
+    padding: 0 0 0 7px;
     width: calc(100% - 13px);
     height: $input-select-height;
     background: url('./images/icon-input-select.png') no-repeat right 10px top 50%;
@@ -156,7 +158,6 @@ $validaiton-message-before-border: 10px solid transparent;
 .input-label {
     @extend .input-label-styles;
     position: relative;
-    top: -3px;
     &.label-only {
         top: 5px;
     }
