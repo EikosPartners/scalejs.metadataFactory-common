@@ -37,11 +37,15 @@ import _ from 'lodash';
     };
 
     function del(itemDef) {
-        var context = this;
-        return merge(itemDef, {
+        var context = this,
+            clonedItem = _.cloneDeep(itemDef);
+
+        delete clonedItem.template; // prevent scalejs merge issue
+
+        return merge(clonedItem, {
             id: undefined,
             template: {
-                name: 'list_del_template',
+                name: clonedItem.template ||'list_del_template',
                 data: context
             }
         })
