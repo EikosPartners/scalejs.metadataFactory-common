@@ -53,7 +53,7 @@ const node = {
             "options": {
                  "validations": {
                      "expression": {
-                         "params": "true === false",
+                         "term": "true === false",
                          "message": "Warning Message",
                          "severity": 2
                      }
@@ -68,7 +68,7 @@ const node = {
             "options": {
                  "validations": {
                      "expression": {
-                         "params": "true === false",
+                         "term": "true === false",
                          "message": "Very Invalid"
                      }
                  }
@@ -121,7 +121,7 @@ describe('validationsViewModel test', function () {
                 "options": {
                      "validations": {
                          "expression": {
-                             "params": "true === false",
+                             "term": "true === false",
                              "message": "Very Invalid"
                          }
                      }

@@ -745,7 +745,7 @@ describe('inputViewModel test', function () {
                  "options": {
                      "validations": {
                          "expression": {
-                             "params": "true === false",
+                             "term": "true === false",
                              "message": "invalid"
                          }
                      }
@@ -793,7 +793,7 @@ describe('inputViewModel test', function () {
                  "options": {
                      "validations": {
                          "expression": {
-                            "params": "true === false",
+                            "term": "true === false",
                             "message": "Required."
                          }
                      }
