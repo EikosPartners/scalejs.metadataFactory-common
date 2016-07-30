@@ -60,6 +60,7 @@
   },
   "dependencies": {
     "autoprefixer-loader": "^3.2.0",
+    "autosize": "^3.0.17",
     "jquery": "^3.0.0",
     "jquery-ui": "1.10.5",
     "js-format": "git+https://github.com/tsu-complete/js-format.git",

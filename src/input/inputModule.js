@@ -9,6 +9,7 @@ import inputViewModel from './inputViewModel';
 import inputBindings from './inputBindings';
 import inputTemplates from './input.html';
 import 'ko-bindings/datepicker.js';
+import 'ko-bindings/autosize';
 import 'pikaday/scss/pikaday.scss';
 import './input.scss';
 

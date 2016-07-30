@@ -63,7 +63,7 @@ function del(itemDef) {
     return (0, _scalejs5.merge)(clonedItem, {
         id: undefined,
         template: {
-            name: clonedItem.template || 'list_del_template',
+            name: itemDef.template || 'list_del_template',
             data: context
         }
     });

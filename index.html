@@ -12,23 +12,60 @@
 
 <body>
 
-    <div data-bind="metadataFactory: inputJSON"></div>
+    <div data-bind="metadataFactory: sampleJSON"></div>
     <script>
-        var inputJSON = {
-                "type": "input",
-                "inputType": "text",
-                "label": "FocusField",
-                "id": "FocusField",
-                "options": {
-                    "value": "hi",
-                     "validations": {
-                         "expression": {
-                             "params": "true === false",
-                             "message": "Very Invalid"
-                         }
-                     }
-                 }
+        function clone(json) {
+            return JSON.parse(JSON.stringify(json));
+        }
+
+        var sampleJSON = [];
+
+        var inputs = {
+            "text": {},
+            "select": {
+                "values": ["Option 1", "Option 2"]
+            },
+            "datepicker": {},
+            "textarea": {},
+            "autosize": {},
+            "radio": {},
+            "checkbox": {
+                "text": "True?",
+                "checked": true,
+                "unchecked": false,
+                "value": true
+            },
+            "checkboxList": {
+                "values": [
+                    {
+                        "text": "Value 1",
+                        "value": "1"
+                    },
+                    {
+                        "text": "Value 2",
+                        "value": "2"
+                    }
+                ]
+            },
+            "autocomplete": {
+                "autocompleteSource": [
+                    "Option 1",
+                    "Option 2"
+                ]
             }
+        }
+
+        var inputJSON = Object.keys(inputs).map(function(type) {
+            return {
+                "type": "input",
+                "inputType": type,
+                "label": type,
+                "id": type,
+                "options": inputs[type]
+            }
+        });
+
+        sampleJSON = sampleJSON.concat(inputJSON);
     </script>
     
     <script src="./build/bundle.js"></script>

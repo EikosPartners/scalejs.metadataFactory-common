@@ -172,8 +172,10 @@
   background: #33aaff;
   box-shadow: none;
   border-radius: 3px; }
+/* sass-loader:inject-overrides */
 .input-styles, .input-text,
-.input-date, .input-select {
+.input-date,
+.input-textarea, .input-select {
   font-family: "Arial", sans-serif;
   font-size: 13px;
   color: #424242;
@@ -181,53 +183,69 @@
   border: none;
   margin-top: 5px; }
   .input-styles:focus, .input-text:focus,
-  .input-date:focus, .input-select:focus {
+  .input-date:focus,
+  .input-textarea:focus, .input-select:focus {
     outline: none;
-    box-shadow: 0px 0px 0px 2px #B2BB1E, -2px 0px 0px 2px #B2BB1E; }
+    box-shadow: 0 0 0 2px #F3D30E, -2px 0 0 2px #F3D30E; }
   .input-styles.error, .error.input-text,
-  .error.input-date, .error.input-select, .input-styles:focus.error, .input-text:focus.error,
-  .input-date:focus.error, .input-select:focus.error {
-    box-shadow: 0px 0px 0px 2px #CE0000 !important; }
+  .error.input-date,
+  .error.input-textarea, .error.input-select, .input-styles:focus.error, .input-text:focus.error,
+  .input-date:focus.error,
+  .input-textarea:focus.error, .input-select:focus.error {
+    box-shadow: 0 0 0 2px #CE0000 !important; }
   .input-styles.warning, .warning.input-text,
-  .warning.input-date, .warning.input-select, .input-styles:focus.warning, .input-text:focus.warning,
-  .input-date:focus.warning, .input-select:focus.warning {
-    box-shadow: 0px 0px 0px 2px #E87400 !important; }
+  .warning.input-date,
+  .warning.input-textarea, .warning.input-select, .input-styles:focus.warning, .input-text:focus.warning,
+  .input-date:focus.warning,
+  .input-textarea:focus.warning, .input-select:focus.warning {
+    box-shadow: 0 0 0 2px #E87400 !important; }
   .input-styles[readonly="true"], [readonly="true"].input-text,
-  [readonly="true"].input-date, [readonly="true"].input-select, .input-styles[disabled="true"], [disabled="true"].input-text,
-  [disabled="true"].input-date, [disabled="true"].input-select {
+  [readonly="true"].input-date,
+  [readonly="true"].input-textarea, [readonly="true"].input-select, .input-styles[disabled="true"], [disabled="true"].input-text,
+  [disabled="true"].input-date,
+  [disabled="true"].input-textarea, [disabled="true"].input-select {
     box-shadow: none;
     background-image: none;
     background-color: transparent;
     padding-left: 0;
     padding-top: 0; }
     .input-styles[readonly="true"]:focus, [readonly="true"].input-text:focus,
-    [readonly="true"].input-date:focus, [readonly="true"].input-select:focus, .input-styles[disabled="true"]:focus, [disabled="true"].input-text:focus,
-    [disabled="true"].input-date:focus, [disabled="true"].input-select:focus {
+    [readonly="true"].input-date:focus,
+    [readonly="true"].input-textarea:focus, [readonly="true"].input-select:focus, .input-styles[disabled="true"]:focus, [disabled="true"].input-text:focus,
+    [disabled="true"].input-date:focus,
+    [disabled="true"].input-textarea:focus, [disabled="true"].input-select:focus {
       box-shadow: none;
       padding-left: 0;
       padding-top: 0; }
 
 .input-text-styles, .input-text,
-.input-date {
+.input-date,
+.input-textarea {
   text-overflow: ellipsis;
   padding: 7px 0 7px 7px;
   width: calc(100% - 20px);
-  height: 12px; }
+  height: 12px;
+  box-sizing: content-box; }
   .input-text-styles::-ms-clear, .input-text::-ms-clear,
-  .input-date::-ms-clear {
+  .input-date::-ms-clear,
+  .input-textarea::-ms-clear {
     display: none; }
   .input-text-styles.error[readonly="true"], .error[readonly="true"].input-text,
-  .error[readonly="true"].input-date, .input-text-styles.error[readonly="true"]:focus, .error[readonly="true"].input-text:focus,
-  .error[readonly="true"].input-date:focus, .input-text-styles.warning[readonly="true"], .warning[readonly="true"].input-text,
-  .warning[readonly="true"].input-date, .input-text-styles.warning[readonly="true"]:focus, .warning[readonly="true"].input-text:focus,
-  .warning[readonly="true"].input-date:focus {
+  .error[readonly="true"].input-date,
+  .error[readonly="true"].input-textarea, .input-text-styles.error[readonly="true"]:focus, .error[readonly="true"].input-text:focus,
+  .error[readonly="true"].input-date:focus,
+  .error[readonly="true"].input-textarea:focus, .input-text-styles.warning[readonly="true"], .warning[readonly="true"].input-text,
+  .warning[readonly="true"].input-date,
+  .warning[readonly="true"].input-textarea, .input-text-styles.warning[readonly="true"]:focus, .warning[readonly="true"].input-text:focus,
+  .warning[readonly="true"].input-date:focus,
+  .warning[readonly="true"].input-textarea:focus {
     padding: 7px 0 7px 7px; }
 
 .input-select-styles, .input-select {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  padding: 0 25px 0 7px;
+  padding: 0 0 0 7px;
   width: calc(100% - 13px);
   height: 26px;
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAHCAYAAAAxrNxjAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAOqAAADqgBI1XlkQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAC1SURBVBiVbY4xasNAEEXfWGcI6AxpjDsfILUxpA/ufAfFu8tqnUOkVR+wU+cAruwuFzAI3WER380qJMFTzfz/eIw5585m9hZj/ODOhBCeJb3OgKukzns//w957+eSOuA6yzlvgB44Nk3zMEFlPwJ9znljkogxPo7jeDKzyzAMTwB1XX9JWlRVtQwhfJskAJxzKzM7AO9FupW0Til9AvyA5acdkMrp2rbdT90fsJg7gJTSy+/8BkIGUW93/oUGAAAAAElFTkSuQmCC) no-repeat right 10px top 50%; }
@@ -255,9 +273,11 @@
   font-size: 12px;
   color: #7d7d7d; }
 
+.input-textarea {
+  height: inherit; }
+
 .input-label {
-  position: relative;
-  top: -3px; }
+  position: relative; }
   .input-label.label-only {
     top: 5px; }
 
@@ -265,15 +285,9 @@
   font-size: 12px;
   vertical-align: top; }
   .input-radio-wrapper span {
-    float: left;
-    padding-right: 15px;
-    padding-bottom: 30px; }
-    .input-radio-wrapper span .input-radio {
-      float: left;
-      margin-right: 6px; }
+    margin-right: 15px; }
   .input-radio-wrapper .input-radio-label {
     display: inline-block;
-    max-width: calc(100% - 25px);
     margin-top: 3px; }
 
 .input-checkbox-wrapper {
@@ -306,7 +320,7 @@
   .input-checkbox-wrapper .input-checkbox-button {
     opacity: 0; }
     .input-checkbox-wrapper .input-checkbox-button:focus + .input-checkbox-display {
-      box-shadow: 0px 0px 0px 2px #B2BB1E, -2px 0px 0px 2px #B2BB1E; }
+      box-shadow: 0 0 0 2px #F3D30E, -2px 0 0 2px #F3D30E; }
     .input-checkbox-wrapper .input-checkbox-button:checked + .input-checkbox-display:after {
       opacity: 1; }
     .input-checkbox-wrapper .input-checkbox-button[disabled="true"] + .input-checkbox-display {

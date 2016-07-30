@@ -20,7 +20,7 @@ import _ from 'lodash';
             hasFocus = inputViewModel.hasFocus,
             readonly = inputViewModel.readonly,
             isShown = inputViewModel.isShown,            
-            autocompleteSource = inputViewModel.values,
+            autocompleteSource = inputViewModel.values, //todo: just use values
             // props
             sourceArray,
             validations,
@@ -28,7 +28,15 @@ import _ from 'lodash';
             unique = options.unique,
             computedSource,
             itemMapper = mapItem(keyMap),
-            objectValue;
+            objectValue,
+            autocompleteSourceDef;
+        
+        if(node.autocompleteSource) {
+            console.warn('[autocomplete] please move the autocompleteSource into options');
+            autocompleteSourceDef = _.cloneDeep(node.autocompleteSource);
+        } else {
+            autocompleteSourceDef = _.cloneDeep(node.options && node.options.autocompleteSource)
+        }
 
         function mapAutocompleteSource(source) {
             return source.map(function(src) {
@@ -73,7 +81,7 @@ import _ from 'lodash';
         }
 
         function getAutocompleteSourceFromContext() {
-            var source = evaluate(node.autocompleteSource.fromArray, context.getValue);
+            var source = evaluate(autocompleteSourceDef.fromArray, context.getValue);
 
             // storing source array before any mapping
             sourceArray = source;
@@ -106,12 +114,12 @@ import _ from 'lodash';
             subs.push(computed(getAutocompleteSource));
         }
 
-        if (Array.isArray(node.autocompleteSource)) {
-            sourceArray = node.autocompleteSource;
-            autocompleteSource(mapAutocompleteSource(node.autocompleteSource));
+        if (Array.isArray(autocompleteSourceDef)) {
+            sourceArray = autocompleteSourceDef;
+            autocompleteSource(mapAutocompleteSource(autocompleteSourceDef));
         }
 
-        if (node.autocompleteSource && !Array.isArray(node.autocompleteSource)) {
+        if (autocompleteSourceDef && !Array.isArray(autocompleteSourceDef)) {
             subs.push(computed(getAutocompleteSourceFromContext).extend({ deferred: true }));
         }
 
@@ -167,6 +175,7 @@ import _ from 'lodash';
         return {
             autocompleteSource: unique ? computedSource : autocompleteSource,
             validations,
+            mappedChildNodes: observableArray(), // todo: still need?
             // setReadonly: setReadonly,
             dispose: () => {
                 if(unique) {

@@ -59,11 +59,11 @@
 	
 	__webpack_require__(146);
 	
-	__webpack_require__(153);
-	
-	__webpack_require__(185);
+	__webpack_require__(154);
 	
 	__webpack_require__(188);
+	
+	__webpack_require__(191);
 	
 	var _scalejs = __webpack_require__(3);
 	
@@ -40530,35 +40530,11 @@
 	        createViewModels = _scalejs.createViewModels.bind(this),
 	        //ensures context is passed
 	    options = node.options || {},
-	        aggregateVisibleMessages = function aggregateVisibleMessages(childNodes) {
-	        return (0, _knockout.unwrap)(childNodes).reduce(function (msgs, childNode) {
-	            var msg;
-	
-	            if (childNode.visibleMessage) {
-	                msg = childNode.visibleMessage();
-	                if (msg) {
-	                    msgs.push(msg);
-	                    return msgs;
-	                }
-	            }
-	            msg = aggregateVisibleMessages(childNode.mappedChildNodes || []);
-	            msgs = msgs.concat(msg);
-	
-	            return msgs;
-	        }, []);
-	    },
 	        mappedChildNodes,
 	        sections,
 	        isShown = (0, _knockout.observable)(true);
 	
 	    mappedChildNodes = createViewModels(node.children);
-	
-	    mappedChildNodes.forEach(function (node) {
-	        node.visibleMessages = (0, _knockout.computed)(function () {
-	            var messages = aggregateVisibleMessages(node.mappedChildNodes);
-	            return messages;
-	        }).extend({ rateLimit: 50 });
-	    });
 	
 	    sections = node.sections.map(function (section, index) {
 	        var visible = (0, _knockout.observable)(options.openByDefault === false ? false : true);
@@ -40617,6 +40593,7 @@
 	 * There is one child per section
 	 */
 
+	// TODO: add docs
 	/*global define, ko*/
 
 /***/ },
@@ -41364,6 +41341,7 @@
 	});
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; }; /*global define */
+	//todo move out
 	
 	
 	var _jsFormat = __webpack_require__(136);
@@ -41376,6 +41354,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	//todo evaluate if should move to advanced grid?
 	function aggregateValues(node) {
 	    var value;
 	    if (node.getValue) {
@@ -41407,44 +41386,17 @@
 	    });
 	    return value;
 	}
-	exports.default = {
-	    'accordion': function accordion(ctx) {
-	        return {
-	            accordion: {
-	                itemsSource: this.sections,
-	                contentTemplate: 'form_self_template',
-	                headerPath: 'header',
-	                openPanel: 1
-	            }
-	        };
-	    },
-	    'accordion-header': function accordionHeader(ctx) {
-	        var error = false,
-	            warning = false;
-	        if (this.visibleMessages().length) {
-	            this.visibleMessages().forEach(function (err) {
-	                if (err.severity == 1) {
-	                    error = true;
-	                } else {
-	                    warning = true;
-	                }
-	            });
-	        }
 	
+	exports.default = {
+	    'accordion-header': function accordionHeader(ctx) {
 	        return {
 	            click: this.toggleVisibility,
+	            //todo this should be an SVG / class
 	            css: {
 	                'fa-caret-down': this.visible(),
-	                'fa-caret-right': !this.visible(),
-	                'error': error,
-	                'warning': warning
+	                'fa-caret-right': !this.visible()
 	            }
 	
-	        };
-	    },
-	    'info': function info(ctx) {
-	        return {
-	            visible: ctx.$parent.options.showInfo
 	        };
 	    },
 	    'accordion-expand-all': function accordionExpandAll(ctx) {
@@ -41463,6 +41415,7 @@
 	            clickBubble: false
 	        };
 	    },
+	    //todo move to advanced grid
 	    'accordion-header-preview-text': function accordionHeaderPreviewText(ctx) {
 	        var accordionChild = ctx.$parents[1].mappedChildNodes[ctx.$index()],
 	            count = (0, _knockout.computed)(function () {
@@ -41477,41 +41430,6 @@
 	    'accordion-header-text': function accordionHeaderText(ctx) {
 	        return {
 	            text: typeof this.header === 'string' ? this.header : this.header.text
-	        };
-	    },
-	    'accordion-header-error-text': function accordionHeaderErrorText(ctx) {
-	        var text = '',
-	            errors = 0,
-	            warnings = 0;
-	        if (this.visibleMessages().length) {
-	            text += '(';
-	            this.visibleMessages().forEach(function (err) {
-	                if (err.severity == 1) {
-	                    errors = errors + 1;
-	                } else {
-	                    warnings = warnings + 1;
-	                }
-	            });
-	            if (errors) {
-	                text += errors + ' error';
-	                if (errors > 1) {
-	                    text += 's';
-	                }
-	                if (warnings) {
-	                    text += ', ';
-	                }
-	            }
-	            if (warnings) {
-	                text += warnings + ' warning';
-	                if (warnings > 1) {
-	                    text += 's';
-	                }
-	            }
-	            text += ')';
-	        }
-	
-	        return {
-	            text: text
 	        };
 	    },
 	    'accordion-sections': function accordionSections() {
@@ -53181,7 +53099,7 @@
 /* 141 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=\"accordion_template\">\r\n\r\n    <div data-bind=\"css: $data.classes, visible: isShown\">\r\n    <!-- ko class: accordion-sections -->\r\n        <!-- ko if: $data.rendered -->\r\n        <header class=\"accordion-header fa\" data-class=\"accordion-header\">\r\n            <span class=\"header-text\" data-class=\"accordion-header-text\"></span>\r\n            <span class=\"error-text\" data-class=\"accordion-header-error-text\"></span>\r\n            <!-- ko template: { name: $data.header.headerTemplate || $parent.headerTemplate || \"accordion_default_header_template\", data: $data.header } -->\r\n            <!-- /ko -->\r\n    </header>\r\n    <section data-bind=\"slideVisible: visible,\r\n                        template: { name: 'metadata_item_template', data: $data }\"\r\n             class=\"inner-accordion\"></section>\r\n    <!-- /ko -->\r\n    <!-- /ko -->\r\n    </div>\r\n</div>\r\n\r\n<div id=\"accordion_info_header_template\">\r\n    <span class=\"header-preview-bg\">\r\n        <span class=\"header-preview-text\" data-class=\"accordion-header-preview-text\"></span>\r\n    </span>\r\n    <!-- ko if: $data.helpText -->\r\n        <i class=\"fa fa-info-circle info\">\r\n            <div class=\"tool-tip\" data-bind=\"text: $data.helpText\"></div>\r\n        </i>\r\n    <!-- /ko -->\r\n</div>\r\n\r\n<div id=\"accordion_control_header_template\">\r\n    <i class=\"fa fa-compress action\" data-class=\"accordion-collapse-all\">\r\n    </i>\r\n    <i class=\"fa fa-expand action\" data-class=\"accordion-expand-all\">\r\n    </i>\r\n</div>\r\n";
+	module.exports = "<div id=\"accordion_template\">\r\n\r\n    <div data-bind=\"css: $data.classes, visible: isShown\">\r\n    <!-- ko class: accordion-sections -->\r\n        <!-- ko if: $data.rendered -->\r\n        <header class=\"accordion-header fa\" data-class=\"accordion-header\">\r\n            <span class=\"header-text\" data-class=\"accordion-header-text\"></span>\r\n            <!-- ko template: { name: $data.header.headerTemplate || $parent.headerTemplate || \"accordion_default_header_template\", data: $data.header } -->\r\n            <!-- /ko -->\r\n    </header>\r\n    <section data-bind=\"slideVisible: visible,\r\n                        template: { name: 'metadata_item_template', data: $data }\"\r\n             class=\"inner-accordion\"></section>\r\n    <!-- /ko -->\r\n    <!-- /ko -->\r\n    </div>\r\n</div>\r\n\r\n<div id=\"accordion_info_header_template\">\r\n    <span class=\"header-preview-bg\">\r\n        <span class=\"header-preview-text\" data-class=\"accordion-header-preview-text\"></span>\r\n    </span>\r\n    <!-- ko if: $data.helpText -->\r\n        <i class=\"fa fa-info-circle info\">\r\n            <div class=\"tool-tip\" data-bind=\"text: $data.helpText\"></div>\r\n        </i>\r\n    <!-- /ko -->\r\n</div>\r\n\r\n<div id=\"accordion_control_header_template\">\r\n    <i class=\"fa fa-compress action\" data-class=\"accordion-collapse-all\">\r\n    </i>\r\n    <i class=\"fa fa-expand action\" data-class=\"accordion-expand-all\">\r\n    </i>\r\n</div>\r\n";
 
 /***/ },
 /* 142 */
@@ -53350,7 +53268,7 @@
 	
 	var _adapterViewModel2 = _interopRequireDefault(_adapterViewModel);
 	
-	var _adapter = __webpack_require__(152);
+	var _adapter = __webpack_require__(153);
 	
 	var _adapter2 = _interopRequireDefault(_adapter);
 	
@@ -53516,28 +53434,41 @@
 	            dataObject = data();
 	
 	        dataSourceEndpointArray.forEach(function (endpoint) {
-	            _dataservice2.default.ajax(endpoint, function (error, results) {
-	                var resultsByKey = void 0,
-	                    keyMap = endpoint.keyMap || {},
-	                    newDataObject = {};
+	            if (endpoint.uri) {
+	                console.warn('dataSourceEndpoint expects URI in "target". Please update your JSON to reflect the new syntax');
+	                endpoint = (0, _scalejs3.merge)(endpoint, {
+	                    target: endpoint
+	                });
+	            }
 	
-	                count++;
+	            _scalejs.createViewModel.call(context, {
+	                "type": "action",
+	                "actionType": "ajax",
+	                "options": endpoint
+	            }).action({
+	                callback: function callback(error, results) {
+	                    var resultsByKey = void 0,
+	                        keyMap = endpoint.keyMap || {},
+	                        newDataObject = {};
 	
-	                if (!error) {
-	                    resultsByKey = keyMap.resultsKey ? (0, _scalejs3.get)(results, keyMap.resultsKey) : results;
-	                    // optional: keyMap.dataKey path to extend dataObject on
-	                    if (keyMap.dataKey) {
-	                        newDataObject[keyMap.dataKey] = resultsByKey;
-	                    } else {
-	                        newDataObject = resultsByKey;
+	                    count++;
+	
+	                    if (!error) {
+	                        resultsByKey = keyMap.resultsKey ? (0, _scalejs3.get)(results, keyMap.resultsKey) : results;
+	                        // optional: keyMap.dataKey path to extend dataObject on
+	                        if (keyMap.dataKey) {
+	                            newDataObject[keyMap.dataKey] = resultsByKey;
+	                        } else {
+	                            newDataObject = resultsByKey;
+	                        }
+	                        (0, _lodash.extend)(dataObject, newDataObject);
 	                    }
-	                    (0, _lodash.extend)(dataObject, newDataObject);
-	                }
 	
-	                if (count === dataSourceEndpointArray.length) {
-	                    updateData(dataObject);
-	                    if (!mappedChildNodes().length) {
-	                        mappedChildNodes(_scalejs.createViewModels.call(context, node.children || []));
+	                    if (count === dataSourceEndpointArray.length) {
+	                        updateData(dataObject);
+	                        if (!mappedChildNodes().length) {
+	                            mappedChildNodes(_scalejs.createViewModels.call(context, node.children || []));
+	                        }
 	                    }
 	                }
 	            });
@@ -53587,10 +53518,11 @@
 	
 	    // listen for 'refresh' event
 	    subs.push((0, _scalejs2.receive)(node.id + '.refresh', function (options) {
+	        console.log('-->', node);
 	        fetchData(options);
 	    }));
 	
-	    return (0, _lodash.merge)(node, {
+	    return (0, _scalejs3.merge)(node, {
 	        mappedChildNodes: mappedChildNodes,
 	        data: data,
 	        contextPlugins: contextPlugins,
@@ -53631,6 +53563,10 @@
 	
 	var _adapterSetValue_data2 = _interopRequireDefault(_adapterSetValue_data);
 	
+	var _ajax_data = __webpack_require__(152);
+	
+	var _ajax_data2 = _interopRequireDefault(_ajax_data);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var timeout = 100;
@@ -53638,7 +53574,7 @@
 	var testData = {},
 	    o = {};
 	
-	_lodash2.default.merge(testData, _adapter_data2.default, _store_data2.default, _adapterSetValue_data2.default);
+	_lodash2.default.merge(testData, _adapter_data2.default, _store_data2.default, _adapterSetValue_data2.default, _ajax_data2.default);
 	
 	function mockAjax(request, callback) {
 	    setTimeout(function () {
@@ -53757,10 +53693,25 @@
 /* 152 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=\"adapter_template\">\r\n    <!-- ko template: { name: 'metadata_items_template', data: mappedChildNodes } -->\r\n    <!-- /ko -->\r\n</div>";
+	"use strict";
+	
+	module.exports = {
+		"test/testURI": {
+			"test": "success"
+		},
+		"test/testContext": {
+			"testContext": "success"
+		}
+	};
 
 /***/ },
 /* 153 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=\"adapter_template\">\r\n    <!-- ko template: { name: 'metadata_items_template', data: mappedChildNodes } -->\r\n    <!-- /ko -->\r\n</div>";
+
+/***/ },
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53769,35 +53720,37 @@
 	
 	var _scalejs2 = __webpack_require__(21);
 	
-	__webpack_require__(154);
+	__webpack_require__(155);
 	
-	__webpack_require__(156);
+	__webpack_require__(157);
 	
-	var _autocompleteViewModel = __webpack_require__(163);
+	var _autocompleteViewModel = __webpack_require__(164);
 	
 	var _autocompleteViewModel2 = _interopRequireDefault(_autocompleteViewModel);
 	
-	var _selectViewModel = __webpack_require__(164);
+	var _selectViewModel = __webpack_require__(165);
 	
 	var _selectViewModel2 = _interopRequireDefault(_selectViewModel);
 	
-	var _inputViewModel = __webpack_require__(165);
+	var _inputViewModel = __webpack_require__(166);
 	
 	var _inputViewModel2 = _interopRequireDefault(_inputViewModel);
 	
-	var _inputBindings = __webpack_require__(166);
+	var _inputBindings = __webpack_require__(167);
 	
 	var _inputBindings2 = _interopRequireDefault(_inputBindings);
 	
-	var _input = __webpack_require__(174);
+	var _input = __webpack_require__(175);
 	
 	var _input2 = _interopRequireDefault(_input);
 	
-	__webpack_require__(175);
+	__webpack_require__(176);
 	
-	__webpack_require__(177);
+	__webpack_require__(178);
 	
-	__webpack_require__(181);
+	__webpack_require__(180);
+	
+	__webpack_require__(184);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -53808,7 +53761,7 @@
 	});
 
 /***/ },
-/* 154 */
+/* 155 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53823,7 +53776,7 @@
 	
 	var _lodash2 = _interopRequireDefault(_lodash);
 	
-	__webpack_require__(155);
+	__webpack_require__(156);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -53901,7 +53854,7 @@
 	_knockout2.default.validation.registerExtenders();
 
 /***/ },
-/* 155 */
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*=============================================================================
@@ -55436,7 +55389,7 @@
 	;}));
 
 /***/ },
-/* 156 */
+/* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55449,8 +55402,6 @@
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
 	
-	__webpack_require__(157);
-	
 	__webpack_require__(158);
 	
 	__webpack_require__(159);
@@ -55460,6 +55411,8 @@
 	__webpack_require__(161);
 	
 	__webpack_require__(162);
+	
+	__webpack_require__(163);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -55571,7 +55524,7 @@
 	};
 
 /***/ },
-/* 157 */
+/* 158 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -56936,7 +56889,7 @@
 	});
 
 /***/ },
-/* 158 */
+/* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -56947,7 +56900,7 @@
 	* Version: 3.1.63
 	*/
 	!function(factory) {
-	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(140), __webpack_require__(157) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./jquery.inputmask")) : factory(jQuery);
+	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(140), __webpack_require__(158) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./jquery.inputmask")) : factory(jQuery);
 	}(function($) {
 	    return $.extend($.inputmask.defaults.definitions, {
 	        h: {
@@ -57402,7 +57355,7 @@
 	});
 
 /***/ },
-/* 159 */
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -57413,7 +57366,7 @@
 	* Version: 3.1.63
 	*/
 	!function(factory) {
-	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(140), __webpack_require__(157) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./jquery.inputmask")) : factory(jQuery);
+	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(140), __webpack_require__(158) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./jquery.inputmask")) : factory(jQuery);
 	}(function($) {
 	    return $.extend($.inputmask.defaults.definitions, {
 	        A: {
@@ -57514,7 +57467,7 @@
 	});
 
 /***/ },
-/* 160 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -57525,7 +57478,7 @@
 	* Version: 3.1.63
 	*/
 	!function(factory) {
-	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(140), __webpack_require__(157) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./jquery.inputmask")) : factory(jQuery);
+	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(140), __webpack_require__(158) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./jquery.inputmask")) : factory(jQuery);
 	}(function($) {
 	    return $.extend($.inputmask.defaults.aliases, {
 	        numeric: {
@@ -57876,7 +57829,7 @@
 	});
 
 /***/ },
-/* 161 */
+/* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -57887,7 +57840,7 @@
 	* Version: 3.1.63
 	*/
 	!function(factory) {
-	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(140), __webpack_require__(157) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./jquery.inputmask")) : factory(jQuery);
+	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(140), __webpack_require__(158) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./jquery.inputmask")) : factory(jQuery);
 	}(function($) {
 	    return $.extend($.inputmask.defaults.aliases, {
 	        phone: {
@@ -57929,7 +57882,7 @@
 	});
 
 /***/ },
-/* 162 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -57940,7 +57893,7 @@
 	* Version: 3.1.63
 	*/
 	!function(factory) {
-	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(140), __webpack_require__(157) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./jquery.inputmask")) : factory(jQuery);
+	     true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [ __webpack_require__(140), __webpack_require__(158) ], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == typeof exports ? module.exports = factory(require("jquery"), require("./jquery.inputmask")) : factory(jQuery);
 	}(function($) {
 	    return $.extend($.inputmask.defaults.aliases, {
 	        Regex: {
@@ -58058,7 +58011,7 @@
 	});
 
 /***/ },
-/* 163 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58101,16 +58054,24 @@
 	        hasFocus = inputViewModel.hasFocus,
 	        readonly = inputViewModel.readonly,
 	        isShown = inputViewModel.isShown,
-	
+	        autocompleteSource = inputViewModel.values,
+	        //todo: just use values
 	    // props
-	    autocompleteSource = (0, _knockout.observableArray)(),
-	        sourceArray,
+	    sourceArray,
 	        validations,
 	        options = node.options || {},
 	        unique = options.unique,
 	        computedSource,
 	        itemMapper = mapItem(keyMap),
-	        objectValue;
+	        objectValue,
+	        autocompleteSourceDef;
+	
+	    if (node.autocompleteSource) {
+	        console.warn('[autocomplete] please move the autocompleteSource into options');
+	        autocompleteSourceDef = _lodash2.default.cloneDeep(node.autocompleteSource);
+	    } else {
+	        autocompleteSourceDef = _lodash2.default.cloneDeep(node.options && node.options.autocompleteSource);
+	    }
 	
 	    function mapAutocompleteSource(source) {
 	        return source.map(function (src) {
@@ -58153,7 +58114,7 @@
 	    }
 	
 	    function getAutocompleteSourceFromContext() {
-	        var source = (0, _scalejs2.evaluate)(node.autocompleteSource.fromArray, context.getValue);
+	        var source = (0, _scalejs2.evaluate)(autocompleteSourceDef.fromArray, context.getValue);
 	
 	        // storing source array before any mapping
 	        sourceArray = source;
@@ -58180,12 +58141,12 @@
 	        subs.push((0, _knockout.computed)(getAutocompleteSource));
 	    }
 	
-	    if (Array.isArray(node.autocompleteSource)) {
-	        sourceArray = node.autocompleteSource;
-	        autocompleteSource(mapAutocompleteSource(node.autocompleteSource));
+	    if (Array.isArray(autocompleteSourceDef)) {
+	        sourceArray = autocompleteSourceDef;
+	        autocompleteSource(mapAutocompleteSource(autocompleteSourceDef));
 	    }
 	
-	    if (node.autocompleteSource && !Array.isArray(node.autocompleteSource)) {
+	    if (autocompleteSourceDef && !Array.isArray(autocompleteSourceDef)) {
 	        subs.push((0, _knockout.computed)(getAutocompleteSourceFromContext).extend({ deferred: true }));
 	    }
 	
@@ -58243,6 +58204,7 @@
 	    return {
 	        autocompleteSource: unique ? computedSource : autocompleteSource,
 	        validations: validations,
+	        mappedChildNodes: (0, _knockout.observableArray)(), // todo: still need?
 	        // setReadonly: setReadonly,
 	        dispose: function dispose() {
 	            if (unique) {
@@ -58253,7 +58215,7 @@
 	};
 
 /***/ },
-/* 164 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58310,11 +58272,11 @@
 	        mapItem = inputViewModel.mapItem,
 	        format = inputViewModel.format,
 	        subs = inputViewModel.subs,
+	        values = inputViewModel.values,
 	
 	    // props           
 	    addBlank = !(0, _scalejs2.has)(options.addBlank) || options.addBlank,
 	        currentFilter = (0, _knockout.observable)(),
-	        values = (0, _knockout.observableArray)(),
 	        computedValues;
 	
 	    if (!options.values) {
@@ -58445,7 +58407,7 @@
 	};
 
 /***/ },
-/* 165 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58480,11 +58442,11 @@
 	
 	var _moment2 = _interopRequireDefault(_moment);
 	
-	var _autocompleteViewModel = __webpack_require__(163);
+	var _autocompleteViewModel = __webpack_require__(164);
 	
 	var _autocompleteViewModel2 = _interopRequireDefault(_autocompleteViewModel);
 	
-	var _selectViewModel = __webpack_require__(164);
+	var _selectViewModel = __webpack_require__(165);
 	
 	var _selectViewModel2 = _interopRequireDefault(_selectViewModel);
 	
@@ -58580,7 +58542,8 @@
 	        hasFocus: hasFocus,
 	        format: format,
 	        subs: subs,
-	        readonly: readonly
+	        readonly: readonly,
+	        values: values
 	    };
 	
 	    /*
@@ -58610,14 +58573,17 @@
 	        }
 	    }
 	
-	    // function update(data) {
-	    //     if (data.hasOwnProperty('value')) {
-	    //         setValue(data.value);
-	    //     }
-	    //     if (data.hasOwnProperty('ErrorMessage')) {
-	    //         customError(data.ErrorMessage);
-	    //     }
-	    // }
+	    function update(data) {
+	        if (data.hasOwnProperty('value')) {
+	            setValue(data.value);
+	        }
+	        if (data.hasOwnProperty('error')) {
+	            customError(data.error);
+	        }
+	        if (data.hasOwnProperty('values')) {
+	            values(data.values);
+	        }
+	    }
 	
 	    function validate() {
 	        console.error('Relying on "this" for rendered in validate. REFACTOR');
@@ -58791,40 +58757,68 @@
 	    }
 	
 	    // Is this needed in the common? Should it be a plugin/mixin?
-	    // if (options.registered) {
-	    //     registeredAction = createViewModel.call(this, {
-	    //         type: 'action',
-	    //         actionType: 'ajax',
-	    //         options: merge(options.registered, { data: {} })
-	    //     });
+	    /*
+	        how to define
+	        {
+	            type: 'input',
+	            options: {
+	                registered: {
+	                    target: {
+	                        uri: 'uri/here' <- requests an endpoint
+	                    }
+	                }
+	            }
+	        }
+	          data that gets sent
+	        {
+	            input_id: input_value
+	        }
+	          data that comes back 
+	        {
+	            input_to_update: {
+	                values: [
+	                    'value1'
+	                ]
+	            }
+	        }
+	    */
 	
-	    //     inputValue.subscribe(function (newValue) {
-	    //         registeredAction.options.data[node.id] = newValue; //our own sub gets called before context is updated
-	    //         if (newValue !== '') {
-	    //             registeredAction.action({
-	    //                 callback: (error, data) => {
-	    //                     Object.keys(data).forEach((key) => {
-	    //                         if (!context.dictionary && !context.data) {
-	    //                             console.warn('Using a registered input when no data/dictionary available in context', node);
-	    //                             return;
-	    //                         }
-	    //                         var node = context.dictionary && context.dictionary()[key];
-	    //                         if (node && node.update) {
-	    //                             node.update(data[key]);
-	    //                         } else if (context.data && has(data[key], 'value')) {
-	    //                             context.data()[key] = data[key].value;
-	    //                         }
-	    //                     });
-	    //                 }
-	    //             });
-	    //         }
-	    //     });
-	    // }
+	    if (options.registered) {
+	        registeredAction = _scalejs.createViewModel.call(this, {
+	            type: 'action',
+	            actionType: 'ajax',
+	            options: (0, _scalejs3.merge)(options.registered, { data: {} })
+	        });
+	
+	        inputValue.subscribe(function (newValue) {
+	            registeredAction.options.data[node.id] = newValue; //our own sub gets called before context is updated
+	            if (newValue !== '') {
+	                registeredAction.action({
+	                    callback: function callback(error, data) {
+	                        Object.keys(data).forEach(function (key) {
+	                            if (!context.dictionary && !context.data) {
+	                                console.warn('Using a registered input when no data/dictionary available in context', node);
+	                                return;
+	                            }
+	                            var node = context.dictionary && context.dictionary()[key];
+	                            if (node && node.update) {
+	                                node.update(data[key]);
+	                            }
+	                        });
+	                    }
+	                });
+	            }
+	        });
+	    }
 	
 	    // TODO: Clean up validation Code
 	    // add validations to the inputvalue
 	    validations = (0, _scalejs3.merge)(_lodash2.default.cloneDeep(options.validations), { customError: customError });
 	    if (validations.expression) {
+	        if (options.validations.expression.message && !options.validations.expression.term) {
+	            console.error("[input] if providing a message for expression validation, must also provide term");
+	            options.validations.expression.term = "true"; // don't cause exceptions.
+	        }
 	        validations.expression.params = [options.validations.expression.message ? options.validations.expression.term : options.validations.expression, context.getValue];
 	    }
 	
@@ -58871,7 +58865,10 @@
 	            return (0, _scalejs2.evaluate)(options.valueExpression, context.getValue);
 	        });
 	        setValue(computedValueExpression());
-	        computedValueExpression.subscribe(setValue(value));
+	        computedValueExpression.subscribe(function (value) {
+	            setValue(value);
+	        });
+	
 	        subs.push(computedValueExpression);
 	    }
 	
@@ -58908,7 +58905,7 @@
 	        shake: shake,
 	        options: options,
 	        setValue: setValue,
-	        // update,
+	        update: update,
 	        context: this,
 	        error: inputValue.error,
 	
@@ -58975,7 +58972,7 @@
 	 */
 
 /***/ },
-/* 166 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -58990,9 +58987,9 @@
 	
 	var format = _interopRequireWildcard(_jsFormat);
 	
-	__webpack_require__(167);
+	__webpack_require__(168);
 	
-	__webpack_require__(173);
+	__webpack_require__(174);
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
@@ -59318,14 +59315,14 @@
 	};
 
 /***/ },
-/* 167 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// knockout-jqautocomplete 0.4.4 | (c) 2016 Ryan Niemeyer |  http://www.opensource.org/licenses/mit-license
 	;(function(factory) {
 	    if (true) {
 	        // AMD anonymous module
-	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(10), __webpack_require__(140), __webpack_require__(168)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(10), __webpack_require__(140), __webpack_require__(169)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	    } else {
 	        // No module loader - put directly in global namespace
 	        factory(window.ko, jQuery);
@@ -59513,14 +59510,14 @@
 
 
 /***/ },
-/* 168 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var jQuery = __webpack_require__(140);
-	__webpack_require__(169);
 	__webpack_require__(170);
 	__webpack_require__(171);
 	__webpack_require__(172);
+	__webpack_require__(173);
 	
 	/*!
 	 * jQuery UI Autocomplete 1.10.4
@@ -60131,7 +60128,7 @@
 
 
 /***/ },
-/* 169 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var jQuery = __webpack_require__(140);
@@ -60459,7 +60456,7 @@
 
 
 /***/ },
-/* 170 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var jQuery = __webpack_require__(140);
@@ -60988,7 +60985,7 @@
 
 
 /***/ },
-/* 171 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var jQuery = __webpack_require__(140);
@@ -61497,13 +61494,13 @@
 
 
 /***/ },
-/* 172 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var jQuery = __webpack_require__(140);
-	__webpack_require__(169);
 	__webpack_require__(170);
 	__webpack_require__(171);
+	__webpack_require__(172);
 	
 	/*!
 	 * jQuery UI Menu 1.10.4
@@ -62135,7 +62132,7 @@
 
 
 /***/ },
-/* 173 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -62148,7 +62145,7 @@
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
 	
-	__webpack_require__(167);
+	__webpack_require__(168);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -62185,13 +62182,13 @@
 	//# sourceMappingURL=showAllAuto.js.map
 
 /***/ },
-/* 174 */
+/* 175 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=\"input_template\">\r\n    <div data-bind=\"css: $data.classes\" class=\"input\">\r\n        <label data-class=\"input-labels input-color-text\" class=\"input-label\"></label>\r\n        <!-- ko if: $data.helpText -->\r\n            <i class=\"fa fa-info-circle info\"> <!--TODO: image icon -->\r\n                <div class=\"tool-tip\" data-bind=\"text: $data.helpText\"></div>\r\n            </i>\r\n        <!-- /ko -->\r\n\r\n        <!-- ko template: 'input_' + inputType + '_template' -->\r\n        <!-- /ko -->\r\n        <span data-class=\"input-validation\"></span>\r\n        <span data-class=\"input-tooltip\"></span>\r\n    </div>\r\n</div>\r\n\r\n<!-- TODO: Need this? -->\r\n<div id=\"input_textLabel_template\">\r\n    <div class=\"input-label label-only\" data-class=\"input-labels-only\"></div>\r\n</div>\r\n\r\n<!-- TODO: Do we need input-wrapper around every template?-->\r\n\r\n<div id=\"input_text_template\">\r\n    <div class=\"input-wrapper\">\r\n        <input data-class=\"input-input input-validation-checker\" type=\"text\" class=\"input-text\"/>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_select_template\">\r\n    <div class=\"input-wrapper\">\r\n        <select data-class=\"input-select input-validation-checker\" class=\"input-select\"></select>\r\n    </div>\r\n\r\n</div>\r\n\r\n<div id=\"input_datepicker_template\">\r\n    <div class=\"input-wrapper\">\r\n        <input type=\"text\" data-class=\"input-datepicker input-validation-checker\" class=\"input-date\"/>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_autosize_template\">\r\n    <div class=\"input-wrapper\">\r\n        <textarea  data-class=\"input-input input-validation-checker input-autosize\" class=\"input-text\"></textarea>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_radio_template\">\r\n    <div data-class=\"input-radio input-color-text\" class=\"input-radio-wrapper\">\r\n    <span data-bind=\"style: { display: $parent.options.vertical ? 'block' : 'inline-block' }\">\r\n        <input type=\"radio\" class=\"input-radio\" data-class=\"input-radio-button\" />\r\n        <div class=\"input-radio-label\">\r\n            <!-- ko text: value --> <!-- /ko -->\r\n        </div>\r\n    </span>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_checkbox_template\">\r\n    <label class=\"input-checkbox-wrapper\">\r\n        <input type=\"checkbox\" class=\"input-checkbox-button\" data-class=\"input-checkbox-button input-validation-checker\">\r\n        <span class=\"input-checkbox-display\"></span>\r\n        <span class=\"input-checkbox-label\" data-bind=\"text: options.text\"></span>\r\n    </label>\r\n</div>\r\n\r\n<div id=\"input_checkboxList_template\">\r\n    <div data-bind=\"css:$data.classes\">\r\n    <!-- ko foreach: values -->\r\n        <label class=\"input-checkbox-wrapper\" data-bind=\"style: { display: $parent.options.vertical ? 'block' : 'inline-block' }\">\r\n            <input type=\"checkbox\" data-class=\"input-checkbox-button-group\" class=\"input-checkbox-button\">\r\n            <span class=\"input-checkbox-display\"></span>\r\n            <span class=\"input-checkbox-label\" data-bind=\"text: text\" ></span>\r\n        </label>\r\n    <!-- /ko -->\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_autocomplete_template\">\r\n     <!-- ko if: mappedChildNodes().length === 0 -->\r\n    <div class=\"input-wrapper\">\r\n        <input data-class=\"input-autocomplete input-validation-checker\" class=\"input-text\"/>\r\n    </div>\r\n     <!-- /ko -->\r\n    <!-- ko if: mappedChildNodes().length !==  0-->\r\n        <!-- ko foreach: mappedChildNodes -->\r\n            <!-- ko template: 'metadata_item_template' -->\r\n            <!-- /ko -->\r\n        <!-- /ko -->\r\n    <!-- /ko -->\r\n\r\n</div>\r\n\r\n<!-- TODO: Why do we need this? -->\r\n<div id=\"input_add_button_template\" class=\"add\">\r\n    <button class=\"fa fa-icon-add\" data-bind=\"click: input.add\">\r\n        <span class=\"button-text\">Add</span>\r\n    </button>\r\n</div>";
+	module.exports = "<div id=\"input_template\">\r\n    <div data-bind=\"css: $data.classes\" class=\"input\">\r\n        <label data-class=\"input-labels input-color-text\" class=\"input-label\"></label>\r\n        <!-- ko if: $data.helpText -->\r\n        <i class=\"fa fa-info-circle info\"> <!--TODO: image icon -->\r\n                <div class=\"tool-tip\" data-bind=\"text: $data.helpText\"></div>\r\n            </i>\r\n        <!-- /ko -->\r\n\r\n        <!-- ko template: 'input_' + inputType + '_template' -->\r\n        <!-- /ko -->\r\n        <span data-class=\"input-validation\"></span>\r\n        <span data-class=\"input-tooltip\"></span>\r\n    </div>\r\n</div>\r\n\r\n<!-- TODO: Need this? -->\r\n<div id=\"input_textLabel_template\">\r\n    <div class=\"input-label label-only\" data-class=\"input-labels-only\"></div>\r\n</div>\r\n\r\n<!-- TODO: Do we need input-wrapper around every template?-->\r\n\r\n<div id=\"input_text_template\">\r\n    <div class=\"input-wrapper\">\r\n        <input data-class=\"input-input input-validation-checker\" type=\"text\" class=\"input-text\" />\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_select_template\">\r\n    <div class=\"input-wrapper\">\r\n        <select data-class=\"input-select input-validation-checker\" class=\"input-select\"></select>\r\n    </div>\r\n\r\n</div>\r\n\r\n<div id=\"input_datepicker_template\">\r\n    <div class=\"input-wrapper\">\r\n        <input type=\"text\" data-class=\"input-datepicker input-validation-checker\" class=\"input-date\" />\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_textarea_template\">\r\n    <div class=\"input-wrapper\">\r\n        <textarea data-class=\"input-input input-validation-checker\" class=\"input-textarea\"></textarea>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_autosize_template\">\r\n    <div class=\"input-wrapper\">\r\n        <textarea data-class=\"input-input input-validation-checker input-autosize\" class=\"input-text\"></textarea>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_radio_template\">\r\n    <div data-class=\"input-radio input-color-text\" class=\"input-radio-wrapper\">\r\n        <label>\r\n            <input type=\"radio\" class=\"input-radio\" data-class=\"input-radio-button\" />\r\n            <span data-bind=\"css: 'icon ' + $data.icon\"></span>\r\n            <span class=\"input-radio-label\" data-bind=\"text: $data.value\"></span>\r\n        </label>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_checkbox_template\">\r\n    <label class=\"input-checkbox-wrapper\">\r\n        <input type=\"checkbox\" class=\"input-checkbox-button\" data-class=\"input-checkbox-button input-validation-checker\">\r\n        <span class=\"input-checkbox-display\"></span>\r\n        <span class=\"input-checkbox-label\" data-bind=\"text: options.text\"></span>\r\n    </label>\r\n</div>\r\n\r\n<div id=\"input_checkboxList_template\">\r\n    <div data-bind=\"css:$data.classes\">\r\n        <!-- ko foreach: values -->\r\n        <label class=\"input-checkbox-wrapper\" data-bind=\"style: { display: $parent.options.vertical ? 'block' : 'inline-block' }\">\r\n            <input type=\"checkbox\" data-class=\"input-checkbox-button-group\" class=\"input-checkbox-button\">\r\n            <span class=\"input-checkbox-display\"></span>\r\n            <span class=\"input-checkbox-label\" data-bind=\"text: text\"></span>\r\n        </label>\r\n        <!-- /ko -->\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_autocomplete_template\">\r\n    <!-- ko if: mappedChildNodes().length === 0 -->\r\n    <div class=\"input-wrapper\">\r\n        <input data-class=\"input-autocomplete input-validation-checker\" class=\"input-text\" />\r\n    </div>\r\n    <!-- /ko -->\r\n    <!-- ko if: mappedChildNodes().length !==  0-->\r\n    <!-- ko foreach: mappedChildNodes -->\r\n    <!-- ko template: 'metadata_item_template' -->\r\n    <!-- /ko -->\r\n    <!-- /ko -->\r\n    <!-- /ko -->\r\n\r\n</div>\r\n\r\n<!-- TODO: Why do we need this? -->\r\n<div id=\"input_add_button_template\" class=\"add\">\r\n    <button class=\"fa fa-icon-add\" data-bind=\"click: input.add\">\r\n        <span class=\"button-text\">Add</span>\r\n    </button>\r\n</div>";
 
 /***/ },
-/* 175 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -62204,7 +62201,7 @@
 	
 	var _knockout2 = _interopRequireDefault(_knockout);
 	
-	var _pikaday = __webpack_require__(176);
+	var _pikaday = __webpack_require__(177);
 	
 	var _pikaday2 = _interopRequireDefault(_pikaday);
 	
@@ -62433,7 +62430,7 @@
 	//# sourceMappingURL=datepicker.js.map
 
 /***/ },
-/* 176 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -63523,26 +63520,335 @@
 
 
 /***/ },
-/* 177 */
+/* 178 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _knockout = __webpack_require__(10);
+	
+	var _knockout2 = _interopRequireDefault(_knockout);
+	
+	var _autosize = __webpack_require__(179);
+	
+	var _autosize2 = _interopRequireDefault(_autosize);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * TODO - description
+	 * @module autosize
+	 */
+	
+	_knockout2.default.bindingHandlers.autosize = {
+	    init: function init(element, valueAccessor) {
+	        function applyAutosize() {
+	            (0, _autosize2.default)(element);
+	        }
+	
+	        function destroyAutosize() {
+	            _autosize2.default.destroy(element);
+	        }
+	
+	        element.addEventListener('focus', applyAutosize);
+	        element.addEventListener('focusout', destroyAutosize);
+	
+	        _knockout2.default.utils.domNodeDisposal.addDisposeCallback(element, function () {
+	            element.removeEventListener('focus', applyAutosize);
+	            element.removeEventListener('focusout', destroyAutosize);
+	        });
+	    }
+	};
+	//# sourceMappingURL=autosize.js.map
+
+/***/ },
+/* 179 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+		Autosize 3.0.17
+		license: MIT
+		http://www.jacklmoore.com/autosize
+	*/
+	(function (global, factory) {
+		if (true) {
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [exports, module], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
+			factory(exports, module);
+		} else {
+			var mod = {
+				exports: {}
+			};
+			factory(mod.exports, mod);
+			global.autosize = mod.exports;
+		}
+	})(this, function (exports, module) {
+		'use strict';
+	
+		var set = typeof Set === 'function' ? new Set() : (function () {
+			var list = [];
+	
+			return {
+				has: function has(key) {
+					return Boolean(list.indexOf(key) > -1);
+				},
+				add: function add(key) {
+					list.push(key);
+				},
+				'delete': function _delete(key) {
+					list.splice(list.indexOf(key), 1);
+				} };
+		})();
+	
+		var createEvent = function createEvent(name) {
+			return new Event(name);
+		};
+		try {
+			new Event('test');
+		} catch (e) {
+			// IE does not support `new Event()`
+			createEvent = function (name) {
+				var evt = document.createEvent('Event');
+				evt.initEvent(name, true, false);
+				return evt;
+			};
+		}
+	
+		function assign(ta) {
+			if (!ta || !ta.nodeName || ta.nodeName !== 'TEXTAREA' || set.has(ta)) return;
+	
+			var heightOffset = null;
+			var clientWidth = ta.clientWidth;
+			var cachedHeight = null;
+	
+			function init() {
+				var style = window.getComputedStyle(ta, null);
+	
+				if (style.resize === 'vertical') {
+					ta.style.resize = 'none';
+				} else if (style.resize === 'both') {
+					ta.style.resize = 'horizontal';
+				}
+	
+				if (style.boxSizing === 'content-box') {
+					heightOffset = -(parseFloat(style.paddingTop) + parseFloat(style.paddingBottom));
+				} else {
+					heightOffset = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
+				}
+				// Fix when a textarea is not on document body and heightOffset is Not a Number
+				if (isNaN(heightOffset)) {
+					heightOffset = 0;
+				}
+	
+				update();
+			}
+	
+			function changeOverflow(value) {
+				{
+					// Chrome/Safari-specific fix:
+					// When the textarea y-overflow is hidden, Chrome/Safari do not reflow the text to account for the space
+					// made available by removing the scrollbar. The following forces the necessary text reflow.
+					var width = ta.style.width;
+					ta.style.width = '0px';
+					// Force reflow:
+					/* jshint ignore:start */
+					ta.offsetWidth;
+					/* jshint ignore:end */
+					ta.style.width = width;
+				}
+	
+				ta.style.overflowY = value;
+	
+				resize();
+			}
+	
+			function getParentOverflows(el) {
+				var arr = [];
+	
+				while (el && el.parentNode && el.parentNode instanceof Element) {
+					if (el.parentNode.scrollTop) {
+						arr.push({
+							node: el.parentNode,
+							scrollTop: el.parentNode.scrollTop });
+					}
+					el = el.parentNode;
+				}
+	
+				return arr;
+			}
+	
+			function resize() {
+				var originalHeight = ta.style.height;
+				var overflows = getParentOverflows(ta);
+				var docTop = document.documentElement && document.documentElement.scrollTop; // Needed for Mobile IE (ticket #240)
+	
+				ta.style.height = 'auto';
+	
+				var endHeight = ta.scrollHeight + heightOffset;
+	
+				if (ta.scrollHeight === 0) {
+					// If the scrollHeight is 0, then the element probably has display:none or is detached from the DOM.
+					ta.style.height = originalHeight;
+					return;
+				}
+	
+				ta.style.height = endHeight + 'px';
+	
+				// used to check if an update is actually necessary on window.resize
+				clientWidth = ta.clientWidth;
+	
+				// prevents scroll-position jumping
+				overflows.forEach(function (el) {
+					el.node.scrollTop = el.scrollTop;
+				});
+	
+				if (docTop) {
+					document.documentElement.scrollTop = docTop;
+				}
+			}
+	
+			function update() {
+				resize();
+	
+				var computed = window.getComputedStyle(ta, null);
+				var computedHeight = Math.round(parseFloat(computed.height));
+				var styleHeight = Math.round(parseFloat(ta.style.height));
+	
+				// The computed height not matching the height set via resize indicates that
+				// the max-height has been exceeded, in which case the overflow should be set to visible.
+				if (computedHeight !== styleHeight) {
+					if (computed.overflowY !== 'visible') {
+						changeOverflow('visible');
+					}
+				} else {
+					// Normally keep overflow set to hidden, to avoid flash of scrollbar as the textarea expands.
+					if (computed.overflowY !== 'hidden') {
+						changeOverflow('hidden');
+					}
+				}
+	
+				if (cachedHeight !== computedHeight) {
+					cachedHeight = computedHeight;
+					var evt = createEvent('autosize:resized');
+					ta.dispatchEvent(evt);
+				}
+			}
+	
+			var pageResize = function pageResize() {
+				if (ta.clientWidth !== clientWidth) {
+					update();
+				}
+			};
+	
+			var destroy = (function (style) {
+				window.removeEventListener('resize', pageResize, false);
+				ta.removeEventListener('input', update, false);
+				ta.removeEventListener('keyup', update, false);
+				ta.removeEventListener('autosize:destroy', destroy, false);
+				ta.removeEventListener('autosize:update', update, false);
+				set['delete'](ta);
+	
+				Object.keys(style).forEach(function (key) {
+					ta.style[key] = style[key];
+				});
+			}).bind(ta, {
+				height: ta.style.height,
+				resize: ta.style.resize,
+				overflowY: ta.style.overflowY,
+				overflowX: ta.style.overflowX,
+				wordWrap: ta.style.wordWrap });
+	
+			ta.addEventListener('autosize:destroy', destroy, false);
+	
+			// IE9 does not fire onpropertychange or oninput for deletions,
+			// so binding to onkeyup to catch most of those events.
+			// There is no way that I know of to detect something like 'cut' in IE9.
+			if ('onpropertychange' in ta && 'oninput' in ta) {
+				ta.addEventListener('keyup', update, false);
+			}
+	
+			window.addEventListener('resize', pageResize, false);
+			ta.addEventListener('input', update, false);
+			ta.addEventListener('autosize:update', update, false);
+			set.add(ta);
+			ta.style.overflowX = 'hidden';
+			ta.style.wordWrap = 'break-word';
+	
+			init();
+		}
+	
+		function destroy(ta) {
+			if (!(ta && ta.nodeName && ta.nodeName === 'TEXTAREA')) return;
+			var evt = createEvent('autosize:destroy');
+			ta.dispatchEvent(evt);
+		}
+	
+		function update(ta) {
+			if (!(ta && ta.nodeName && ta.nodeName === 'TEXTAREA')) return;
+			var evt = createEvent('autosize:update');
+			ta.dispatchEvent(evt);
+		}
+	
+		var autosize = null;
+	
+		// Do nothing in Node.js environment and IE8 (or lower)
+		if (typeof window === 'undefined' || typeof window.getComputedStyle !== 'function') {
+			autosize = function (el) {
+				return el;
+			};
+			autosize.destroy = function (el) {
+				return el;
+			};
+			autosize.update = function (el) {
+				return el;
+			};
+		} else {
+			autosize = function (el, options) {
+				if (el) {
+					Array.prototype.forEach.call(el.length ? el : [el], function (x) {
+						return assign(x, options);
+					});
+				}
+				return el;
+			};
+			autosize.destroy = function (el) {
+				if (el) {
+					Array.prototype.forEach.call(el.length ? el : [el], destroy);
+				}
+				return el;
+			};
+			autosize.update = function (el) {
+				if (el) {
+					Array.prototype.forEach.call(el.length ? el : [el], update);
+				}
+				return el;
+			};
+		}
+	
+		module.exports = autosize;
+	});
+
+/***/ },
+/* 180 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 178 */,
-/* 179 */,
-/* 180 */,
-/* 181 */
+/* 181 */,
+/* 182 */,
+/* 183 */,
+/* 184 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	"use strict";
 
 /***/ },
-/* 182 */,
-/* 183 */,
-/* 184 */,
-/* 185 */
+/* 185 */,
+/* 186 */,
+/* 187 */,
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -63551,11 +63857,11 @@
 	
 	var _scalejs2 = __webpack_require__(21);
 	
-	var _storeViewModel = __webpack_require__(186);
+	var _storeViewModel = __webpack_require__(189);
 	
 	var _storeViewModel2 = _interopRequireDefault(_storeViewModel);
 	
-	var _store = __webpack_require__(187);
+	var _store = __webpack_require__(190);
 	
 	var _store2 = _interopRequireDefault(_store);
 	
@@ -63567,7 +63873,7 @@
 	});
 
 /***/ },
-/* 186 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -63681,13 +63987,13 @@
 	 */
 
 /***/ },
-/* 187 */
+/* 190 */
 /***/ function(module, exports) {
 
 	module.exports = "<div id=\"store_template\">\r\n</div>";
 
 /***/ },
-/* 188 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -63696,7 +64002,7 @@
 	
 	var _scalejs2 = __webpack_require__(21);
 	
-	var _templateViewModel = __webpack_require__(189);
+	var _templateViewModel = __webpack_require__(192);
 	
 	var _templateViewModel2 = _interopRequireDefault(_templateViewModel);
 	
@@ -63707,7 +64013,7 @@
 	});
 
 /***/ },
-/* 189 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -63725,9 +64031,12 @@
 	
 	var _knockout = __webpack_require__(10);
 	
+	var _scalejs3 = __webpack_require__(130);
+	
 	function templateViewModel(node) {
-	    var data = (0, _knockout.observable)(node.data || {}),
-	        context = node.options && node.options.createContext ? { metadata: [], data: data } : this,
+	    var data = (0, _knockout.observable)(node.hasOwnProperty('data') ? node.data : {}),
+	        // ability to override initial data
+	    context = node.options && node.options.createContext ? { metadata: [], data: data } : this,
 	        createViewModel = _scalejs.createViewModel.bind(context),
 	        // passes context
 	    createViewModels = _scalejs.createViewModels.bind(context),
@@ -63767,7 +64076,7 @@
 	        createViewModel(node.dataSourceEndpoint).action(callback);
 	    }
 	
-	    return (0, _lodash.merge)(node, {
+	    return (0, _scalejs3.merge)(node, {
 	        mappedChildNodes: mappedChildNodes,
 	        action: action,
 	        data: data,

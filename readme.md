@@ -27,7 +27,9 @@ Import the modules into your entry point for them to be registered in the MVVM a
 
 Modules will be compatible with hot-loader to add hot loading functionality with webpack.
 
-## Worklog
-* 6/17 - Store (complete)
-* 6/16 - Adapter (needs more tests)
+
+## TODO
+* grep repo for inline todos
+* move over common layout templates
+* autocomplete: fix error & get styles working
 
