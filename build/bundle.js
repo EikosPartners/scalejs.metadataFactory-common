@@ -65,6 +65,10 @@
 	
 	__webpack_require__(191);
 	
+	__webpack_require__(193);
+	
+	__webpack_require__(197);
+	
 	var _scalejs = __webpack_require__(3);
 	
 	var _scalejs2 = _interopRequireDefault(_scalejs);
@@ -64084,6 +64088,1170 @@
 	        context: this
 	    });
 	}
+
+/***/ },
+/* 193 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _scalejs = __webpack_require__(3);
+	
+	var _scalejs2 = __webpack_require__(21);
+	
+	var _listViewModel = __webpack_require__(194);
+	
+	var _listViewModel2 = _interopRequireDefault(_listViewModel);
+	
+	var _listBindings = __webpack_require__(195);
+	
+	var _listBindings2 = _interopRequireDefault(_listBindings);
+	
+	var _list = __webpack_require__(196);
+	
+	var _list2 = _interopRequireDefault(_list);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	(0, _scalejs.registerBindings)(_listBindings2.default);
+	(0, _scalejs.registerTemplates)(_list2.default);
+	(0, _scalejs2.registerViewModels)({
+	    list: _listViewModel2.default
+	});
+
+/***/ },
+/* 194 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = listViewModel;
+	
+	var _knockout = __webpack_require__(10);
+	
+	var _scalejs = __webpack_require__(21);
+	
+	var _scalejs2 = __webpack_require__(128);
+	
+	var _scalejs3 = __webpack_require__(22);
+	
+	var _scalejs4 = _interopRequireDefault(_scalejs3);
+	
+	var _scalejs5 = __webpack_require__(130);
+	
+	var _lodash = __webpack_require__(23);
+	
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// todo: revisit comments below
+	// listViewModel is a component which manages a simple list
+	// - items - items are what are used to make up the rows in the list
+	// - options
+	// -- addRows - if false add button does not appear
+	// -- deleteRows - if false delete button does not appear
+	// -- minRequiredRows - initializes list with # of rows and wont let user delete
+	
+	//TODO: Refactor Session
+	//- implement "parent passes to children" pattern for labels
+	//- brainstorm cleaner "itemViewModel" imp.
+	//- general clean up/renaming/documenting session
+	// ...add more refactor session goals here!
+	/**
+	 *  list is the component to use when wanting to group items into enumerable lists.
+	 *  There are two types of lists: responsive form lists (default) and table lists (+listAdvanced wrapper)
+	 *  The underlying data model for a list is an array of objects.
+	 *
+	 * @module list
+	 *
+	 * @param {object} node
+	 *  The configuration specs for the component.
+	 * @param {string} [node.id]
+	 *  The id of the list becomes the key in the data for all the children of the list.
+	 *
+	 */
+	var listItems = {
+	    DELETE: del,
+	    DELETE_FLAG: deleteFlag
+	};
+	
+	function del(itemDef) {
+	    var context = this,
+	        clonedItem = _lodash2.default.cloneDeep(itemDef);
+	
+	    delete clonedItem.template; // prevent scalejs merge issue
+	
+	    return (0, _scalejs5.merge)(clonedItem, {
+	        id: undefined,
+	        template: {
+	            name: itemDef.template || 'list_del_template',
+	            data: context
+	        }
+	    });
+	}
+	
+	function deleteFlag(itemDef) {
+	    var context = this;
+	    // the id will be the propertu
+	    // getValue - return if it was deleted or not
+	    return context.isNew ? del.call(context, itemDef) : (0, _scalejs5.merge)(context, {
+	        template: 'list_del_flag_template',
+	        getValue: function getValue() {
+	            return context.deleteFlag() ? "T" : "F";
+	        },
+	        deleteRow: function deleteRow() {
+	            context.deleteFlag(true);
+	            if (itemDef.options && itemDef.options.clearOnDelete) {
+	                var item = context.itemDictionary()[itemDef.options.clearOnDelete];
+	                if (item && item.setValue) {
+	                    item.setValue(0);
+	                }
+	            }
+	        }
+	    }, itemDef);
+	}
+	
+	function listViewModel(node) {
+	    var keyMap = node.keyMap || {},
+	        rows = (0, _knockout.observableArray)(),
+	        options = node.options || {},
+	        isShown = (0, _knockout.observable)(true),
+	        context = this || {},
+	        readonly = (0, _knockout.observable)(context.readonly && context.readonly() || false),
+	        //initialize to the context's state as determined by the form generally
+	    deleteRows = (0, _knockout.observable)(options.deleteRows !== false),
+	        minRequiredRows = 0,
+	        showRemoveButton,
+	
+	    // addButtonContext = node.addButtonContext,
+	    mappedChildNodes = (0, _knockout.observableArray)(),
+	        data = (0, _knockout.observable)(node.data),
+	        unique = {},
+	        visibleRows = (0, _knockout.observableArray)(),
+	        scrolled,
+	        initialData = _lodash2.default.cloneDeep(node.data) || [],
+	        addButtonRendered = (0, _scalejs5.is)(node.addButtonRendered, 'string') ? (0, _knockout.computed)(_scalejs2.evaluate.bind(null, node.addButtonRendered, context.getValue)) : (0, _knockout.observable)(node.addButtonRendered !== false);
+	
+	    function setReadonly(bool) {
+	        readonly(bool); //sets readonly state of the list
+	        rows().forEach(function (row) {
+	            //sets readonly state of each row
+	            row.readonly(bool);
+	        });
+	    }
+	
+	    // rowViewModel
+	    // called on each add
+	    // or when data is set with initial values
+	    function rowViewModel(initialValues, isNew) {
+	        var items = (0, _knockout.observableArray)(),
+	            // observable array to hold the items in the row
+	        itemDictionary = (0, _knockout.observable)({}),
+	            // observable dictionary to hold the items and other properties
+	        rowContext = {
+	            metadata: context.metadata, // reference to the parent metadata
+	            rows: rows,
+	            unique: unique,
+	            isNew: isNew,
+	            itemDictionary: itemDictionary,
+	            editMode: (0, _knockout.observable)(false), //for styling - maybe better if called isActiveRow
+	            deleteFlag: (0, _knockout.observable)(false)
+	        },
+	            row = {},
+	            // the row itself
+	        itemViewModels,
+	            rowReadonly;
+	
+	        // initialize row readonly as the list's state
+	        rowContext.readonly = (0, _knockout.observable)(readonly());
+	
+	        // rowReadonly - string to run thrown expression parser to show/hide rows
+	        if ((0, _scalejs5.is)(options.rowReadonly, 'string')) {
+	            rowReadonly = (0, _knockout.computed)(function () {
+	                if (rowContext.readonly && rowContext.readonly()) {
+	                    return true; //if readonly is true on context, then row is readonly
+	                }
+	                // else, eval the expression to determine if the row is readonly
+	                return (0, _scalejs2.evaluate)(options.rowReadonly, function (id) {
+	                    var item = itemDictionary()[id];
+	                    if (item && item.getValue) {
+	                        return item.getValue();
+	                    }
+	                });
+	            });
+	        }
+	
+	        // can be utilized by expression parser to get error for an id
+	        function error(id) {
+	            var item = itemDictionary()[id];
+	            if (item && item.inputValue && item.inputValue.error) {
+	                return item.inputValue.error();
+	            }
+	        }
+	
+	        // accurately calculates the index of the row in the list
+	        rowContext.index = (0, _knockout.computed)(function () {
+	            return rows().indexOf(row);
+	        });
+	
+	        // getValueById function for expression parsing
+	        // todo. refactor this
+	        rowContext.getValue = function (id) {
+	            if (id === 'index') {
+	                return rowContext.index();
+	            }
+	            if (id === 'list') {
+	                return rows();
+	            }
+	            if (id === 'row') {
+	                return rows()[rowContext.index()];
+	            }
+	            if (id === 'error') {
+	                return error;
+	            }
+	            // check the item dictionary
+	            var item = itemDictionary()[id];
+	            if (item && item.getValue) {
+	                return item.getValue();
+	            }
+	
+	            // if the item doesnt have getValue, return itself
+	            if ((0, _scalejs5.has)(item)) {
+	                return (0, _knockout.unwrap)(item);
+	            }
+	
+	            var prop = rowContext[id];
+	
+	            if ((0, _scalejs5.has)(prop)) {
+	                return (0, _knockout.unwrap)(prop);
+	            }
+	
+	            return context.getValue(id);
+	        };
+	
+	        itemViewModels = node.items.map(function (_item) {
+	            var item = _lodash2.default.cloneDeep(_item); // deep clone the item as we might mutate it before passing to createViewModels
+	
+	            // add readonly computed to the item before passing it to input
+	            // input will use the already defined observable if it exists
+	            // but, if the input already has readonly set on it, dont get readonly from row..
+	            if (rowReadonly && item.input && !(0, _scalejs5.has)(item.input.readonly)) {
+	                item.input.readonly = rowReadonly;
+	            }
+	
+	            if (item.options && item.options.unique) {
+	                if (!item.id) {
+	                    console.error('Cannot set unique on item without id');
+	                } else if (!unique[item.id]) {
+	                    //only create once
+	                    unique[item.id] = (0, _knockout.observableArray)();
+	                }
+	            }
+	
+	            // todo - clean this up?
+	            if (listItems[item.type]) {
+	                var ret = listItems[item.type].call(rowContext, item);
+	                if (item.visible) {
+	                    ret.visible = (0, _knockout.computed)(function () {
+	                        return (0, _scalejs2.evaluate)(item.visible, rowContext.getValue);
+	                    });
+	                }
+	                return ret;
+	            } else {
+	                return _scalejs.createViewModel.call(rowContext, item);
+	            }
+	        });
+	
+	        // if there are initial values, update the children
+	        if (initialValues) {
+	            itemViewModels.forEach(function (item) {
+	                if (initialValues[item.id]) {
+	                    // allow for JSON default values don't get overwritten by server data that doesn't contain data
+	                    item.setValue && item.setValue(initialValues[item.id]);
+	                }
+	            });
+	        }
+	
+	        // update items obsArr
+	        items(itemViewModels);
+	
+	        // generate itemDictionary from the itemViewModels
+	        // also add each item's inputValue directly on the row
+	        // this is for MemberExpressions to work properly (list[0].Status)
+	        itemDictionary(itemViewModels.reduce(function (dict, item) {
+	            if ((0, _scalejs5.has)(item.id)) {
+	                dict[item.id] = item;
+	                row[item.id] = item.inputValue;
+	            }
+	            return dict;
+	        }, (0, _scalejs5.merge)(initialValues || {}))); // just in case some data doesnt have a column, keep it in the item dict
+	
+	        // TODO: ItemDict or Row? which one is better?
+	        // rowVM
+	        row.items = items;
+	        row.itemDictionary = itemDictionary;
+	        row.mappedChildNodes = items;
+	        row.editMode = rowContext.editMode;
+	        row.deleteFlag = rowContext.deleteFlag;
+	        row.readonly = function (bool) {
+	            items().forEach(function (item) {
+	                if (item.setReadonly) {
+	                    item.setReadonly(bool);
+	                } else if (item.readonly) {
+	                    item.readonly(bool);
+	                }
+	            });
+	        };
+	
+	        return row;
+	    }
+	
+	    // generates a new row and add to list
+	    function add(row, isNew) {
+	        var rowVm = rowViewModel(row, isNew);
+	
+	        // add remove function to rowVM
+	        rowVm.remove = function () {
+	            rowVm.items().forEach(function (item) {
+	                if (item.dispose) {
+	                    item.dispose();
+	                }
+	            });
+	            rows.remove(rowVm);
+	        };
+	
+	        if (options.push) {
+	            rows.push(rowVm);
+	        } else {
+	            rows.unshift(rowVm);
+	        }
+	
+	        if (isNew === true) {
+	            // auto-focus on the newly added row
+	            setTimeout(function () {
+	                // need to wait for clickOff events to stop firing.
+	                rowVm.editMode(true);
+	                (rowVm.items() || []).some(function (item) {
+	                    if (item.rendered() && item.hasFocus) {
+	                        item.hasFocus(true);
+	                        return true;
+	                    }
+	                });
+	            });
+	        }
+	    }
+	
+	    // returns the values of the list
+	    // e.g. [{item1:'Value1',item2:'Value2'}]
+	    // dontSendIfEmpty - this prevents items from getting sent in the data if that property is empty
+	    // if array is empty send null
+	    function getValue() {
+	        var originalData = data.peek(),
+	            listData = _lodash2.default.cloneDeep(rows().map(function (row) {
+	            var originalRowItems = row.itemDictionary.peek();
+	            return Object.keys(originalRowItems).reduce(function (dataObj, itemKey) {
+	                var item = row.itemDictionary.peek()[itemKey];
+	
+	                if (item.getValue) {
+	                    dataObj[item.id] = item.getValue();
+	                } else if ((0, _scalejs5.has)(item) && item.type !== 'DELETE') {
+	                    dataObj[itemKey] = item;
+	                }
+	                return dataObj;
+	            }, {});
+	        }).filter(function (obj) {
+	            return !(options.dontSendIfEmpty && !obj[options.dontSendIfEmpty] && obj[options.dontSendIfEmpty] !== 0);
+	        }));
+	        if (options.sendNullIfEmpty && listData.length === 0) {
+	            listData = null;
+	        }
+	        return listData;
+	    }
+	
+	    // on initialization if the node already has data defined, add rows
+	    // else generate the minReqiredRows
+	    function initialize() {
+	        //console.time('List init');
+	        if (data()) {
+	            rows().forEach(function (row) {
+	                row.items().forEach(function (item) {
+	                    item.dispose && item.dispose();
+	                });
+	            });
+	            rows.removeAll();
+	            data().forEach(function (item) {
+	                add(item, false);
+	            });
+	
+	            //if trackDiffChanges set to true store the original data to noticeboard
+	            if (node.trackDiffChanges) {
+	                _scalejs4.default.set(node.id, data());
+	            }
+	        } else {
+	            for (var i = 0; i < minRequiredRows; i++) {
+	                add(null, true);
+	            }
+	        }
+	        //  console.timeEnd('List init');
+	    }
+	
+	    // sets value in list
+	    // or re-inits if data is empty or invalid
+	    function setValue(newData) {
+	        // reverse the data because adding now unshifts the rows.
+	        if (Array.isArray(newData) && !options.push) {
+	            newData.reverse();
+	        }
+	        data(newData || initialData || []);
+	        initialize();
+	    }
+	
+	    // returns last row
+	    function lastRow() {
+	        return rows()[rows().length - 1];
+	    }
+	
+	    // sets minrequired rows
+	    if (node.validations && node.validations.required) {
+	        minRequiredRows = node.validations.required === true ? 1 : node.validations.required;
+	    }
+	
+	    // only show remove button if rows is greater than min req rows
+	    showRemoveButton = (0, _knockout.computed)(function () {
+	        return rows().length > minRequiredRows;
+	    });
+	
+	    // get data from data parent if exists
+	    if (context.data && !options.subscribeToData) {
+	        console.warn('Please make sure you get the Data from setValue or set node.subscribeToData to true! Removing data-subscribe as a default', node);
+	    }
+	    if (options.subscribeToData && context.data) {
+	        if (context.data()[node.id]) {
+	            data(context.data()[node.id]);
+	        } else {
+	            context.data.subscribe(function (newData) {
+	                if (newData[node.id]) {
+	                    data(newData[node.id]);
+	                    initialize();
+	                }
+	            });
+	        }
+	    }
+	
+	    initialize();
+	
+	    // will "remove" mapped child nodes if the list is hidden
+	    // this is required for validations to work properly
+	    // todo: remove this workaround and implement validation on list itself
+	    (0, _knockout.computed)(function () {
+	        if (isShown()) {
+	            mappedChildNodes(rows().filter(function (row) {
+	                return !row.deleteFlag();
+	            }));
+	        } else {
+	            mappedChildNodes([]);
+	        }
+	    });
+	
+	    if (node.infinite) {
+	        rows.subscribe(function (newRows) {
+	            visibleRows((newRows || []).slice(0, 20));
+	        });
+	
+	        scrolled = function scrolled(event) {
+	            var elem = event.target,
+	                currentRows = rows();
+	
+	            if (elem.scrollTop > elem.scrollHeight - elem.offsetHeight - 35) {
+	                var seed = visibleRows().length;
+	                for (var i = 0; i < 20; i++) {
+	                    visibleRows.push(currentRows[seed + i]);
+	
+	                    if (!currentRows[seed + i]) {
+	                        // no more rows stahp
+	                        break;
+	                    }
+	                }
+	            }
+	        };
+	    }
+	
+	    return (0, _scalejs5.merge)(node, {
+	        add: add,
+	        rows: node.infinite ? visibleRows : rows,
+	        allRows: rows,
+	        scrolled: scrolled,
+	        mappedChildNodes: mappedChildNodes,
+	        isShown: isShown,
+	        showRemove: showRemoveButton,
+	        getValue: getValue,
+	        setValue: setValue,
+	        readonly: readonly,
+	        deleteRows: deleteRows,
+	        lastRow: lastRow,
+	        setReadonly: setReadonly,
+	        addButtonRendered: addButtonRendered
+	    });
+	};
+
+/***/ },
+/* 195 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	/*global define */
+	/*jslint sloppy: true*/
+	!(module.exports = {
+	    'list-remove': function listRemove(ctx) {
+	        // visible is based on either the visible expression on the JSON,
+	        // or on the showRemoveButton function in the viewmodel
+	        var parent = ctx.$parents.filter(function (parent) {
+	            return parent.showRemove; // the parent will have this prop
+	        })[0],
+	            visible = this.visible || parent.showRemove() && parent.deleteRows(),
+	
+	        // account for both contexts, depending on how this list was generated
+	        click = ctx.$parents[1].remove || ctx.$parents[0].remove;
+	
+	        return {
+	            click: click,
+	            visible: visible
+	        };
+	    },
+	    'list-delete-flag': function listDeleteFlag(ctx) {
+	        var parent = ctx.$parents.filter(function (parent) {
+	            return parent.showRemove; // the parent will have this prop
+	        })[0];
+	
+	        return {
+	            click: this.deleteRow,
+	            visible: this.visible || parent.showRemove() && parent.deleteRows()
+	        };
+	    },
+	    'list-add': function listAdd(ctx) {
+	        return {
+	            click: ctx.$parents[1].add
+	        };
+	    },
+	    'list-add-rendered': function listAddRendered() {
+	        var rendered = this.list.addButtonRendered;
+	
+	        return {
+	            visible: rendered()
+	        };
+	    }
+	});
+
+/***/ },
+/* 196 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=\"list_template\">\r\n    <div data-bind=\"css: $data.classes, visible: isShown\">\r\n        <div class=\"grid-100 fieldset-panel\">\r\n            <span class=\"legend\" data-bind=\"text: name\"></span>\r\n            <!-- ko foreach: rows -->\r\n                <!-- ko template: { name: 'list_items_template', data: items } -->\r\n                <!-- /ko -->\r\n            <!-- /ko -->\r\n            <div class=\"row\" data-bind=\"if: options.addRows !== false && !readonly()\">\r\n                <button class=\"fa fa-icon-add\" data-bind=\"click: add\">\r\n                    <span class=\"button-text\">Add</span>\r\n                </button>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"list_items_template\">\r\n    <div class=\"grid-100 row\">\r\n        <!-- ko template: { name: 'list_item_template', foreach: $data } -->\r\n        <!--/ko -->\r\n        <!-- ko template: 'list_del_template' -->\r\n        <!-- /ko -->\r\n    </div>\r\n</div>\r\n\r\n<div id=\"list_item_template\">\r\n        <!-- ko template: $data.template || $data.type + '_template' -->\r\n        <!-- /ko -->\r\n</div>\r\n\r\n<div id=\"list_del_template\">\r\n    <div class=\"list-del-button\" data-class=\"list-remove\">\r\n        <a class=\"fa fa-icon-trash icon-only\"></a>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"list_del_flag_template\">\r\n    <div class=\"list-del-button\" data-class=\"list-delete-flag\">\r\n        <a class=\"fa fa-icon-trash icon-only\"></a>\r\n    </div>\r\n</div>\r\n";
+
+/***/ },
+/* 197 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _scalejs = __webpack_require__(3);
+	
+	var _scalejs2 = __webpack_require__(21);
+	
+	var _listAdvancedViewModel = __webpack_require__(198);
+	
+	var _listAdvancedViewModel2 = _interopRequireDefault(_listAdvancedViewModel);
+	
+	var _listAdvancedBindings = __webpack_require__(199);
+	
+	var _listAdvancedBindings2 = _interopRequireDefault(_listAdvancedBindings);
+	
+	var _listAdvanced = __webpack_require__(200);
+	
+	var _listAdvanced2 = _interopRequireDefault(_listAdvanced);
+	
+	__webpack_require__(201);
+	
+	__webpack_require__(205);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	(0, _scalejs.registerBindings)(_listAdvancedBindings2.default);
+	(0, _scalejs.registerTemplates)(_listAdvanced2.default);
+	(0, _scalejs2.registerViewModels)({
+	    listAdvanced: _listAdvancedViewModel2.default
+	});
+
+/***/ },
+/* 198 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	exports.default = function (node) {
+	    var createViewModel = _scalejs.createViewModel.bind(this),
+	        context = this,
+	        itemDictionary = (0, _knockout.observable)({}),
+	        listViewModel = createViewModel((0, _scalejs4.merge)({ id: node.id }, node.list)),
+	        // pass along id
+	    headers = (node.headers || []).map(function (header) {
+	        return {
+	            items: header.items.map(function (item) {
+	                if (listItems[item.type]) {
+	                    return listItems[item.type].call(this, item, listViewModel);
+	                }
+	            })
+	        };
+	    }),
+	        headerItems = (node.list.items || []).map(function (header) {
+	        var classes = [];
+	
+	        if (header.id) {
+	            classes.push(header.id);
+	        }
+	        if (header.headerClasses) {
+	            classes.push(header.headerClasses);
+	        }
+	        return {
+	            text: header.label,
+	            classes: classes.join(' '),
+	            hidden: header.hidden
+	        };
+	    }),
+	        footers = (node.footers || []).map(function (footer) {
+	        var items,
+	            visible = true;
+	
+	        // maps footer item defs
+	        items = footer.items.map(function (item) {
+	            if (listItems[item.type]) {
+	                return listItems[item.type].call(context, item, listViewModel);
+	            } else {
+	                return _scalejs.createViewModel.call({
+	                    metadata: context.metadata,
+	                    getValue: function getValue(id) {
+	                        var item = itemDictionary()[id];
+	                        if (item && item.getValue) {
+	                            return item.getValue();
+	                        }
+	                        return context.getValue(id);
+	                    }
+	                }, item);
+	            }
+	        });
+	
+	        items.forEach(function (item) {
+	            if (item.id) {
+	                // add to dictionary for accessibility from expressions
+	                itemDictionary()[item.id] = item;
+	                itemDictionary.valueHasMutated();
+	            }
+	        });
+	
+	        // creates expression binding for visible
+	        if ((0, _scalejs4.has)(footer.visible)) {
+	            visible = (0, _scalejs4.is)(footer.visible, 'boolean') ? footer.visible : (0, _knockout.pureComputed)(function () {
+	                return (0, _scalejs2.evaluate)(footer.visible, function (id) {
+	                    if (id === 'list') {
+	                        return listViewModel.rows() || [];
+	                    }
+	
+	                    if (id === 'dict') {
+	                        return itemDictionary();
+	                    }
+	
+	                    if (id === 'readonly') {
+	                        return context.readonly();
+	                    }
+	
+	                    var item = itemDictionary()[id];
+	                    if (item) {
+	                        return item;
+	                    }
+	                    console.log(id);
+	                    // returning empty string within string as catch all for evaluate function
+	                    return '""';
+	                });
+	            });
+	        }
+	
+	        return (0, _scalejs4.merge)(footer, {
+	            items: items,
+	            visible: visible
+	        });
+	    }),
+	        groups,
+	        visibleRows = (0, _knockout.observableArray)(),
+	        viewmodel,
+	        showInfinite;
+	
+	    // Updates rows within the list with additional properties in regards to their group
+	    // all subscribers are notified
+	    function updateRowsWithGroupValues(groupDict) {
+	        Object.keys(groupDict).forEach(function (group) {
+	            var groupArray = groupDict[group];
+	            groupArray.forEach(function (row, index) {
+	                row.itemDictionary().group = groupArray;
+	                row.itemDictionary().groupIndex = index;
+	                row.itemDictionary.valueHasMutated();
+	            });
+	        });
+	    }
+	
+	    // will group the nodes based on groupby prop
+	    if (node.groupBy) {
+	        groups = (0, _knockout.computed)(function () {
+	            var groupDict = {};
+	            listViewModel.rows().forEach(function (row) {
+	                var group = (0, _knockout.unwrap)(row[node.groupBy]);
+	                groupDict[group] = groupDict[group] || [];
+	                groupDict[group].push(row);
+	            });
+	            return groupDict;
+	        });
+	        // update rows
+	        groups.subscribe(updateRowsWithGroupValues);
+	        updateRowsWithGroupValues(groups());
+	    }
+	
+	    if (listViewModel.infinite) {
+	        //the listViewModel is managing its rows to account for infinite scroll
+	        //the listAdvanced will show only up to 25 rows and show the infinitely scrolling list in a popup
+	
+	        visibleRows((listViewModel.allRows() || []).slice(0, 20));
+	        listViewModel.allRows.subscribe(function (newRows) {
+	            visibleRows((newRows || []).slice(0, 20));
+	        });
+	
+	        showInfinite = function showInfinite() {
+	            listViewModel.rows(listViewModel.rows().slice(0, 20));
+	            (0, _scalejs3.notify)('showPopup', (0, _scalejs4.merge)(viewmodel, {
+	                template: 'listAdvanced_infinite_template',
+	                disableHasFocus: true
+	            }));
+	        };
+	    }
+	
+	    viewmodel = (0, _scalejs4.merge)(node, {
+	        setReadonly: listViewModel.setReadonly,
+	        getValue: listViewModel.getValue,
+	        setValue: listViewModel.setValue,
+	        headers: headers,
+	        headerItems: headerItems,
+	        footers: footers,
+	        groups: groups,
+	        list: listViewModel,
+	        rows: listViewModel.infinite ? visibleRows : listViewModel.rows,
+	        showInfinite: showInfinite,
+	        showRemove: listViewModel.showRemove,
+	        deleteRows: listViewModel.deleteRows,
+	        itemDictionary: itemDictionary,
+	        mappedChildNodes: listViewModel.mappedChildNodes, //for automatic stuff
+	        context: this //for the bindings to access context
+	    });
+	    return viewmodel;
+	};
+	
+	var _knockout = __webpack_require__(10);
+	
+	var _scalejs = __webpack_require__(21);
+	
+	var _scalejs2 = __webpack_require__(128);
+	
+	var _scalejs3 = __webpack_require__(132);
+	
+	var _scalejs4 = __webpack_require__(130);
+	
+	// the list advanced component provides advanced features over the base list
+	// - Headers (TBD) and Footers (partially done)
+	// - ListItems such as ADD and EMPTY
+	// - GroupBy
+	var listItems = {
+	    ADD: add,
+	    EMPTY: empty,
+	    TEXT: text,
+	    TOTAL: total
+	};
+	
+	// creates the Add ViewModel from the add def
+	function add(addDef, list) {
+	    return (0, _scalejs4.merge)({
+	        template: 'list_advanced_add_item_template',
+	        text: 'Add',
+	        add: function add() {
+	            var lastRow = list.lastRow(),
+	                initialItems = {};
+	
+	            // autpopulate
+	            // an array containing the items which should be autopopulated with the last row's values
+	            if (addDef.autopopulate) {
+	                addDef.autopopulate.forEach(function (prop) {
+	                    var lastProp = lastRow.itemDictionary()[prop];
+	                    initialItems[prop] = lastProp.getValue();
+	                });
+	            }
+	
+	            // increment
+	            // a string indicating which property to incremement upon add
+	            if (addDef.increment) {
+	                (Array.isArray(addDef.increment) ? addDef.increment : [addDef.increment]).forEach(function (prop) {
+	                    initialItems[prop] = Number(lastRow.itemDictionary()[prop].getValue()) + 1;
+	                });
+	            }
+	
+	            // defaults
+	            // sets the value of an item to a default value
+	            if (addDef.defaults) {
+	                Object.keys(addDef.defaults).forEach(function (key) {
+	                    initialItems[key] = addDef.defaults[key];
+	                });
+	            }
+	
+	            // creates new item in list
+	            list.add(initialItems);
+	        }
+	    }, addDef);
+	}
+	
+	// creates an empty space in table
+	function empty(emptyDef, base) {
+	    return (0, _scalejs4.merge)({
+	        template: 'list_advanced_empty_item_template',
+	        cellClasses: 'empty'
+	    }, emptyDef);
+	}
+	
+	function text(textDef, base) {
+	    return (0, _scalejs4.merge)({
+	        template: 'list_advanced_text_item_template'
+	    }, textDef);
+	}
+	
+	function total(totalDef, list) {
+	    // create a input vm
+	    var totalJson = {
+	        id: totalDef.id,
+	        type: 'input',
+	        inputType: 'text',
+	        label: 'Total',
+	        cellClasses: totalDef.cellClasses,
+	        options: (0, _scalejs4.merge)({
+	            readonly: true
+	        }, totalDef.options)
+	    },
+	
+	    // use input view model for instant formatting/validation
+	    totalViewModel = _scalejs.createViewModel.call(this, totalJson),
+	        total = (0, _knockout.computed)(function () {
+	        return list.rows().reduce(function (sum, row) {
+	            return sum + Number(row[totalDef.field]() || 0); // get the value for field
+	        }, 0);
+	    });
+	
+	    total.subscribe(function (sum) {
+	        totalViewModel.setValue(sum.toFixed(2));
+	    });
+	
+	    // adding totals to the dictionary from the context
+	    if (totalDef.id) {
+	        this.dictionary()[totalDef.id] = totalViewModel;
+	        //this.dictionary.valueHasMutated();
+	    }
+	
+	    return totalViewModel;
+	}
+	
+	;
+
+/***/ },
+/* 199 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _scalejs = __webpack_require__(21);
+	
+	var _lodash = __webpack_require__(23);
+	
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function sticky(_el) {
+	    _el.style.transform = "translateY(" + this.scrollTop + "px)";
+	}
+	
+	exports.default = {
+	    'list-advanced-cell': function listAdvancedCell() {
+	        return {
+	            css: this.cellClasses,
+	            attr: {
+	                colspan: this.colspan || 1
+	            }
+	        };
+	    },
+	    'list-advanced-row-editable': function listAdvancedRowEditable(ctx) {
+	        var editMode = this.editMode,
+	            context = ctx.$parent.context || {},
+	            readonly = context.readonly ? context.readonly() : false;
+	
+	        return {
+	            css: {
+	                'edit-mode': editMode() && !readonly
+	            },
+	            click: function click() {
+	                editMode(true);
+	                return true;
+	            },
+	            clickOff: {
+	                excludes: ['ui-autocomplete'],
+	                handler: function handler() {
+	                    editMode(false);
+	                }
+	            }
+	        };
+	    },
+	    'list-advanced-group-actions': function listAdvancedGroupActions(ctx) {
+	        var group = ctx.$parent,
+	            listViewModel = ctx.$parents[1],
+	            groupActions = _lodash2.default.cloneDeep(listViewModel.groupActions),
+	            groupActionViewModels;
+	
+	        if (!groupActions) {
+	            return;
+	        }
+	
+	        groupActionViewModels = _scalejs.createViewModels.call({
+	            metadata: [],
+	            getValue: function getValue(id) {
+	                if (id === 'group') {
+	                    return group;
+	                }
+	                return listViewModel.context.getValue(id);
+	            }
+	        }, groupActions);
+	
+	        return {
+	            template: {
+	                name: 'metadata_items_template',
+	                data: groupActionViewModels
+	            }
+	        };
+	    },
+	    'list-advanced-group-row-spacer': function listAdvancedGroupRowSpacer(ctx) {
+	        var showSpacer = false,
+	            currentGroupIndex = Number(ctx.$data) - 1;
+	
+	        showSpacer = Object.keys(ctx.$parent.groups()).map(function (groupKey) {
+	            return ctx.$parent.groups()[groupKey];
+	        }).slice(0, currentGroupIndex + 1).reduce(function (previousHasSpacer, group, index) {
+	            var ret,
+	                previousGroup = ctx.$parent.groups()[index.toString()];
+	
+	            if (!previousGroup) {
+	                return false;
+	            }
+	
+	            if ((previousGroup.length + (previousHasSpacer ? 1 : 0)) % 2 !== 0) {
+	                return true;
+	            } else {
+	                return false;
+	            }
+	        }, false);
+	
+	        return {
+	            if: showSpacer
+	        };
+	    }
+	};
+
+/***/ },
+/* 200 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=\"listAdvanced_template\">\r\n    <div data-bind=\"css: $data.classes\" class=\"list-advanced\">\r\n        <header>\r\n            <div class=\"add\" data-class=\"list-add-rendered\">\r\n                <button class=\"fa fa-icon-add\" data-bind=\"click:  list.add.bind(null, null, true)\">\r\n                    <span class=\"button-text\">Add</span>\r\n                </button>\r\n            </div>\r\n        </header>\r\n        <table>\r\n            <!-- ko template: { name: 'list_table_header_row_template', foreach: headers } -->\r\n            <!-- /ko -->\r\n            <tr data-bind=\"foreach: headerItems\">\r\n                <!-- ko if: !$data.hidden -->\r\n                    <td class=\"header-cell\" data-bind=\"text: text, css: classes\"></td>\r\n                <!-- /ko -->\r\n            </tr>\r\n            <tbody>\r\n                <!-- ko foreach: rows  -->\r\n                    <!-- ko if: !deleteFlag() -->\r\n                    <tr data-class=\"list-advanced-row-editable\">\r\n                        <!-- ko foreach: items -->\r\n                            <!-- ko if: !$data.hidden -->\r\n                                <td class=\"cell\" data-class=\"list-advanced-cell\">\r\n                                    <!-- ko template: 'metadata_item_template'-->\r\n                                    <!-- /ko -->\r\n                                </td>\r\n                            <!-- /ko -->\r\n                        <!-- /ko -->\r\n                    </tr>\r\n                    <!-- /ko -->\r\n                <!-- /ko -->\r\n                <tr class=\"row-no-data\">\r\n                    <td class=\"cell\" data-bind=\"attr: { colspan: headerItems.length }\">No data available.</td>\r\n                </tr>\r\n                <!-- ko template: {name: 'list_table_footer_row_template', foreach: footers } -->\r\n                <!-- /ko -->\r\n            </tbody>\r\n        </table>\r\n\r\n    </div>\r\n    <!-- ko if: list.infinite -->\r\n    <button data-bind=\"click: showInfinite, visible: list.mappedChildNodes().length > 20\">Show More</button>\r\n    <!-- /ko -->\r\n</div>\r\n\r\n\r\n<!-- Note to Developers: The infinte template is used within a popup\r\ntherefore lots of work-arounds needed to be put in place for fixed header stylings-->\r\n<div id=\"listAdvanced_infinite_template\">\r\n    <div class=\"table-viewport table-fixed-header\" data-bind=\"css: $data.classes\">\r\n        <div class=\"table-header\">\r\n            <div class=\"add\" data-bind=\"if: !list.readonly()\">\r\n                <button class=\"fa fa-icon-add\" style=\"float:none\" data-bind=\"click:  list.add.bind(null, null, true)\">\r\n                    <span class=\"button-text\">Add</span>\r\n                </button>\r\n            </div>\r\n        </div>\r\n        <table data-bind=\"fixedTableHeader: { scrollListener: list.scrolled }\">\r\n            <!-- ko template: { name: 'list_table_header_row_template', foreach: headers } -->\r\n            <!-- /ko -->\r\n            <thead>\r\n                <tr data-bind=\"foreach: headerItems\">\r\n                    <td class=\"header-cell\" data-bind=\"text: text, css: classes\">\r\n                </tr>\r\n            </thead>\r\n            <tbody>\r\n                <!-- ko template: {name: 'list_table_row_template', foreach: list.rows } -->\r\n                <!-- /ko -->\r\n                <!-- ko template: {name: 'list_table_footer_row_template', foreach: footers } -->\r\n                <!-- /ko -->\r\n            </tbody>\r\n        </table>\r\n    </div>\r\n</div>\r\n\r\n<!-- templates for groups -->\r\n<div id=\"listAdvanced_groups_template\">\r\n     <div data-bind=\"css: $data.classes\">\r\n        <table>\r\n            <!-- ko template: { name: 'list_table_header_row_template', foreach: headers } -->\r\n            <!-- /ko -->\r\n            <tbody>\r\n                <tr data-bind=\"foreach: headerItems\">\r\n                    <td class=\"header-cell\" data-bind=\"text: text, css: classes\">\r\n                </tr>\r\n            </tbody>\r\n            <!-- ko template: { name: 'list_group_template', foreach: Object.keys(groups()) } -->\r\n            <!-- /ko -->\r\n            <tbody>\r\n                <!-- ko foreach: footers -->\r\n                <!-- ko template: $data.template || 'list_table_footer_row_template' -->\r\n                <!-- /ko -->\r\n                <!-- /ko -->\r\n            </tbody>\r\n        </table>\r\n        <div data-class=\"list-add-rendered\">\r\n            <button class=\"fa fa-icon-add\" data-bind=\"click: list.add.bind(null, null)\">\r\n                <span class=\"button-text\">Add</span>\r\n            </button>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<script type=\"text/template\" id=\"list_table_group_row_template\">\r\n    <tr data-class=\"list-advanced-row-editable\">\r\n        <!-- ko foreach: items -->\r\n        <td class=\"cell\" data-class=\"list-advanced-cell\">\r\n            <!-- ko template: 'metadata_item_template'-->\r\n            <!-- /ko -->\r\n        </td>\r\n        <!-- /ko -->\r\n        <td style=\"width: 0px; position: relative\">\r\n\r\n        <!-- ko if: $index() == 0 -->\r\n            <div class=\"list-advanced-group-actions\" data-class=\"list-advanced-group-actions\"></div>\r\n        <!-- /ko -->\r\n        </td>\r\n    </tr>\r\n</script>\r\n\r\n<!-- todo: refactor row templates into 1 template -->\r\n\r\n<script type=\"text/template\" id=\"list_table_header_row_template\">\r\n    <tr>\r\n        <!-- ko foreach: items -->\r\n        <td class=\"header-cell\" data-class=\"list-advanced-cell\">\r\n            <!-- ko template: 'metadata_item_template'-->\r\n            <!-- /ko -->\r\n        </td>\r\n        <!-- /ko -->\r\n    </tr>\r\n</script>\r\n\r\n<script type=\"text/template\" id=\"list_table_row_template\">\r\n    <!-- ko if: !deleteFlag() -->\r\n    <tr data-class=\"list-advanced-row-editable\">\r\n        <!-- ko foreach: items -->\r\n            <!-- ko if: !$data.hidden -->\r\n                <td class=\"cell\" data-class=\"list-advanced-cell\">\r\n                    <!-- ko template: 'metadata_item_template'-->\r\n                    <!-- /ko -->\r\n                </td>\r\n            <!-- /ko -->\r\n        <!-- /ko -->\r\n    </tr>\r\n    <!-- /ko -->\r\n</script>\r\n\r\n<script type=\"text/template\" id=\"list_table_footer_row_template\">\r\n    <tr data-bind=\"if: visible, click: $data.clickHandler, clickOff: $data.clickOffHandler\">\r\n        <!-- ko foreach: items -->\r\n        <td class=\"footer-cell\" data-class=\"list-advanced-cell\">\r\n            <!-- ko template: 'metadata_item_template'-->\r\n            <!-- /ko -->\r\n        </td>\r\n        <!-- /ko -->\r\n    </tr>\r\n</script>\r\n\r\n<!-- item templates -->\r\n\r\n<div id=\"list_advanced_add_item_template\">\r\n    <button class=\"fa fa-icon-add\" data-bind=\"click: add\">\r\n        <span data-bind=\"text: text\" class=\"button-text\">Add</span>\r\n    </button>\r\n</div>\r\n\r\n<div id=\"list_advanced_empty_item_template\">\r\n\r\n</div>\r\n\r\n<div id=\"list_advanced_text_item_template\">\r\n    <span data-bind=\"text:text\"></span>\r\n</div>\r\n";
+
+/***/ },
+/* 201 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+	"use strict";
+
+/***/ },
+/* 202 */,
+/* 203 */,
+/* 204 */,
+/* 205 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _scalejs = __webpack_require__(4);
+	
+	var _scalejs2 = _interopRequireDefault(_scalejs);
+	
+	var _knockout = __webpack_require__(10);
+	
+	var _knockout2 = _interopRequireDefault(_knockout);
+	
+	var _lodash = __webpack_require__(23);
+	
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * A knockout binding that is used to allow detection of clicking on another element i.e. "clicking off"
+	 * @param {function} clickOff - the function that is called when click off
+	 * @param {object} clickOff - a configuration object with additional parameters to modify the behaviour of click off
+	 * @param {function} clickOff.handler -  the function that is called when click off
+	 * @param {string[]|HTMLElement[]} [clickOff.includes] - an array of class names or html dom elements that when clicked on will invoke the handler
+	 * @param {string[]|HTMLElement[]} [clickOff.excludes] - an array of class names or html dom elements that when clicked on will <strong>not</strong> invoke the handler
+	 * 
+	 * @example <caption>Passing a function to value accessor</caption>
+	 * clickOff: function() {
+	 *   alert('it works!');
+	 * }
+	 * @example <caption>Passing an object with includes and excludes</caption>
+	 * clickOff: {
+	 *    handler: function ( ) {
+	 *        alert('it works!');
+	 *    },
+	 *    includes: ['clickOn', 'mainContent'],
+	 *    excludes: ['clickOff', 'titleBar']
+	 * }
+	 * @module clickOff
+	 */
+	
+	var has = _scalejs2.default.object.has;
+	
+	/**
+	 *
+	 * 1. click off should be invoked if the click target is not the element
+	 *    or a child of the element bound to click-off
+	 * 2. click off should also be invoked if the target or one of the parents
+	 *    of the target include a class name that matches this.includes
+	 * 3. the opposite applies for this.excludes
+	 * @private
+	 * @param  {HTMLElement} element        the element that has click-off bound to it
+	 * @param  {HTMLElement} clickTarget    the target of the click
+	 * @return {boolean}
+	 */
+	
+	function canClickOff(element, clickTarget) {
+	    var cls = void 0,
+	        index = void 0,
+	        value = void 0;
+	
+	    //loop from click target to root parent of click target
+	    while (has(clickTarget)) {
+	
+	        if (element === clickTarget) {
+	            return false;
+	        }
+	
+	        //clickTarget.className.baseVal is the way to get classNames for SVG elements (path, etc)
+	        if (has(clickTarget.className, 'baseVal')) {
+	            cls = clickTarget.className.baseVal.split(' ');
+	        } else {
+	            cls = (clickTarget.className || '').split(' ');
+	        }
+	
+	        var filterFunc = function filterFunc(value) {
+	            return typeof value === 'string' && cls.indexOf(value) > -1 || value instanceof Element && value.isEqualNode(clickTarget);
+	        };
+	
+	        if (_lodash2.default.some(this.includes, filterFunc)) {
+	            return true;
+	        }
+	
+	        if (_lodash2.default.some(this.excludes, filterFunc)) {
+	            return false;
+	        }
+	
+	        // move up in the dom
+	        clickTarget = clickTarget.parentNode;
+	    }
+	    return true;
+	}
+	
+	/**
+	 * clickOff binding - A binding that invokes a handler when the user clicks somewhere else
+	 * @private
+	 * @param  {HTMLElement} element        the dom element clickOff is bound to
+	 * @param  {Function} valueAccessor     the options passed to the clickOff binding
+	 * @param  {type} allBindings           description
+	 * @param  {type} viewModel             description
+	 */
+	function init(element, valueAccessor, allBindings, viewModel) {
+	    var va = valueAccessor(),
+	        wasRemoved = false,
+	        eventListener = void 0;
+	
+	    if (!has(va)) {
+	        return;
+	    }
+	
+	    // Normalize value accessor
+	    if (va instanceof Function) {
+	        // convert function to expected object
+	        va = {
+	            handler: va,
+	            includes: va.includes,
+	            excludes: va.excludes
+	        };
+	    }
+	
+	    // enforce handler function
+	    if (!(va.handler instanceof Function)) {
+	        throw new TypeError('clickoff: handler function required');
+	    }
+	
+	    va.handler = va.handler.bind(viewModel);
+	
+	    // provide defaults for includes and excludes
+	    if (!has(va.includes)) {
+	        va.includes = ['clickoff'];
+	    }
+	    if (!has(va.excludes)) {
+	        va.excludes = ['no-clickoff'];
+	    }
+	
+	    eventListener = function eventListener(event) {
+	        if (wasRemoved) {
+	            return;
+	        }
+	        if (canClickOff.call(va, element, event.target)) {
+	            va.handler.apply(this, [arguments, [element]]);
+	        }
+	    };
+	
+	    // add handler to body and create dom removal callback for cleanup
+	    document.body.addEventListener('click', eventListener);
+	    _knockout2.default.utils.domNodeDisposal.addDisposeCallback(element, function () {
+	        wasRemoved = true;
+	        document.body.removeEventListener('click', eventListener);
+	    });
+	}
+	
+	_knockout2.default.bindingHandlers.clickOff = {
+	    init: init
+	};
+	//# sourceMappingURL=clickoff.js.map
 
 /***/ }
 /******/ ]);

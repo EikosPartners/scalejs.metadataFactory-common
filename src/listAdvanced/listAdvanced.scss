@@ -1,9 +1,16 @@
+@import "../input/input.vars.scss"; // for list-specific input styles
+
 $table-border-gray: #e0e0e0;
 $table-header-border-gray: #969696;
 $table-footer-border-gray: #969696;
 $highlight-yellow: #fff8d4;
 $validated-green: green;
 $dark-gray: #7d7d7d;
+
+//todo: clean up these styles
+//remove non-generic / reusable styles
+//move all paddings, margins, and colors to vars (ex. input.vars.scss)
+//make sure all input styles are using input vars
 
 .list-form-padding {
     padding: 0 11px;
@@ -19,6 +26,12 @@ $dark-gray: #7d7d7d;
 
 .list-advanced {
 
+	//TODO: Move to ListAdvanced
+	table {
+		border-collapse: collapse;
+		border-spacing: 0;
+	}
+	
 	.cell {
 		.input-select-styles {
 			&:disabled, [disabled="true"] {
@@ -199,8 +212,8 @@ $dark-gray: #7d7d7d;
                 &:focus {
                     background-color: #fff;
 
-                    box-shadow: 0px 0px 0px 2px #B2BB1E,
-                    -2px 0px 0px 2px #B2BB1E;
+					box-shadow: $input-focused-box-shadow1 $input-focus-box-shadow-color,
+                    			$input-focused-box-shadow2 $input-focus-box-shadow-color;
                 }
 			}
 		}

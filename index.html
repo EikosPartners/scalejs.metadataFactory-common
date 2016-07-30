@@ -7,6 +7,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link href="./build/main.css" rel="stylesheet" type="text/css" />
+
+    <style>
+        .list-advanced {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 
 
@@ -46,13 +52,13 @@
                         "value": "2"
                     }
                 ]
-            },
+            },/* todo: fix issues with autocomplete
             "autocomplete": {
                 "autocompleteSource": [
                     "Option 1",
                     "Option 2"
                 ]
-            }
+            }*/
         }
 
         var inputJSON = Object.keys(inputs).map(function(type) {
@@ -65,7 +71,23 @@
             }
         });
 
-        sampleJSON = sampleJSON.concat(inputJSON);
+        var advancedListJSON = {
+            "type": "listAdvanced",
+            "id": "list",
+            "list": {
+                "type": "list",
+                "validations": {
+                    "required": true
+                },
+                "items": inputJSON.slice(0,2).map(clone)
+            }
+        };
+
+        sampleJSON = sampleJSON
+                        .concat(inputJSON)
+                        .concat(advancedListJSON);
+
+
     </script>
     
     <script src="./build/bundle.js"></script>
