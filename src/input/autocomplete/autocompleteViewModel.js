@@ -81,7 +81,7 @@ import _ from 'lodash';
         }
 
         function getAutocompleteSourceFromContext() {
-            var source = evaluate(autocompleteSourceDef.fromArray, context.getValue);
+            var source = _.toArray(evaluate(autocompleteSourceDef.fromArray || [], context.getValue));
 
             // storing source array before any mapping
             sourceArray = source;

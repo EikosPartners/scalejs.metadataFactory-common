@@ -33,6 +33,7 @@ import { receive } from 'scalejs.messagebus';
     export default function (node) {
         var keyMap = node.keyMap || {},
             storeKey = node.storeKey,
+            storeValue = node.storeValue,
             dataSourceEndpoint = node.dataSourceEndpoint,
             options = node.options || {},
             subs = [];
@@ -42,8 +43,8 @@ import { receive } from 'scalejs.messagebus';
             return;
         }
 
-        if (!dataSourceEndpoint) {
-            console.warn('Cannot retrieve data for store without a dataSourceEndpoint', node);
+        if (!dataSourceEndpoint || !storeValue) {
+            console.warn('Cannot set storeKey with data without a dataSourceEndpoint or storeValue', node);
             return;
         }
 
@@ -73,13 +74,21 @@ import { receive } from 'scalejs.messagebus';
                 noticeboard.setValue(storeKey, value);
             });
         }
-        fetchData(); //initial call
 
-        if (node.id) { //setup refresh receiver if store has id
-            subs.push(receive(node.id + '.refresh', function () {
-                fetchData();
-            }));
+        if(dataSourceEndpoint) {
+            fetchData(); //initial call
+
+            if (node.id) { //setup refresh receiver if store has id
+                subs.push(receive(node.id + '.refresh', function () {
+                    fetchData();
+                }));
+            }
         }
+
+        if(storeValue) {
+            noticeboard.setValue(storeKey, storeValue);
+        }
+
 
         return {
                 dispose: function () {

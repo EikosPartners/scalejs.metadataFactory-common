@@ -98,7 +98,7 @@ import _ from 'lodash';
             // create a sub to subscribe to changes in values
             subs.push(computed(function () {
                 var value = inputValue.peek(), 
-                    newValues = (evaluate(options.values.fromArray, context.getValue) || [])
+                    newValues = (_.toArray(evaluate(options.values.fromArray, context.getValue) || []))
                         .filter(function(item) {
                             return has(item);
                         }).map(mapItem(options.values));
