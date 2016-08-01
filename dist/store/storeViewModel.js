@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = function (node) {
     var keyMap = node.keyMap || {},
         storeKey = node.storeKey,
+        storeValue = node.storeValue,
         dataSourceEndpoint = node.dataSourceEndpoint,
         options = node.options || {},
         subs = [];
@@ -16,8 +17,8 @@ exports.default = function (node) {
         return;
     }
 
-    if (!dataSourceEndpoint) {
-        console.warn('Cannot retrieve data for store without a dataSourceEndpoint', node);
+    if (!dataSourceEndpoint || !storeValue) {
+        console.warn('Cannot set storeKey with data without a dataSourceEndpoint or storeValue', node);
         return;
     }
 
@@ -47,13 +48,20 @@ exports.default = function (node) {
             _scalejs2.default.setValue(storeKey, value);
         });
     }
-    fetchData(); //initial call
 
-    if (node.id) {
-        //setup refresh receiver if store has id
-        subs.push((0, _scalejs3.receive)(node.id + '.refresh', function () {
-            fetchData();
-        }));
+    if (dataSourceEndpoint) {
+        fetchData(); //initial call
+
+        if (node.id) {
+            //setup refresh receiver if store has id
+            subs.push((0, _scalejs3.receive)(node.id + '.refresh', function () {
+                fetchData();
+            }));
+        }
+    }
+
+    if (storeValue) {
+        _scalejs2.default.setValue(storeKey, storeValue);
     }
 
     return {

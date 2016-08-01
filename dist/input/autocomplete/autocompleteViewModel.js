@@ -91,14 +91,14 @@ function autocompleteViewModel(node, inputViewModel) {
                     return item ? (0, _scalejs3.has)(item, 'value') ? item.value : item : '';
                 }).filter(Boolean))); // remove empty values
             } else {
-                sourceArray = data.SearchResults;
-                autocompleteSource(mapAutocompleteSource(data.SearchResults));
-            }
+                    sourceArray = data.SearchResults;
+                    autocompleteSource(mapAutocompleteSource(data.SearchResults));
+                }
         });
     }
 
     function getAutocompleteSourceFromContext() {
-        var source = (0, _scalejs2.evaluate)(autocompleteSourceDef.fromArray, context.getValue);
+        var source = _lodash2.default.toArray((0, _scalejs2.evaluate)(autocompleteSourceDef.fromArray || [], context.getValue));
 
         // storing source array before any mapping
         sourceArray = source;

@@ -54,7 +54,7 @@ function selectViewModel(node, inputViewModel) {
         subs = inputViewModel.subs,
         values = inputViewModel.values,
 
-    // props            
+    // props           
     addBlank = !(0, _scalejs2.has)(options.addBlank) || options.addBlank,
         currentFilter = (0, _knockout.observable)(),
         computedValues;
@@ -114,7 +114,7 @@ function selectViewModel(node, inputViewModel) {
         // create a sub to subscribe to changes in values
         subs.push((0, _knockout.computed)(function () {
             var value = inputValue.peek(),
-                newValues = ((0, _scalejs.evaluate)(options.values.fromArray, context.getValue) || []).filter(function (item) {
+                newValues = _lodash2.default.toArray((0, _scalejs.evaluate)(options.values.fromArray, context.getValue) || []).filter(function (item) {
                 return (0, _scalejs2.has)(item);
             }).map(mapItem(options.values));
 
