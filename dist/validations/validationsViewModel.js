@@ -52,7 +52,7 @@ function validationsViewModel(node) {
     }
 
     function _validate(childNodes) {
-        return childNodes.reduce(function (isInvalid, curr) {
+        return _knockout2.default.unwrap(childNodes).reduce(function (isInvalid, curr) {
             if (curr.validate && typeof curr.validate === 'function') {
                 return curr.validate() || isInvalid;
             } else {
@@ -70,5 +70,5 @@ function validationsViewModel(node) {
             });
         }
     });
-};
+}
 //# sourceMappingURL=validationsViewModel.js.map

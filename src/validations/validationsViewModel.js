@@ -39,7 +39,7 @@ export default function validationsViewModel(node) {
     }
 
     function _validate(childNodes) {
-        return childNodes.reduce(function (isInvalid, curr) {
+        return ko.unwrap(childNodes).reduce(function (isInvalid, curr) {
             if (curr.validate && typeof curr.validate === 'function') {
                 return curr.validate() || isInvalid;
             } else {
@@ -54,7 +54,7 @@ export default function validationsViewModel(node) {
         dispose: function () {
             subs.forEach(function (sub) {
                 sub.dispose();
-            })
+            });
         }
     });
-};
+}
