@@ -22,6 +22,10 @@ $dark-gray: #7d7d7d;
 
 .list-del-button {
 	cursor: pointer;
+    background-image: url("./images/icon-list-del.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 15px;
 }
 
 .list-advanced {
@@ -31,7 +35,7 @@ $dark-gray: #7d7d7d;
 		border-collapse: collapse;
 		border-spacing: 0;
 	}
-	
+
 	.cell {
 		.input-select-styles {
 			&:disabled, [disabled="true"] {

@@ -39,7 +39,7 @@ function autocompleteViewModel(node, inputViewModel) {
         readonly = inputViewModel.readonly,
         isShown = inputViewModel.isShown,
         autocompleteSource = inputViewModel.values,
-
+        //todo: just use values
     // props
     sourceArray,
         validations,
@@ -47,7 +47,15 @@ function autocompleteViewModel(node, inputViewModel) {
         unique = options.unique,
         computedSource,
         itemMapper = mapItem(keyMap),
-        objectValue;
+        objectValue,
+        autocompleteSourceDef;
+
+    if (node.autocompleteSource) {
+        console.warn('[autocomplete] please move the autocompleteSource into options');
+        autocompleteSourceDef = _lodash2.default.cloneDeep(node.autocompleteSource);
+    } else {
+        autocompleteSourceDef = _lodash2.default.cloneDeep(node.options && node.options.autocompleteSource);
+    }
 
     function mapAutocompleteSource(source) {
         return source.map(function (src) {
@@ -83,14 +91,14 @@ function autocompleteViewModel(node, inputViewModel) {
                     return item ? (0, _scalejs3.has)(item, 'value') ? item.value : item : '';
                 }).filter(Boolean))); // remove empty values
             } else {
-                    sourceArray = data.SearchResults;
-                    autocompleteSource(mapAutocompleteSource(data.SearchResults));
-                }
+                sourceArray = data.SearchResults;
+                autocompleteSource(mapAutocompleteSource(data.SearchResults));
+            }
         });
     }
 
     function getAutocompleteSourceFromContext() {
-        var source = (0, _scalejs2.evaluate)(node.autocompleteSource.fromArray, context.getValue);
+        var source = (0, _scalejs2.evaluate)(autocompleteSourceDef.fromArray, context.getValue);
 
         // storing source array before any mapping
         sourceArray = source;
@@ -117,12 +125,12 @@ function autocompleteViewModel(node, inputViewModel) {
         subs.push((0, _knockout.computed)(getAutocompleteSource));
     }
 
-    if (Array.isArray(node.autocompleteSource)) {
-        sourceArray = node.autocompleteSource;
-        autocompleteSource(mapAutocompleteSource(node.autocompleteSource));
+    if (Array.isArray(autocompleteSourceDef)) {
+        sourceArray = autocompleteSourceDef;
+        autocompleteSource(mapAutocompleteSource(autocompleteSourceDef));
     }
 
-    if (node.autocompleteSource && !Array.isArray(node.autocompleteSource)) {
+    if (autocompleteSourceDef && !Array.isArray(autocompleteSourceDef)) {
         subs.push((0, _knockout.computed)(getAutocompleteSourceFromContext).extend({ deferred: true }));
     }
 
@@ -180,6 +188,7 @@ function autocompleteViewModel(node, inputViewModel) {
     return {
         autocompleteSource: unique ? computedSource : autocompleteSource,
         validations: validations,
+        mappedChildNodes: (0, _knockout.observableArray)(), // todo: still need?
         // setReadonly: setReadonly,
         dispose: function dispose() {
             if (unique) {

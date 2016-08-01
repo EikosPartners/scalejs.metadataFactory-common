@@ -1,0 +1,49 @@
+//fonts
+$font-medium: 'Arial', sans-serif;
+$font-light: 'Arial', sans-serif;
+
+//z-index
+$input-z-index: 450;
+
+//colors
+$darker-gray: #424242;
+$gray: #cfd4d8;
+$dark-gray: #7d7d7d;
+$chartreuse: #B2BB1E;
+$error-red: #CE0000;
+$yellow: #F3D30E;
+
+//input styles variables - colors
+$input-focus-box-shadow-color: $yellow;
+$input-warning-box-shadow-color: #E87400;
+$input-error-box-shadow-color: $error-red;
+$input-background-color-main: white;
+
+//input styles variables - fonts
+$input-font-family-main: "Gotham Light", sans-serif;
+
+//input styles variables - sizes
+$input-width-main: calc(100% - 20px);
+$input-select-height: 26px;
+$input-height: 12px;
+$input-label-font-size: 12px;
+$input-font-size: 13px;
+
+//input styles variables - box shadow size
+$input-box-shadow: 0 0 0 1px;
+$input-focused-box-shadow1: 0 0 0 2px;
+$input-focused-box-shadow2: -2px 0 0 2px;
+
+//input styles variables - padding
+$input-padding: 7px 0 7px 7px;
+
+//validation styles variables
+$validation-message-unread-background-color: #FEFCD3;
+$validation-message-warning-color: orange;
+$validation-message-validated-color: green;
+$validation-message-z-index: 2;
+$validaiton-message-before-border: 10px solid transparent;
+
+/* sass-loader:inject-overrides */
+
+//todo: update sass-loader

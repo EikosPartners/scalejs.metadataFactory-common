@@ -12,6 +12,10 @@ require('./store/storeModule');
 
 require('./template/templateModule');
 
+require('./list/listModule');
+
+require('./listAdvanced/listAdvancedModule');
+
 var _scalejs = require('scalejs.mvvm');
 
 var _scalejs2 = _interopRequireDefault(_scalejs);

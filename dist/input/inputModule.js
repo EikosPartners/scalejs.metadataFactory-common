@@ -30,6 +30,8 @@ var _input2 = _interopRequireDefault(_input);
 
 require('ko-bindings/datepicker.js');
 
+require('ko-bindings/autosize');
+
 require('pikaday/scss/pikaday.scss');
 
 require('./input.scss');

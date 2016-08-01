@@ -357,11 +357,11 @@ function inputViewModel(node) {
                 }
             }
         }
-          data that gets sent
+         data that gets sent
         {
             input_id: input_value
         }
-          data that comes back 
+         data that comes back 
         {
             input_to_update: {
                 values: [
@@ -403,6 +403,10 @@ function inputViewModel(node) {
     // add validations to the inputvalue
     validations = (0, _scalejs3.merge)(_lodash2.default.cloneDeep(options.validations), { customError: customError });
     if (validations.expression) {
+        if (options.validations.expression.message && !options.validations.expression.term) {
+            console.error("[input] if providing a message for expression validation, must also provide term");
+            options.validations.expression.term = "true"; // don't cause exceptions.
+        }
         validations.expression.params = [options.validations.expression.message ? options.validations.expression.term : options.validations.expression, context.getValue];
     }
 
