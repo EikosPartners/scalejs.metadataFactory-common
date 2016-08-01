@@ -7,6 +7,7 @@ import { extend } from 'lodash';
 import moment from 'moment';
 import ko from 'knockout';
 import _ from 'lodash';
+import noticeboard from 'scalejs.noticeboard';
 
 import autocompleteViewModel from './autocomplete/autocompleteViewModel';
 import selectViewModel from './select/selectViewModel';
@@ -317,6 +318,13 @@ export default function inputViewModel(node) {
                 ]
             }
         }
+
+        or if wanting to update store
+        {
+            store: {
+                store_key: value
+            }
+        }
     */
 
     if (options.registered) {
@@ -332,10 +340,18 @@ export default function inputViewModel(node) {
                 registeredAction.action({
                     callback: (error, data) => {
                         Object.keys(data).forEach((key) => {
+                            if (key === 'store') {
+                                Object.keys(data[key]).forEach(function (storeKey) {
+                                    let valueToStore = data[key][storeKey];
+                                    noticeboard.setValue(storeKey, valueToStore);
+                                });
+                                return;
+                            }
+
                             if (!context.dictionary && !context.data) {
                                 console.warn('Using a registered input when no data/dictionary available in context', node);
                                 return;
-                            }
+                            }                            
                             var node = context.dictionary && context.dictionary()[key];
                             if (node && node.update) {
                                 node.update(data[key]);
