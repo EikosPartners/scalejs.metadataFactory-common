@@ -79,7 +79,11 @@
                 "validations": {
                     "required": true
                 },
-                "items": inputJSON.slice(0,2).map(clone)
+                "items": inputJSON.slice(0,2).map(clone).concat([
+                    {
+                        "type": "DELETE"
+                    }
+                ])
             }
         };
 
