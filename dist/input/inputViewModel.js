@@ -30,6 +30,10 @@ var _moment = require('moment');
 
 var _moment2 = _interopRequireDefault(_moment);
 
+var _scalejs4 = require('scalejs.noticeboard');
+
+var _scalejs5 = _interopRequireDefault(_scalejs4);
+
 var _autocompleteViewModel = require('./autocomplete/autocompleteViewModel');
 
 var _autocompleteViewModel2 = _interopRequireDefault(_autocompleteViewModel);
@@ -357,16 +361,22 @@ function inputViewModel(node) {
                 }
             }
         }
-         data that gets sent
+          data that gets sent
         {
             input_id: input_value
         }
-         data that comes back 
+          data that comes back 
         {
             input_to_update: {
                 values: [
                     'value1'
                 ]
+            }
+        }
+          or if wanting to update store
+        {
+            store: {
+                store_key: value
             }
         }
     */
@@ -384,6 +394,14 @@ function inputViewModel(node) {
                 registeredAction.action({
                     callback: function callback(error, data) {
                         Object.keys(data).forEach(function (key) {
+                            if (key === 'store') {
+                                Object.keys(data[key]).forEach(function (storeKey) {
+                                    var valueToStore = data[key][storeKey];
+                                    _scalejs5.default.setValue(storeKey, valueToStore);
+                                });
+                                return;
+                            }
+
                             if (!context.dictionary && !context.data) {
                                 console.warn('Using a registered input when no data/dictionary available in context', node);
                                 return;

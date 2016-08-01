@@ -54,7 +54,7 @@ function selectViewModel(node, inputViewModel) {
         subs = inputViewModel.subs,
         values = inputViewModel.values,
 
-    // props            
+    // props           
     addBlank = !(0, _scalejs2.has)(options.addBlank) || options.addBlank,
         currentFilter = (0, _knockout.observable)(),
         computedValues;
