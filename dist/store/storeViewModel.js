@@ -17,7 +17,7 @@ exports.default = function (node) {
         return;
     }
 
-    if (!dataSourceEndpoint || !storeValue) {
+    if (!dataSourceEndpoint && !storeValue) {
         console.warn('Cannot set storeKey with data without a dataSourceEndpoint or storeValue', node);
         return;
     }
