@@ -310,7 +310,7 @@ exports.default = {
     },
     'input-labels': function inputLabels() {
         var label = this.label,
-            required = this.required ? '<span id="input-required-label">*</span> ' : '';
+            required = this.required ? '<span class="input-required-label">*</span> ' : '';
 
         var showLabel = true;
         if (this.options) {

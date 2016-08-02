@@ -361,11 +361,11 @@ function inputViewModel(node) {
                 }
             }
         }
-          data that gets sent
+         data that gets sent
         {
             input_id: input_value
         }
-          data that comes back 
+         data that comes back 
         {
             input_to_update: {
                 values: [
@@ -373,7 +373,7 @@ function inputViewModel(node) {
                 ]
             }
         }
-          or if wanting to update store
+         or if wanting to update store
         {
             store: {
                 store_key: value
