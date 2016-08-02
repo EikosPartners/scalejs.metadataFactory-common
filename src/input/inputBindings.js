@@ -73,7 +73,7 @@ export default {
                     //if disabled changes, will the binding be re-initialized? Not sure
                     //this is why i created this issue to ask the creator of bindings
                     //https://github.com/rniemeyer/knockout-classBindingProvider/issues/23
-                
+
             },
             attr: {
                 readonly: this.readonly(),
@@ -306,7 +306,7 @@ export default {
     },
     'input-labels': function () {
         var label = this.label,
-            required = this.required ? '* ' : '';
+            required = this.required ? '<span id="input_required_label">*</span> ' : '';
 
         var showLabel = true;
         if (this.options) {
@@ -314,7 +314,7 @@ export default {
         }
 
         return {
-            text: required + label,
+            html: required + label,
             visible: showLabel
         };
     },
@@ -332,4 +332,3 @@ export default {
         }
     }
 }
-
