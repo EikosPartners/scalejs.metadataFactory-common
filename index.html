@@ -89,9 +89,13 @@
             }
         };
 
-        sampleJSON = sampleJSON
+        sampleJSON = {
+            "type": "template",
+            "template": "div",
+            "children": []
                         .concat(inputJSON)
-                        .concat(advancedListJSON);
+                        .concat(advancedListJSON)
+        }
 
 
     </script>
