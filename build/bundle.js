@@ -64125,7 +64125,7 @@
 /* 193 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=\"div\">\r\n    <div data-bind=\"css: $data.classes, template: {name: 'metadata_items_template', data: mappedChildNodes}\"></div>\r\n</div>";
+	module.exports = "<div id=\"div\">\r\n    <div data-bind=\"css: $data.classes, template: {name: 'metadata_items_template', data: mappedChildNodes}\"></div>\r\n</div>\r\n\r\n<div id=\"text\">\r\n    <span data-bind=\"css: $data.classes, text: $data.text\"></span>\r\n</div>";
 
 /***/ },
 /* 194 */
