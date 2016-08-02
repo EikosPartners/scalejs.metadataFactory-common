@@ -59518,7 +59518,7 @@
 	    },
 	    'input-labels': function inputLabels() {
 	        var label = this.label,
-	            required = this.required ? '<span id="input_required_label">*</span> ' : '';
+	            required = this.required ? '<span id="input-required-label">*</span> ' : '';
 	
 	        var showLabel = true;
 	        if (this.options) {
