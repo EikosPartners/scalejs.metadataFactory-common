@@ -1,10 +1,6 @@
 {
   "name": "scalejs.metadatafactory-common",
-<<<<<<< f8d6c21fa034bb7d31266793333bab2a17db4a87
   "version": "1.0.65",
-=======
-  "version": "1.0.64",
->>>>>>> Added div template
   "description": "Common scalejs.metadatafactory modules",
   "main": "dist/scalejs.metadataFactory-common.js",
   "scripts": {
