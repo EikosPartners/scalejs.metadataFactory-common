@@ -115,7 +115,19 @@ import _ from 'lodash';
                     isNew: isNew,
                     itemDictionary: itemDictionary,
                     editMode: observable(false), //for styling - maybe better if called isActiveRow
-                    deleteFlag: observable(false)
+                    deleteFlag: observable(false),
+                    data: computed(function () {
+                        var dict = itemDictionary();
+                         return Object.keys(dict).reduce(function (d, id) {
+                            var item = dict[id];
+                            if(item.getValue) {
+                                d[id] = item.getValue();
+                            } else {
+                                d[id] = item;
+                            }
+                            return d;
+                        }, {});
+                    })
                 },
                 row = {}, // the row itself
                 itemViewModels,
