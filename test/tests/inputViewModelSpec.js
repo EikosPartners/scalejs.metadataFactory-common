@@ -444,7 +444,7 @@ describe('inputViewModel test', function () {
             let input = testDomStubDP.node.querySelector('input');
 
             ko.dataFor(input).assignDate("2016-03-01", {days: 14, months: 1});
-            expect(ko.dataFor(input).inputValue()).equals("04/15/2016");
+            expect(ko.dataFor(input).inputValue()).equals("2016-04-15");
             testDomStubDP.dispose();
             done();
         });
