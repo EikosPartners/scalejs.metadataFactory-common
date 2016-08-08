@@ -8,6 +8,7 @@ import 'chai';
 import 'input/inputModule';
 import inputViewModel from 'input/inputViewModel';
 import noticeboard from 'scalejs.noticeboard';
+import moment from 'moment';
 
 
 
@@ -448,7 +449,32 @@ describe('inputViewModel test', function () {
             testDomStubDP.dispose();
             done();
         });
+        
+        it('expects date to be utc date', function (done) {
+
+            const nodeDatePicker = {
+                "type": "input",
+                "inputType": "datepicker",
+                "label": "Date Picker",
+                "options": {
+                    //"rawFormat": "iso", todo: implement iso formatter?
+                    "value": "2016-08-06T00:00:06.000Z",
+                    "utc": true
+                }
+            };
+
+            let testDomStubDP = createMetadataDomStub(nodeDatePicker);
+            let input = testDomStubDP.node.querySelector('input');
+
+            //console.log(moment('2016-02-01').utc().toDate().toISOString());
+            
+            // ko.dataFor(input).assignDate("2016-03-01", {days: 14, months: 1});
+            expect(ko.dataFor(input).inputValue()).equals("2016-08-06T00:00:06.000Z");
+            testDomStubDP.dispose();
+            done();
+        });
     });
+
 
     describe('inputViewModel dateformatter function', function () {    
         it('tests dateformatter function', function (done) {
