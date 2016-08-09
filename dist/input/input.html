@@ -7,7 +7,7 @@
             </i>
         <!-- /ko -->
 
-        <!-- ko template: 'input_' + inputType + '_template' -->
+        <!-- ko template: $data.inputTemplate || 'input_' + inputType + '_template' -->
         <!-- /ko -->
         <span data-class="input-validation"></span>
         <span data-class="input-tooltip"></span>

@@ -129,7 +129,8 @@ exports.default = {
                 enabledDate: options.enabledDate,
                 disableWeekends: options.disableWeekends,
                 errorObservable: this.customError,
-                errorMessage: options.disabledDateMessage
+                errorMessage: options.disabledDateMessage,
+                utc: options.utc
             },
             validationElement: false,
             hasFocus: this.hasFocus,

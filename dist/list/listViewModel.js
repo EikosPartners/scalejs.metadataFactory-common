@@ -134,7 +134,19 @@ function listViewModel(node) {
             isNew: isNew,
             itemDictionary: itemDictionary,
             editMode: (0, _knockout.observable)(false), //for styling - maybe better if called isActiveRow
-            deleteFlag: (0, _knockout.observable)(false)
+            deleteFlag: (0, _knockout.observable)(false),
+            data: (0, _knockout.computed)(function () {
+                var dict = itemDictionary();
+                return Object.keys(dict).reduce(function (d, id) {
+                    var item = dict[id];
+                    if (item.getValue) {
+                        d[id] = item.getValue();
+                    } else {
+                        d[id] = item;
+                    }
+                    return d;
+                }, {});
+            })
         },
             row = {},
             // the row itself
