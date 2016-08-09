@@ -14,7 +14,8 @@ exports.default = {
             nextHeader,
             hasChild,
             isChild,
-            isChild = this.tabDef.options && this.tabDef.options.isChild;
+            isChild = this.tabDef.options && this.tabDef.options.isChild,
+            classes = this.tabDef.classes;
 
         if (ctx.$index() + 1 < ctx.$parent.tabs.length) {
             nextTab = ctx.$parent.tabs[ctx.$index() + 1];
@@ -22,13 +23,21 @@ exports.default = {
             hasChild = nextHeader.options && nextHeader.options.isChild;
         }
 
+        var css = {
+            on: this.isActive,
+            childActive: hasChild && nextTab.isActive,
+            childTab: isChild
+        };
+
+        if (classes) {
+            classes.split(' ').forEach(function (className) {
+                //add class to css object 
+                css[className] = true;
+            });
+        }
         return {
             visible: !isChild || this.isActive,
-            css: {
-                on: this.isActive,
-                childActive: hasChild && nextTab.isActive,
-                childTab: isChild
-            },
+            css: css,
             click: this.setActiveTab.bind(null, null)
         };
     },
