@@ -67,10 +67,12 @@ export default function inputViewModel(node) {
         // subs disposable array
         subs = [],
 
-        // how can we define these more clearly / better? Block Scope?
-        wasModified, //Needed?
-        computedValueExpression, //Needed?
-        registeredAction, //Needed?
+        computedValueExpression, 
+
+        // registered action vars
+        registeredAction, 
+        initialRegisteredAction,
+        initial,
 
         // move out to utility?
         formatters = {
@@ -96,9 +98,11 @@ export default function inputViewModel(node) {
         return inputValue() || '';
     }
 
-    function setValue(data) {
-        var value = is(data, 'object') ? data.value : data,  // TODO: Refactor - should only accept "value", not "data".
-            wasModifed = inputValue.isModified();
+    function setValue(data, opts = {}) {
+        let value = is(data, 'object') ? data.value : data,  // TODO: Refactor - should only accept "value", not "data".
+            wasModified = inputValue.isModified();
+        
+        initial = opts.initial;
 
          // uses setValueFunc if defined, else updates inputValue
         if (setValueFuncs[node.inputType]) {
@@ -110,7 +114,9 @@ export default function inputViewModel(node) {
         }
 
         // programtically setting the inputValue will not cause isModified to become true
-        if (!wasModifed) { inputValue.isModified(false); }
+        if (!wasModified) { inputValue.isModified(false); }
+
+        initial = false;
     }
 
     function update(data) {
@@ -210,6 +216,12 @@ export default function inputViewModel(node) {
     function getPattern() {
         // implicitly determine pattern (inputmask) if there is a Regex validation
         if (validations && validations.pattern) {
+            
+            if(!validations.pattern.params) {
+                console.error('Pattern validation must have params and message', node);
+                return;
+            }
+
             return {
                 alias: 'Regex',
                 regex: validations.pattern.params
@@ -291,53 +303,25 @@ export default function inputViewModel(node) {
         viewmodel.maxDate = ko.observable(options.maxDate);
     }
 
-    // Is this needed in the common? Should it be a plugin/mixin?
-    /*
-        how to define
-        {
-            type: 'input',
-            options: {
-                registered: {
-                    target: {
-                        uri: 'uri/here' <- requests an endpoint
-                    }
-                }
-            }
-        }
-
-        data that gets sent
-        {
-            input_id: input_value
-        }
-
-        data that comes back 
-        {
-            input_to_update: {
-                values: [
-                    'value1'
-                ]
-            }
-        }
-
-        or if wanting to update store
-        {
-            store: {
-                store_key: value
-            }
-        }
-    */
-
     if (options.registered) {
         registeredAction = createViewModel.call(this, {
             type: 'action',
             actionType: 'ajax',
-            options: merge(options.registered, { data: {} })
+            options: merge(options.registered.update || options.registered, { data: {} })
+        });
+        
+        initialRegisteredAction = createViewModel.call(this, {
+            type: 'action',
+            actionType: 'ajax',
+            options: merge(options.registered.initial || options.registered, { data: {} })
         });
 
         inputValue.subscribe(function (newValue) {
-            registeredAction.options.data[node.id] = newValue; //our own sub gets called before context is updated
+            let action = initial ? initialRegisteredAction : registeredAction;
+
+            action.options.data[node.id] = newValue; //our own sub gets called before context is updated
             if (newValue !== '') {
-                registeredAction.action({
+                action.action({
                     callback: (error, data) => {
                         Object.keys(data).forEach((key) => {
                             if (key === 'store') {
