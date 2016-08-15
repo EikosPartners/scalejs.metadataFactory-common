@@ -16,8 +16,36 @@ import dataservice from 'dataservice';
     // todo: refactor tabObj/tabDef to be more clear?
     var tabTypes = {
         ajax: ajax,
-        route: route
+        route: route,
+        lazy: lazy
     };
+
+    function lazy(tabObj, tab) {
+        var mappedChildNodes = observableArray(),
+            setActiveTab = tabObj.setActiveTab,
+            tabTemplate = tabObj.tabTemplate,
+            context = this;
+        
+        tabObj.mappedChildNodes = mappedChildNodes;
+
+        tabObj.setActiveTab = function (newRoute) {
+            if (!mappedChildNodes().length) {
+                mappedChildNodes(createViewModels.call(context, tabObj.children));
+                tabTemplate({
+                    template: {
+                        name: 'metadata_items_template',
+                        data: mappedChildNodes()
+                    },
+                    tabObj: tabObj
+                });
+                setActiveTab(newRoute);
+            } else {
+                setActiveTab(newRoute);
+            }
+        };
+
+        return tabObj;
+    }
 
     function ajax(tabObj, tab) {
         var tabParams = tab.options && tab.options.params,
