@@ -14,7 +14,14 @@ import selectViewModel from './select/selectViewModel';
 
 let inputTypes = {
     autocomplete: autocompleteViewModel,
-    select: selectViewModel
+    select: selectViewModel,
+    multiselect: function (node, inputVM) {
+        node.options = merge(node.options || {}, {
+            addBlank: false
+        }); // do not add blanks in multiselect
+
+        return selectViewModel.call(this, node, inputVM);
+    }
 }
 
 export default function inputViewModel(node) {
@@ -61,7 +68,8 @@ export default function inputViewModel(node) {
 
         // custom setValue functions for input types
         setValueFuncs = {
-            checkboxList: setCheckboxListValue
+            checkboxList: setCheckboxListValue,
+            multiselect: setCheckboxListValue
         },
 
         // subs disposable array
@@ -203,7 +211,7 @@ export default function inputViewModel(node) {
      */
     function createInputValue() {
         // checkboxList can have multiple answers so make it an array
-        if (node.inputType === 'checkboxList') {
+        if (['checkboxList', 'multiselect'].includes(node.inputType)) {
             return observableArray(options.value || []);
         } else {
             // if there is no initial value, set it to empty string,
@@ -254,17 +262,21 @@ export default function inputViewModel(node) {
     }
 
     function mapItem(mapper) {
-        var textKey = Array.isArray(mapper.textKey) ? mapper.textKey : [mapper.textKey],
-            valueKey = Array.isArray(mapper.valueKey) ? mapper.valueKey : [mapper.valueKey],
-            textFormatter = formatters[mapper.textFormatter] || _.identity,
+        var textFormatter = formatters[mapper.textFormatter] || _.identity,
             delimiter = mapper.delimeter || ' / ';
-
+        
+        function format(val, key) {
+           if(Array.isArray(key)) {
+               return key.map((k) => { return val[k]; }).join(delimiter)
+           } else {
+               return val[key]
+           }
+        }
+        
         return function (val) {
             return {
-                text: textFormatter(
-                    textKey.map((k) => { return val[k]; }).join(delimiter)
-                ),
-                value: valueKey.map((k) => { return val[k]; }).join(delimiter),
+                text: textFormatter(format(val, mapper.textKey)),
+                value: format(val, mapper.valueKey),
                 original: val
             }
         }

@@ -8,11 +8,12 @@ import selectViewModel from './select/selectViewModel';
 import inputViewModel from './inputViewModel';
 import inputBindings from './inputBindings';
 import inputTemplates from './input.html';
-import 'ko-bindings/datepicker.js';
+import 'ko-bindings/datepicker';
 import 'ko-bindings/autosize';
+import 'ko-bindings/tokeninput';
 import 'pikaday/scss/pikaday.scss';
 import './input.scss';
-
+import './input-multiselect.scss';
     registerBindings(inputBindings);
     registerTemplates(inputTemplates);
     registerViewModels({
