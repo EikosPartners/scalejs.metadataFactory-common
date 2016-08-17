@@ -85,6 +85,18 @@ export default {
             disable: disabled // use knockout disable binding - its sufficient. See "showAllAuto" binding for more details
         }
     },
+    'input-multiselect': function () {
+        return {
+            tokeninputValue: this.inputValue,
+            tokeninputSource: this.values().map(function (x) {
+                return {
+                    id: x.value || x,
+                    name: x.text || x
+                };
+            }),
+            tokeninputDisable: this.readonly          
+        };
+    },
     'input-datepicker': function (ctx) {
         var options = this.options,
             hover = this.hover,

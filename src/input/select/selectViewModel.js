@@ -71,7 +71,7 @@ import _ from 'lodash';
         function unshiftToValues(valuesArr, value) {
             var hasValue = arrayHasValue(valuesArr, value);
 
-            if (!hasValue && has(value) && value != '') {
+            if (options.unshiftToValues && !hasValue && has(value) && value != '') {
                 valuesArr.unshift({
                     text: format(value),
                     value: value
