@@ -30,7 +30,7 @@ import dataservice from 'dataservice';
 
         tabObj.setActiveTab = function (newRoute) {
             if (!mappedChildNodes().length) {
-                mappedChildNodes(createViewModels.call(context, tabObj.children));
+                mappedChildNodes(createViewModels.call(context, tab.children));
                 tabTemplate({
                     template: {
                         name: 'metadata_items_template',
