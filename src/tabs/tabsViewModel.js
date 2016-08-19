@@ -4,7 +4,7 @@ import { observable, observableArray, computed, unwrap } from 'knockout';
 import { getCurrent, setRoute } from 'scalejs.navigation';
 import { receive, notify } from 'scalejs.messagebus';
 import { evaluate } from 'scalejs.expression-jsep';
-import { objectContains, formatText } from 'utils';
+import { objectContains, formatText } from './tabUtils';
 import { extend, cloneDeep } from 'lodash';
 import { is, has, merge } from 'scalejs';
 import dataservice from 'dataservice';
