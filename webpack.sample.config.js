@@ -8,16 +8,12 @@ webpackConfig.entry = [
 ];
 
 webpackConfig.module.loaders =  webpackConfig.module.loaders.concat([
-        {
+    {
         test: [
             path.join(__dirname, 'node_modules/scalejs'),
             path.join(__dirname, 'node_modules/datatables-epresponsive')
         ],
         loader: 'source-map-loader'
-    },
-    {
-        test: /\.css$/,
-        loader: 'style-loader!css-loader!autoprefixer-loader'
     }
 ]).map(function (loader) {
     if (typeof loader.loader === 'string' && loader.loader.indexOf('style-loader!') === 0) {
