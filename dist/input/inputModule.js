@@ -28,13 +28,17 @@ var _input = require('./input.html');
 
 var _input2 = _interopRequireDefault(_input);
 
-require('ko-bindings/datepicker.js');
+require('ko-bindings/datepicker');
 
 require('ko-bindings/autosize');
+
+require('ko-bindings/tokeninput');
 
 require('pikaday/scss/pikaday.scss');
 
 require('./input.scss');
+
+require('./input-multiselect.scss');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

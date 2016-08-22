@@ -87,7 +87,7 @@ function selectViewModel(node, inputViewModel) {
     function unshiftToValues(valuesArr, value) {
         var hasValue = arrayHasValue(valuesArr, value);
 
-        if (!hasValue && (0, _scalejs2.has)(value) && value != '') {
+        if (options.unshiftToValues && !hasValue && (0, _scalejs2.has)(value) && value != '') {
             valuesArr.unshift({
                 text: format(value),
                 value: value

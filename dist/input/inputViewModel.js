@@ -46,7 +46,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var inputTypes = {
     autocomplete: _autocompleteViewModel2.default,
-    select: _selectViewModel2.default
+    select: _selectViewModel2.default,
+    multiselect: function multiselect(node, inputVM) {
+        node.options = (0, _scalejs3.merge)(node.options || {}, {
+            addBlank: false
+        }); // do not add blanks in multiselect
+
+        return _selectViewModel2.default.call(this, node, inputVM);
+    }
 };
 
 function inputViewModel(node) {
@@ -104,21 +111,21 @@ function inputViewModel(node) {
 
     // custom setValue functions for input types
     setValueFuncs = {
-        checkboxList: setCheckboxListValue
+        checkboxList: setCheckboxListValue,
+        multiselect: setCheckboxListValue
     },
 
 
     // subs disposable array
     subs = [],
+        computedValueExpression,
 
 
-    // how can we define these more clearly / better? Block Scope?
-    wasModified,
-        //Needed?
-    computedValueExpression,
-        //Needed?
+    // registered action vars
     registeredAction,
-        //Needed?
+        initialRegisteredAction,
+        initial,
+
 
     // move out to utility?
     formatters = {
@@ -146,9 +153,13 @@ function inputViewModel(node) {
     }
 
     function setValue(data) {
+        var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
         var value = (0, _scalejs3.is)(data, 'object') ? data.value : data,
             // TODO: Refactor - should only accept "value", not "data".
-        wasModifed = inputValue.isModified();
+        wasModified = inputValue.isModified();
+
+        initial = opts.initial;
 
         // uses setValueFunc if defined, else updates inputValue
         if (setValueFuncs[node.inputType]) {
@@ -160,9 +171,11 @@ function inputViewModel(node) {
         }
 
         // programtically setting the inputValue will not cause isModified to become true
-        if (!wasModifed) {
+        if (!wasModified) {
             inputValue.isModified(false);
         }
+
+        initial = false;
     }
 
     function update(data) {
@@ -250,7 +263,7 @@ function inputViewModel(node) {
      */
     function createInputValue() {
         // checkboxList can have multiple answers so make it an array
-        if (node.inputType === 'checkboxList') {
+        if (['checkboxList', 'multiselect'].includes(node.inputType)) {
             return (0, _knockout.observableArray)(options.value || []);
         } else {
             // if there is no initial value, set it to empty string,
@@ -262,6 +275,12 @@ function inputViewModel(node) {
     function getPattern() {
         // implicitly determine pattern (inputmask) if there is a Regex validation
         if (validations && validations.pattern) {
+
+            if (!validations.pattern.params) {
+                console.error('Pattern validation must have params and message', node);
+                return;
+            }
+
             return {
                 alias: 'Regex',
                 regex: validations.pattern.params
@@ -298,19 +317,23 @@ function inputViewModel(node) {
     }
 
     function mapItem(mapper) {
-        var textKey = Array.isArray(mapper.textKey) ? mapper.textKey : [mapper.textKey],
-            valueKey = Array.isArray(mapper.valueKey) ? mapper.valueKey : [mapper.valueKey],
-            textFormatter = formatters[mapper.textFormatter] || _lodash2.default.identity,
+        var textFormatter = formatters[mapper.textFormatter] || _lodash2.default.identity,
             delimiter = mapper.delimeter || ' / ';
+
+        function format(val, key) {
+            if (Array.isArray(key)) {
+                return key.map(function (k) {
+                    return val[k];
+                }).join(delimiter);
+            } else {
+                return val[key];
+            }
+        }
 
         return function (val) {
             return {
-                text: textFormatter(textKey.map(function (k) {
-                    return val[k];
-                }).join(delimiter)),
-                value: valueKey.map(function (k) {
-                    return val[k];
-                }).join(delimiter),
+                text: textFormatter(format(val, mapper.textKey)),
+                value: format(val, mapper.valueKey),
                 original: val
             };
         };
@@ -348,50 +371,25 @@ function inputViewModel(node) {
         viewmodel.maxDate = _knockout2.default.observable(options.maxDate);
     }
 
-    // Is this needed in the common? Should it be a plugin/mixin?
-    /*
-        how to define
-        {
-            type: 'input',
-            options: {
-                registered: {
-                    target: {
-                        uri: 'uri/here' <- requests an endpoint
-                    }
-                }
-            }
-        }
-         data that gets sent
-        {
-            input_id: input_value
-        }
-         data that comes back 
-        {
-            input_to_update: {
-                values: [
-                    'value1'
-                ]
-            }
-        }
-         or if wanting to update store
-        {
-            store: {
-                store_key: value
-            }
-        }
-    */
-
     if (options.registered) {
         registeredAction = _scalejs.createViewModel.call(this, {
             type: 'action',
             actionType: 'ajax',
-            options: (0, _scalejs3.merge)(options.registered, { data: {} })
+            options: (0, _scalejs3.merge)(options.registered.update || options.registered, { data: {} })
+        });
+
+        initialRegisteredAction = _scalejs.createViewModel.call(this, {
+            type: 'action',
+            actionType: 'ajax',
+            options: (0, _scalejs3.merge)(options.registered.initial || options.registered, { data: {} })
         });
 
         inputValue.subscribe(function (newValue) {
-            registeredAction.options.data[node.id] = newValue; //our own sub gets called before context is updated
+            var action = initial ? initialRegisteredAction : registeredAction;
+
+            action.options.data[node.id] = newValue; //our own sub gets called before context is updated
             if (newValue !== '') {
-                registeredAction.action({
+                action.action({
                     callback: function callback(error, data) {
                         Object.keys(data).forEach(function (key) {
                             if (key === 'store') {
