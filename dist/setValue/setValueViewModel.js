@@ -25,7 +25,7 @@ function setValueViewModel(node) {
 
     function _setValue(node, data, clear) {
         if (node.id && node.setValue && (data.hasOwnProperty(node.id) || clear)) {
-            node.setValue(data[node.id]); //pass as object with value key?
+            node.setValue(data[node.id], { initial: true }); //pass as object with value key?
         }
         (_knockout2.default.unwrap(node.mappedChildNodes) || []).forEach(function (node) {
             _setValue(node, data, clear);

@@ -29,7 +29,11 @@ webpackConfig.output = {
 };
 
 webpackConfig.plugins = (webpackConfig.plugins || []).concat([
-    new ExtractTextPlugin('main.css')
+    new ExtractTextPlugin('main.css'),
+    new webpack.ProvidePlugin({
+       $: "jquery",
+       jQuery: "jquery"
+   })
 ]);
 
 webpackConfig.devtool = 'source-map';

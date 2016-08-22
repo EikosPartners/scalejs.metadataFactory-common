@@ -2,6 +2,7 @@ import { merge, has} from 'scalejs';
 import * as format from 'js-format';
 import 'knockout-jqautocomplete/build/knockout-jqAutocomplete';
 import 'ko-bindings/showAllAuto';
+import 'ko-bindings/timepicker';
 
 export default {
     'input-input': function () {
@@ -38,6 +39,32 @@ export default {
             },
             inputmask: pattern
         };
+    },
+    'input-time': function (ctx) {
+      var tooltipShown = this.tooltipShown,
+          shake = this.shake,
+          value = this.inputValue,
+          timeFormat = this.timeFormat,
+          css = { 'animated shake': shake };
+
+      if (this.classes) {
+        css[this.classes] = true;
+      }
+      return {
+        timepicker: {
+          data: value,
+          timeFormat: timeFormat
+        },
+        validationElement: false,
+        hasFocus: this.hasFocus,
+        disable: this.readonly() || this.disabled(),
+        css: css,
+        attr: {
+            readonly: this.readonly(),
+            'data-id': this.id,
+            title: value
+        }
+      }
     },
     'input-autocomplete': function (ctx) {
         var pattern,
@@ -94,7 +121,7 @@ export default {
                     name: x.text || x
                 };
             }),
-            tokeninputDisable: this.readonly          
+            tokeninputDisable: this.readonly
         };
     },
     'input-datepicker': function (ctx) {

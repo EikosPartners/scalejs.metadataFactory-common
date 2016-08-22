@@ -32,7 +32,7 @@ exports.default = function (node, metadata) {
             // can by dynamic because of ajax tabs
         tabDef = typeof node.headers[index] === 'string' ? { text: node.headers[index] } : node.headers[index],
             tabName = tabDef.computed ? (0, _knockout.computed)(function () {
-            return (0, _utils.formatText)(tabDef.text, context.getValue);
+            return (0, _tabUtils.formatText)(tabDef.text, context.getValue);
         }) : tabDef.text,
             tabObj = {
             tabName: tabName,
@@ -88,7 +88,7 @@ exports.default = function (node, metadata) {
         tabs.push(tabObj);
 
         // sets the active tab if defined in the query or tabDef
-        if (tabDef.isActive || tabDef.params && query && (0, _utils.objectContains)(query, tabDef.params)) {
+        if (tabDef.isActive || tabDef.params && query && (0, _tabUtils.objectContains)(query, tabDef.params)) {
             initialActiveTab = tabObj;
         }
     });
@@ -112,7 +112,7 @@ exports.default = function (node, metadata) {
             tabs.some(function (tab) {
                 // if activeTab: 'x' is in both objects, set the active tab
                 // and write this better..maybe use ids
-                if ((0, _utils.objectContains)(params, tab.tabDef.params)) {
+                if ((0, _tabUtils.objectContains)(params, tab.tabDef.params)) {
                     tab.setActiveTab((0, _scalejs6.merge)((0, _lodash.cloneDeep)(tab.tabDef), { params: params }));
                 }
             });
@@ -176,7 +176,7 @@ var _scalejs4 = require('scalejs.messagebus');
 
 var _scalejs5 = require('scalejs.expression-jsep');
 
-var _utils = require('utils');
+var _tabUtils = require('./tabUtils');
 
 var _lodash = require('lodash');
 
@@ -195,8 +195,36 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // todo: refactor tabObj/tabDef to be more clear?
 var tabTypes = {
     ajax: ajax,
-    route: route
+    route: route,
+    lazy: lazy
 };
+
+function lazy(tabObj, tab) {
+    var mappedChildNodes = (0, _knockout.observableArray)(),
+        setActiveTab = tabObj.setActiveTab,
+        tabTemplate = tabObj.tabTemplate,
+        context = this;
+
+    tabObj.mappedChildNodes = mappedChildNodes;
+
+    tabObj.setActiveTab = function (newRoute) {
+        if (!mappedChildNodes().length) {
+            mappedChildNodes(_scalejs.createViewModels.call(context, tab.children));
+            tabTemplate({
+                template: {
+                    name: 'metadata_items_template',
+                    data: mappedChildNodes()
+                },
+                tabObj: tabObj
+            });
+            setActiveTab(newRoute);
+        } else {
+            setActiveTab(newRoute);
+        }
+    };
+
+    return tabObj;
+}
 
 function ajax(tabObj, tab) {
     var tabParams = tab.options && tab.options.params,

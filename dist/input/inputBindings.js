@@ -14,6 +14,8 @@ require('knockout-jqautocomplete/build/knockout-jqAutocomplete');
 
 require('ko-bindings/showAllAuto');
 
+require('ko-bindings/timepicker');
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 exports.default = {
@@ -50,6 +52,32 @@ exports.default = {
                 'data-id': this.id
             },
             inputmask: pattern
+        };
+    },
+    'input-time': function inputTime(ctx) {
+        var tooltipShown = this.tooltipShown,
+            shake = this.shake,
+            value = this.inputValue,
+            timeFormat = this.timeFormat,
+            css = { 'animated shake': shake };
+
+        if (this.classes) {
+            css[this.classes] = true;
+        }
+        return {
+            timepicker: {
+                data: value,
+                timeFormat: timeFormat
+            },
+            validationElement: false,
+            hasFocus: this.hasFocus,
+            disable: this.readonly() || this.disabled(),
+            css: css,
+            attr: {
+                readonly: this.readonly(),
+                'data-id': this.id,
+                title: value
+            }
         };
     },
     'input-autocomplete': function inputAutocomplete(ctx) {
@@ -96,6 +124,18 @@ exports.default = {
             validationElement: false,
             showAllAuto: (0, _scalejs.has)(this.options.showAllSearch) ? this.options.showAllSearch : '',
             disable: disabled // use knockout disable binding - its sufficient. See "showAllAuto" binding for more details
+        };
+    },
+    'input-multiselect': function inputMultiselect() {
+        return {
+            tokeninputValue: this.inputValue,
+            tokeninputSource: this.values().map(function (x) {
+                return {
+                    id: x.value || x,
+                    name: x.text || x
+                };
+            }),
+            tokeninputDisable: this.readonly
         };
     },
     'input-datepicker': function inputDatepicker(ctx) {
