@@ -224,7 +224,8 @@ export default {
                 'data-id': this.id
             },
             optionsText: 'text',
-            optionsValue: 'value'
+            optionsValue: 'value',
+            valueAllowUnset: true
         };
     },
     'input-checkbox': function () {
