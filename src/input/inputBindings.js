@@ -1,4 +1,4 @@
-import { merge, has} from 'scalejs';
+import { merge, has, get} from 'scalejs';
 import * as format from 'js-format';
 import 'knockout-jqautocomplete/build/knockout-jqAutocomplete';
 import 'ko-bindings/showAllAuto';
@@ -255,14 +255,16 @@ export default {
     },
     'input-radio': function () {
         if (this.values().length === 0) {
-            this.values([{ key: 'Y', value: 'Yes' },
-                { key: 'N', value: 'No' }]);
+            this.values([
+                { text: 'Yes', value: get(this, 'yesValue', true) },
+                { text: 'No', value: get(this, 'noValue', false) }
+            ]);
         }
 
         var values = this.values().map(function (val) {
             if (typeof val === 'string') {
                 return {
-                    key: val,
+                    text: val,
                     value: val
                 }
             }
@@ -275,7 +277,7 @@ export default {
     },
     'input-radio-button': function (ctx) {
         return {
-            value: this.key,
+            value: this.value,
             checked: ctx.$parent.inputValue,
             attr: {
                 disabled: ctx.$parent.readonly()
@@ -284,10 +286,10 @@ export default {
                 // for 508
                 keyup: function (d, e) {
                     if (e.keyCode === 13) {
-                        if (ctx.$parent.inputValue() === this.key) {
+                        if (ctx.$parent.inputValue() === this.value) {
                             ctx.$parent.inputValue(undefined);
                         } else {
-                            ctx.$parent.inputValue(this.key);
+                            ctx.$parent.inputValue(this.value);
                         }
                     }
                 }
