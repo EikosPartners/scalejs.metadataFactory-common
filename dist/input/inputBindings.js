@@ -268,13 +268,13 @@ exports.default = {
     },
     'input-radio': function inputRadio() {
         if (this.values().length === 0) {
-            this.values([{ key: 'Y', value: 'Yes' }, { key: 'N', value: 'No' }]);
+            this.values([{ text: 'Yes', value: (0, _scalejs.get)(this, 'yesValue', true) }, { text: 'No', value: (0, _scalejs.get)(this, 'noValue', false) }]);
         }
 
         var values = this.values().map(function (val) {
             if (typeof val === 'string') {
                 return {
-                    key: val,
+                    text: val,
                     value: val
                 };
             }
@@ -287,7 +287,7 @@ exports.default = {
     },
     'input-radio-button': function inputRadioButton(ctx) {
         return {
-            value: this.key,
+            value: this.value,
             checked: ctx.$parent.inputValue,
             attr: {
                 disabled: ctx.$parent.readonly()
@@ -296,10 +296,10 @@ exports.default = {
                 // for 508
                 keyup: function keyup(d, e) {
                     if (e.keyCode === 13) {
-                        if (ctx.$parent.inputValue() === this.key) {
+                        if (ctx.$parent.inputValue() === this.value) {
                             ctx.$parent.inputValue(undefined);
                         } else {
-                            ctx.$parent.inputValue(this.key);
+                            ctx.$parent.inputValue(this.value);
                         }
                     }
                 }
