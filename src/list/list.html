@@ -17,16 +17,11 @@
 
 <div id="list_items_template">
     <div class="grid-100 row">
-        <!-- ko template: { name: 'list_item_template', foreach: $data } -->
+        <!-- ko template: { name: 'metadata_items_template', data: $data } -->
         <!--/ko -->
         <!-- ko template: 'list_del_template' -->
         <!-- /ko -->
     </div>
-</div>
-
-<div id="list_item_template">
-        <!-- ko template: $data.template || $data.type + '_template' -->
-        <!-- /ko -->
 </div>
 
 <div id="list_del_template">
