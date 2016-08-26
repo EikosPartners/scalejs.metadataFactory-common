@@ -62613,6 +62613,9 @@
 	                data((0, _jquery2.default)(element).timepicker('getTime'));
 	            });
 	            data((0, _jquery2.default)(element).timepicker('getTime'));
+	            data.subscribe(function (newTime) {
+	                $element.timepicker('setTime', newTime);
+	            });
 	        }
 	    }
 	};
@@ -62644,7 +62647,7 @@
 /* 181 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=\"input_template\">\r\n    <div data-bind=\"css: $data.classes\" class=\"input\">\r\n        <label data-class=\"input-labels input-color-text\" class=\"input-label\"></label>\r\n        <!-- ko if: $data.helpText -->\r\n        <i class=\"fa fa-info-circle info\"> <!--TODO: image icon -->\r\n                <div class=\"tool-tip\" data-bind=\"text: $data.helpText\"></div>\r\n            </i>\r\n        <!-- /ko -->\r\n\r\n        <!-- ko template: $data.inputTemplate || 'input_' + inputType + '_template' -->\r\n        <!-- /ko -->\r\n        <span data-class=\"input-validation\"></span>\r\n        <span data-class=\"input-tooltip\"></span>\r\n    </div>\r\n</div>\r\n\r\n<!-- TODO: Need this? -->\r\n<div id=\"input_textLabel_template\">\r\n    <div class=\"input-label label-only\" data-class=\"input-labels-only\"></div>\r\n</div>\r\n\r\n<!-- TODO: Do we need input-wrapper around every template?-->\r\n\r\n<div id=\"input_text_template\">\r\n    <div class=\"input-wrapper\">\r\n        <input data-class=\"input-input input-validation-checker\" type=\"text\" class=\"input-text\" />\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_select_template\">\r\n    <div class=\"input-wrapper\">\r\n        <select data-class=\"input-select input-validation-checker\" class=\"input-select\"></select>\r\n    </div>\r\n\r\n</div>\r\n\r\n<div id=\"input_datepicker_template\">\r\n    <div class=\"input-wrapper\">\r\n        <input type=\"text\" data-class=\"input-datepicker input-validation-checker\" class=\"input-date\" />\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_time_template\">\r\n    <div class=\"input-wrapper\">\r\n        <input data-class=\"input-time input-validation-checker\" value=\"5:00pm\" class=\"ui-timepicker-input\" type=\"text\">\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_textarea_template\">\r\n    <div class=\"input-wrapper\">\r\n        <textarea data-class=\"input-input input-validation-checker\" class=\"input-textarea\"></textarea>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_autosize_template\">\r\n    <div class=\"input-wrapper\">\r\n        <textarea data-class=\"input-input input-validation-checker input-autosize\" class=\"input-text\"></textarea>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_radio_template\">\r\n    <div data-class=\"input-radio input-color-text\" class=\"input-radio-wrapper\">\r\n        <label>\r\n            <input type=\"radio\" class=\"input-radio\" data-class=\"input-radio-button\" />\r\n            <span data-bind=\"css: 'icon ' + $data.icon\"></span>\r\n            <span class=\"input-radio-label\" data-bind=\"text: $data.text\"></span>\r\n        </label>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_checkbox_template\">\r\n    <label class=\"input-checkbox-wrapper\">\r\n        <input type=\"checkbox\" class=\"input-checkbox-button\" data-class=\"input-checkbox-button input-validation-checker\">\r\n        <span class=\"input-checkbox-display\"></span>\r\n        <span class=\"input-checkbox-label\" data-bind=\"text: options.text\"></span>\r\n    </label>\r\n</div>\r\n\r\n<div id=\"input_checkboxList_template\">\r\n    <div data-bind=\"css:$data.classes\">\r\n        <!-- ko foreach: values -->\r\n        <label class=\"input-checkbox-wrapper\" data-bind=\"style: { display: $parent.options.vertical ? 'block' : 'inline-block' }\">\r\n            <input type=\"checkbox\" data-class=\"input-checkbox-button-group\" class=\"input-checkbox-button\">\r\n            <span class=\"input-checkbox-display\"></span>\r\n            <span class=\"input-checkbox-label\" data-bind=\"text: text\"></span>\r\n        </label>\r\n        <!-- /ko -->\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_autocomplete_template\">\r\n    <!-- ko if: mappedChildNodes().length === 0 -->\r\n    <div class=\"input-wrapper\">\r\n        <input data-class=\"input-autocomplete input-validation-checker\" class=\"input-text\" />\r\n    </div>\r\n    <!-- /ko -->\r\n    <!-- ko if: mappedChildNodes().length !==  0-->\r\n    <!-- ko foreach: mappedChildNodes -->\r\n    <!-- ko template: 'metadata_item_template' -->\r\n    <!-- /ko -->\r\n    <!-- /ko -->\r\n    <!-- /ko -->\r\n\r\n</div>\r\n\r\n<!-- TODO: Why do we need this? -->\r\n<div id=\"input_add_button_template\" class=\"add\">\r\n    <button class=\"fa fa-icon-add\" data-bind=\"click: input.add\">\r\n        <span class=\"button-text\">Add</span>\r\n    </button>\r\n</div>\r\n\r\n<div id=\"input_multiselect_template\">\r\n    <div data-class=\"input-validation-checker\" class=\"input-wrapper\">\r\n        <input data-class=\"input-multiselect\" class=\"input-text\" />\r\n    </div>\r\n</div>\r\n";
+	module.exports = "<div id=\"input_template\">\r\n    <div data-bind=\"css: $data.classes\" class=\"input\">\r\n        <label data-class=\"input-labels input-color-text\" class=\"input-label\"></label>\r\n        <!-- ko if: $data.helpText -->\r\n        <i class=\"fa fa-info-circle info\"> <!--TODO: image icon -->\r\n                <div class=\"tool-tip\" data-bind=\"text: $data.helpText\"></div>\r\n            </i>\r\n        <!-- /ko -->\r\n\r\n        <!-- ko template: $data.inputTemplate || 'input_' + inputType + '_template' -->\r\n        <!-- /ko -->\r\n        <span data-class=\"input-validation\"></span>\r\n        <span data-class=\"input-tooltip\"></span>\r\n    </div>\r\n</div>\r\n\r\n<!-- TODO: Need this? -->\r\n<div id=\"input_textLabel_template\">\r\n    <div class=\"input-label label-only\" data-class=\"input-labels-only\"></div>\r\n</div>\r\n\r\n<!-- TODO: Do we need input-wrapper around every template?-->\r\n\r\n<div id=\"input_text_template\">\r\n    <div class=\"input-wrapper\">\r\n        <input data-class=\"input-input input-validation-checker\" type=\"text\" class=\"input-text\" />\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_select_template\">\r\n    <div class=\"input-wrapper\">\r\n        <select data-class=\"input-select input-validation-checker\" class=\"input-select\"></select>\r\n    </div>\r\n\r\n</div>\r\n\r\n<div id=\"input_datepicker_template\">\r\n    <div class=\"input-wrapper\">\r\n        <input type=\"text\" data-class=\"input-datepicker input-validation-checker\" class=\"input-date\" />\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_time_template\">\r\n    <div class=\"input-wrapper\">\r\n        <input data-class=\"input-time input-validation-checker\" class=\"ui-timepicker-input\" type=\"text\">\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_textarea_template\">\r\n    <div class=\"input-wrapper\">\r\n        <textarea data-class=\"input-input input-validation-checker\" class=\"input-textarea\"></textarea>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_autosize_template\">\r\n    <div class=\"input-wrapper\">\r\n        <textarea data-class=\"input-input input-validation-checker input-autosize\" class=\"input-text\"></textarea>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_radio_template\">\r\n    <div data-class=\"input-radio input-color-text\" class=\"input-radio-wrapper\">\r\n        <label>\r\n            <input type=\"radio\" class=\"input-radio\" data-class=\"input-radio-button\" />\r\n            <span data-bind=\"css: 'icon ' + $data.icon\"></span>\r\n            <span class=\"input-radio-label\" data-bind=\"text: $data.text\"></span>\r\n        </label>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_checkbox_template\">\r\n    <label class=\"input-checkbox-wrapper\">\r\n        <input type=\"checkbox\" class=\"input-checkbox-button\" data-class=\"input-checkbox-button input-validation-checker\">\r\n        <span class=\"input-checkbox-display\"></span>\r\n        <span class=\"input-checkbox-label\" data-bind=\"text: options.text\"></span>\r\n    </label>\r\n</div>\r\n\r\n<div id=\"input_checkboxList_template\">\r\n    <div data-bind=\"css:$data.classes\">\r\n        <!-- ko foreach: values -->\r\n        <label class=\"input-checkbox-wrapper\" data-bind=\"style: { display: $parent.options.vertical ? 'block' : 'inline-block' }\">\r\n            <input type=\"checkbox\" data-class=\"input-checkbox-button-group\" class=\"input-checkbox-button\">\r\n            <span class=\"input-checkbox-display\"></span>\r\n            <span class=\"input-checkbox-label\" data-bind=\"text: text\"></span>\r\n        </label>\r\n        <!-- /ko -->\r\n    </div>\r\n</div>\r\n\r\n<div id=\"input_autocomplete_template\">\r\n    <!-- ko if: mappedChildNodes().length === 0 -->\r\n    <div class=\"input-wrapper\">\r\n        <input data-class=\"input-autocomplete input-validation-checker\" class=\"input-text\" />\r\n    </div>\r\n    <!-- /ko -->\r\n    <!-- ko if: mappedChildNodes().length !==  0-->\r\n    <!-- ko foreach: mappedChildNodes -->\r\n    <!-- ko template: 'metadata_item_template' -->\r\n    <!-- /ko -->\r\n    <!-- /ko -->\r\n    <!-- /ko -->\r\n\r\n</div>\r\n\r\n<!-- TODO: Why do we need this? -->\r\n<div id=\"input_add_button_template\" class=\"add\">\r\n    <button class=\"fa fa-icon-add\" data-bind=\"click: input.add\">\r\n        <span class=\"button-text\">Add</span>\r\n    </button>\r\n</div>\r\n\r\n<div id=\"input_multiselect_template\">\r\n    <div data-class=\"input-validation-checker\" class=\"input-wrapper\">\r\n        <input data-class=\"input-multiselect\" class=\"input-text\" />\r\n    </div>\r\n</div>\r\n";
 
 /***/ },
 /* 182 */
@@ -64421,16 +64424,18 @@
 /* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(jQuery) {/*
-	 * jQuery Plugin: Tokenizing Autocomplete Text Entry
-	 * Version 1.7.2
-	 *
-	 * Copyright (c) 2009 James Smith (http://loopj.com)
-	 * Licensed jointly under the GPL and MIT licenses,
-	 * choose which one suits your project best!
-	 *
-	 */
-	;(function ($) {
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* global window, document, define, jQuery, setInterval, clearInterval */
+	(function(factory) {
+	    'use strict';
+	    if (true) {
+	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(140)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    } else if (typeof exports !== 'undefined') {
+	        module.exports = factory(require('jquery'));
+	    } else {
+	        factory(jQuery);
+	    }
+	
+	}(function($) {
 	    var DEFAULT_SETTINGS = {
 	        // Search settings
 	        method: "GET",
@@ -65533,10 +65538,8 @@
 	            return data[query];
 	        };
 	    };
-	
-	}(jQuery));
-	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(140)))
+	}));
+
 
 /***/ },
 /* 188 */
