@@ -375,7 +375,8 @@ div.token-input-dropdown ul li.token-input-selected-dropdown-item {
   padding: 0 0 0 7px;
   width: calc(100% - 13px);
   height: 26px;
-  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pg0KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAyMDAxMDkwNC8vRU4iDQogImh0dHA6Ly93d3cudzMub3JnL1RSLzIwMDEvUkVDLVNWRy0yMDAxMDkwNC9EVEQvc3ZnMTAuZHRkIj4NCjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciDQogd2lkdGg9IjEwLjAwMDAwMHB0IiBoZWlnaHQ9IjcuMDAwMDAwcHQiIHZpZXdCb3g9IjAgMCAxMC4wMDAwMDAgNy4wMDAwMDAiDQogcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQgbWVldCI+DQoNCjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMDAwMDAwLDcuMDAwMDAwKSBzY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIg0KZmlsbD0iIzAwMDAwMCIgc3Ryb2tlPSJub25lIj4NCjxwYXRoIGQ9Ik0wIDYwIGMwIC02IDExIC0yMyAyNSAtMzggbDI1IC0yNyAyNSAyNyBjMzcgNDEgMzIgNjYgLTcgMzEgLTE3IC0xNQ0KLTE5IC0xNSAtMzYgMCAtMjEgMTkgLTMyIDIyIC0zMiA3eiIvPg0KPC9nPg0KPC9zdmc+DQo=) no-repeat right 10px top 50%; }
+  background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTc5MiIgaGVpZ2h0PSIxNzkyIiB2aWV3Qm94PSIwIDAgMTc5MiAxNzkyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPg0KICAgIDxzdHlsZT4NCiAgICAgICAgLnN0MCB7ZmlsbDogIzdkN2Q3ZDt9DQogICAgPC9zdHlsZT4NCiAgICA8cGF0aCBjbGFzcz0ic3QwIiBkPSJNMTY4MyA4MDhsLTc0MiA3NDFxLTE5IDE5LTQ1IDE5dC00NS0xOWwtNzQyLTc0MXEtMTktMTktMTktNDUuNXQxOS00NS41bDE2Ni0xNjVxMTktMTkgNDUtMTl0NDUgMTlsNTMxIDUzMSA1MzEtNTMxcTE5LTE5IDQ1LTE5dDQ1IDE5bDE2NiAxNjVxMTkgMTkgMTkgNDUuNXQtMTkgNDUuNXoiLz4NCjwvc3ZnPg==) no-repeat right 5px top 1px;
+  background-size: 20px 20px; }
   .input-select-styles::-ms-expand, .input-select::-ms-expand {
     display: none; }
   .input-select-styles.error[disabled="true"], .error[disabled="true"].input-select, .input-select-styles.warning[disabled="true"], .warning[disabled="true"].input-select {

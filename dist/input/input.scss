@@ -54,7 +54,9 @@
     padding: 0 0 0 7px;
     width: calc(100% - 13px);
     height: $input-select-height;
-    background: url('./images/icon-input-select.svg') no-repeat right 10px top 50%;
+    background: url('./images/chevron-down.svg') no-repeat right 5px top 1px;
+    background-size: 20px 20px;
+
     &::-ms-expand {  //remove IE select arrow
         display: none;
     }
