@@ -62,7 +62,7 @@
     "autoprefixer-loader": "^3.2.0",
     "autosize": "^3.0.17",
     "jquery": "^3.0.0",
-    "jquery-ui": "1.10.5",
+    "jquery-ui": "1.12.0",
     "js-format": "git+https://github.com/tsu-complete/js-format.git",
     "knockout": "^3.4.0",
     "knockout-jqautocomplete": "^0.4.4",

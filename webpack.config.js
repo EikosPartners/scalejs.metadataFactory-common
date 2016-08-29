@@ -9,7 +9,9 @@ module.exports = {
         ],
         alias: {
             // scalejs
-            'scalejs.core': path.join(__dirname, 'node_modules/scalejs/dist/scalejs.core.js')
+            'scalejs.core': path.join(__dirname, 'node_modules/scalejs/dist/scalejs.core.js'),
+
+            'jquery-ui/autocomplete':  path.join(__dirname, 'node_modules/jquery-ui/ui/widgets/autocomplete.js')
        }
     },
     module: {
