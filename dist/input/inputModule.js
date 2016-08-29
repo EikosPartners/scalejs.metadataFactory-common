@@ -36,6 +36,8 @@ require('ko-bindings/tokeninput');
 
 require('pikaday/scss/pikaday.scss');
 
+require('./autocomplete/autocomplete.scss');
+
 require('./input.scss');
 
 require('./input-multiselect.scss');
