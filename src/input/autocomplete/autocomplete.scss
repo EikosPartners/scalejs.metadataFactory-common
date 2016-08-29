@@ -1,0 +1,50 @@
+.ui-autocomplete {
+    z-index: 50;
+    position: absolute;
+    list-style: none;
+    padding: 2px;
+    margin: 0;
+    display: block;
+    float: left;
+    background-color: #fff;
+    border: 1px solid #cfd4d8;
+}
+
+.ui-menu-item {
+    padding: 5px;
+    box-sizing: border-box;
+
+    &:hover {
+      background-color: #B2BB1E;
+      color: #fff;
+    }
+
+    &:active {
+      border: 1px solid #000;
+    }
+
+    //need this class for add new button styling!
+    &.add-new {
+        background-color: #3B73B9;        
+        color: #fff;
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 11px;
+        padding: 8px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #5790ce;
+            color: #fff;
+        }
+    }
+  } 
+
+.ui-widget-content {
+    z-index: 999
+}
+
+.ui-helper-hidden-accessible { //remove helper text from visible screen
+    position: absolute; 
+    left: -9999px; 
+}

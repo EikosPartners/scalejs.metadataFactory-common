@@ -12,6 +12,7 @@ import 'ko-bindings/datepicker';
 import 'ko-bindings/autosize';
 import 'ko-bindings/tokeninput';
 import 'pikaday/scss/pikaday.scss';
+import './autocomplete/autocomplete.scss';
 import './input.scss';
 import './input-multiselect.scss';
     registerBindings(inputBindings);
