@@ -20,6 +20,13 @@ import dataservice from 'dataservice';
         lazy: lazy
     };
 
+    function disposeNodes(nodes) {
+        unwrap(nodes).forEach(node => {
+            node.dispose && node.dispose();
+            disposeNodes(node.mappedChildNodes || []);
+        });
+    }
+
     function lazy(tabObj, tab) {
         var mappedChildNodes = observableArray(),
             setActiveTab = tabObj.setActiveTab,
@@ -29,7 +36,10 @@ import dataservice from 'dataservice';
         tabObj.mappedChildNodes = mappedChildNodes;
 
         tabObj.setActiveTab = function (newRoute) {
-            if (!mappedChildNodes().length) {
+            if (!mappedChildNodes().length || !tabObj.keepCache) {
+                if (mappedChildNodes().length) {
+                    disposeNodes(mappedChildNodes());
+                }
                 mappedChildNodes(createViewModels.call(context, tab.children));
                 tabTemplate({
                     template: {
