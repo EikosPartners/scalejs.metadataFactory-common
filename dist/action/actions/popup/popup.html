@@ -5,7 +5,9 @@
     <!-- /ko -->
 
     <!-- ko ifnot: modal -->
+    <!-- ko ifnot: $data.disableCancel -->
     <button data-bind="click: hidePopup" class="btn btn-default secondary">Cancel</button>
+    <!-- /ko -->
     <!-- /ko -->
 </div>
 

@@ -199,6 +199,13 @@ var tabTypes = {
     lazy: lazy
 };
 
+function disposeNodes(nodes) {
+    (0, _knockout.unwrap)(nodes).forEach(function (node) {
+        node.dispose && node.dispose();
+        disposeNodes(node.mappedChildNodes || []);
+    });
+}
+
 function lazy(tabObj, tab) {
     var mappedChildNodes = (0, _knockout.observableArray)(),
         setActiveTab = tabObj.setActiveTab,
@@ -208,7 +215,10 @@ function lazy(tabObj, tab) {
     tabObj.mappedChildNodes = mappedChildNodes;
 
     tabObj.setActiveTab = function (newRoute) {
-        if (!mappedChildNodes().length) {
+        if (!mappedChildNodes().length || !tabObj.keepCache) {
+            if (mappedChildNodes().length) {
+                disposeNodes(mappedChildNodes());
+            }
             mappedChildNodes(_scalejs.createViewModels.call(context, tab.children));
             tabTemplate({
                 template: {
