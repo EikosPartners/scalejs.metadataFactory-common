@@ -34,9 +34,9 @@ require('ko-bindings/autosize');
 
 require('ko-bindings/tokeninput');
 
-require('./autocomplete/autocomplete.scss');
-
 require('pikaday/scss/pikaday.scss');
+
+require('./autocomplete/autocomplete.scss');
 
 require('./input.scss');
 
