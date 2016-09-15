@@ -378,28 +378,35 @@ function inputViewModel(node) {
     if (options.registered) {
         (function () {
             var fetchData = function fetchData() {
-                action.action({
-                    callback: function callback(error, data) {
-                        Object.keys(data).forEach(function (key) {
-                            if (key === 'store') {
-                                Object.keys(data[key]).forEach(function (storeKey) {
-                                    var valueToStore = data[key][storeKey];
-                                    _scalejs6.default.setValue(storeKey, valueToStore);
-                                });
-                                return;
-                            }
+                var newValue = inputValue(),
+                    action = initial ? initialRegisteredAction : registeredAction;
 
-                            if (!context.dictionary && !context.data) {
-                                console.warn('Using a registered input when no data/dictionary available in context', node);
-                                return;
-                            }
-                            var node = context.dictionary && context.dictionary()[key];
-                            if (node && node.update) {
-                                node.update(data[key]);
-                            }
-                        });
-                    }
-                });
+                action.options.data[node.id] = newValue; //our own sub gets called before context is updated
+
+                if (newValue !== '') {
+                    action.action({
+                        callback: function callback(error, data) {
+                            Object.keys(data).forEach(function (key) {
+                                if (key === 'store') {
+                                    Object.keys(data[key]).forEach(function (storeKey) {
+                                        var valueToStore = data[key][storeKey];
+                                        _scalejs6.default.setValue(storeKey, valueToStore);
+                                    });
+                                    return;
+                                }
+
+                                if (!context.dictionary && !context.data) {
+                                    console.warn('Using a registered input when no data/dictionary available in context', node);
+                                    return;
+                                }
+                                var node = context.dictionary && context.dictionary()[key];
+                                if (node && node.update) {
+                                    node.update(data[key]);
+                                }
+                            });
+                        }
+                    });
+                }
             };
 
             registeredAction = _scalejs.createViewModel.call(_this, {
@@ -414,18 +421,13 @@ function inputViewModel(node) {
                 options: (0, _scalejs4.merge)(options.registered.initial || options.registered, { data: {} })
             });
 
-            var action = initial ? initialRegisteredAction : registeredAction;
-
             inputValue.subscribe(function (newValue) {
-                action.options.data[node.id] = newValue; //our own sub gets called before context is updated
-                if (newValue !== '') {
-                    fetchData();
-                }
+                fetchData();
             });
 
             // listen for 'refresh' event
             subs.push((0, _scalejs3.receive)(node.id + '.refreshRegistered', function (options) {
-                console.log('-->', node);
+                //console.log('--> refreshing registered', node);
                 fetchData(options);
             }));
         })();
