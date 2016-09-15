@@ -16,7 +16,9 @@ var _scalejs = require('scalejs.metadataFactory');
 
 var _scalejs2 = require('scalejs.expression-jsep');
 
-var _scalejs3 = require('scalejs');
+var _scalejs3 = require('scalejs.messagebus');
+
+var _scalejs4 = require('scalejs');
 
 var _dataservice = require('dataservice');
 
@@ -30,9 +32,9 @@ var _moment = require('moment');
 
 var _moment2 = _interopRequireDefault(_moment);
 
-var _scalejs4 = require('scalejs.noticeboard');
+var _scalejs5 = require('scalejs.noticeboard');
 
-var _scalejs5 = _interopRequireDefault(_scalejs4);
+var _scalejs6 = _interopRequireDefault(_scalejs5);
 
 var _autocompleteViewModel = require('./autocomplete/autocompleteViewModel');
 
@@ -48,7 +50,7 @@ var inputTypes = {
     autocomplete: _autocompleteViewModel2.default,
     select: _selectViewModel2.default,
     multiselect: function multiselect(node, inputVM) {
-        node.options = (0, _scalejs3.merge)(node.options || {}, {
+        node.options = (0, _scalejs4.merge)(node.options || {}, {
             addBlank: false
         }); // do not add blanks in multiselect
 
@@ -57,6 +59,8 @@ var inputTypes = {
 };
 
 function inputViewModel(node) {
+    var _this = this;
+
     var // metadata node + context
     options = node.options || {},
         keyMap = node.keyMap || {},
@@ -155,7 +159,7 @@ function inputViewModel(node) {
     function setValue(data) {
         var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-        var value = (0, _scalejs3.is)(data, 'object') ? data.value : data,
+        var value = (0, _scalejs4.is)(data, 'object') ? data.value : data,
             // TODO: Refactor - should only accept "value", not "data".
         wasModified = inputValue.isModified();
 
@@ -232,7 +236,7 @@ function inputViewModel(node) {
      */
 
     function assignDate(value, params) {
-        if (!(0, _scalejs3.is)(params, 'object')) {
+        if (!(0, _scalejs4.is)(params, 'object')) {
             console.error('Assign date only supports object params', params);
             return;
         }
@@ -268,7 +272,7 @@ function inputViewModel(node) {
         } else {
             // if there is no initial value, set it to empty string,
             // so that isModified does not get triggered for empty dropdowns
-            return (0, _knockout.observable)((0, _scalejs3.has)(options.value) ? options.value : '');
+            return (0, _knockout.observable)((0, _scalejs4.has)(options.value) ? options.value : '');
         }
     }
 
@@ -289,13 +293,13 @@ function inputViewModel(node) {
     }
 
     function deriveReadonly(readonlyParam) {
-        if ((0, _scalejs3.is)(readonlyParam, 'string')) {
+        if ((0, _scalejs4.is)(readonlyParam, 'string')) {
             var _ret = function () {
                 var override = (0, _knockout.observable)();
                 return {
                     v: (0, _knockout.computed)({
                         read: function read() {
-                            return (0, _scalejs3.has)(override()) ? override() : (0, _scalejs2.evaluate)(readonlyParam, context.getValue);
+                            return (0, _scalejs4.has)(override()) ? override() : (0, _scalejs2.evaluate)(readonlyParam, context.getValue);
                         },
                         write: function write(value) {
                             override(value);
@@ -372,30 +376,15 @@ function inputViewModel(node) {
     }
 
     if (options.registered) {
-        registeredAction = _scalejs.createViewModel.call(this, {
-            type: 'action',
-            actionType: 'ajax',
-            options: (0, _scalejs3.merge)(options.registered.update || options.registered, { data: {} })
-        });
-
-        initialRegisteredAction = _scalejs.createViewModel.call(this, {
-            type: 'action',
-            actionType: 'ajax',
-            options: (0, _scalejs3.merge)(options.registered.initial || options.registered, { data: {} })
-        });
-
-        inputValue.subscribe(function (newValue) {
-            var action = initial ? initialRegisteredAction : registeredAction;
-
-            action.options.data[node.id] = newValue; //our own sub gets called before context is updated
-            if (newValue !== '') {
+        (function () {
+            var fetchData = function fetchData() {
                 action.action({
                     callback: function callback(error, data) {
                         Object.keys(data).forEach(function (key) {
                             if (key === 'store') {
                                 Object.keys(data[key]).forEach(function (storeKey) {
                                     var valueToStore = data[key][storeKey];
-                                    _scalejs5.default.setValue(storeKey, valueToStore);
+                                    _scalejs6.default.setValue(storeKey, valueToStore);
                                 });
                                 return;
                             }
@@ -411,13 +400,40 @@ function inputViewModel(node) {
                         });
                     }
                 });
-            }
-        });
+            };
+
+            registeredAction = _scalejs.createViewModel.call(_this, {
+                type: 'action',
+                actionType: 'ajax',
+                options: (0, _scalejs4.merge)(options.registered.update || options.registered, { data: {} })
+            });
+
+            initialRegisteredAction = _scalejs.createViewModel.call(_this, {
+                type: 'action',
+                actionType: 'ajax',
+                options: (0, _scalejs4.merge)(options.registered.initial || options.registered, { data: {} })
+            });
+
+            var action = initial ? initialRegisteredAction : registeredAction;
+
+            inputValue.subscribe(function (newValue) {
+                action.options.data[node.id] = newValue; //our own sub gets called before context is updated
+                if (newValue !== '') {
+                    fetchData();
+                }
+            });
+
+            // listen for 'refresh' event
+            subs.push((0, _scalejs3.receive)(node.id + '.refreshRegistered', function (options) {
+                console.log('-->', node);
+                fetchData(options);
+            }));
+        })();
     }
 
     // TODO: Clean up validation Code
     // add validations to the inputvalue
-    validations = (0, _scalejs3.merge)(_lodash2.default.cloneDeep(options.validations), { customError: customError });
+    validations = (0, _scalejs4.merge)(_lodash2.default.cloneDeep(options.validations), { customError: customError });
     if (validations.expression) {
         if (options.validations.expression.message && !options.validations.expression.term) {
             console.error("[input] if providing a message for expression validation, must also provide term");
@@ -456,7 +472,7 @@ function inputViewModel(node) {
     }
 
     if (viewmodel.validations) {
-        validations = (0, _scalejs3.merge)(validations, viewmodel.validations);
+        validations = (0, _scalejs4.merge)(validations, viewmodel.validations);
     }
     inputValue = inputValue.extend(validations);
 
@@ -477,7 +493,7 @@ function inputViewModel(node) {
     }
 
     // TODO: make into insert zeros option?
-    if ((0, _scalejs3.get)(options, 'pattern.alias') === 'percent') {
+    if ((0, _scalejs4.get)(options, 'pattern.alias') === 'percent') {
         inputValue.subscribe(function (value) {
             if (value && isFinite(Number(value))) {
                 inputValue(Number(value).toFixed(3));
@@ -491,7 +507,7 @@ function inputViewModel(node) {
         }, 1000);
     });
 
-    return (0, _scalejs3.merge)(node, viewmodel, {
+    return (0, _scalejs4.merge)(node, viewmodel, {
         inputValue: inputValue,
         visibleMessage: visibleMessage,
         customError: customError,
