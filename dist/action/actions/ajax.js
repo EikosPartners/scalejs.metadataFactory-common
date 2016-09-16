@@ -30,12 +30,12 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/* format text getValue 
+/* format text getValue
     // {{store.x}} or {{dataKey.subkey}}
     evaluate(param, function (id) {
         if(options.data && options.data[id]) {
             return options.data[id];
-        } 
+        }
         return context.getValue(id); //context data and global data (via store)
     });
 */
@@ -55,7 +55,15 @@ function ajax(options, args) {
 
     if (target.data) {
         //will skip rest of else if's if we have target.data
-        target.data = target.data;
+        if (options.dataAndResults) {
+            // grabbing results from a previous ajaxAction
+            target.data = {
+                data: target.data,
+                results: options.results
+            };
+        } else {
+            target.data = target.data;
+        }
     } else if (options.sendDataFromKey) {
         target.data = data[options.sendDataFromKey];
     } else if (Array.isArray(options.sendDataKeys)) {
