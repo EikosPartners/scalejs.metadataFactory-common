@@ -83,6 +83,12 @@ function ajax(options, args) {
             o[receiverKey] = value;
             return o;
         }, {});
+    } else if (options.dataAndResults) {
+        // grabbing results from a previous ajaxAction
+        target.data = {
+            data: data,
+            results: options.results
+        };
     } else if ((0, _scalejs3.get)(options, 'target.options.type') === 'POST' || (0, _scalejs3.get)(options, 'target.options.type') === 'PUT') {
         target.data = data;
     } else {
