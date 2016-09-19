@@ -112,7 +112,7 @@ export default {
             disable: disabled // use knockout disable binding - its sufficient. See "showAllAuto" binding for more details
         }
     },
-    'input-multiselect': function () {
+    '_input-multiselect': function () {
         return {
             tokeninputValue: this.inputValue,
             tokeninputSource: this.values().map(function (x) {
@@ -230,7 +230,10 @@ export default {
     },
     'input-checkbox': function () {
         return {
-            foreach: this.values
+            foreach: this.values,
+            attr: {
+                'data-id': this.id
+            }
 
         };
     },
@@ -272,7 +275,10 @@ export default {
         })
 
         return {
-            foreach: values
+            foreach: values,
+            attr: {
+                'data-id': this.id
+            }
         };
     },
     'input-radio-button': function (ctx) {
