@@ -76,10 +76,10 @@ export default function inputViewModel(node) {
         // subs disposable array
         subs = [],
 
-        computedValueExpression, 
+        computedValueExpression,
 
         // registered action vars
-        registeredAction, 
+        registeredAction,
         initialRegisteredAction,
         initial,
 
@@ -110,7 +110,7 @@ export default function inputViewModel(node) {
     function setValue(data, opts = {}) {
         let value = is(data, 'object') ? data.value : data,  // TODO: Refactor - should only accept "value", not "data".
             wasModified = inputValue.isModified();
-        
+
         initial = opts.initial;
 
          // uses setValueFunc if defined, else updates inputValue
@@ -225,7 +225,7 @@ export default function inputViewModel(node) {
     function getPattern() {
         // implicitly determine pattern (inputmask) if there is a Regex validation
         if (validations && validations.pattern) {
-            
+
             if(!validations.pattern.params) {
                 console.error('Pattern validation must have params and message', node);
                 return;
@@ -265,7 +265,7 @@ export default function inputViewModel(node) {
     function mapItem(mapper) {
         var textFormatter = formatters[mapper.textFormatter] || _.identity,
             delimiter = mapper.delimeter || ' / ';
-        
+
         function format(val, key) {
            if(Array.isArray(key)) {
                return key.map((k) => { return val[k]; }).join(delimiter)
@@ -273,7 +273,7 @@ export default function inputViewModel(node) {
                return val[key]
            }
         }
-        
+
         return function (val) {
             return {
                 text: textFormatter(format(val, mapper.textKey)),
@@ -322,14 +322,14 @@ export default function inputViewModel(node) {
             actionType: 'ajax',
             options: merge(options.registered.update || options.registered, { data: {} })
         });
-        
+
         initialRegisteredAction = createViewModel.call(this, {
             type: 'action',
             actionType: 'ajax',
             options: merge(options.registered.initial || options.registered, { data: {} })
         });
 
-        function fetchData() {        
+        function fetchData() {
             let newValue = inputValue(),
                 action = initial ? initialRegisteredAction : registeredAction;
 
@@ -350,7 +350,7 @@ export default function inputViewModel(node) {
                             if (!context.dictionary && !context.data) {
                                 console.warn('Using a registered input when no data/dictionary available in context', node);
                                 return;
-                            }                            
+                            }
                             var node = context.dictionary && context.dictionary()[key];
                             if (node && node.update) {
                                 node.update(data[key]);
@@ -370,6 +370,8 @@ export default function inputViewModel(node) {
             //console.log('--> refreshing registered', node);
             fetchData(options);
         }));
+
+        fetchData();    //make initial call if default value is set--fetchData checks if inputValue() is ''
     }
 
     // TODO: Clean up validation Code
