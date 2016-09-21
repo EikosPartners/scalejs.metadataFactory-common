@@ -20,22 +20,26 @@ export default function validationsViewModel(node) {
 
     visibleMessages = computed(function () {
         return aggregateVisibleMessages(_.values(context.dictionary()));
-    }).extend({deferred: true});
+    }).extend({ deferred: true });
 
     function aggregateVisibleMessages(childNodes) {
-            return childNodes.reduce(function (msgs, childNode) {
-                var msg;
+        return childNodes.reduce(function (msgs, childNode) {
+            var msg;
 
-                if (childNode.visibleMessage) {
-                    msg = childNode.visibleMessage();
-                    if (msg) {
-                        msgs.push(msg);
-                        return msgs;
-                    }
+            if (childNode.visibleMessage) {
+                msg = childNode.visibleMessage();
+                if (msg) {
+                    msgs.push(msg);
+                    return msgs;
                 }
-                msgs = _.compact(msgs.concat(msg));
-                return msgs;
-            }, []);
+            }
+            else {
+                msgs = msgs.concat((aggregateVisibleMessages(unwrap(childNode.mappedChildNodes) || [])));
+            }
+
+            msgs = _.compact(msgs.concat(msg));
+            return msgs;
+        }, []);
     }
 
     function _validate(childNodes) {
