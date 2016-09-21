@@ -45,7 +45,10 @@ function validationsViewModel(node) {
                     msgs.push(msg);
                     return msgs;
                 }
+            } else {
+                msgs = msgs.concat(aggregateVisibleMessages(unwrap(childNode.mappedChildNodes) || []));
             }
+
             msgs = _.compact(msgs.concat(msg));
             return msgs;
         }, []);
