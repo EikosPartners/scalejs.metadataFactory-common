@@ -112,7 +112,7 @@ export default {
             disable: disabled // use knockout disable binding - its sufficient. See "showAllAuto" binding for more details
         }
     },
-    '_input-multiselect': function () {
+    'input-multiselect': function () {
         return {
             tokeninputValue: this.inputValue,
             tokeninputSource: this.values().map(function (x) {
