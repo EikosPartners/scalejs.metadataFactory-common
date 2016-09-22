@@ -9,13 +9,38 @@ export default function templateViewModel(node) {
     var data = observable(node.hasOwnProperty('data') ? node.data : {}), // ability to override initial data
         context = node.options && node.options.createContext ? { metadata: [], data: data } : this,
         createViewModel = createViewModelUnbound.bind(context), // passes context
-        createViewModels = createViewModelsUnbound.bind(context), // passes context
+        createViewModels = createViewModelsUnbound.bind(context), // passes context        
+        registeredTemplates = getRegisteredTemplates(),
+        dataSourceEndpoint = node.dataSourceEndpoint,
         isShown = observable(node.visible !== false),
-        actionNode = cloneDeep(node.action),
-        action,
+        actionNode = cloneDeep(node.action),        
+        dataLoaded = false,
         mappedChildNodes,
-        registeredTemplates = getRegisteredTemplates();
+        action;
+    
 
+
+    function fetchData() {
+        if (node.cache && dataLoaded) {
+            return;
+        }
+
+        createViewModel({
+            "type": "action",
+            "actionType": "ajax",
+            "options": dataSourceEndpoint
+        }).action({
+            callback: function (err, results) {
+                if (err) {
+                    console.log('ajax request error', err);
+                    data(err);
+                    return;
+                }
+                data(results);
+                dataLoaded = true;
+            }
+        });
+    }
 
     if (node.template && !registeredTemplates[node.template]) {
         console.error('Template not registered ', node.template);
@@ -31,23 +56,21 @@ export default function templateViewModel(node) {
     }
 
     if (node.dataSourceEndpoint) {
-        // create a callback object that the ajaxAction knows how to use.
-        // this is the alternative to the lously coupled nextactions[] || error actions.
-        var callback = {
-            callback: function (err, results) {
-                if (err) {
-                    console.log('ajax request error', err);
-                    data(err);
-                    return;
-                }
-                data(results);
-            }
+        
+        if (dataSourceEndpoint.type === 'action') {
+        console.log(`[templateVM] - template has been upgraded to 
+            support "options" as a dataSourceEndpoint instead of action`, node);
+            dataSourceEndpoint = dataSourceEndpoint.options;
         }
-        createViewModel(node.dataSourceEndpoint).action(callback);
+
+        if (!node.lazyLoad) {
+            fetchData();
+        }
     }
 
     return merge(node, {
         mappedChildNodes: mappedChildNodes,
+        fetchData: fetchData,
         action: action,
         data: data,
         isShown: isShown,

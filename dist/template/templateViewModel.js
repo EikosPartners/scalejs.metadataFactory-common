@@ -22,12 +22,36 @@ function templateViewModel(node) {
         createViewModel = _scalejs.createViewModel.bind(context),
         // passes context
     createViewModels = _scalejs.createViewModels.bind(context),
-        // passes context
-    isShown = (0, _knockout.observable)(node.visible !== false),
+        // passes context        
+    registeredTemplates = (0, _scalejs2.getRegisteredTemplates)(),
+        dataSourceEndpoint = node.dataSourceEndpoint,
+        isShown = (0, _knockout.observable)(node.visible !== false),
         actionNode = (0, _lodash.cloneDeep)(node.action),
-        action,
+        dataLoaded = false,
         mappedChildNodes,
-        registeredTemplates = (0, _scalejs2.getRegisteredTemplates)();
+        action;
+
+    function fetchData() {
+        if (node.cache && dataLoaded) {
+            return;
+        }
+
+        createViewModel({
+            "type": "action",
+            "actionType": "ajax",
+            "options": dataSourceEndpoint
+        }).action({
+            callback: function callback(err, results) {
+                if (err) {
+                    console.log('ajax request error', err);
+                    data(err);
+                    return;
+                }
+                data(results);
+                dataLoaded = true;
+            }
+        });
+    }
 
     if (node.template && !registeredTemplates[node.template]) {
         console.error('Template not registered ', node.template);
@@ -43,23 +67,20 @@ function templateViewModel(node) {
     }
 
     if (node.dataSourceEndpoint) {
-        // create a callback object that the ajaxAction knows how to use.
-        // this is the alternative to the lously coupled nextactions[] || error actions.
-        var callback = {
-            callback: function callback(err, results) {
-                if (err) {
-                    console.log('ajax request error', err);
-                    data(err);
-                    return;
-                }
-                data(results);
-            }
-        };
-        createViewModel(node.dataSourceEndpoint).action(callback);
+
+        if (dataSourceEndpoint.type === 'action') {
+            console.log('[templateVM] - template has been upgraded to \n            support "options" as a dataSourceEndpoint instead of action', node);
+            dataSourceEndpoint = dataSourceEndpoint.options;
+        }
+
+        if (!node.lazyLoad) {
+            fetchData();
+        }
     }
 
     return (0, _scalejs3.merge)(node, {
         mappedChildNodes: mappedChildNodes,
+        fetchData: fetchData,
         action: action,
         data: data,
         isShown: isShown,
