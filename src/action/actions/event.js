@@ -5,13 +5,32 @@ import ko from 'knockout';
 
 import { registerActions } from '../actionModule';
 
+function renderParams(params, data) {
+    let ret = params;
+    try {
+        ret = JSON.parse(
+            mustache.render(JSON.stringify(params), data)
+        );
+    } catch (ex) {
+        console.error('Unable to JSON parse/stringify params', ex);
+    }
+    return ret;
+}
+
+
 function event(options) {
-    let data = unwrap(this && this.data);
+    let data = unwrap(this && this.data),
+        params = options.params;
 
     if (options.paramsKey) {
-        options.params = merge(options.params || {}, options[options.paramsKey]);
+        params = merge(options.params || {}, options[options.paramsKey]);
     }
-    notify(unwrap(options.target), options.params);
+
+    if (params) {
+        params = renderParams(options.params, data);
+    }
+    
+    notify(unwrap(options.target), params);
 }
 
 registerActions({ event });
