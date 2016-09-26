@@ -18,7 +18,7 @@ function setValueViewModel(node) {
         context.data.subscribe(function (data) {
             var dict = context.dictionary();
             Object.keys(dict).forEach(function (node) {
-                _setValue(dict[node], data);
+                _setValue(dict[node], data, node.clear);
             });
         });
     }

@@ -52,7 +52,7 @@ function popupAction(options) {
         return _scalejs2.createViewModel.call(context, action);
     });
 
-    data = this && this.data && this.data();
+    data = this && _knockout2.default.unwrap(this.data);
 
     if (options.message) {
         options.message = _mustache2.default.render(options.message, data || {});

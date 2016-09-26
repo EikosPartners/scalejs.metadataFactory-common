@@ -430,6 +430,8 @@ function inputViewModel(node) {
                 //console.log('--> refreshing registered', node);
                 fetchData(options);
             }));
+
+            fetchData(); //make initial call if default value is set--fetchData checks if inputValue() is ''
         })();
     }
 
