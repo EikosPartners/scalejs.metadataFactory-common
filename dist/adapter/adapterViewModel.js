@@ -234,7 +234,13 @@ function adapterViewModel(node) {
     // listen for 'refresh' event
     subs.push((0, _scalejs2.receive)(node.id + '.refresh', function (options) {
         console.log('-->', node);
-        fetchData(options);
+        if (node.dataSourceEndpoint) {
+            fetchData(options);
+        } else {
+            Object.keys(dictionary()).forEach(function (key) {
+                dictionary()[key].setValue && dictionary()[key].setValue('');
+            });
+        }
     }));
 
     return (0, _scalejs3.merge)(node, {

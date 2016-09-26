@@ -30,12 +30,12 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/* format text getValue 
+/* format text getValue
     // {{store.x}} or {{dataKey.subkey}}
     evaluate(param, function (id) {
         if(options.data && options.data[id]) {
             return options.data[id];
-        } 
+        }
         return context.getValue(id); //context data and global data (via store)
     });
 */
@@ -93,6 +93,15 @@ function ajax(options, args) {
         target.data = data;
     } else {
         target.data = {};
+    }
+
+    if (options.dataAndResults) {
+        // grabbing results from a previous ajaxAction
+        // combining with data from above
+        target.data = {
+            data: target.data,
+            results: options.results
+        };
     }
 
     nextAction = function nextAction(error, results) {
