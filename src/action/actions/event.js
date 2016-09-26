@@ -2,6 +2,7 @@ import { notify } from 'scalejs.messagebus';
 import { unwrap } from 'knockout';
 import { merge } from 'scalejs';
 import ko from 'knockout';
+import mustache from 'mustache';
 
 import { registerActions } from '../actionModule';
 
