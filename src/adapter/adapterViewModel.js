@@ -131,10 +131,10 @@ export default function adapterViewModel(node) {
             count = 0,
             dataObject = data();
 
-        dataSourceEndpointArray.forEach(function(endpoint) {
+        dataSourceEndpointArray.forEach(function (endpoint) {
             if (endpoint.uri) {
                 console.warn('dataSourceEndpoint expects URI in "target". Please update your JSON to reflect the new syntax');
-                endpoint = merge(endpoint,{
+                endpoint = merge(endpoint, {
                     target: endpoint
                 });
             }
@@ -144,7 +144,7 @@ export default function adapterViewModel(node) {
                 "actionType": "ajax",
                 "options": endpoint
             }).action({
-                callback: function(error, results) {
+                callback: function (error, results) {
                     let resultsByKey,
                         keyMap = endpoint.keyMap || {},
                         newDataObject = {};
@@ -212,9 +212,15 @@ export default function adapterViewModel(node) {
     }
 
     // listen for 'refresh' event
-    subs.push(receive(node.id + '.refresh', function(options) {
+    subs.push(receive(node.id + '.refresh', function (options) {
         console.log('-->', node);
-        fetchData(options);
+        if (node.dataSourceEndpoint) {
+            fetchData(options);
+        } else {
+            Object.keys(dictionary()).forEach((key) => {
+                dictionary()[key].setValue && dictionary()[key].setValue('');
+            });
+        }
     }));
 
     return merge(node, {
@@ -222,8 +228,8 @@ export default function adapterViewModel(node) {
         data: data,
         contextPlugins: contextPlugins,
         context: context,
-        dispose: function() {
-            subs.forEach(function(sub) {
+        dispose: function () {
+            subs.forEach(function (sub) {
                 sub.dispose();
             });
         }
