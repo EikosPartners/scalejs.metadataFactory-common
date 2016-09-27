@@ -4,6 +4,7 @@ import { receive, notify } from 'scalejs.messagebus';
 import dataservice from 'dataservice';
 import { extend } from 'lodash';
 import { get, merge } from 'scalejs';
+import noticeboard from 'scalejs.noticeboard';
 
 /* TODO:
 In PJSON, we used readonly, errors, etc. We need a way to do that outside of adapter
@@ -29,12 +30,14 @@ i.e. plugin to adapter context with other components
  *   The uri for the endpoint
  * @param {string} [node.dataSourceEndpoint.url]
  *  The url for the endpoint
- * @param {object} [node.dataSourceEndpoint.keyMap]
- *  A mapper object to map keys
+ * @param {array|object} [node.dataSourceEndpoint.keyMap]
+ *  A mapper object or array of mapper objects to map keys
  * @param {string} [node.dataSourceEndpoint.keyMap.resultsKey]
  *  Map the results from the ajax call with this key
  * @param {string} [node.dataSourceEndpoint.keyMap.dataKey]
  *  Extend the data object with this key
+ * @param {string} [node.dataSourceEndpoint.keyMap.storeKey]
+ *  Place the resultsByKey inside of the store with this key
  * @param {object} [node.dataSourceEndpoint.options]
  *  Options for the ajax call
  * @param {array} node.children
@@ -148,20 +151,28 @@ export default function adapterViewModel(node) {
             }).action({
                 callback: function (error, results) {
                     let resultsByKey,
-                        keyMap = endpoint.keyMap || {},
+                        keyMapArray = endpoint.keyMap || [],
                         newDataObject = {};
 
                     count++;
 
+                    if (!Array.isArray(keyMapArray)) {
+                        keyMapArray = [keyMapArray];
+                    }
+
                     if (!error) {
-                        resultsByKey = keyMap.resultsKey ? get(results, keyMap.resultsKey) : results;
-                        // optional: keyMap.dataKey path to extend dataObject on
-                        if (keyMap.dataKey) {
-                            newDataObject[keyMap.dataKey] = resultsByKey;
-                        } else {
-                            newDataObject = resultsByKey;
-                        }
-                        extend(dataObject, newDataObject);
+                        keyMapArray.forEach(keyMap => {
+                            resultsByKey = keyMap.resultsKey ? get(results, keyMap.resultsKey) : results;
+                            // optional: keyMap.dataKey path to extend dataObject on
+                            if (keyMap.dataKey) {
+                                newDataObject[keyMap.dataKey] = resultsByKey;
+                            } else if (keyMap.storeKey) {
+                                noticeboard.setValue(keyMap.storeKey, resultsByKey);
+                            } else {
+                                newDataObject = resultsByKey;
+                            }
+                            extend(dataObject, newDataObject);
+                        });
                     }
 
                     if (count === dataSourceEndpointArray.length) {
