@@ -208,7 +208,7 @@ export default function adapterViewModel(node) {
     }
 
     if (node.keepContextData) {
-        data(unwrap(context.data));
+        data(unwrap(this.data));
     }
 
     // update dictionary if mappedChildNodes of a node updates
