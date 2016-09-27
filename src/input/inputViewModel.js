@@ -70,7 +70,8 @@ export default function inputViewModel(node) {
         // custom setValue functions for input types
         setValueFuncs = {
             checkboxList: setCheckboxListValue,
-            multiselect: setCheckboxListValue
+            multiselect: setCheckboxListValue,
+            checkbox: setCheckboxValue
         },
 
         // subs disposable array
@@ -104,6 +105,11 @@ export default function inputViewModel(node) {
      * PJSON API (refine)
      */
     function getValue() {
+        if (node.inputType === 'checkbox') {
+            return inputValue() ?
+                get(options, 'checkedValue', true) :
+                get(options, 'uncheckedValue', false);
+        }
         return inputValue() || '';
     }
 
@@ -207,6 +213,10 @@ export default function inputViewModel(node) {
         }
     }
 
+    function setCheckboxValue(data) {
+        inputValue(data === get(options, 'checkedValue', true) ? true : false);
+    }
+
     /*
      * Internal
      */
@@ -217,7 +227,11 @@ export default function inputViewModel(node) {
         } else {
             // if there is no initial value, set it to empty string,
             // so that isModified does not get triggered for empty dropdowns
-            return observable(has(options.value) ? options.value : '');
+            let value = options.value;
+            if (node.inputType === 'checkbox') {
+                value = (options.value === get(options, 'checkedValue', true) ? true : false);
+            }
+            return observable(has(options.value) ? value : '');
         }
     }
 
@@ -291,20 +305,6 @@ export default function inputViewModel(node) {
     // Mixin the viewModel specific to the inputType
     if (inputTypes[node.inputType]) {
         extend(viewmodel, inputTypes[node.inputType].call(context, node, viewmodel));
-    }
-    // Checkbox underlying value is Array because of knockout, maybe refactor to a custom binding?
-    // TODO: ^ not sure if this is correct anymore. Checkbox may accept true/false - need to investigate
-    if (node.inputType === 'checkbox') {
-        values.subscribe((newValues) => {
-            if (newValues.indexOf(options.checked) !== -1) {
-                inputValue(options.checked);
-            } else {
-                inputValue(options.unchecked);
-            }
-        });
-        if (inputValue() === options.checked) {
-            values.push(options.checked);
-        }
     }
 
     // TODO: Specific to data, move into custom viewModel?
