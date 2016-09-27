@@ -239,8 +239,7 @@ export default {
     },
     'input-checkbox-button': function (ctx) {
         return {
-            checked: this.values,
-            value: this.options.checked,
+            checked: this.inputValue,
             attr: {
                 disabled: this.readonly(),
                 id: this.id
