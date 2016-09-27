@@ -21,6 +21,8 @@ i.e. plugin to adapter context with other components
  *  The id for the module
  * @param {boolean} [node.lazy=false]
  *  If the child nodes need to be lazily loaded (e.g. delay creation of children viewmodels until data returns)
+ * @param {boolean} [node.persist=false]
+ *  If data object should be persisted from one fetch data call to the next (upon refresh)
  * @param {object|Object[]} [node.dataSourceEndpoint]
  *  An object defining the endpoint(s) that makes the ajax calls
  * @param {string} node.dataSourceEndpoint.uri
@@ -129,7 +131,7 @@ export default function adapterViewModel(node) {
         let dataSourceEndpointArray = Array.isArray(node.dataSourceEndpoint)
             ? node.dataSourceEndpoint : [node.dataSourceEndpoint],
             count = 0,
-            dataObject = data();
+            dataObject = node.persist ? data() : {};
 
         dataSourceEndpointArray.forEach(function (endpoint) {
             if (endpoint.uri) {
