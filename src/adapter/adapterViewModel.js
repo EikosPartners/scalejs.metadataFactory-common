@@ -207,6 +207,10 @@ export default function adapterViewModel(node) {
         mappedChildNodes(createViewModels.call(context, node.children || []));
     }
 
+    if (node.keepContextData) {
+        data(context.data);
+    }
+
     // update dictionary if mappedChildNodes of a node updates
     computed(() => {
         updated = false;
