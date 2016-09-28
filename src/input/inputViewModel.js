@@ -111,7 +111,8 @@ export default function inputViewModel(n) {
                 get(options, 'checkedValue', true) :
                 get(options, 'uncheckedValue', false);
         }
-        return inputValue() || '';
+        return has(inputValue()) ? inputValue() :
+            options.hasOwnProperty('emptyValue') ? options.emptyValue :  '';
     }
 
     function setValue(data, opts = {}) {
