@@ -27,7 +27,7 @@ let inputTypes = {
 
 export default function inputViewModel(n) {
     var // metadata node + context
-        node = merge(globalMetadata().input_defaults || {}, n),
+        node = _.merge({}, globalMetadata().input_defaults || {}, n),
         options = node.options || {},
         keyMap = node.keyMap || {},
         context = this || {},
