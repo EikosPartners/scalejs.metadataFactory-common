@@ -19,6 +19,10 @@ var _lodash = require('lodash');
 
 var _scalejs3 = require('scalejs');
 
+var _scalejs4 = require('scalejs.noticeboard');
+
+var _scalejs5 = _interopRequireDefault(_scalejs4);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /* TODO:
@@ -37,18 +41,22 @@ i.e. plugin to adapter context with other components
  *  The id for the module
  * @param {boolean} [node.lazy=false]
  *  If the child nodes need to be lazily loaded (e.g. delay creation of children viewmodels until data returns)
+ * @param {boolean} [node.persist=false]
+ *  If data object should be persisted from one fetch data call to the next (upon refresh)
  * @param {object|Object[]} [node.dataSourceEndpoint]
  *  An object defining the endpoint(s) that makes the ajax calls
  * @param {string} node.dataSourceEndpoint.uri
  *   The uri for the endpoint
  * @param {string} [node.dataSourceEndpoint.url]
  *  The url for the endpoint
- * @param {object} [node.dataSourceEndpoint.keyMap]
- *  A mapper object to map keys
+ * @param {array|object} [node.dataSourceEndpoint.keyMap]
+ *  A mapper object or array of mapper objects to map keys
  * @param {string} [node.dataSourceEndpoint.keyMap.resultsKey]
  *  Map the results from the ajax call with this key
  * @param {string} [node.dataSourceEndpoint.keyMap.dataKey]
  *  Extend the data object with this key
+ * @param {string} [node.dataSourceEndpoint.keyMap.storeKey]
+ *  Place the resultsByKey inside of the store with this key
  * @param {object} [node.dataSourceEndpoint.options]
  *  Options for the ajax call
  * @param {array} node.children
@@ -146,7 +154,7 @@ function adapterViewModel(node) {
     function fetchData() {
         var dataSourceEndpointArray = Array.isArray(node.dataSourceEndpoint) ? node.dataSourceEndpoint : [node.dataSourceEndpoint],
             count = 0,
-            dataObject = data();
+            dataObject = node.persist ? data() : {};
 
         dataSourceEndpointArray.forEach(function (endpoint) {
             if (endpoint.uri) {
@@ -163,20 +171,28 @@ function adapterViewModel(node) {
             }).action({
                 callback: function callback(error, results) {
                     var resultsByKey = void 0,
-                        keyMap = endpoint.keyMap || {},
+                        keyMapArray = endpoint.keyMap || [],
                         newDataObject = {};
 
                     count++;
 
+                    if (!Array.isArray(keyMapArray)) {
+                        keyMapArray = [keyMapArray];
+                    }
+
                     if (!error) {
-                        resultsByKey = keyMap.resultsKey ? (0, _scalejs3.get)(results, keyMap.resultsKey) : results;
-                        // optional: keyMap.dataKey path to extend dataObject on
-                        if (keyMap.dataKey) {
-                            newDataObject[keyMap.dataKey] = resultsByKey;
-                        } else {
-                            newDataObject = resultsByKey;
-                        }
-                        (0, _lodash.extend)(dataObject, newDataObject);
+                        keyMapArray.forEach(function (keyMap) {
+                            resultsByKey = keyMap.resultsKey ? (0, _scalejs3.get)(results, keyMap.resultsKey) : results;
+                            // optional: keyMap.dataKey path to extend dataObject on
+                            if (keyMap.dataKey) {
+                                newDataObject[keyMap.dataKey] = resultsByKey;
+                            } else if (keyMap.storeKey) {
+                                _scalejs5.default.setValue(keyMap.storeKey, resultsByKey);
+                            } else {
+                                newDataObject = resultsByKey;
+                            }
+                            (0, _lodash.extend)(dataObject, newDataObject);
+                        });
                     }
 
                     if (count === dataSourceEndpointArray.length) {
@@ -212,6 +228,10 @@ function adapterViewModel(node) {
 
     if (!node.lazy) {
         mappedChildNodes(_scalejs.createViewModels.call(context, node.children || []));
+    }
+
+    if (node.keepContextData) {
+        data((0, _knockout.unwrap)(this.data));
     }
 
     // update dictionary if mappedChildNodes of a node updates

@@ -252,8 +252,7 @@ exports.default = {
     },
     'input-checkbox-button': function inputCheckboxButton(ctx) {
         return {
-            checked: this.values,
-            value: this.options.checked,
+            checked: this.inputValue,
             attr: {
                 disabled: this.readonly(),
                 id: this.id
@@ -292,9 +291,21 @@ exports.default = {
         };
     },
     'input-radio-button': function inputRadioButton(ctx) {
+        var value = this.value,
+            inputValue = ctx.$parent.inputValue,
+            options = ctx.$parent.options,
+            emptyValue = options.hasOwnProperty('emptyValue') ? options.emptyValue : '';
         return {
-            value: this.value,
-            checked: ctx.$parent.inputValue,
+            value: value,
+            click: function click() {
+                if (inputValue() === value) {
+                    inputValue(emptyValue);
+                } else {
+                    inputValue(value);
+                }
+                return true;
+            },
+            checked: inputValue,
             attr: {
                 disabled: ctx.$parent.readonly()
             },
@@ -302,10 +313,10 @@ exports.default = {
                 // for 508
                 keyup: function keyup(d, e) {
                     if (e.keyCode === 13) {
-                        if (ctx.$parent.inputValue() === this.value) {
-                            ctx.$parent.inputValue(undefined);
+                        if (inputValue() === value) {
+                            inputValue(undefined);
                         } else {
-                            ctx.$parent.inputValue(this.value);
+                            inputValue(value);
                         }
                     }
                 }
