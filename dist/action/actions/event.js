@@ -8,6 +8,10 @@ var _knockout2 = _interopRequireDefault(_knockout);
 
 var _scalejs2 = require('scalejs');
 
+var _mustache = require('mustache');
+
+var _mustache2 = _interopRequireDefault(_mustache);
+
 var _actionModule = require('../actionModule');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -15,7 +19,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function renderParams(params, data) {
     var ret = params;
     try {
-        ret = JSON.parse(mustache.render(JSON.stringify(params), data));
+        ret = JSON.parse(_mustache2.default.render(JSON.stringify(params), data));
     } catch (ex) {
         console.error('Unable to JSON parse/stringify params', ex);
     }

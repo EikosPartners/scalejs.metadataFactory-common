@@ -58,11 +58,12 @@ var inputTypes = {
     }
 };
 
-function inputViewModel(node) {
+function inputViewModel(n) {
     var _this = this;
 
     var // metadata node + context
-    options = node.options || {},
+    node = _lodash2.default.merge({}, (0, _scalejs.globalMetadata)().input_defaults || {}, n),
+        options = node.options || {},
         keyMap = node.keyMap || {},
         context = this || {},
 
@@ -116,7 +117,8 @@ function inputViewModel(node) {
     // custom setValue functions for input types
     setValueFuncs = {
         checkboxList: setCheckboxListValue,
-        multiselect: setCheckboxListValue
+        multiselect: setCheckboxListValue,
+        checkbox: setCheckboxValue
     },
 
 
@@ -153,7 +155,10 @@ function inputViewModel(node) {
      * PJSON API (refine)
      */
     function getValue() {
-        return inputValue() || '';
+        if (node.inputType === 'checkbox') {
+            return inputValue() ? (0, _scalejs4.get)(options, 'checkedValue', true) : (0, _scalejs4.get)(options, 'uncheckedValue', false);
+        }
+        return inputValue() !== '' ? inputValue() : options.hasOwnProperty('emptyValue') ? options.emptyValue : '';
     }
 
     function setValue(data) {
@@ -165,6 +170,9 @@ function inputViewModel(node) {
 
         initial = opts.initial;
 
+        if (data === getValue()) {
+            return;
+        }
         // uses setValueFunc if defined, else updates inputValue
         if (setValueFuncs[node.inputType]) {
             setValueFuncs[node.inputType](data);
@@ -262,6 +270,10 @@ function inputViewModel(node) {
         }
     }
 
+    function setCheckboxValue(data) {
+        inputValue(data === (0, _scalejs4.get)(options, 'checkedValue', true) ? true : false);
+    }
+
     /*
      * Internal
      */
@@ -272,7 +284,11 @@ function inputViewModel(node) {
         } else {
             // if there is no initial value, set it to empty string,
             // so that isModified does not get triggered for empty dropdowns
-            return (0, _knockout.observable)((0, _scalejs4.has)(options.value) ? options.value : '');
+            var value = options.value;
+            if (node.inputType === 'checkbox') {
+                value = options.value === (0, _scalejs4.get)(options, 'checkedValue', true) ? true : false;
+            }
+            return (0, _knockout.observable)((0, _scalejs4.has)(options.value) ? value : '');
         }
     }
 
@@ -351,20 +367,6 @@ function inputViewModel(node) {
     if (inputTypes[node.inputType]) {
         (0, _lodash.extend)(viewmodel, inputTypes[node.inputType].call(context, node, viewmodel));
     }
-    // Checkbox underlying value is Array because of knockout, maybe refactor to a custom binding?
-    // TODO: ^ not sure if this is correct anymore. Checkbox may accept true/false - need to investigate
-    if (node.inputType === 'checkbox') {
-        values.subscribe(function (newValues) {
-            if (newValues.indexOf(options.checked) !== -1) {
-                inputValue(options.checked);
-            } else {
-                inputValue(options.unchecked);
-            }
-        });
-        if (inputValue() === options.checked) {
-            values.push(options.checked);
-        }
-    }
 
     // TODO: Specific to data, move into custom viewModel?
     // make min/max date into observables
@@ -386,6 +388,9 @@ function inputViewModel(node) {
                 if (newValue !== '') {
                     action.action({
                         callback: function callback(error, data) {
+                            if (error) {
+                                return;
+                            }
                             Object.keys(data).forEach(function (key) {
                                 if (key === 'store') {
                                     Object.keys(data[key]).forEach(function (storeKey) {
