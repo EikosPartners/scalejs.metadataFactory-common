@@ -281,9 +281,21 @@ export default {
         };
     },
     'input-radio-button': function (ctx) {
+        let value = this.value,
+            inputValue = ctx.$parent.inputValue,
+            options = ctx.$parent.options,
+            emptyValue = options.hasOwnProperty('emptyValue') ? options.emptyValue :  '';
         return {
-            value: this.value,
-            checked: ctx.$parent.inputValue,
+            value: value,
+            click: function() {
+                if (inputValue() === value) {
+                    inputValue(emptyValue);
+                } else {
+                    inputValue(value);
+                }
+                return true;
+            },
+            checked: inputValue,
             attr: {
                 disabled: ctx.$parent.readonly()
             },
@@ -291,10 +303,10 @@ export default {
                 // for 508
                 keyup: function (d, e) {
                     if (e.keyCode === 13) {
-                        if (ctx.$parent.inputValue() === this.value) {
-                            ctx.$parent.inputValue(undefined);
+                        if (inputValue() === value) {
+                            inputValue(undefined);
                         } else {
-                            ctx.$parent.inputValue(this.value);
+                            inputValue(value);
                         }
                     }
                 }
