@@ -1,5 +1,5 @@
 import { observable, observableArray, computed } from 'knockout';
-import { createViewModel } from 'scalejs.metadataFactory';
+import { createViewModel, globalMetadata } from 'scalejs.metadataFactory';
 import { evaluate } from 'scalejs.expression-jsep';
 import { receive } from 'scalejs.messagebus';
 import { has, get, is, merge } from 'scalejs';
@@ -25,8 +25,9 @@ let inputTypes = {
     }
 }
 
-export default function inputViewModel(node) {
+export default function inputViewModel(n) {
     var // metadata node + context
+        node = merge(globalMetadata().input_defaults || {}, n),
         options = node.options || {},
         keyMap = node.keyMap || {},
         context = this || {},
