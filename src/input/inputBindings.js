@@ -282,14 +282,12 @@ export default {
     },
     'input-radio-button': function (ctx) {
         let value = this.value,
-            inputValue = ctx.$parent.inputValue,
-            options = ctx.$parent.options,
-            emptyValue = options.hasOwnProperty('emptyValue') ? options.emptyValue :  '';
+            inputValue = ctx.$parent.inputValue;
         return {
             value: value,
             click: function() {
                 if (inputValue() === value) {
-                    inputValue(emptyValue);
+                    inputValue('');
                 } else {
                     inputValue(value);
                 }
@@ -304,7 +302,7 @@ export default {
                 keyup: function (d, e) {
                     if (e.keyCode === 13) {
                         if (inputValue() === value) {
-                            inputValue(undefined);
+                            inputValue('');
                         } else {
                             inputValue(value);
                         }
