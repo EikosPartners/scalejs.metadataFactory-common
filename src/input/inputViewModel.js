@@ -121,6 +121,9 @@ export default function inputViewModel(n) {
 
         initial = opts.initial;
 
+        if (data === getValue()) {
+            return;
+        }
          // uses setValueFunc if defined, else updates inputValue
         if (setValueFuncs[node.inputType]) {
             setValueFuncs[node.inputType](data);
