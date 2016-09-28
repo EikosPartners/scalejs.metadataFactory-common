@@ -340,6 +340,9 @@ export default function inputViewModel(n) {
             if (newValue !== '') {
                 action.action({
                     callback: (error, data) => {
+                        if (error) {
+                            return;
+                        }
                         Object.keys(data).forEach((key) => {
                             if (key === 'store') {
                                 Object.keys(data[key]).forEach(function (storeKey) {
