@@ -1,6 +1,7 @@
 /*global define */
 import format from 'js-format'; //todo move out
 import { computed } from 'knockout';
+import { has } from 'scalejs';
 import 'ko-bindings/slideVisible';
 
     //todo evaluate if should move to advanced grid?
@@ -19,6 +20,7 @@ import 'ko-bindings/slideVisible';
         }
         // convert objects to strings
         value = value.map(function(value) {
+            if (!has(value)) { value = '' }
             if(typeof value === 'object') {
                 if (value.op) { delete value.op; } // we don't want to custom operators values in preview
                 return value = Object.keys(value).map(function(key) {
