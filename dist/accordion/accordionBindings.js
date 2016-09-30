@@ -14,6 +14,8 @@ var _jsFormat2 = _interopRequireDefault(_jsFormat);
 
 var _knockout = require('knockout');
 
+var _scalejs = require('scalejs');
+
 require('ko-bindings/slideVisible');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -34,6 +36,9 @@ function aggregateValues(node) {
     }
     // convert objects to strings
     value = value.map(function (value) {
+        if (!(0, _scalejs.has)(value)) {
+            value = '';
+        }
         if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
             if (value.op) {
                 delete value.op;
