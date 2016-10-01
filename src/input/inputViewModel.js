@@ -152,7 +152,7 @@ export default function inputViewModel(n) {
     }
 
     function validate() {
-        console.error('Relying on "this" for rendered in validate. REFACTOR');
+        // can rely on "this" when properties are garuenteed from MD factory and used with compliance
         inputValue.isModified(true);
         return !inputValue.isValid() && isShown() && this.rendered() && inputValue.severity() === 1;
     }
