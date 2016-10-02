@@ -139,7 +139,7 @@ function listViewModel(node) {
                 var dict = itemDictionary();
                 return Object.keys(dict).reduce(function (d, id) {
                     var item = dict[id];
-                    if (item.getValue) {
+                    if (item && item.getValue) {
                         d[id] = item.getValue();
                     } else {
                         d[id] = item;
@@ -343,7 +343,7 @@ function listViewModel(node) {
             return Object.keys(originalRowItems).reduce(function (dataObj, itemKey) {
                 var item = row.itemDictionary.peek()[itemKey];
 
-                if (item.getValue) {
+                if (item && item.getValue) {
                     dataObj[item.id] = item.getValue();
                 } else if ((0, _scalejs5.has)(item) && item.type !== 'DELETE') {
                     dataObj[itemKey] = item;
