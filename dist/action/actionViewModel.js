@@ -19,7 +19,7 @@ var _lodash = require('lodash');
 
 function actionViewModel(node) {
     var registeredActions = (0, _actionModule.getRegisteredActions)(),
-        context = this,
+        context = this || {},
         options = node.options || {},
         text = node.text || options.text,
         // TODO: Options are meant for specific types. Why are we checking options?
