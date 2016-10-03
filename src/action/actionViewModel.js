@@ -7,8 +7,8 @@ import { extend } from 'lodash';
 
 export default function actionViewModel(node) {
     let registeredActions = getRegisteredActions(),
-        context = this,      
-        options = node.options || {},  
+        context = this || {},      
+        options = node.options || {},
         text = node.text || options.text, // TODO: Options are meant for specific types. Why are we checking options?
         createViewModel = createViewModelUnbound.bind(context),
         validate = node.validate,
@@ -18,10 +18,10 @@ export default function actionViewModel(node) {
         actionFunc = mergedActions[actionType] && mergedActions[actionType].bind(context) || null ,
         isShown = observable(true),
         disabled = observable(has(options.disabled) ? options.disabled : false);
-        
+
 
     function action(args) {
-        
+
         if (!actionFunc){
             console.error('actionType is not defined', node);
             return;
@@ -54,4 +54,3 @@ export default function actionViewModel(node) {
     });
 
 };
-
