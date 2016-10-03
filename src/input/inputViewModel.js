@@ -1,5 +1,5 @@
 import { observable, observableArray, computed } from 'knockout';
-import { createViewModel } from 'scalejs.metadataFactory';
+import { createViewModel, globalMetadata } from 'scalejs.metadataFactory';
 import { evaluate } from 'scalejs.expression-jsep';
 import { receive } from 'scalejs.messagebus';
 import { has, get, is, merge } from 'scalejs';
@@ -25,8 +25,9 @@ let inputTypes = {
     }
 }
 
-export default function inputViewModel(node) {
+export default function inputViewModel(n) {
     var // metadata node + context
+        node = _.merge({}, globalMetadata().input_defaults || {}, n),
         options = node.options || {},
         keyMap = node.keyMap || {},
         context = this || {},
@@ -70,7 +71,8 @@ export default function inputViewModel(node) {
         // custom setValue functions for input types
         setValueFuncs = {
             checkboxList: setCheckboxListValue,
-            multiselect: setCheckboxListValue
+            multiselect: setCheckboxListValue,
+            checkbox: setCheckboxValue
         },
 
         // subs disposable array
@@ -104,7 +106,13 @@ export default function inputViewModel(node) {
      * PJSON API (refine)
      */
     function getValue() {
-        return inputValue() || '';
+        if (node.inputType === 'checkbox') {
+            return inputValue() ?
+                get(options, 'checkedValue', true) :
+                get(options, 'uncheckedValue', false);
+        }
+        return inputValue() !== '' ? inputValue() :
+            options.hasOwnProperty('emptyValue') ? options.emptyValue :  '';
     }
 
     function setValue(data, opts = {}) {
@@ -113,6 +121,9 @@ export default function inputViewModel(node) {
 
         initial = opts.initial;
 
+        if (data === getValue()) {
+            return;
+        }
          // uses setValueFunc if defined, else updates inputValue
         if (setValueFuncs[node.inputType]) {
             setValueFuncs[node.inputType](data);
@@ -141,7 +152,7 @@ export default function inputViewModel(node) {
     }
 
     function validate() {
-        console.error('Relying on "this" for rendered in validate. REFACTOR');
+        // can rely on "this" when properties are garuenteed from MD factory and used with compliance
         inputValue.isModified(true);
         return !inputValue.isValid() && isShown() && this.rendered() && inputValue.severity() === 1;
     }
@@ -207,6 +218,10 @@ export default function inputViewModel(node) {
         }
     }
 
+    function setCheckboxValue(data) {
+        inputValue(data === get(options, 'checkedValue', true) ? true : false);
+    }
+
     /*
      * Internal
      */
@@ -217,7 +232,11 @@ export default function inputViewModel(node) {
         } else {
             // if there is no initial value, set it to empty string,
             // so that isModified does not get triggered for empty dropdowns
-            return observable(has(options.value) ? options.value : '');
+            let value = options.value;
+            if (node.inputType === 'checkbox') {
+                value = (options.value === get(options, 'checkedValue', true) ? true : false);
+            }
+            return observable(has(options.value) ? value : '');
         }
     }
 
@@ -292,20 +311,6 @@ export default function inputViewModel(node) {
     if (inputTypes[node.inputType]) {
         extend(viewmodel, inputTypes[node.inputType].call(context, node, viewmodel));
     }
-    // Checkbox underlying value is Array because of knockout, maybe refactor to a custom binding?
-    // TODO: ^ not sure if this is correct anymore. Checkbox may accept true/false - need to investigate
-    if (node.inputType === 'checkbox') {
-        values.subscribe((newValues) => {
-            if (newValues.indexOf(options.checked) !== -1) {
-                inputValue(options.checked);
-            } else {
-                inputValue(options.unchecked);
-            }
-        });
-        if (inputValue() === options.checked) {
-            values.push(options.checked);
-        }
-    }
 
     // TODO: Specific to data, move into custom viewModel?
     // make min/max date into observables
@@ -338,6 +343,9 @@ export default function inputViewModel(node) {
             if (newValue !== '') {
                 action.action({
                     callback: (error, data) => {
+                        if (error) {
+                            return;
+                        }
                         Object.keys(data).forEach((key) => {
                             if (key === 'store') {
                                 Object.keys(data[key]).forEach(function (storeKey) {

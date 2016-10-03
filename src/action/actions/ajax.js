@@ -73,6 +73,15 @@ function ajax(options, args) {
     } else {
         target.data = {};
     }
+    
+    if (options.dataAndResults) {
+        // grabbing results from a previous ajaxAction
+        // combining with data from above
+        target.data = {
+            data: target.data,
+            results: options.results
+        };
+    }
 
     nextAction =  function (error, results) {
         let opts = options ? _.cloneDeep(options) : {},

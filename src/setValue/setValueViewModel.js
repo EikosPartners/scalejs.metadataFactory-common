@@ -6,8 +6,8 @@ export default function setValueViewModel(node) {
     if (context.data) {
         context.data.subscribe(data => {
             let dict = context.dictionary();
-            Object.keys(dict).forEach(function (node) {
-                _setValue(dict[node], data);
+            Object.keys(dict).forEach(function (n) {
+                _setValue(dict[n], data, node.clear);
             })
         })
     }

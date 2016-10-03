@@ -230,14 +230,16 @@ export default {
     },
     'input-checkbox': function () {
         return {
-            foreach: this.values
+            foreach: this.values,
+            attr: {
+                'data-id': this.id
+            }
 
         };
     },
     'input-checkbox-button': function (ctx) {
         return {
-            checked: this.values,
-            value: this.options.checked,
+            checked: this.inputValue,
             attr: {
                 disabled: this.readonly(),
                 id: this.id
@@ -272,13 +274,26 @@ export default {
         })
 
         return {
-            foreach: values
+            foreach: values,
+            attr: {
+                'data-id': this.id
+            }
         };
     },
     'input-radio-button': function (ctx) {
+        let value = this.value,
+            inputValue = ctx.$parent.inputValue;
         return {
-            value: this.value,
-            checked: ctx.$parent.inputValue,
+            value: value,
+            click: function() {
+                if (inputValue() === value) {
+                    inputValue('');
+                } else {
+                    inputValue(value);
+                }
+                return true;
+            },
+            checked: inputValue,
             attr: {
                 disabled: ctx.$parent.readonly()
             },
@@ -286,10 +301,10 @@ export default {
                 // for 508
                 keyup: function (d, e) {
                     if (e.keyCode === 13) {
-                        if (ctx.$parent.inputValue() === this.value) {
-                            ctx.$parent.inputValue(undefined);
+                        if (inputValue() === value) {
+                            inputValue('');
                         } else {
-                            ctx.$parent.inputValue(this.value);
+                            inputValue(value);
                         }
                     }
                 }

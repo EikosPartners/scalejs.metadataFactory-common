@@ -4,6 +4,7 @@ import { receive, notify } from 'scalejs.messagebus';
 import dataservice from 'dataservice';
 import { extend } from 'lodash';
 import { get, merge } from 'scalejs';
+import noticeboard from 'scalejs.noticeboard';
 
 /* TODO:
 In PJSON, we used readonly, errors, etc. We need a way to do that outside of adapter
@@ -21,18 +22,22 @@ i.e. plugin to adapter context with other components
  *  The id for the module
  * @param {boolean} [node.lazy=false]
  *  If the child nodes need to be lazily loaded (e.g. delay creation of children viewmodels until data returns)
+ * @param {boolean} [node.persist=false]
+ *  If data object should be persisted from one fetch data call to the next (upon refresh)
  * @param {object|Object[]} [node.dataSourceEndpoint]
  *  An object defining the endpoint(s) that makes the ajax calls
  * @param {string} node.dataSourceEndpoint.uri
  *   The uri for the endpoint
  * @param {string} [node.dataSourceEndpoint.url]
  *  The url for the endpoint
- * @param {object} [node.dataSourceEndpoint.keyMap]
- *  A mapper object to map keys
+ * @param {array|object} [node.dataSourceEndpoint.keyMap]
+ *  A mapper object or array of mapper objects to map keys
  * @param {string} [node.dataSourceEndpoint.keyMap.resultsKey]
  *  Map the results from the ajax call with this key
  * @param {string} [node.dataSourceEndpoint.keyMap.dataKey]
  *  Extend the data object with this key
+ * @param {string} [node.dataSourceEndpoint.keyMap.storeKey]
+ *  Place the resultsByKey inside of the store with this key
  * @param {object} [node.dataSourceEndpoint.options]
  *  Options for the ajax call
  * @param {array} node.children
@@ -129,12 +134,12 @@ export default function adapterViewModel(node) {
         let dataSourceEndpointArray = Array.isArray(node.dataSourceEndpoint)
             ? node.dataSourceEndpoint : [node.dataSourceEndpoint],
             count = 0,
-            dataObject = data();
+            dataObject = node.persist ? data() : {};
 
-        dataSourceEndpointArray.forEach(function(endpoint) {
+        dataSourceEndpointArray.forEach(function (endpoint) {
             if (endpoint.uri) {
                 console.warn('dataSourceEndpoint expects URI in "target". Please update your JSON to reflect the new syntax');
-                endpoint = merge(endpoint,{
+                endpoint = merge(endpoint, {
                     target: endpoint
                 });
             }
@@ -144,22 +149,30 @@ export default function adapterViewModel(node) {
                 "actionType": "ajax",
                 "options": endpoint
             }).action({
-                callback: function(error, results) {
+                callback: function (error, results) {
                     let resultsByKey,
-                        keyMap = endpoint.keyMap || {},
+                        keyMapArray = endpoint.keyMap || [],
                         newDataObject = {};
 
                     count++;
 
+                    if (!Array.isArray(keyMapArray)) {
+                        keyMapArray = [keyMapArray];
+                    }
+
                     if (!error) {
-                        resultsByKey = keyMap.resultsKey ? get(results, keyMap.resultsKey) : results;
-                        // optional: keyMap.dataKey path to extend dataObject on
-                        if (keyMap.dataKey) {
-                            newDataObject[keyMap.dataKey] = resultsByKey;
-                        } else {
-                            newDataObject = resultsByKey;
-                        }
-                        extend(dataObject, newDataObject);
+                        keyMapArray.forEach(keyMap => {
+                            resultsByKey = keyMap.resultsKey ? get(results, keyMap.resultsKey) : results;
+                            // optional: keyMap.dataKey path to extend dataObject on
+                            if (keyMap.dataKey) {
+                                newDataObject[keyMap.dataKey] = resultsByKey;
+                            } else if (keyMap.storeKey) {
+                                noticeboard.setValue(keyMap.storeKey, resultsByKey);
+                            } else {
+                                newDataObject = resultsByKey;
+                            }
+                            extend(dataObject, newDataObject);
+                        });
                     }
 
                     if (count === dataSourceEndpointArray.length) {
@@ -194,6 +207,10 @@ export default function adapterViewModel(node) {
         mappedChildNodes(createViewModels.call(context, node.children || []));
     }
 
+    if (node.keepContextData) {
+        data(unwrap(this.data));
+    }
+
     // update dictionary if mappedChildNodes of a node updates
     computed(() => {
         updated = false;
@@ -212,9 +229,15 @@ export default function adapterViewModel(node) {
     }
 
     // listen for 'refresh' event
-    subs.push(receive(node.id + '.refresh', function(options) {
+    subs.push(receive(node.id + '.refresh', function (options) {
         console.log('-->', node);
-        fetchData(options);
+        if (node.dataSourceEndpoint) {
+            fetchData(options);
+        } else {
+            Object.keys(dictionary()).forEach((key) => {
+                dictionary()[key].setValue && dictionary()[key].setValue('');
+            });
+        }
     }));
 
     return merge(node, {
@@ -222,8 +245,8 @@ export default function adapterViewModel(node) {
         data: data,
         contextPlugins: contextPlugins,
         context: context,
-        dispose: function() {
-            subs.forEach(function(sub) {
+        dispose: function () {
+            subs.forEach(function (sub) {
                 sub.dispose();
             });
         }

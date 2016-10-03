@@ -24,7 +24,7 @@ function popupAction(options) {
         return createViewModel.call(context, action);
     });
 
-    data = this && this.data && this.data();
+    data = this && ko.unwrap(this.data);
 
     if (options.message) {
         options.message = mustache.render(options.message, data || {});

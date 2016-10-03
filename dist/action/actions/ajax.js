@@ -103,6 +103,15 @@ function ajax(options, args) {
         target.data = {};
     }
 
+    if (options.dataAndResults) {
+        // grabbing results from a previous ajaxAction
+        // combining with data from above
+        target.data = {
+            data: target.data,
+            results: options.results
+        };
+    }
+
     nextAction = function nextAction(error, results) {
         var opts = options ? _lodash2.default.cloneDeep(options) : {},
             err = error ? error : null;

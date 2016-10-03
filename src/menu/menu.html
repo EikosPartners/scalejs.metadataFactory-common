@@ -1,0 +1,37 @@
+<div id="menu_template">
+    <div class="menu-accordion-wrapper" 
+        data-bind="css: $data.classes, template: {
+                name: 'metadata_items_template',
+                data: mappedChildNodes
+            }">
+    </div>        
+</div>
+
+<div id="menu_accordion">
+    <div class="accordion" data-bind="css: $data.classes, visible: isShown">
+        <!-- ko class: accordion-sections -->
+        <!-- ko if: $data.rendered -->
+        <header tabindex="0" class="accordion-header" data-bind="css: {
+            selected: visible
+        }, clickOrEnter: toggleVisibility">
+            <span>
+                <span></span>
+                <span class="header-text" 
+                      data-class="accordion-header-text">
+                </span>
+            </span>
+        </header>
+        <section data-bind=" slideVisible: visible,
+                        css: {
+                            selected: visible
+                        },
+                        template: { name: 'metadata_item_template', data: $data }"
+                class="inner-accordion"></section>
+        <!-- /ko -->
+        <!-- /ko -->
+        </section>
+    </div>
+</div>
+
+<div id="empty_panel">
+</div>

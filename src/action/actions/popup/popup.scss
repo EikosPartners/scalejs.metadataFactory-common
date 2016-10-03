@@ -1,0 +1,29 @@
+.popup-box header {
+  padding: 10px;
+}
+
+.popup-box header h1 {
+    display: inline-block;
+    margin: 0px;
+}
+
+.popup-box header h1.x {
+    float: right;
+    padding-left: 5px;
+    cursor: pointer;
+}
+
+.popup-box section {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.popup-box button {
+  float: right;
+  padding: 9px 15px;
+  margin-right: 8px;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  box-shadow: none;
+}
