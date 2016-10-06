@@ -115,8 +115,14 @@ export default function adapterViewModel(node) {
         dataSyncSubscription = computed(() => {
             let dict = dictionary();
             Object.keys(dict).forEach(id => {
-                if (dict[id].getValue) {
-                    data()[id] = dict[id].getValue();
+                if (dict[id].rendered) {
+                    if (dict[id].rendered() && dict[id].getValue) {
+                        data()[id] = dict[id].getValue();
+                    } else if (!dict[id].rendered()) {
+                       if(!dict[id].trackIfHidden) {
+                           delete data()[id];
+                       } 
+                    }
                 }
             });
         });
