@@ -119,7 +119,9 @@ export default function adapterViewModel(node) {
                     if (dict[id].rendered() && dict[id].getValue) {
                         data()[id] = dict[id].getValue();
                     } else if (!dict[id].rendered()) {
-                       if(!dict[id].trackIfHidden) {
+                        if(dict[id].trackIfHidden) {
+                            data()[id] = dict[id].getValue();
+                        } else {
                            delete data()[id];
                        } 
                     }
