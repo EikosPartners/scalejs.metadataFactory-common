@@ -136,8 +136,14 @@ function adapterViewModel(node) {
         dataSyncSubscription = (0, _knockout.computed)(function () {
             var dict = dictionary();
             Object.keys(dict).forEach(function (id) {
-                if (dict[id].getValue) {
-                    data()[id] = dict[id].getValue();
+                if (dict[id].rendered) {
+                    if (dict[id].rendered() && dict[id].getValue) {
+                        data()[id] = dict[id].getValue();
+                    } else if (!dict[id].rendered()) {
+                        if (!dict[id].trackIfHidden) {
+                            delete data()[id];
+                        }
+                    }
                 }
             });
         });
