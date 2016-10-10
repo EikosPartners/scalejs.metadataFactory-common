@@ -7,7 +7,7 @@
                 <!-- /ko -->
             <!-- /ko -->
             <div class="row" data-bind="if: options.addRows !== false && !readonly()">
-                <button class="fa fa-icon-add" data-bind="click: add">
+                <button class="fa fa-icon-add" data-bind="click: add.bind(null, null, true)">
                     <span class="button-text">Add</span>
                 </button>
             </div>
