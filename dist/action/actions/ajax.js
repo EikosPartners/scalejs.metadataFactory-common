@@ -30,15 +30,15 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/* format text getValue
-    // {{store.x}} or {{dataKey.subkey}}
-    evaluate(param, function (id) {
-        if(options.data && options.data[id]) {
-            return options.data[id];
-        }
-        return context.getValue(id); //context data and global data (via store)
-    });
-*/
+function renderParams(params, data) {
+    var ret = params;
+    try {
+        ret = JSON.parse(_mustache2.default.render(JSON.stringify(params), data));
+    } catch (ex) {
+        console.error('Unable to JSON parse/stringify params', ex);
+    }
+    return ret;
+}
 
 function ajax(options, args) {
     var context = this,
@@ -47,10 +47,10 @@ function ajax(options, args) {
         // to prevent mutations to underlying object
     optionData = options.data || {},
 
-    // todo: replace the mustache render with formatText
-    uri = _mustache2.default.render(options.target.uri, (0, _scalejs3.merge)(data, optionData, (0, _scalejs2.getCurrent)().query, _knockout2.default.toJS(_scalejs5.default.dictionary()))),
-        //DS: temporary adding noticeboard dict for demo, replace with rendered/getValue interface
-    callback = args && args.callback,
+    // todo: is dictionary reliable?
+    renderDataObject = (0, _scalejs3.merge)(data, optionData, (0, _scalejs2.getCurrent)().query, _knockout2.default.toJS(_scalejs5.default.dictionary())),
+        uri = _mustache2.default.render(options.target.uri, renderDataObject),
+        callback = args && args.callback,
         nextAction = void 0;
 
     if (target.data) {
@@ -102,6 +102,11 @@ function ajax(options, args) {
             data: target.data,
             results: options.results
         };
+    }
+
+    if (options.params) {
+        console.log('Using render params feature in ajax:', options);
+        target.data = renderParams(options.params, renderDataObject);
     }
 
     nextAction = function nextAction(error, results) {
