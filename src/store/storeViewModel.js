@@ -1,6 +1,7 @@
 import noticeboard from 'scalejs.noticeboard';
 import dataservice from 'dataservice';
 import { receive } from 'scalejs.messagebus';
+import { createViewModel } from 'scalejs.metadataFactory';
 
     //TODO: Rename results to resultsKey
 
@@ -36,6 +37,7 @@ import { receive } from 'scalejs.messagebus';
             storeValue = node.storeValue,
             dataSourceEndpoint = node.dataSourceEndpoint,
             options = node.options || {},
+            context = this,
             subs = [];
 
         if (!storeKey) {
@@ -51,27 +53,40 @@ import { receive } from 'scalejs.messagebus';
         //todo: check if storeKey is already in the noticeboard
         // option to persist data and not request endpoint multiple times
         function fetchData() {
-            dataservice.ajax(dataSourceEndpoint, function (error, results) {
-                if (error) {
-                    console.error('Error when retrieving data for node', node, error);
-                    noticeboard.setValue(storeKey, error);
-                    return;
-                }
-                var value = keyMap.resultsKey ? results[keyMap.resultsKey] : results;
+            if (dataSourceEndpoint.uri) {
+                console.warn('dataSourceEndpoint expects URI in "target". Please update your JSON to reflect the new syntax', node);
+                dataSourceEndpoint = merge(dataSourceEndpoint, {
+                    target: dataSourceEndpoint
+                });
+            }
 
-                if (options.mapArrayToDictionaryWithKey) {
-                    value = value.reduce(function (obj, item) {
-                        var key = options.mapArrayToDictionaryWithKey;
-                        if (options.aggregateMappedItems) {
-                            obj[item[key]] = obj[item[key]] || [];
-                            obj[item[key]].push(item);
-                        } else {
-                            obj[item[key]] = keyMap.resultsValueKey ? item[keyMap.resultsValueKey] : item; // will overwrite any existing items with the key
-                        }
-                        return obj;
-                    }, {})
-                }
-                noticeboard.setValue(storeKey, value);
+            createViewModel.call(context, {
+                "type": "action",
+                "actionType": "ajax",
+                "options": dataSourceEndpoint
+            }).action({
+                callback: function (error, results) {
+                    if (error) {
+                        console.error('Error when retrieving data for node', node, error);
+                        noticeboard.setValue(storeKey, error);
+                        return;
+                    }
+                    var value = keyMap.resultsKey ? results[keyMap.resultsKey] : results;
+
+                    if (options.mapArrayToDictionaryWithKey) {
+                        value = value.reduce(function (obj, item) {
+                            var key = options.mapArrayToDictionaryWithKey;
+                            if (options.aggregateMappedItems) {
+                                obj[item[key]] = obj[item[key]] || [];
+                                obj[item[key]].push(item);
+                            } else {
+                                obj[item[key]] = keyMap.resultsValueKey ? item[keyMap.resultsValueKey] : item; // will overwrite any existing items with the key
+                            }
+                            return obj;
+                        }, {})
+                    }
+                    noticeboard.setValue(storeKey, value);
+                }              
             });
         }
 
