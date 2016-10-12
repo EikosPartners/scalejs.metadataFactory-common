@@ -8,23 +8,27 @@ import ko from 'knockout';
 import mustache from 'mustache';
 import _ from 'lodash';
 
-/* format text getValue
-    // {{store.x}} or {{dataKey.subkey}}
-    evaluate(param, function (id) {
-        if(options.data && options.data[id]) {
-            return options.data[id];
-        }
-        return context.getValue(id); //context data and global data (via store)
-    });
-*/
+function renderParams(params, data) {
+    let ret = params;
+    try {
+        ret = JSON.parse(
+            mustache.render(JSON.stringify(params), data)
+        );
+    } catch (ex) {
+        console.error('Unable to JSON parse/stringify params', ex);
+    }
+    return ret;
+}
+
 
 function ajax(options, args) {
     let context = this,
         data = context.data && ko.unwrap(context.data),
         target = _.cloneDeep(options.target), // to prevent mutations to underlying object
         optionData = options.data || {},
-        // todo: replace the mustache render with formatText
-        uri = mustache.render(options.target.uri, merge(data, optionData, getCurrent().query, ko.toJS(noticeboard.dictionary()))), //DS: temporary adding noticeboard dict for demo, replace with rendered/getValue interface
+        // todo: is dictionary reliable?
+        renderDataObject =  merge(data, optionData, getCurrent().query, ko.toJS(noticeboard.dictionary())), 
+        uri = mustache.render(options.target.uri, renderDataObject), 
         callback = args && args.callback,
         nextAction;
 
@@ -73,6 +77,11 @@ function ajax(options, args) {
             data: target.data,
             results: options.results
         };
+    }
+
+    if (options.params) {
+        console.log('Using render params feature in ajax:', options);
+        target.data = renderParams(options.params, renderDataObject);
     }
 
     nextAction =  function (error, results) {
