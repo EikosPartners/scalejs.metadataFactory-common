@@ -119,7 +119,6 @@ describe('actionModule test', function () {
 
         it('event with button click', function (done) {
             const action = merge({}, node, {
-                "icon": "foo",
                 "options": {
                     "params": {
                         "test": "passing test"
@@ -137,15 +136,16 @@ describe('actionModule test', function () {
             document.querySelector('.action-button-wrapper button').click();
         });
 
-        it('create action button with icon', function (done) {
-            const action = merge({}, node, {
-                "icon": "foo"
-            }),
-                testAction = createMetadataDomStub(action);
-            expect(document.querySelector('.fa-foo')).to.not.equal(undefined);
-            done();
+        // it('create action button with icon', function (done) {
+        //     const action = merge({}, node, {
+        //             "icon": "foo"
+        //         }),
+        //         testAction = createMetadataDomStub(action);
 
-        });
+        //     expect(document.querySelector('.fa-foo')).to.not.equal(undefined);
+        //     done();
+
+        // });
 
         it('event with immediate action', function (done) {
             const sub = receive('eventTest', function (params) {

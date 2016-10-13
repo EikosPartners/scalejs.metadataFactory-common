@@ -24,11 +24,11 @@ function event(options) {
         params = options.params;
 
     if (options.paramsKey) {
-        params = merge(options.params || {}, options[options.paramsKey]);
+        params = merge(params || {}, options[options.paramsKey]);
     }
 
     if (params) {
-        params = renderParams(options.params, data);
+        params = renderParams(params, data);
     }
     
     notify(unwrap(options.target), params);
