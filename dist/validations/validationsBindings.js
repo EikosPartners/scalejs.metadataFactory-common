@@ -16,12 +16,12 @@ exports.default = {
     },
     'validation-show-messages': function validationShowMessages(ctx) {
         var visible = this.showValidationMessages(),
-            css = visible ? 'fa fa-caret-down' : 'fa fa-caret-right';
+            icon = visible ? 'caret-down' : 'caret-right';
         return {
             click: function click() {
                 this.showValidationMessages(!visible);
             },
-            css: css
+            fontIcon: icon
         };
     },
     'validation-severity-css': function validationSeverityCss(ctx) {

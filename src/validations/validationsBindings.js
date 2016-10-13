@@ -11,12 +11,12 @@ export default {
     },
     'validation-show-messages': function (ctx) {
         var visible = this.showValidationMessages(),
-            css = visible ? 'fa fa-caret-down' : 'fa fa-caret-right';
+            icon = visible ? 'caret-down' : 'caret-right';
         return {
             click: function () {
                 this.showValidationMessages(!visible);
             },
-            css: css
+            fontIcon: icon
         }
     },
     'validation-severity-css': function (ctx) {
