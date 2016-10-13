@@ -44,6 +44,7 @@ export default {
 
         return {
             visible: isChild,
+            fontIcon: 'icon-table-x-td', 
             click: parentTab ? parentTab.setActiveTab.bind(null, null) : function () { },
             clickBubble: false
         };

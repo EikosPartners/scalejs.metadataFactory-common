@@ -50,6 +50,7 @@ import 'ko-bindings/slideVisible';
         },
         'accordion-expand-all': function(ctx) {
             return {
+                fontIcon: 'expand-all',
                 click: function () {
                     ctx.$parents[1].setAllSectionVisibility(true);
                 },
@@ -58,6 +59,7 @@ import 'ko-bindings/slideVisible';
         },
         'accordion-collapse-all': function(ctx) {
             return {
+                fontIcon: 'collapse-all',
                 click: function () {
                     ctx.$parents[1].setAllSectionVisibility(false);
                 },

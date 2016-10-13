@@ -2,7 +2,7 @@
     <div data-bind="css: $data.classes" class="input">
         <label data-class="input-labels input-color-text" class="input-label"></label>
         <!-- ko if: $data.helpText -->
-        <i class="fa fa-info-circle info"> <!--TODO: image icon -->
+        <i data-bind="fontIcon: 'info-circle'" class="info"> <!--TODO: image icon -->
                 <div class="tool-tip" data-bind="text: $data.helpText"></div>
             </i>
         <!-- /ko -->
@@ -105,7 +105,7 @@
 
 <!-- TODO: Why do we need this? -->
 <div id="input_add_button_template" class="add">
-    <button class="fa fa-icon-add" data-bind="click: input.add">
+    <button data-bind="fontIcon: 'icon-add', click: input.add">
         <span class="button-text">Add</span>
     </button>
 </div>
