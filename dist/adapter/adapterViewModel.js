@@ -234,12 +234,12 @@ function adapterViewModel(node) {
         return context.parentContext.getValue(id);
     }
 
-    if (!node.lazy) {
-        mappedChildNodes(_scalejs.createViewModels.call(context, node.children || []));
-    }
-
     if (node.keepContextData) {
         data((0, _knockout.unwrap)(this.data));
+    }
+
+    if (!node.lazy) {
+        mappedChildNodes(_scalejs.createViewModels.call(context, node.children || []));
     }
 
     // update dictionary if mappedChildNodes of a node updates

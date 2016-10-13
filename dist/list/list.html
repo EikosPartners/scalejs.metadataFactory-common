@@ -7,7 +7,7 @@
                 <!-- /ko -->
             <!-- /ko -->
             <div class="row" data-bind="if: options.addRows !== false && !readonly()">
-                <button class="fa fa-icon-add" data-bind="click: add.bind(null, null, true)">
+                <button data-bind="fontIcon: 'icon-add', click: add.bind(null, null, true)">
                     <span class="button-text">Add</span>
                 </button>
             </div>
@@ -26,12 +26,12 @@
 
 <div id="list_del_template">
     <div class="list-del-button" data-class="list-remove">
-        <a class="fa fa-icon-trash icon-only"></a>
+        <a data-bind="fontIcon: 'icon-trash'" class="icon-only"></a>
     </div>
 </div>
 
 <div id="list_del_flag_template">
     <div class="list-del-button" data-class="list-delete-flag">
-        <a class="fa fa-icon-trash icon-only"></a>
+        <a data-bind="fontIcon: 'icon-trash'" class="icon-only"></a>
     </div>
 </div>

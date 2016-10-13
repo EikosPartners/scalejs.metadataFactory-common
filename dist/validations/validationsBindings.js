@@ -26,9 +26,9 @@ exports.default = {
     },
     'validation-severity-css': function validationSeverityCss(ctx) {
         return {
-            css: {
-                'fa-icon-error': this.severity === 1,
-                'fa-icon-table-warning': this.severity !== 1
+            fontIcon: {
+                'icon-error': this.severity === 1,
+                'icon-table-warning': this.severity !== 1
             }
         };
     },
