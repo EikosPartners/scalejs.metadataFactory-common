@@ -6,6 +6,7 @@ export default {
     },
     'validation-message-list': function (ctx) {
         return {
+            visible: this.showValidationMessages,
             foreach: this.visibleMessages()
         }
     },
