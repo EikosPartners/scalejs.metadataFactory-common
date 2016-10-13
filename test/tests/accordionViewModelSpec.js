@@ -36,7 +36,7 @@ describe('accordionModule test', function () {
               node = {
                 "type": "accordion",
                 "sections": [
-                    "Section 1",
+                    "section 1",
                     "section 2"
                 ],
                 "children": [
@@ -99,7 +99,7 @@ describe('accordionModule test', function () {
                 expect(sectionOneVis()).to.equal(false);
                 expect(sectionTwoVis()).to.equal(false);
                 done();
-            },200);
+            },500);
         });
 
         it('creates closed accordions and opens them all', function(done) {
@@ -126,7 +126,7 @@ describe('accordionModule test', function () {
                 expect(sectionOneVis()).to.equal(true);
                 expect(sectionTwoVis()).to.equal(true);
                 done();
-            },100);
+            },500);
         });
 
         it('toggle visibility using click',function(done){
@@ -147,7 +147,7 @@ describe('accordionModule test', function () {
                 expect(sectionOneVis()).to.equal(false);
                 expect(sectionTwoVis()).to.equal(false);
                 done();
-            },200);
+            },500);
         });
         it('collapse all test',function(done){
             let close;
@@ -167,7 +167,7 @@ describe('accordionModule test', function () {
                 expect(sectionOneVis()).to.equal(false);
                 expect(sectionTwoVis()).to.equal(false);
                 done();
-            }, 200);
+            }, 500);
         });
 
         it('expand all test',function(done){
@@ -189,7 +189,7 @@ describe('accordionModule test', function () {
                 expect(sectionOneVis()).to.equal(true);
                 expect(sectionTwoVis()).to.equal(true);
                 done();
-            }, 100);
+            }, 500);
         });
     });
 
