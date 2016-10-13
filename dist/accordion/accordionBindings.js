@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; }; /*global define */
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /*global define */
 //todo move out
 
 
@@ -70,6 +70,7 @@ exports.default = {
     },
     'accordion-expand-all': function accordionExpandAll(ctx) {
         return {
+            fontIcon: 'expand-all',
             click: function click() {
                 ctx.$parents[1].setAllSectionVisibility(true);
             },
@@ -78,6 +79,7 @@ exports.default = {
     },
     'accordion-collapse-all': function accordionCollapseAll(ctx) {
         return {
+            fontIcon: 'collapse-all',
             click: function click() {
                 ctx.$parents[1].setAllSectionVisibility(false);
             },

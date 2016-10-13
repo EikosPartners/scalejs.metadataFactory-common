@@ -21,15 +21,13 @@
         <span class="header-preview-text" data-class="accordion-header-preview-text"></span>
     </span>
     <!-- ko if: $data.helpText -->
-        <i class="fa fa-info-circle info">
+        <i data-bind="fontIcon: 'info-circle'" class="info">
             <div class="tool-tip" data-bind="text: $data.helpText"></div>
         </i>
     <!-- /ko -->
 </div>
 
 <div id="accordion_control_header_template">
-    <i class="fa fa-compress action" data-class="accordion-collapse-all">
-    </i>
-    <i class="fa fa-expand action" data-class="accordion-expand-all">
-    </i>
+    <i data-class="accordion-collapse-all"></i>
+    <i data-class="accordion-expand-all"></i>
 </div>

@@ -10,6 +10,7 @@ exports.default = function (node) {
         storeValue = node.storeValue,
         dataSourceEndpoint = node.dataSourceEndpoint,
         options = node.options || {},
+        context = this,
         subs = [];
 
     if (!storeKey) {
@@ -25,27 +26,40 @@ exports.default = function (node) {
     //todo: check if storeKey is already in the noticeboard
     // option to persist data and not request endpoint multiple times
     function fetchData() {
-        _dataservice2.default.ajax(dataSourceEndpoint, function (error, results) {
-            if (error) {
-                console.error('Error when retrieving data for node', node, error);
-                _scalejs2.default.setValue(storeKey, error);
-                return;
-            }
-            var value = keyMap.resultsKey ? results[keyMap.resultsKey] : results;
+        if (dataSourceEndpoint.uri) {
+            console.warn('dataSourceEndpoint expects URI in "target". Please update your JSON to reflect the new syntax', node);
+            dataSourceEndpoint = (0, _scalejs5.merge)(dataSourceEndpoint, {
+                target: dataSourceEndpoint
+            });
+        }
 
-            if (options.mapArrayToDictionaryWithKey) {
-                value = value.reduce(function (obj, item) {
-                    var key = options.mapArrayToDictionaryWithKey;
-                    if (options.aggregateMappedItems) {
-                        obj[item[key]] = obj[item[key]] || [];
-                        obj[item[key]].push(item);
-                    } else {
-                        obj[item[key]] = keyMap.resultsValueKey ? item[keyMap.resultsValueKey] : item; // will overwrite any existing items with the key
-                    }
-                    return obj;
-                }, {});
+        _scalejs4.createViewModel.call(context, {
+            "type": "action",
+            "actionType": "ajax",
+            "options": dataSourceEndpoint
+        }).action({
+            callback: function callback(error, results) {
+                if (error) {
+                    console.error('Error when retrieving data for node', node, error);
+                    _scalejs2.default.setValue(storeKey, error);
+                    return;
+                }
+                var value = keyMap.resultsKey ? results[keyMap.resultsKey] : results;
+
+                if (options.mapArrayToDictionaryWithKey) {
+                    value = value.reduce(function (obj, item) {
+                        var key = options.mapArrayToDictionaryWithKey;
+                        if (options.aggregateMappedItems) {
+                            obj[item[key]] = obj[item[key]] || [];
+                            obj[item[key]].push(item);
+                        } else {
+                            obj[item[key]] = keyMap.resultsValueKey ? item[keyMap.resultsValueKey] : item; // will overwrite any existing items with the key
+                        }
+                        return obj;
+                    }, {});
+                }
+                _scalejs2.default.setValue(storeKey, value);
             }
-            _scalejs2.default.setValue(storeKey, value);
         });
     }
 
@@ -82,6 +96,10 @@ var _dataservice = require('dataservice');
 var _dataservice2 = _interopRequireDefault(_dataservice);
 
 var _scalejs3 = require('scalejs.messagebus');
+
+var _scalejs4 = require('scalejs.metadataFactory');
+
+var _scalejs5 = require('scalejs');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

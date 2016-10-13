@@ -31,11 +31,11 @@ function event(options) {
         params = options.params;
 
     if (options.paramsKey) {
-        params = (0, _scalejs2.merge)(options.params || {}, options[options.paramsKey]);
+        params = (0, _scalejs2.merge)(params || {}, options[options.paramsKey]);
     }
 
     if (params) {
-        params = renderParams(options.params, data);
+        params = renderParams(params, data);
     }
 
     (0, _scalejs.notify)((0, _knockout.unwrap)(options.target), params);

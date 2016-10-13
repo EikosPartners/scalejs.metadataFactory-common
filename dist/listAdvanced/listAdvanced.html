@@ -2,7 +2,7 @@
     <div data-bind="css: $data.classes" class="list-advanced">
         <header>
             <div class="add" data-class="list-add-rendered">
-                <button class="fa fa-icon-add" data-bind="click:  list.add.bind(null, null, true)">
+                <button data-bind="fontIcon: 'icon-add', click: list.add.bind(null, null, true)">
                     <span class="button-text">Add</span>
                 </button>
             </div>
@@ -51,7 +51,7 @@ therefore lots of work-arounds needed to be put in place for fixed header stylin
     <div class="table-viewport table-fixed-header" data-bind="css: $data.classes">
         <div class="table-header">
             <div class="add" data-bind="if: !list.readonly()">
-                <button class="fa fa-icon-add" style="float:none" data-bind="click:  list.add.bind(null, null, true)">
+                <button data-bind="fontIcon: 'icon-add', click: list.add.bind(null, null, true)" style="float:none">
                     <span class="button-text">Add</span>
                 </button>
             </div>
@@ -95,7 +95,7 @@ therefore lots of work-arounds needed to be put in place for fixed header stylin
             </tbody>
         </table>
         <div data-class="list-add-rendered">
-            <button class="fa fa-icon-add" data-bind="click: list.add.bind(null, null)">
+            <button data-bind="fontIcon: 'icon-add', click: list.add.bind(null, null)">
                 <span class="button-text">Add</span>
             </button>
         </div>
@@ -161,7 +161,7 @@ therefore lots of work-arounds needed to be put in place for fixed header stylin
 <!-- item templates -->
 
 <div id="list_advanced_add_item_template">
-    <button class="fa fa-icon-add" data-bind="click: add">
+    <button data-bind="fontIcon: 'icon-add', click: add">
         <span data-bind="text: text" class="button-text">Add</span>
     </button>
 </div>
