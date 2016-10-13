@@ -2,6 +2,7 @@ import noticeboard from 'scalejs.noticeboard';
 import dataservice from 'dataservice';
 import { receive } from 'scalejs.messagebus';
 import { createViewModel } from 'scalejs.metadataFactory';
+import { merge } from 'scalejs';
 
     //TODO: Rename results to resultsKey
 
