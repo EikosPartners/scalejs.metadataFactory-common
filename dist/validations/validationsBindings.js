@@ -11,6 +11,7 @@ exports.default = {
     },
     'validation-message-list': function validationMessageList(ctx) {
         return {
+            visible: this.showValidationMessages,
             foreach: this.visibleMessages()
         };
     },
