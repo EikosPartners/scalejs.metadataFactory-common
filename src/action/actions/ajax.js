@@ -80,8 +80,14 @@ function ajax(options, args) {
     }
 
     if (options.params) {
+        // either overwrite the data from above
+        // or merge with the data from above
+        let mergeData = {};
         console.log('Using render params feature in ajax:', options);
-        target.data = renderParams(options.params, renderDataObject);
+        if (options.mergeData) {
+            mergeData = target.data;
+        }
+        target.data = merge(mergeData, renderParams(options.params, renderDataObject));
     }
 
     nextAction =  function (error, results) {
