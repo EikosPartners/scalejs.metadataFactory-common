@@ -5,6 +5,7 @@ import validationsViewModel from './validationsViewModel';
 import validationsBindings from './validationsBindings';
 import validationTemplate from './validations.html';
 import './validations.scss';
+import 'ko-bindings/fontIcon';
 
 registerBindings(validationsBindings);
 registerTemplates(validationTemplate);

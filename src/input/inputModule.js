@@ -11,6 +11,7 @@ import inputTemplates from './input.html';
 import 'ko-bindings/datepicker';
 import 'ko-bindings/autosize';
 import 'ko-bindings/tokeninput';
+import 'ko-bindings/fontIcon';
 import 'pikaday/scss/pikaday.scss';
 import './autocomplete/autocomplete.scss';
 import './input.scss';

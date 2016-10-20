@@ -6,6 +6,7 @@ import listAdvancedBindings from './listAdvancedBindings';
 import listAdvancedTemplates from './listAdvanced.html';
 import './listAdvanced.scss';
 import 'ko-bindings/clickoff';
+import 'ko-bindings/fontIcon';
 
 
     registerBindings(listAdvancedBindings);
