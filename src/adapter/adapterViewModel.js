@@ -150,6 +150,7 @@ export default function adapterViewModel(node) {
                 endpoint = merge(endpoint, {
                     target: endpoint
                 });
+                delete endpoint.uri;
             }
 
             createViewModel.call(context, {
@@ -159,11 +160,11 @@ export default function adapterViewModel(node) {
             }).action({
                 callback: function (error, results) {
                     let resultsByKey,
-                        keyMapArray = endpoint.keyMap || [],
+                        keyMapArray = endpoint.keyMap || [{}],
                         newDataObject = {};
 
                     count++;
-
+                    
                     if (!Array.isArray(keyMapArray)) {
                         keyMapArray = [keyMapArray];
                     }

@@ -13,6 +13,7 @@ let expect = chai.expect,
 
 const node = {
     "type": "adapter",
+    "id": "adapter",
     "dataSourceEndpoint": {
         "uri": "setValue"
     },

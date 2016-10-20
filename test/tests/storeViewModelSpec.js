@@ -5,6 +5,10 @@ import { notify } from 'scalejs.messagebus';
 import _ from 'lodash';
 import 'chai';
 
+import 'action/actionModule';
+import 'action/actions/event';
+import 'action/actions/ajax';
+
 let expect = chai.expect,
     store;
 
