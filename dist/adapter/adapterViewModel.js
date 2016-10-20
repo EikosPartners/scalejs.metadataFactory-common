@@ -170,6 +170,7 @@ function adapterViewModel(node) {
                 endpoint = (0, _scalejs3.merge)(endpoint, {
                     target: endpoint
                 });
+                delete endpoint.uri;
             }
 
             _scalejs.createViewModel.call(context, {
@@ -179,7 +180,7 @@ function adapterViewModel(node) {
             }).action({
                 callback: function callback(error, results) {
                     var resultsByKey = void 0,
-                        keyMapArray = endpoint.keyMap || [],
+                        keyMapArray = endpoint.keyMap || [{}],
                         newDataObject = {};
 
                     count++;
