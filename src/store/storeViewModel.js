@@ -59,6 +59,7 @@ import { merge } from 'scalejs';
                 dataSourceEndpoint = merge(dataSourceEndpoint, {
                     target: dataSourceEndpoint
                 });
+                delete dataSourceEndpoint.uri;
             }
 
             createViewModel.call(context, {
