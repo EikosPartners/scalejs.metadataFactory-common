@@ -31,6 +31,7 @@ exports.default = function (node) {
             dataSourceEndpoint = (0, _scalejs5.merge)(dataSourceEndpoint, {
                 target: dataSourceEndpoint
             });
+            delete dataSourceEndpoint.uri;
         }
 
         _scalejs4.createViewModel.call(context, {
