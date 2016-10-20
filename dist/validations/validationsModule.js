@@ -18,6 +18,8 @@ var _validations2 = _interopRequireDefault(_validations);
 
 require('./validations.scss');
 
+require('ko-bindings/fontIcon');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (0, _scalejs2.registerBindings)(_validationsBindings2.default);

@@ -20,6 +20,8 @@ require('./listAdvanced.scss');
 
 require('ko-bindings/clickoff');
 
+require('ko-bindings/fontIcon');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (0, _scalejs.registerBindings)(_listAdvancedBindings2.default);

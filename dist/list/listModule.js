@@ -16,6 +16,8 @@ var _list = require('./list.html');
 
 var _list2 = _interopRequireDefault(_list);
 
+require('ko-bindings/fontIcon');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (0, _scalejs.registerBindings)(_listBindings2.default);
