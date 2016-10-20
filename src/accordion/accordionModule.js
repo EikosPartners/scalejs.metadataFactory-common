@@ -5,6 +5,7 @@ import accordionViewModel from './accordionViewModel';
 import accordionBindings from './accordionBindings';
 import accordionTemplates from './accordion.html';
 
+import 'ko-bindings/fontIcon';
 
 
     registerBindings(accordionBindings);

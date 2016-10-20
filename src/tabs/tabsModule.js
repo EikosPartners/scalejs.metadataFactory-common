@@ -5,6 +5,7 @@ import tabsViewModel from './tabsViewModel';
 import tabsBindings from './tabsBindings';
 import tabsTemplates from './tabs.html';
 import './tabs.scss';
+import 'ko-bindings/fontIcon';
 
 registerBindings(tabsBindings);
 registerTemplates(tabsTemplates);

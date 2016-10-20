@@ -152,7 +152,7 @@ describe('accordionModule test', function () {
         it('collapse all test',function(done){
             let close;
             domStub = createMetadataDomStub(merge({}, node, {headerTemplate: "accordion_control_header_template"}));
-            close = document.querySelector('.fa.fa-compress.action');
+            close = document.querySelector('.fa.fa-collapse-all');
 
             expect(sectionOne()).to.equal('');
             expect(sectionTwo()).to.equal('');
@@ -173,7 +173,7 @@ describe('accordionModule test', function () {
         it('expand all test',function(done){
             let open;
             domStub = createMetadataDomStub(merge({}, node, {options: { openByDefault: false }, headerTemplate: "accordion_control_header_template"}));
-            open = document.querySelector('.fa.fa-expand.action');
+            open = document.querySelector('.fa.fa-expand-all');
 
 
             expect(sectionOne()).to.equal('none');
