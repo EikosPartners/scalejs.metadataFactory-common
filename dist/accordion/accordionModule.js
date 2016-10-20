@@ -16,6 +16,8 @@ var _accordion = require('./accordion.html');
 
 var _accordion2 = _interopRequireDefault(_accordion);
 
+require('ko-bindings/fontIcon');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (0, _scalejs.registerBindings)(_accordionBindings2.default);

@@ -18,6 +18,8 @@ var _tabs2 = _interopRequireDefault(_tabs);
 
 require('./tabs.scss');
 
+require('ko-bindings/fontIcon');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (0, _scalejs.registerBindings)(_tabsBindings2.default);
