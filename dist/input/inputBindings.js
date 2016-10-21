@@ -58,26 +58,35 @@ exports.default = {
         var tooltipShown = this.tooltipShown,
             shake = this.shake,
             value = this.inputValue,
-            timeFormat = this.timeFormat,
-            css = { 'animated shake': shake };
+            options = (0, _scalejs.merge)({ data: value }, this.options);
 
-        if (this.classes) {
-            css[this.classes] = true;
+        if (typeof this.pattern === 'string') {
+            pattern = {
+                mask: this.pattern
+            };
+        } else {
+            pattern = this.pattern;
         }
+        if (pattern) {
+            pattern.onKeyValidation = function (result) {
+                tooltipShown(!result);
+                shake(!result);
+            };
+            pattern.placeholder = ' ';
+        }
+
         return {
-            timepicker: {
-                data: value,
-                timeFormat: timeFormat
-            },
+            timepicker: options,
             validationElement: false,
             hasFocus: this.hasFocus,
             disable: this.readonly() || this.disabled(),
-            css: css,
+            css: { 'animated shake': shake },
             attr: {
                 readonly: this.readonly(),
                 'data-id': this.id,
                 title: value
-            }
+            },
+            inputmask: pattern
         };
     },
     'input-autocomplete': function inputAutocomplete(ctx) {
