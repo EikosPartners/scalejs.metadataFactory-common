@@ -44,7 +44,8 @@ export default {
       var tooltipShown = this.tooltipShown,
           shake = this.shake,
           value = this.inputValue,
-          options = merge({data: value}, this.options);
+          options = merge({data: value}, this.options),
+          pattern;
 
         if (typeof this.pattern === 'string') {
             pattern = {
