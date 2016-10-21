@@ -66,7 +66,7 @@ export default {
         validationElement: false,
         hasFocus: this.hasFocus,
         disable: this.readonly() || this.disabled(),
-        css = { 'animated shake': shake },
+        css: { 'animated shake': shake },
         attr: {
             readonly: this.readonly(),
             'data-id': this.id,
