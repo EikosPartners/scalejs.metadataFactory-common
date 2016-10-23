@@ -70,8 +70,7 @@ export default {
         css: { 'animated shake': shake },
         attr: {
             readonly: this.readonly(),
-            'data-id': this.id,
-            title: value
+            'data-id': this.id
         },
         inputmask: pattern
       }
