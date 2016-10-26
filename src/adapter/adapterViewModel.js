@@ -184,11 +184,12 @@ export default function adapterViewModel(node) {
                         });
                     }
 
-                    if (count === dataSourceEndpointArray.length) {
-                        if (!mappedChildNodes().length) {
-                            mappedChildNodes(createViewModels.call(context, node.children || []));
-                        }
+                    if (count === dataSourceEndpointArray.length) {                        
                         updateData(dataObject);
+                        if (!mappedChildNodes().length) {
+                            mappedChildNodes(createViewModels.call(context, node.children || []));                            
+                            updateData(dataObject);
+                        }
                     }
                 }
             });
