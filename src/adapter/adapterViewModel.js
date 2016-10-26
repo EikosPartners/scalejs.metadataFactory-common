@@ -185,7 +185,7 @@ export default function adapterViewModel(node) {
                     }
 
                     if (count === dataSourceEndpointArray.length) {                        
-                        updateData(dataObject);
+                        updateData(_.cloneDeep(dataObject));
                         if (!mappedChildNodes().length) {
                             mappedChildNodes(createViewModels.call(context, node.children || []));                            
                             updateData(_.cloneDeep(dataObject)); // TODO fix workaround for lazy
