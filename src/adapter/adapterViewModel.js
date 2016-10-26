@@ -188,7 +188,7 @@ export default function adapterViewModel(node) {
                         updateData(dataObject);
                         if (!mappedChildNodes().length) {
                             mappedChildNodes(createViewModels.call(context, node.children || []));                            
-                            updateData(dataObject);
+                            updateData(_.cloneDeep(dataObject)); // TODO fix workaround for lazy
                         }
                     }
                 }
