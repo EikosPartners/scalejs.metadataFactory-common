@@ -214,7 +214,7 @@ export default function adapterViewModel(node) {
     }
 
     if (node.keepContextData) {
-        data(unwrap(this.data));
+        data(unwrap(this.data) || {});
     }
 
     if (!node.lazy) {
