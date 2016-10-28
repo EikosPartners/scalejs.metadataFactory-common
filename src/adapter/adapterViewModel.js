@@ -1,7 +1,6 @@
 import { observable, observableArray, computed, unwrap } from 'knockout';
 import { createViewModel, createViewModels } from 'scalejs.metadataFactory';
-import { receive, notify } from 'scalejs.messagebus';
-import dataservice from 'dataservice';
+import { receive } from 'scalejs.messagebus';
 import { extend } from 'lodash';
 import { get, merge } from 'scalejs';
 import noticeboard from 'scalejs.noticeboard';
@@ -21,7 +20,8 @@ i.e. plugin to adapter context with other components
  * @param {string} node.id
  *  The id for the module
  * @param {boolean} [node.lazy=false]
- *  If the child nodes need to be lazily loaded (e.g. delay creation of children viewmodels until data returns)
+ *  If the child nodes need to be lazily loaded
+ * (e.g. delay creation of children viewmodels until data returns)
  * @param {boolean} [node.persist=false]
  *  If data object should be persisted from one fetch data call to the next (upon refresh)
  * @param {object|Object[]} [node.dataSourceEndpoint]
@@ -41,13 +41,16 @@ i.e. plugin to adapter context with other components
  * @param {object} [node.dataSourceEndpoint.options]
  *  Options for the ajax call
  * @param {array} node.children
- *  The json configuration for children nodes which will be mapped to view models and kept track of from the adapter
+ *  The json configuration for children nodes which will be mapped
+ * to view models and kept track of from the adapter
  * @param {array} [node.plugins]
- *  The json configuration for plugins which will be accessible from getValue function, based upon type
+ *  The json configuration for plugins which will be accessible
+ * from getValue function, based upon type
  *
  * @property {array} mappedChildNodes the mapped children nodes
  * @property {observable} data the data retrieved from dataSourceEndpoint and tracked from children
- * @property {object} contextPlugins an object that contains the plugins which have been added to the adapter context
+ * @property {object} contextPlugins an object that contains the plugins which have
+ * been added to the adapter context
  * @property {context} the context for the adapter (which can be utilized in a custom template)
  * @property {function} dispose the dispose function for all internal subs
  *
@@ -73,7 +76,7 @@ i.e. plugin to adapter context with other components
  * }
  */
 export default function adapterViewModel(node) {
-    let dictionary = observable({}), // dictionary of nodes with an id
+    const dictionary = observable({}), // dictionary of nodes with an id
         data = observable({}), // data of dictionary contents
         context = {
             metadata: node.children,
@@ -84,28 +87,29 @@ export default function adapterViewModel(node) {
             id: node.id
         },
         mappedChildNodes = observableArray(),
-        updated = false,
         subs = [],
-        dataSyncSubscription,
         plugins = node.plugins ? createViewModels.call(context, node.plugins) : [],
         contextPlugins = {};
 
-    plugins.forEach(plugin => {
+    let dataSyncSubscription,
+        updated = false;
+
+    plugins.forEach((plugin) => {
         contextPlugins[plugin.type] = plugin;
     });
 
     // recursive function which parses through nodes and adds nodes with an id to dictionary
     function createDictionary(nodes) {
-        let dict = dictionary.peek();
-        nodes.forEach(node => {
+        const dict = dictionary.peek();
+        nodes.forEach((n) => {
             // add node to dictionary if it isnt there yet
-            if (node.id && !dict[node.id]) {
-                dict[node.id] = node;
+            if (n.id && !dict[n.id]) {
+                dict[n.id] = n;
                 updated = true;
             }
             // add children to dictionary if getValue function is not exposed
-            if (!node.getValue) {
-                createDictionary(unwrap(node.mappedChildNodes) || []);
+            if (!n.getValue) {
+                createDictionary(unwrap(n.mappedChildNodes) || []);
             }
         });
     }
@@ -113,17 +117,17 @@ export default function adapterViewModel(node) {
     // keep the data current if the node value changed with dataSyncDescription
     function syncDataDictionary() {
         dataSyncSubscription = computed(() => {
-            let dict = dictionary();
-            Object.keys(dict).forEach(id => {
+            const dict = dictionary();
+            Object.keys(dict).forEach((id) => {
                 if (dict[id].rendered) {
                     if (dict[id].rendered() && dict[id].getValue) {
                         data()[id] = dict[id].getValue();
                     } else if (!dict[id].rendered()) {
-                        if(dict[id].trackIfHidden) {
+                        if (dict[id].trackIfHidden) {
                             data()[id] = dict[id].getValue();
                         } else {
-                           delete data()[id];
-                       } 
+                            delete data()[id];
+                        }
                     }
                 }
             });
@@ -139,12 +143,13 @@ export default function adapterViewModel(node) {
 
     // fetches the data from dataSourceEndpoint(s)
     function fetchData() {
-        let dataSourceEndpointArray = Array.isArray(node.dataSourceEndpoint)
+        const dataSourceEndpointArray = Array.isArray(node.dataSourceEndpoint)
             ? node.dataSourceEndpoint : [node.dataSourceEndpoint],
-            count = 0,
             dataObject = node.persist ? data() : {};
+        let count = 0;
 
-        dataSourceEndpointArray.forEach(function (endpoint) {
+        dataSourceEndpointArray.forEach((e) => {
+            let endpoint = e;
             if (endpoint.uri) {
                 console.warn('dataSourceEndpoint expects URI in "target". Please update your JSON to reflect the new syntax');
                 endpoint = merge(endpoint, {
@@ -154,23 +159,23 @@ export default function adapterViewModel(node) {
             }
 
             createViewModel.call(context, {
-                "type": "action",
-                "actionType": "ajax",
-                "options": endpoint
+                type: 'action',
+                actionType: 'ajax',
+                options: endpoint
             }).action({
                 callback: function (error, results) {
                     let resultsByKey,
                         keyMapArray = endpoint.keyMap || [{}],
                         newDataObject = {};
 
-                    count++;
-                    
+                    count += 1;
+
                     if (!Array.isArray(keyMapArray)) {
                         keyMapArray = [keyMapArray];
                     }
 
                     if (!error) {
-                        keyMapArray.forEach(keyMap => {
+                        keyMapArray.forEach((keyMap) => {
                             resultsByKey = keyMap.resultsKey ? get(results, keyMap.resultsKey) : results;
                             // optional: keyMap.dataKey path to extend dataObject on
                             if (keyMap.dataKey) {
@@ -184,25 +189,23 @@ export default function adapterViewModel(node) {
                         });
                     }
 
-                    if (count === dataSourceEndpointArray.length) {                        
-                        updateData(_.cloneDeep(dataObject));
+                    if (count === dataSourceEndpointArray.length) {
+                        updateData(dataObject);
                         if (!mappedChildNodes().length) {
-                            mappedChildNodes(createViewModels.call(context, node.children || []));                            
-                            updateData(_.cloneDeep(dataObject)); // TODO fix workaround for lazy
+                            mappedChildNodes(createViewModels.call(context, node.children || []));
                         }
                     }
                 }
             });
-
         });
     }
 
     function getValue(id) {
-        let node = dictionary()[id],
+        const dictNode = dictionary()[id],
             dataValue = (data() || {})[id];
 
         // the node has been defined so get the value from the node
-        if (node && node.getValue) { return node.getValue(); }
+        if (dictNode && dictNode.getValue) { return dictNode.getValue(); }
 
         // data has been defined for the node but the node doesnt exist yet
         if (dataValue) { return dataValue; }
@@ -220,11 +223,11 @@ export default function adapterViewModel(node) {
     if (!node.lazy) {
         mappedChildNodes(createViewModels.call(context, node.children || []));
     }
-    
+
     // update dictionary if mappedChildNodes of a node updates
     computed(() => {
         updated = false;
-        createDictionary(mappedChildNodes())
+        createDictionary(mappedChildNodes());
         if (updated) {
             dictionary.valueHasMutated();
         }
@@ -239,7 +242,7 @@ export default function adapterViewModel(node) {
     }
 
     // listen for 'refresh' event
-    subs.push(receive(node.id + '.refresh', function (options) {
+    subs.push(receive(`${node.id}.refresh`, (options) => {
         console.log('-->', node);
         if (node.dataSourceEndpoint) {
             fetchData(options);
@@ -256,9 +259,9 @@ export default function adapterViewModel(node) {
         contextPlugins: contextPlugins,
         context: context,
         dispose: function () {
-            subs.forEach(function (sub) {
+            subs.forEach((sub) => {
                 sub.dispose();
             });
         }
     });
-};
+}
