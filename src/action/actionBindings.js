@@ -1,17 +1,16 @@
-/*global define */
 export default {
     'action-button': function () {
-        var classes = this.buttonClasses || '';
+        let classes = this.buttonClasses || '';
 
         if (this.icon) {
-            classes += ' fa fa-' + this.icon;
+            classes += ` fa fa-${this.icon}`;
         }
 
         return {
-            click: function() {
+            click: () => {
                 this.action();
             },
             css: classes
-        }
+        };
     }
-}
+};

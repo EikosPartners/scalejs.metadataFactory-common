@@ -22,39 +22,43 @@ function renderParams(params, data) {
 
 
 function ajax(options, args) {
-    let context = this,
+    const context = this,
         data = context.data && ko.unwrap(context.data),
         target = _.cloneDeep(options.target), // to prevent mutations to underlying object
         optionData = options.data || {},
         // todo: is dictionary reliable?
-        renderDataObject =  merge(data, optionData, getCurrent().query, ko.toJS(noticeboard.dictionary())), 
-        uri = mustache.render(options.target.uri, renderDataObject), 
-        callback = args && args.callback,
-        nextAction;
+        renderDataObject = merge(data, optionData, getCurrent().query,
+            ko.toJS(noticeboard.dictionary())),
+        uri = mustache.render(options.target.uri, renderDataObject),
+        callback = args && args.callback;
+    let nextAction;
 
     if (target.data) {
-         //will skip rest of else if's if we have target.data
+        // will skip rest of else if's if we have target.data
         target.data = target.data;
     } else if (options.sendDataFromKey) {
         target.data = data[options.sendDataFromKey];
     } else if (Array.isArray(options.sendDataKeys)) {
-        target.data = options.sendDataKeys.reduce(function(o, k) {
-            let receiverKey = k, supplierKey = k, value;
-            if(is(k, 'object')) {
-                Object.keys(k).forEach(function (key) {
+        target.data = options.sendDataKeys.reduce((o, k) => {
+            let receiverKey = k,
+                supplierKey = k,
+                value;
+
+            if (is(k, 'object')) {
+                Object.keys(k).forEach((key) => {
                     receiverKey = key;
                     supplierKey = k[key];
                 });
             }
 
-            if(!has(data[supplierKey])) {
+            if (!has(data[supplierKey])) {
                 console.warn('Data key missing from data', supplierKey);
                 o[receiverKey] = null;
                 return o;
             }
 
             value = data[supplierKey];
-            if(typeof value === 'string') { value = value.trim(); }
+            if (typeof value === 'string') { value = value.trim(); }
             o[receiverKey] = value;
             return o;
         }, {});
@@ -69,7 +73,7 @@ function ajax(options, args) {
     } else {
         target.data = {};
     }
-    
+
     if (options.dataAndResults) {
         // grabbing results from a previous ajaxAction
         // combining with data from above
@@ -90,13 +94,13 @@ function ajax(options, args) {
         target.data = merge(mergeData, renderParams(options.params, renderDataObject));
     }
 
-    nextAction =  function (error, results) {
-        let opts = options ? _.cloneDeep(options) : {},
-            err = error ? error : null;
+    nextAction = function (error, results) {
+        const opts = options ? _.cloneDeep(options) : {},
+            err = error;
 
-        ((err ? opts.errorActions : opts.nextActions) || []).forEach(function (item) {
-            if (err && opts.errorActions){
-                opts.errorActions.forEach(function(errorAction){
+        ((err ? opts.errorActions : opts.nextActions) || []).forEach((item) => {
+            if (err && opts.errorActions) {
+                opts.errorActions.forEach((errorAction) => {
                     if (errorAction.options.message && error.message) {
                         errorAction.options.message = error.message;
                     }
@@ -104,7 +108,7 @@ function ajax(options, args) {
             }
 
             // get the results of the request and push
-            let response = {
+            const response = {
                 request: options.target,
                 error: error,
                 results: results
@@ -122,4 +126,4 @@ function ajax(options, args) {
     dataservice.ajax(merge(target, { uri: uri }), nextAction);
 }
 
-registerActions({ajax});
+registerActions({ ajax });

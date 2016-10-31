@@ -1,28 +1,26 @@
-import { createViewModel as createViewModelUnbound } from 'scalejs.metadataFactory';
-import { getRegisteredActions } from './actionModule';
-import { observable, unwrap } from 'knockout';
 import { notify } from 'scalejs.messagebus';
+import { observable } from 'knockout';
 import { merge, has } from 'scalejs';
 import { extend } from 'lodash';
 
+import { getRegisteredActions } from './actionModule';
+
 export default function actionViewModel(node) {
-    let registeredActions = getRegisteredActions(),
-        context = this || {},      
+    const registeredActions = getRegisteredActions(),
+        context = this || {},
         options = node.options || {},
-        text = node.text || options.text, // TODO: Options are meant for specific types. Why are we checking options?
-        createViewModel = createViewModelUnbound.bind(context),
+        text = node.text || options.text, // TODO: Why are we checking options?
         validate = node.validate,
         actionType = node.actionType,
         actions = {},
         mergedActions = extend(actions, registeredActions),
-        actionFunc = mergedActions[actionType] && mergedActions[actionType].bind(context) || null ,
+        actionFunc = (mergedActions[actionType] && mergedActions[actionType].bind(context)) || null,
         isShown = observable(true),
         disabled = observable(has(options.disabled) ? options.disabled : false);
 
 
     function action(args) {
-
-        if (!actionFunc){
+        if (!actionFunc) {
             console.error('actionType is not defined', node);
             return;
         }
@@ -52,5 +50,4 @@ export default function actionViewModel(node) {
         disabled: disabled,
         context: context
     });
-
-};
+}

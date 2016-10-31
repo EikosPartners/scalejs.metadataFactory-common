@@ -1,7 +1,6 @@
 import { registerTemplates, registerBindings, template } from 'scalejs.mvvm';
 import { createViewModel } from 'scalejs.metadataFactory';
 import { registerActions } from '../../actionModule';
-import { notify } from 'scalejs.messagebus';
 import { merge } from 'scalejs';
 import popup from 'scalejs.popup';
 import mustache from 'mustache';
@@ -10,16 +9,19 @@ import ko from 'knockout'
 import popupBindings from './popupBindings';
 import popupTemplates from './popup.html';
 
-let popupRoot = popup.popupRoot;
-let initialized = false
+const popupRoot = popup.popupRoot;
+let initialized = false;
 
 function popupAction(options) {
     if (!initialized) { init(); }
-    let context = this,
-        message = {},
-        onHidePopup, actions, data, modal, merged;
+    const context = this;
+    let onHidePopup,
+        actions,
+        data,
+        modal,
+        merged;
 
-    actions = (options.actions || []).map(function (action) {
+    actions = (options.actions || []).map((action) => {
         action.type = 'action';
         return createViewModel.call(context, action);
     });
@@ -82,9 +84,8 @@ function init() {
         popupDiv = document.createElement('div');
         popupDiv.setAttributeNode(att);
         document.body.insertBefore(popupDiv, document.body.lastChild.nextSibling);
-        ko.applyBindings({popupRoot}, popupDiv);
+        ko.applyBindings({ popupRoot }, popupDiv);
     }
-    
 }
 
 registerBindings(popupBindings);
