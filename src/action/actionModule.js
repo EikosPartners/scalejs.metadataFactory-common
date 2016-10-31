@@ -6,8 +6,7 @@ import actionViewModel from './actionViewModel';
 import actionBindings from './actionBindings';
 import actionTemplates from './action.html';
 
-
-let registeredActions = {};
+const registeredActions = {};
 
 function registerActions(actions) {
     extend(registeredActions, actions);
@@ -19,6 +18,6 @@ function getRegisteredActions() {
 
 registerBindings(actionBindings);
 registerTemplates(actionTemplates);
-registerViewModels({action: actionViewModel});
+registerViewModels({ action: actionViewModel });
 
 export { registerActions, getRegisteredActions };
