@@ -1,20 +1,19 @@
-import { merge, has, get} from 'scalejs';
-import * as format from 'js-format';
+import { merge, has, get } from 'scalejs';
 import 'knockout-jqautocomplete/build/knockout-jqAutocomplete';
 import 'ko-bindings/showAllAuto';
 import 'ko-bindings/timepicker';
 
 export default {
     'input-input': function () {
-        var pattern,
-            tooltipShown = this.tooltipShown,
+        const tooltipShown = this.tooltipShown,
             shake = this.shake,
             value = this.inputValue;
+        let pattern;
 
         if (typeof this.pattern === 'string') {
             pattern = {
                 mask: this.pattern
-            }
+            };
         } else {
             pattern = this.pattern;
         }
@@ -22,12 +21,12 @@ export default {
             pattern.onKeyValidation = function (result) {
                 tooltipShown(!result);
                 shake(!result);
-            }
+            };
             pattern.placeholder = ' ';
         }
 
         return {
-            value: value,
+            value,
             validationElement: false,
             hasFocus: this.hasFocus,
             disable: this.readonly() || this.disabled(),
@@ -40,17 +39,17 @@ export default {
             inputmask: pattern
         };
     },
-    'input-time': function (ctx) {
-      var tooltipShown = this.tooltipShown,
-          shake = this.shake,
-          value = this.inputValue,
-          options = merge({data: value}, this.options),
-          pattern;
+    'input-time': function () {
+        const tooltipShown = this.tooltipShown,
+            shake = this.shake,
+            value = this.inputValue,
+            options = merge({ data: value }, this.options);
+        let pattern;
 
         if (typeof this.pattern === 'string') {
             pattern = {
                 mask: this.pattern
-            }
+            };
         } else {
             pattern = this.pattern;
         }
@@ -58,58 +57,57 @@ export default {
             pattern.onKeyValidation = function (result) {
                 tooltipShown(!result);
                 shake(!result);
-            }
+            };
             pattern.placeholder = ' ';
         }
 
-      return {
-        timepicker: options,
-        validationElement: false,
-        hasFocus: this.hasFocus,
-        disable: this.readonly() || this.disabled(),
-        css: { 'animated shake': shake },
-        attr: {
-            readonly: this.readonly(),
-            'data-id': this.id
-        },
-        inputmask: pattern
-      }
+        return {
+            timepicker: options,
+            validationElement: false,
+            hasFocus: this.hasFocus,
+            disable: this.readonly() || this.disabled(),
+            css: { 'animated shake': shake },
+            attr: {
+                readonly: this.readonly(),
+                'data-id': this.id
+            },
+            inputmask: pattern
+        };
     },
     'input-autocomplete': function (ctx) {
-        var pattern,
-            tooltipShown = this.tooltipShown,
+        const tooltipShown = this.tooltipShown,
             value = this.inputValue,
-            disabled = this.readonly() ? true : false;
-        var disableHasFocus = ctx.$parents.filter(function (parent) {
-            return parent.disableHasFocus;
-        })[0];
+            disabled = !!this.readonly(),
+            disableHasFocus = ctx.$parents.filter(p => p.disableHasFocus)[0];
+        let pattern;
+
         if (typeof this.pattern === 'string') {
             pattern = {
                 mask: this.pattern
-            }
+            };
         } else {
             pattern = this.pattern;
         }
         if (pattern) {
             pattern.onKeyValidation = function (result) {
                 tooltipShown(!result);
-            }
+            };
         }
 
         return {
             jqAuto: {
-                value: value,
+                value,
                 source: this.autocompleteSource,
                 valueProp: 'value',
                 labelProp: 'label',
                 inputProp: this.inputProp || 'label'
-                    //disabled: disabled
-                    //Note: pasing disabled to the jquery autocomplete control might have unexpected behaviour
-                    //the options get passed straight thru to the jquery autocomplete
-                    //if disabled changes, will the binding be re-initialized? Not sure
-                    //this is why i created this issue to ask the creator of bindings
-                    //https://github.com/rniemeyer/knockout-classBindingProvider/issues/23
-
+                    // disabled: disabled
+                    // Note: pasing disabled to the jquery autocomplete control
+                    // might have unexpected behaviour
+                    // the options get passed straight thru to the jquery autocomplete
+                    // if disabled changes, will the binding be re-initialized? Not sure
+                    // this is why i created this issue to ask the creator of bindings
+                    // https://github.com/rniemeyer/knockout-classBindingProvider/issues/23
             },
             attr: {
                 readonly: this.readonly(),
@@ -118,42 +116,31 @@ export default {
             hasFocus: !disableHasFocus && this.hasFocus,
             validationElement: false,
             showAllAuto: has(this.options.showAllSearch) ? this.options.showAllSearch : '',
-            disable: disabled // use knockout disable binding - its sufficient. See "showAllAuto" binding for more details
-        }
+            // use knockout disable binding - its sufficient.
+            // See "showAllAuto" binding for more details
+            disable: disabled
+        };
     },
     'input-multiselect': function () {
         return {
             tokeninputValue: this.inputValue,
-            tokeninputSource: this.values().map(function (x) {
-                return {
+            tokeninputSource: this.values().map(x => (
+                {
                     id: x.value || x,
                     name: x.text || x
-                };
-            }),
+                }
+            )),
             tokeninputDisable: this.readonly
         };
     },
-    'input-datepicker': function (ctx) {
-        var options = this.options,
-            hover = this.hover,
-            pattern;
-
-        //when will datepicker be anything but a date? do we need the pattern?
-        // if (typeof this.pattern === 'string') {
-        //     pattern = {
-        //         mask: this.pattern
-        //     };
-        // } else if (this.pattern) {
-        //     pattern = this.pattern;
-        // } else {
+    'input-datepicker': function () {
+        const options = this.options,
             pattern = {
-                alias: 'date'
+                alias: 'date',
+                autoUnmask: false
             };
-        // }
-        pattern.autoUnmask = false; // do we still need?
-        // pattern.insertMode = true;
 
-        var obj = {
+        return {
             hover: this.hover,
             datepicker: {
                 data: this.inputValue,
@@ -178,29 +165,26 @@ export default {
             },
             inputmask: pattern
         };
-        return obj;
     },
-    'input-validation-checker': function (ctx) {
-        var value = this.inputValue,
+    'input-validation-checker': function () {
+        const value = this.inputValue,
             shake = this.shake,
             tooltipShown = this.tooltipShown,
-            customError = this.customError;
-
-
-        var resetShake = function () {
-            if (customError.peek()) {
-                return true; // dont shake if there is still a server error
-            }
-            if (value.isValid && value.isValid() && value.isModified()) {
-                shake(false);
-                tooltipShown(false);
-            }
-            if (value.isValid && !value.isValid() && value.isModified()) {
-                shake(true);
-                tooltipShown(true);
-            }
-            return true;
-        }
+            customError = this.customError,
+            resetShake = function () {
+                if (customError.peek()) {
+                    return true; // dont shake if there is still a server error
+                }
+                if (value.isValid && value.isValid() && value.isModified()) {
+                    shake(false);
+                    tooltipShown(false);
+                }
+                if (value.isValid && !value.isValid() && value.isModified()) {
+                    shake(true);
+                    tooltipShown(true);
+                }
+                return true;
+            };
 
         return {
             event: {
@@ -209,15 +193,15 @@ export default {
             },
             css: {
                 'animated shake': this.shake,
-                'error': value.isModified() && !value.isValid() && value.severity() === 1,
-                'warning': value.isModified() && !value.isValid() && value.severity() === 2,
-                'validated': value.isModified() && !value.isValid() && value.severity() === 3
+                error: value.isModified() && !value.isValid() && value.severity() === 1,
+                warning: value.isModified() && !value.isValid() && value.severity() === 2,
+                validated: value.isModified() && !value.isValid() && value.severity() === 3
             }
         };
     },
     'input-select': function (ctx) {
         // if values contains a string, throw an error
-        (this.values() || []).forEach(function (val) {
+        (this.values() || []).forEach((val) => {
             if (typeof val === 'string') {
                 console.error('Values must not contain strings!!', ctx);
             }
@@ -246,7 +230,7 @@ export default {
 
         };
     },
-    'input-checkbox-button': function (ctx) {
+    'input-checkbox-button': function () {
         return {
             checked: this.inputValue,
             attr: {
@@ -257,11 +241,11 @@ export default {
     },
     'input-checkbox-button-group': function (ctx) {
         return {
-            value: this['value'],
+            value: this.value,
             attr: {
-                disabled: ctx.$parent.readonly(),
+                disabled: ctx.$parent.readonly()
             },
-            checked: ctx.$parent.inputValue,
+            checked: ctx.$parent.inputValue
         };
     },
     'input-radio': function () {
@@ -272,15 +256,15 @@ export default {
             ]);
         }
 
-        var values = this.values().map(function (val) {
+        const values = this.values().map((val) => {
             if (typeof val === 'string') {
                 return {
                     text: val,
                     value: val
-                }
+                };
             }
             return val;
-        })
+        });
 
         return {
             foreach: values,
@@ -290,11 +274,11 @@ export default {
         };
     },
     'input-radio-button': function (ctx) {
-        let value = this.value,
+        const value = this.value,
             inputValue = ctx.$parent.inputValue;
         return {
-            value: value,
-            click: function() {
+            value,
+            click: function () {
                 if (inputValue() === value) {
                     inputValue('');
                 } else {
@@ -318,10 +302,10 @@ export default {
                     }
                 }
             }
-        }
+        };
     },
-    'input-validation': function (ctx) {
-        var inputValue = this.inputValue,
+    'input-validation': function () {
+        const inputValue = this.inputValue,
             visible = !this.tooltip ?
                 inputValue.isModified() && !inputValue.isValid() :
                 inputValue.isModified() && !inputValue.isValid() && !this.hasFocus();
@@ -331,34 +315,34 @@ export default {
         }
 
         return {
-            visible: visible,
+            visible,
             text: inputValue.error,
             css: {
                 'validation-message': true,
-                'error': inputValue.severity() === 1,
-                'warning': inputValue.severity() === 2,
-                'validated': inputValue.severity() === 3
+                error: inputValue.severity() === 1,
+                warning: inputValue.severity() === 2,
+                validated: inputValue.severity() === 3
             }
         };
     },
     'input-tooltip': function () {
-        var value = this.inputValue;
+        const value = this.inputValue;
 
         return {
             visible: this.tooltipShown() && this.hasFocus() && this.tooltip,
             text: this.tooltip,
             css: {
                 'validation-message': true,
-                'tooltip': true,
-                'error': value.isModified() && !value.isValid()
+                tooltip: true,
+                error: value.isModified() && !value.isValid()
                 && value.severity() === 1,
-                'warning': value.isModified() && !value.isValid()
+                warning: value.isModified() && !value.isValid()
                 && value.severity() !== 1
             }
         };
     },
     'input-color-text': function () {
-        var value = this.inputValue;
+        const value = this.inputValue;
 
         return {
             css: {
@@ -372,10 +356,10 @@ export default {
         };
     },
     'input-labels': function () {
-        var label = this.label,
+        const label = this.label,
             required = this.required ? '<span class="input-required-label">*</span> ' : '';
 
-        var showLabel = true;
+        let showLabel = true;
         if (this.options) {
             showLabel = this.options.showLabel === false ? false : showLabel;
         }
@@ -388,7 +372,7 @@ export default {
     'input-labels-only': function () {
         return {
             text: this.getValue()
-        }
+        };
     },
     'input-autosize': function () {
         return {
@@ -396,6 +380,6 @@ export default {
             attr: {
                 disabled: this.readonly()
             }
-        }
+        };
     }
-}
+};

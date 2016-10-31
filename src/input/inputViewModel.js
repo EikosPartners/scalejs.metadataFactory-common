@@ -3,7 +3,6 @@ import { createViewModel, globalMetadata } from 'scalejs.metadataFactory';
 import { evaluate } from 'scalejs.expression-jsep';
 import { receive } from 'scalejs.messagebus';
 import { has, get, is, merge } from 'scalejs';
-import dataservice from 'dataservice';
 import { extend } from 'lodash';
 import moment from 'moment';
 import ko from 'knockout';
@@ -13,7 +12,7 @@ import noticeboard from 'scalejs.noticeboard';
 import autocompleteViewModel from './autocomplete/autocompleteViewModel';
 import selectViewModel from './select/selectViewModel';
 
-let inputTypes = {
+const inputTypes = {
     autocomplete: autocompleteViewModel,
     select: selectViewModel,
     multiselect: function (node, inputVM) {
@@ -23,17 +22,13 @@ let inputTypes = {
 
         return selectViewModel.call(this, node, inputVM);
     }
-}
+};
 
 export default function inputViewModel(n) {
-    var // metadata node + context
+    const // metadata node + context
         node = _.merge({}, globalMetadata().input_defaults || {}, n),
         options = node.options || {},
-        keyMap = node.keyMap || {},
         context = this || {},
-
-        // inputValue: accepts user input via KO Binding
-        inputValue = createInputValue(),
 
         // values which can be chosen from
         values = observableArray(Array.isArray(options.values) ? options.values : []),
@@ -48,23 +43,22 @@ export default function inputViewModel(n) {
         hover = observable(),
 
         // validations
-        validations = options.validations || null,
-        required = validations ? validations.required : false,
+        required = options.validations ? options.validations.required : false,
         customError = observable(),
 
         // attributes
         disabled = observable(!!options.disabled),
         readonly = deriveReadonly(options.readonly),
-        maxlength = validations && validations.maxLength,
+        maxlength = options.validations && options.validations.maxLength,
 
         // patterns
         pattern = options.pattern === true ? getPattern() : options.pattern,
-        tooltipShown = observable(false), //for patterns
+        tooltipShown = observable(false), // for patterns
         shake = observable(false),
 
-        //specific datepicker
-        datePlaceholder = node.inputType === 'datepicker' && ko.pureComputed(function () {
-            var placeholder = !hover() || hasFocus() ? '' : 'mm/dd/yyyy';
+        // specific datepicker
+        datePlaceholder = node.inputType === 'datepicker' && ko.pureComputed(() => {
+            const placeholder = !hover() || hasFocus() ? '' : 'mm/dd/yyyy';
             return placeholder;
         }),
 
@@ -78,29 +72,33 @@ export default function inputViewModel(n) {
         // subs disposable array
         subs = [],
 
-        computedValueExpression,
+        // move out to utility?
+        formatters = {
+            dateFormatter
+        },
+        format = options.values && options.values.textFormatter ?
+            formatters[options.values.textFormatter] :
+            _.identity;
 
+    let viewmodel = { },
+        validations = options.validations || null,
+        computedValueExpression,
         // registered action vars
         registeredAction,
         initialRegisteredAction,
-        initial,
+        // inputValue: accepts user input via KO Binding
+        inputValue = createInputValue(),
+        initial;
 
-        // move out to utility?
-        formatters = {
-            dateFormatter: dateFormatter
-        },
-        format = options.values && options.values.textFormatter ? formatters[options.values.textFormatter] : _.identity,
-
-        // BaseViewModel to be passed to Mixins
-        viewmodel = {
-            mapItem: mapItem,
-            inputValue: inputValue,
-            hasFocus: hasFocus,
-            format: format,
-            subs: subs,
-            readonly: readonly,
-            values: values
-        };
+    viewmodel = {
+        mapItem,
+        inputValue,
+        hasFocus,
+        format,
+        subs,
+        readonly,
+        values
+    };
 
     /*
      * PJSON API (refine)
@@ -111,12 +109,17 @@ export default function inputViewModel(n) {
                 get(options, 'checkedValue', true) :
                 get(options, 'uncheckedValue', false);
         }
-        return inputValue() !== '' ? inputValue() :
-            options.hasOwnProperty('emptyValue') ? options.emptyValue :  '';
+        if (inputValue() === '') {
+            return {}.hasOwnProperty.call(options, 'emptyValue') ? options.emptyValue : '';
+        }
+        if (options.number) {
+            return Number(inputValue());
+        }
+        return inputValue();
     }
 
     function setValue(data, opts = {}) {
-        let value = is(data, 'object') ? data.value : data,  // TODO: Refactor - should only accept "value", not "data".
+        const value = is(data, 'object') ? data.value : data,  // TODO: Refactor - should only accept "value", not "data".
             wasModified = inputValue.isModified();
 
         initial = opts.initial;
@@ -140,19 +143,20 @@ export default function inputViewModel(n) {
     }
 
     function update(data) {
-        if (data.hasOwnProperty('value')) {
+        if ({}.hasOwnProperty.call(data, 'value')) {
             setValue(data.value);
         }
-        if (data.hasOwnProperty('error')) {
+        if ({}.hasOwnProperty.call(data, 'error')) {
             customError(data.error);
         }
-        if (data.hasOwnProperty('values')) {
+        if ({}.hasOwnProperty.call(data, 'values')) {
             values(data.values);
         }
     }
 
     function validate() {
-        // can rely on "this" when properties are garuenteed from MD factory and used with compliance
+        // can rely on "this" when properties are garuenteed
+        // from MD factory and used with compliance
         inputValue.isModified(true);
         return !inputValue.isValid() && isShown() && this.rendered() && inputValue.severity() === 1;
     }
@@ -160,8 +164,9 @@ export default function inputViewModel(n) {
     // TODO: How to allow for custom visible message specific to project?
     function visibleMessage() {
         // returns the message to be displayed (based on validations)
-        var inputMessage, message,
-            severity = inputValue.severity();
+        const severity = inputValue.severity();
+        let inputMessage,
+            message;
 
         if (!inputValue.isModified() || inputValue.isValid() || !this.rendered() || !isShown()) {
             // the user has yet to modify the input
@@ -170,12 +175,12 @@ export default function inputViewModel(n) {
         }
 
         inputMessage = inputValue.error();
-        inputMessage = inputMessage[inputMessage.length - 1] === '.' ? inputMessage : inputMessage + '.';
+        inputMessage = inputMessage[inputMessage.length - 1] === '.' ? inputMessage : `${inputMessage}.`;
 
         if (inputMessage === 'Required.') {
-            message = (node.errorLabel || node.label) + ' is required.';
+            message = `${node.errorLabel || node.label} is required.`;
         } else {
-            message = (node.errorLabel || node.label) + ' is invalid. ' + inputMessage;
+            message = `${node.errorLabel || node.label} is invalid. ${inputMessage}`;
         }
 
         return {
@@ -196,12 +201,12 @@ export default function inputViewModel(n) {
             console.error('Assign date only supports object params', params);
             return;
         }
-        var newDate = moment(value).add(params).format(options.rawFormat || 'YYYY-MM-DD');
+        const newDate = moment(value).add(params).format(options.rawFormat || 'YYYY-MM-DD');
         setValue(newDate);
     }
 
     function setReadonly(bool) {
-        readonly(bool)
+        readonly(bool);
     }
 
     function setCheckboxListValue(data) {
@@ -219,7 +224,7 @@ export default function inputViewModel(n) {
     }
 
     function setCheckboxValue(data) {
-        inputValue(data === get(options, 'checkedValue', true) ? true : false);
+        inputValue(data === get(options, 'checkedValue', true));
     }
 
     /*
@@ -229,37 +234,35 @@ export default function inputViewModel(n) {
         // checkboxList can have multiple answers so make it an array
         if (['checkboxList', 'multiselect'].includes(node.inputType)) {
             return observableArray(options.value || []);
-        } else {
-            // if there is no initial value, set it to empty string,
-            // so that isModified does not get triggered for empty dropdowns
-            let value = options.value;
-            if (node.inputType === 'checkbox') {
-                value = (options.value === get(options, 'checkedValue', true) ? true : false);
-            }
-            return observable(has(options.value) ? value : '');
         }
+        // if there is no initial value, set it to empty string,
+        // so that isModified does not get triggered for empty dropdowns
+        let value = options.value;
+        if (node.inputType === 'checkbox') {
+            value = (options.value === get(options, 'checkedValue', true));
+        }
+        return observable(has(options.value) ? value : '');
     }
 
 
     function getPattern() {
         // implicitly determine pattern (inputmask) if there is a Regex validation
-        if (validations && validations.pattern) {
-
-            if(!validations.pattern.params) {
+        if (options.validations && options.validations.pattern) {
+            if (!options.validations.pattern.params) {
                 console.error('Pattern validation must have params and message', node);
                 return;
             }
 
             return {
                 alias: 'Regex',
-                regex: validations.pattern.params
+                regex: options.validations.pattern.params
             };
         }
     }
 
     function deriveReadonly(readonlyParam) {
         if (is(readonlyParam, 'string')) {
-            let override = observable();
+            const override = observable();
             return computed({
                 read: function () {
                     return has(override()) ?
@@ -282,27 +285,60 @@ export default function inputViewModel(n) {
     }
 
     function mapItem(mapper) {
-        var textFormatter = formatters[mapper.textFormatter] || _.identity,
+        const textFormatter = formatters[mapper.textFormatter] || _.identity,
             delimiter = mapper.delimeter || ' / ';
 
-        function format(val, key) {
-           if(Array.isArray(key)) {
-               return key.map((k) => { return val[k]; }).join(delimiter)
-           } else {
-               return val[key]
-           }
+        function formatText(val, key) {
+            if (Array.isArray(key)) {
+                return key.map(k => val[k]).join(delimiter);
+            }
+            return val[key];
         }
 
         return function (val) {
             return {
-                text: textFormatter(format(val, mapper.textKey)),
-                value: format(val, mapper.valueKey),
+                text: textFormatter(formatText(val, mapper.textKey)),
+                value: formatText(val, mapper.valueKey),
                 original: val
-            }
-        }
+            };
+        };
     }
 
 
+    function fetchData() {
+        const newValue = inputValue(),
+            action = initial ? initialRegisteredAction : registeredAction;
+        // our own sub gets called before context is updated
+        action.options.data[node.id] = newValue;
+
+        if (newValue !== '') {
+            action.action({
+                callback: (error, data) => {
+                    if (error) {
+                        return;
+                    }
+                    Object.keys(data).forEach((key) => {
+                        if (key === 'store') {
+                            Object.keys(data[key]).forEach((storeKey) => {
+                                const valueToStore = data[key][storeKey];
+                                noticeboard.setValue(storeKey, valueToStore);
+                            });
+                            return;
+                        }
+
+                        if (!context.dictionary && !context.data) {
+                            console.warn('Using a registered input when no data/dictionary available in context', node);
+                            return;
+                        }
+                        const updateNode = context.dictionary && context.dictionary()[key];
+                        if (updateNode && updateNode.update) {
+                            updateNode.update(data[key]);
+                        }
+                    });
+                }
+            });
+        }
+    }
     /*
      * Init
      */
@@ -334,95 +370,60 @@ export default function inputViewModel(n) {
             options: merge(options.registered.initial || options.registered, { data: {} })
         });
 
-        function fetchData() {
-            let newValue = inputValue(),
-                action = initial ? initialRegisteredAction : registeredAction;
-
-            action.options.data[node.id] = newValue; //our own sub gets called before context is updated
-
-            if (newValue !== '') {
-                action.action({
-                    callback: (error, data) => {
-                        if (error) {
-                            return;
-                        }
-                        Object.keys(data).forEach((key) => {
-                            if (key === 'store') {
-                                Object.keys(data[key]).forEach(function (storeKey) {
-                                    let valueToStore = data[key][storeKey];
-                                    noticeboard.setValue(storeKey, valueToStore);
-                                });
-                                return;
-                            }
-
-                            if (!context.dictionary && !context.data) {
-                                console.warn('Using a registered input when no data/dictionary available in context', node);
-                                return;
-                            }
-                            var node = context.dictionary && context.dictionary()[key];
-                            if (node && node.update) {
-                                node.update(data[key]);
-                            }
-                        });
-                    }
-                });
-            }
-        }
-
-        inputValue.subscribe(function (newValue) {
-            fetchData()
+        inputValue.subscribe(() => {
+            fetchData();
         });
 
         // listen for 'refresh' event
-        subs.push(receive(node.id + '.refreshRegistered', function(options) {
-            //console.log('--> refreshing registered', node);
-            fetchData(options);
+        subs.push(receive(`${node.id}.refreshRegistered`, (eventOptions) => {
+            // console.log('--> refreshing registered', node);
+            fetchData(eventOptions);
         }));
-
-        fetchData();    //make initial call if default value is set--fetchData checks if inputValue() is ''
+        // make initial call if default value is set--fetchData checks if inputValue() is ''
+        fetchData();
     }
 
     // TODO: Clean up validation Code
     // add validations to the inputvalue
-    validations = merge(_.cloneDeep(options.validations), { customError: customError });
+    validations = merge(_.cloneDeep(options.validations), { customError });
     if (validations.expression) {
-        if(options.validations.expression.message && !options.validations.expression.term) {
-            console.error("[input] if providing a message for expression validation, must also provide term");
-            options.validations.expression.term = "true"; // don't cause exceptions.
+        if (options.validations.expression.message && !options.validations.expression.term) {
+            console.error('[input] if providing a message for expression validation, must also provide term');
+            options.validations.expression.term = 'true'; // don't cause exceptions.
         }
         validations.expression.params = [
             options.validations.expression.message ?
                 options.validations.expression.term
                 : options.validations.expression,
             context.getValue
-        ]
+        ];
     }
 
     if (options.unique && node.inputType !== 'autocomplete') {
-        inputValue.subscribe(function (oldValue) {
+        inputValue.subscribe((oldValue) => {
             context.unique[node.id].remove(oldValue);
         }, null, 'beforeChange');
 
-        inputValue.subscribe(function (newValue) {
-            if(context.deleteFlag && context.deleteFlag()) { return; }
+        inputValue.subscribe((newValue) => {
+            if (context.deleteFlag && context.deleteFlag()) { return; }
             context.unique[node.id].push(newValue);
         });
 
-        if(context.deleteFlag) {
-            context.deleteFlag.subscribe(function(deleted) {
+        if (context.deleteFlag) {
+            context.deleteFlag.subscribe((deleted) => {
                 if (deleted) {
                     context.unique[node.id].remove(inputValue());
                 }
             });
         }
 
-        context.unique[node.id].subscribe(function (values) {
-            var occurances = values.filter(function (value) {
-                return value === inputValue();
-            }).length;
+        context.unique[node.id].subscribe((newValues) => {
+            const occurances = newValues.filter(value =>
+                 value === inputValue()
+            ).length;
 
             customError(occurances > 1 ? 'Identifier must be unique' : undefined);
-        })
+        });
     }
 
     if (viewmodel.validations) {
@@ -439,11 +440,11 @@ export default function inputViewModel(n) {
             return evaluate(options.valueExpression, context.getValue);
         });
         setValue(computedValueExpression());
-        computedValueExpression.subscribe(function(value){
-            setValue(value)
+        computedValueExpression.subscribe((value) => {
+            setValue(value);
         });
 
-        subs.push(computedValueExpression)
+        subs.push(computedValueExpression);
     }
 
     // TODO: make into insert zeros option?
@@ -489,11 +490,11 @@ export default function inputViewModel(n) {
         setReadonly: viewmodel.setReadonly || setReadonly,
         validate: viewmodel.validate || validate,
 
-        dispose: function () {
+        dispose() {
             if (viewmodel.dispose) {
                 viewmodel.dispose();
             }
-            (subs || []).forEach(function (sub) {
+            (subs || []).forEach((sub) => {
                 sub.dispose && sub.dispose();
             });
 
@@ -502,18 +503,18 @@ export default function inputViewModel(n) {
             }
         }
     });
-};
-
+}
 
 
     // implements an input of type
     // text, select, date, radio, checkbox, checkboxList
 
-    //TODO: Refactor Session
-    //- createJSDocs
-    //- revisit and de-tangle bindings
-    //- refactor validations so that the tooltip works without inputText wrapper in the inputType template
-    //- move tooltip/helpText in options
+    // TODO: Refactor Session
+    // - createJSDocs
+    // - revisit and de-tangle bindings
+    // - refactor validations so that the tooltip works without
+    // inputText wrapper in the inputType template
+    // - move tooltip/helpText in options
 
     /**
      *  input is the component to use when accepting user-input.
@@ -525,13 +526,15 @@ export default function inputViewModel(n) {
      * @param {object} node
      *  The configuration specs for the component.
      * @param {string} [node.id]
-     *  By specifying an "id" on your input, you are automatically adding your input's data to the data context model.
+     *  By specifying an "id" on your input, you are automatically
+     * adding your input's data to the data context model.
      * @param {object} node.options
      *  The options pertaining to your specific inputType
      * @param {boolean|string} [node.rendered=true]
      *  Boolean or expression to render the input (or not)
      * @param {array} [node.options.values]
-     *  The values that can be chosen from for inputTypes that have selections (e.g. radio, checkboxList)
+     *  The values that can be chosen from for inputTypes that have selections
+     * (e.g. radio, checkboxList)
      * @param {object} [node.options.validations]
      *  KO validations object to validate the inputValue
      * @param {boolean} [node.options.validations.required]
@@ -541,8 +544,10 @@ export default function inputViewModel(n) {
      * @param {boolean} [node.options.disabled]np
      *  Disables the input (different from readonly)
      * @param {object|string|boolean} [node.options.pattern]
-     *  Sets an inputmask for the input. If a string, this is the mask. If an object, gets passed as is.
+     *  Sets an inputmask for the input. If a string, this is the mask.
+     * If an object, gets passed as is.
      *  If boolean = true, uses pattern validation.
      * @param {boolean} [node.options.vertical=false]
-     *  For multi-option types (e.g. checkboxList, radio), sets the display to block if true for the options
+     *  For multi-option types (e.g. checkboxList, radio),
+     * sets the display to block if true for the options
      */

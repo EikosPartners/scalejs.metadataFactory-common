@@ -12,9 +12,10 @@ module.exports = {
         "one-var": ["error", "always"],
         "eol-last": ["error", "never"],
         "func-names": ["error", "never"],
-        "object-shorthand": [2, "consistent"],
+        "object-shorthand": [2, "properties"],
         "import/no-extraneous-dependencies": "off", // revisit 
         "import/no-duplicates": "off",
+        "no-duplicate-imports": "off",
         "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
         "no-console": "off",
         "no-use-before-define": ["error", "nofunc"],
