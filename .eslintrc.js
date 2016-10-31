@@ -14,6 +14,7 @@ module.exports = {
         "func-names": ["error", "never"],
         "object-shorthand": [2, "consistent"],
         "import/no-extraneous-dependencies": "off", // revisit 
+        "import/no-duplicates": "off",
         "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
         "no-console": "off",
         "no-use-before-define": ["error", "nofunc"],
