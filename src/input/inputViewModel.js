@@ -380,8 +380,8 @@ export default function inputViewModel(n) {
             fetchData(eventOptions);
         }));
 
-        // Updates input component 
-        subs.push(receive(`{node.id}.update`, update));
+        // Updates input component
+        subs.push(receive(`${node.id}.update`, update));
 
         // make initial call if default value is set--fetchData checks if inputValue() is ''
         fetchData();
