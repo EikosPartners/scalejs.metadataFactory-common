@@ -379,6 +379,10 @@ export default function inputViewModel(n) {
             // console.log('--> refreshing registered', node);
             fetchData(eventOptions);
         }));
+
+        // Updates input component (Sets comment text area to an empty string in GMEP Blog)
+        subs.push(receive(`{node.id}.update`, (data) => update(data)));
+
         // make initial call if default value is set--fetchData checks if inputValue() is ''
         fetchData();
     }
