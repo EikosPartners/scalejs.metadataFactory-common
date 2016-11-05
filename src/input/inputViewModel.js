@@ -380,9 +380,6 @@ export default function inputViewModel(n) {
             fetchData(eventOptions);
         }));
 
-        // Updates input component
-        subs.push(receive(`${node.id}.update`, update));
-
         // make initial call if default value is set--fetchData checks if inputValue() is ''
         fetchData();
     }
@@ -402,6 +399,9 @@ export default function inputViewModel(n) {
             context.getValue
         ];
     }
+
+    // Updates input component
+    subs.push(receive(`${node.id}.update`, update));
 
     if (options.unique && node.inputType !== 'autocomplete') {
         inputValue.subscribe((oldValue) => {
