@@ -4,8 +4,6 @@ var _scalejs = require('scalejs.navigation');
 
 var _knockout = require('knockout');
 
-var _knockout2 = _interopRequireDefault(_knockout);
-
 var _scalejs2 = require('scalejs');
 
 var _mustache = require('mustache');
@@ -29,9 +27,11 @@ function renderParams(params, data) {
 function route(options) {
     var data = (0, _knockout.unwrap)(options.data || this && this.data),
         params = void 0;
+
     if (options.params && options.paramsKey) {
         data = (0, _scalejs2.merge)(data, options[options.paramsKey]);
     }
+
     params = options.params ? renderParams(options.params, data) : undefined;
 
     (0, _scalejs.setRoute)((0, _knockout.unwrap)(options.target), params);

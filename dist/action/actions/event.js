@@ -4,8 +4,6 @@ var _scalejs = require('scalejs.messagebus');
 
 var _knockout = require('knockout');
 
-var _knockout2 = _interopRequireDefault(_knockout);
-
 var _scalejs2 = require('scalejs');
 
 var _mustache = require('mustache');
@@ -23,12 +21,13 @@ function renderParams(params, data) {
     } catch (ex) {
         console.error('Unable to JSON parse/stringify params', ex);
     }
+
     return ret;
 }
 
 function event(options) {
-    var data = (0, _knockout.unwrap)(this && this.data),
-        params = options.params;
+    var data = (0, _knockout.unwrap)(this && this.data);
+    var params = options.params;
 
     if (options.paramsKey) {
         params = (0, _scalejs2.merge)(params || {}, options[options.paramsKey]);

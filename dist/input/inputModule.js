@@ -4,17 +4,19 @@ var _scalejs = require('scalejs.mvvm');
 
 var _scalejs2 = require('scalejs.metadataFactory');
 
-require('./validation/validationEngine');
-
 require('scalejs.inputmask');
 
-var _autocompleteViewModel = require('./autocomplete/autocompleteViewModel');
+require('ko-bindings/datepicker');
 
-var _autocompleteViewModel2 = _interopRequireDefault(_autocompleteViewModel);
+require('ko-bindings/autosize');
 
-var _selectViewModel = require('./select/selectViewModel');
+require('ko-bindings/tokeninput');
 
-var _selectViewModel2 = _interopRequireDefault(_selectViewModel);
+require('ko-bindings/fontIcon');
+
+require('pikaday/scss/pikaday.scss');
+
+require('./validation/validationEngine');
 
 var _inputViewModel = require('./inputViewModel');
 
@@ -27,16 +29,6 @@ var _inputBindings2 = _interopRequireDefault(_inputBindings);
 var _input = require('./input.html');
 
 var _input2 = _interopRequireDefault(_input);
-
-require('ko-bindings/datepicker');
-
-require('ko-bindings/autosize');
-
-require('ko-bindings/tokeninput');
-
-require('ko-bindings/fontIcon');
-
-require('pikaday/scss/pikaday.scss');
 
 require('./autocomplete/autocomplete.scss');
 

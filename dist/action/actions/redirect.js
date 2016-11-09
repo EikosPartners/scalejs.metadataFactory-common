@@ -4,8 +4,6 @@ var _actionModule = require('scalejs.metadatafactory-common/dist/action/actionMo
 
 var _knockout = require('knockout');
 
-var _knockout2 = _interopRequireDefault(_knockout);
-
 var _scalejs = require('scalejs');
 
 var _mustache = require('mustache');
@@ -16,18 +14,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function redirect(options) {
     if (!options.target) {
-        console.error("Must provide target!");
+        console.error('Must provide target!');
         return;
     }
 
     var data = (0, _knockout.unwrap)(options.data || this && this.data),
-        params = void 0;
+        url = void 0;
 
     if (options.params && options.paramsKey) {
         data = (0, _scalejs.merge)(data, options[options.paramsKey]);
     }
 
-    var url = _mustache2.default.render(options.target, data);
+    url = _mustache2.default.render(options.target, data);
 
     window.location.replace(url);
 }

@@ -50,11 +50,11 @@ function ajax(options, args) {
     // todo: is dictionary reliable?
     renderDataObject = (0, _scalejs3.merge)(data, optionData, (0, _scalejs2.getCurrent)().query, _knockout2.default.toJS(_scalejs5.default.dictionary())),
         uri = _mustache2.default.render(options.target.uri, renderDataObject),
-        callback = args && args.callback,
-        nextAction = void 0;
+        callback = args && args.callback;
+    var nextAction = void 0;
 
     if (target.data) {
-        //will skip rest of else if's if we have target.data
+        // will skip rest of else if's if we have target.data
         target.data = target.data;
     } else if (options.sendDataFromKey) {
         target.data = data[options.sendDataFromKey];
@@ -63,6 +63,7 @@ function ajax(options, args) {
             var receiverKey = k,
                 supplierKey = k,
                 value = void 0;
+
             if ((0, _scalejs3.is)(k, 'object')) {
                 Object.keys(k).forEach(function (key) {
                     receiverKey = key;
@@ -117,7 +118,7 @@ function ajax(options, args) {
 
     nextAction = function nextAction(error, results) {
         var opts = options ? _lodash2.default.cloneDeep(options) : {},
-            err = error ? error : null;
+            err = error;
 
         ((err ? opts.errorActions : opts.nextActions) || []).forEach(function (item) {
             if (err && opts.errorActions) {

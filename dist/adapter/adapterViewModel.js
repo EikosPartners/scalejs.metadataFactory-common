@@ -11,10 +11,6 @@ var _scalejs = require('scalejs.metadataFactory');
 
 var _scalejs2 = require('scalejs.messagebus');
 
-var _dataservice = require('dataservice');
-
-var _dataservice2 = _interopRequireDefault(_dataservice);
-
 var _lodash = require('lodash');
 
 var _scalejs3 = require('scalejs');
@@ -40,7 +36,8 @@ i.e. plugin to adapter context with other components
  * @param {string} node.id
  *  The id for the module
  * @param {boolean} [node.lazy=false]
- *  If the child nodes need to be lazily loaded (e.g. delay creation of children viewmodels until data returns)
+ *  If the child nodes need to be lazily loaded
+ * (e.g. delay creation of children viewmodels until data returns)
  * @param {boolean} [node.persist=false]
  *  If data object should be persisted from one fetch data call to the next (upon refresh)
  * @param {object|Object[]} [node.dataSourceEndpoint]
@@ -60,13 +57,16 @@ i.e. plugin to adapter context with other components
  * @param {object} [node.dataSourceEndpoint.options]
  *  Options for the ajax call
  * @param {array} node.children
- *  The json configuration for children nodes which will be mapped to view models and kept track of from the adapter
+ *  The json configuration for children nodes which will be mapped
+ * to view models and kept track of from the adapter
  * @param {array} [node.plugins]
- *  The json configuration for plugins which will be accessible from getValue function, based upon type
+ *  The json configuration for plugins which will be accessible
+ * from getValue function, based upon type
  *
  * @property {array} mappedChildNodes the mapped children nodes
  * @property {observable} data the data retrieved from dataSourceEndpoint and tracked from children
- * @property {object} contextPlugins an object that contains the plugins which have been added to the adapter context
+ * @property {object} contextPlugins an object that contains the plugins which have
+ * been added to the adapter context
  * @property {context} the context for the adapter (which can be utilized in a custom template)
  * @property {function} dispose the dispose function for all internal subs
  *
@@ -105,11 +105,12 @@ function adapterViewModel(node) {
         id: node.id
     },
         mappedChildNodes = (0, _knockout.observableArray)(),
-        updated = false,
         subs = [],
-        dataSyncSubscription = void 0,
         plugins = node.plugins ? _scalejs.createViewModels.call(context, node.plugins) : [],
         contextPlugins = {};
+
+    var dataSyncSubscription = void 0,
+        updated = false;
 
     plugins.forEach(function (plugin) {
         contextPlugins[plugin.type] = plugin;
@@ -118,15 +119,15 @@ function adapterViewModel(node) {
     // recursive function which parses through nodes and adds nodes with an id to dictionary
     function createDictionary(nodes) {
         var dict = dictionary.peek();
-        nodes.forEach(function (node) {
+        nodes.forEach(function (n) {
             // add node to dictionary if it isnt there yet
-            if (node.id && !dict[node.id]) {
-                dict[node.id] = node;
+            if (n.id && !dict[n.id]) {
+                dict[n.id] = n;
                 updated = true;
             }
             // add children to dictionary if getValue function is not exposed
-            if (!node.getValue) {
-                createDictionary((0, _knockout.unwrap)(node.mappedChildNodes) || []);
+            if (!n.getValue) {
+                createDictionary((0, _knockout.unwrap)(n.mappedChildNodes) || []);
             }
         });
     }
@@ -161,10 +162,11 @@ function adapterViewModel(node) {
     // fetches the data from dataSourceEndpoint(s)
     function fetchData() {
         var dataSourceEndpointArray = Array.isArray(node.dataSourceEndpoint) ? node.dataSourceEndpoint : [node.dataSourceEndpoint],
-            count = 0,
             dataObject = node.persist ? data() : {};
+        var count = 0;
 
-        dataSourceEndpointArray.forEach(function (endpoint) {
+        dataSourceEndpointArray.forEach(function (e) {
+            var endpoint = e;
             if (endpoint.uri) {
                 console.warn('dataSourceEndpoint expects URI in "target". Please update your JSON to reflect the new syntax');
                 endpoint = (0, _scalejs3.merge)(endpoint, {
@@ -174,16 +176,16 @@ function adapterViewModel(node) {
             }
 
             _scalejs.createViewModel.call(context, {
-                "type": "action",
-                "actionType": "ajax",
-                "options": endpoint
+                type: 'action',
+                actionType: 'ajax',
+                options: endpoint
             }).action({
                 callback: function callback(error, results) {
                     var resultsByKey = void 0,
                         keyMapArray = endpoint.keyMap || [{}],
                         newDataObject = {};
 
-                    count++;
+                    count += 1;
 
                     if (!Array.isArray(keyMapArray)) {
                         keyMapArray = [keyMapArray];
@@ -216,12 +218,12 @@ function adapterViewModel(node) {
     }
 
     function getValue(id) {
-        var node = dictionary()[id],
+        var dictNode = dictionary()[id],
             dataValue = (data() || {})[id];
 
         // the node has been defined so get the value from the node
-        if (node && node.getValue) {
-            return node.getValue();
+        if (dictNode && dictNode.getValue) {
+            return dictNode.getValue();
         }
 
         // data has been defined for the node but the node doesnt exist yet
@@ -236,7 +238,7 @@ function adapterViewModel(node) {
     }
 
     if (node.keepContextData) {
-        data((0, _knockout.unwrap)(this.data));
+        data((0, _knockout.unwrap)(this.data) || {});
     }
 
     if (!node.lazy) {
@@ -283,5 +285,5 @@ function adapterViewModel(node) {
             });
         }
     });
-};
+}
 //# sourceMappingURL=adapterViewModel.js.map
