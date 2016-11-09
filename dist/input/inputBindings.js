@@ -6,24 +6,18 @@ Object.defineProperty(exports, "__esModule", {
 
 var _scalejs = require('scalejs');
 
-var _jsFormat = require('js-format');
-
-var format = _interopRequireWildcard(_jsFormat);
-
 require('knockout-jqautocomplete/build/knockout-jqAutocomplete');
 
 require('ko-bindings/showAllAuto');
 
 require('ko-bindings/timepicker');
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 exports.default = {
     'input-input': function inputInput() {
-        var pattern,
-            tooltipShown = this.tooltipShown,
+        var tooltipShown = this.tooltipShown,
             shake = this.shake,
             value = this.inputValue;
+        var pattern = void 0;
 
         if (typeof this.pattern === 'string') {
             pattern = {
@@ -54,12 +48,12 @@ exports.default = {
             inputmask: pattern
         };
     },
-    'input-time': function inputTime(ctx) {
+    'input-time': function inputTime() {
         var tooltipShown = this.tooltipShown,
             shake = this.shake,
             value = this.inputValue,
-            options = (0, _scalejs.merge)({ data: value }, this.options),
-            pattern;
+            options = (0, _scalejs.merge)({ data: value }, this.options);
+        var pattern = void 0;
 
         if (typeof this.pattern === 'string') {
             pattern = {
@@ -90,13 +84,14 @@ exports.default = {
         };
     },
     'input-autocomplete': function inputAutocomplete(ctx) {
-        var pattern,
-            tooltipShown = this.tooltipShown,
+        var tooltipShown = this.tooltipShown,
             value = this.inputValue,
-            disabled = this.readonly() ? true : false;
-        var disableHasFocus = ctx.$parents.filter(function (parent) {
-            return parent.disableHasFocus;
+            disabled = !!this.readonly(),
+            disableHasFocus = ctx.$parents.filter(function (p) {
+            return p.disableHasFocus;
         })[0];
+        var pattern = void 0;
+
         if (typeof this.pattern === 'string') {
             pattern = {
                 mask: this.pattern
@@ -117,13 +112,13 @@ exports.default = {
                 valueProp: 'value',
                 labelProp: 'label',
                 inputProp: this.inputProp || 'label'
-                //disabled: disabled
-                //Note: pasing disabled to the jquery autocomplete control might have unexpected behaviour
-                //the options get passed straight thru to the jquery autocomplete
-                //if disabled changes, will the binding be re-initialized? Not sure
-                //this is why i created this issue to ask the creator of bindings
-                //https://github.com/rniemeyer/knockout-classBindingProvider/issues/23
-
+                // disabled: disabled
+                // Note: pasing disabled to the jquery autocomplete control
+                // might have unexpected behaviour
+                // the options get passed straight thru to the jquery autocomplete
+                // if disabled changes, will the binding be re-initialized? Not sure
+                // this is why i created this issue to ask the creator of bindings
+                // https://github.com/rniemeyer/knockout-classBindingProvider/issues/23
             },
             attr: {
                 readonly: this.readonly(),
@@ -132,7 +127,9 @@ exports.default = {
             hasFocus: !disableHasFocus && this.hasFocus,
             validationElement: false,
             showAllAuto: (0, _scalejs.has)(this.options.showAllSearch) ? this.options.showAllSearch : '',
-            disable: disabled // use knockout disable binding - its sufficient. See "showAllAuto" binding for more details
+            // use knockout disable binding - its sufficient.
+            // See "showAllAuto" binding for more details
+            disable: disabled
         };
     },
     'input-multiselect': function inputMultiselect() {
@@ -147,27 +144,14 @@ exports.default = {
             tokeninputDisable: this.readonly
         };
     },
-    'input-datepicker': function inputDatepicker(ctx) {
+    'input-datepicker': function inputDatepicker() {
         var options = this.options,
-            hover = this.hover,
-            pattern;
-
-        //when will datepicker be anything but a date? do we need the pattern?
-        // if (typeof this.pattern === 'string') {
-        //     pattern = {
-        //         mask: this.pattern
-        //     };
-        // } else if (this.pattern) {
-        //     pattern = this.pattern;
-        // } else {
-        pattern = {
-            alias: 'date'
+            pattern = {
+            alias: 'date',
+            autoUnmask: false
         };
-        // }
-        pattern.autoUnmask = false; // do we still need?
-        // pattern.insertMode = true;
 
-        var obj = {
+        return {
             hover: this.hover,
             datepicker: {
                 data: this.inputValue,
@@ -192,15 +176,13 @@ exports.default = {
             },
             inputmask: pattern
         };
-        return obj;
     },
-    'input-validation-checker': function inputValidationChecker(ctx) {
+    'input-validation-checker': function inputValidationChecker() {
         var value = this.inputValue,
             shake = this.shake,
             tooltipShown = this.tooltipShown,
-            customError = this.customError;
-
-        var resetShake = function resetShake() {
+            customError = this.customError,
+            resetShake = function resetShake() {
             if (customError.peek()) {
                 return true; // dont shake if there is still a server error
             }
@@ -222,9 +204,9 @@ exports.default = {
             },
             css: {
                 'animated shake': this.shake,
-                'error': value.isModified() && !value.isValid() && value.severity() === 1,
-                'warning': value.isModified() && !value.isValid() && value.severity() === 2,
-                'validated': value.isModified() && !value.isValid() && value.severity() === 3
+                error: value.isModified() && !value.isValid() && value.severity() === 1,
+                warning: value.isModified() && !value.isValid() && value.severity() === 2,
+                validated: value.isModified() && !value.isValid() && value.severity() === 3
             }
         };
     },
@@ -259,7 +241,7 @@ exports.default = {
 
         };
     },
-    'input-checkbox-button': function inputCheckboxButton(ctx) {
+    'input-checkbox-button': function inputCheckboxButton() {
         return {
             checked: this.inputValue,
             attr: {
@@ -270,7 +252,7 @@ exports.default = {
     },
     'input-checkbox-button-group': function inputCheckboxButtonGroup(ctx) {
         return {
-            value: this['value'],
+            value: this.value,
             attr: {
                 disabled: ctx.$parent.readonly()
             },
@@ -330,7 +312,7 @@ exports.default = {
             }
         };
     },
-    'input-validation': function inputValidation(ctx) {
+    'input-validation': function inputValidation() {
         var inputValue = this.inputValue,
             visible = !this.tooltip ? inputValue.isModified() && !inputValue.isValid() : inputValue.isModified() && !inputValue.isValid() && !this.hasFocus();
 
@@ -343,9 +325,9 @@ exports.default = {
             text: inputValue.error,
             css: {
                 'validation-message': true,
-                'error': inputValue.severity() === 1,
-                'warning': inputValue.severity() === 2,
-                'validated': inputValue.severity() === 3
+                error: inputValue.severity() === 1,
+                warning: inputValue.severity() === 2,
+                validated: inputValue.severity() === 3
             }
         };
     },
@@ -357,9 +339,9 @@ exports.default = {
             text: this.tooltip,
             css: {
                 'validation-message': true,
-                'tooltip': true,
-                'error': value.isModified() && !value.isValid() && value.severity() === 1,
-                'warning': value.isModified() && !value.isValid() && value.severity() !== 1
+                tooltip: true,
+                error: value.isModified() && !value.isValid() && value.severity() === 1,
+                warning: value.isModified() && !value.isValid() && value.severity() !== 1
             }
         };
     },

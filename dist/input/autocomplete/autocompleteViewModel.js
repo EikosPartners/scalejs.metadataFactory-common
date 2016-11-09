@@ -7,11 +7,9 @@ exports.default = autocompleteViewModel;
 
 var _knockout = require('knockout');
 
-var _scalejs = require('scalejs.metadataFactory');
+var _scalejs = require('scalejs.expression-jsep');
 
-var _scalejs2 = require('scalejs.expression-jsep');
-
-var _scalejs3 = require('scalejs');
+var _scalejs2 = require('scalejs');
 
 var _dataservice = require('dataservice');
 
@@ -23,32 +21,28 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//TODO: Refactor multi-input functionality out or to its own viewmodel
+// TODO: Refactor multi-input functionality out or to its own viewmodel
 
 function autocompleteViewModel(node, inputViewModel) {
     var context = this,
         dataSourceEndpoint = node.dataSourceEndpoint,
         keyMap = node.keyMap || {},
-        createViewModels = _scalejs.createViewModels.bind(this),
+        options = node.options || {},
+        unique = options.unique,
 
     // inputViewModel
     inputValue = inputViewModel.inputValue,
         subs = inputViewModel.subs,
         mapItem = inputViewModel.mapItem,
-        hasFocus = inputViewModel.hasFocus,
-        readonly = inputViewModel.readonly,
-        isShown = inputViewModel.isShown,
-        autocompleteSource = inputViewModel.values,
-        //todo: just use values
-    // props
-    sourceArray,
-        validations,
-        options = node.options || {},
-        unique = options.unique,
-        computedSource,
         itemMapper = mapItem(keyMap),
-        objectValue,
-        autocompleteSourceDef;
+
+    // todo: just use values
+    autocompleteSource = inputViewModel.values;
+    // props
+    var sourceArray = void 0,
+        validations = void 0,
+        computedSource = void 0,
+        autocompleteSourceDef = void 0;
 
     if (node.autocompleteSource) {
         console.warn('[autocomplete] please move the autocompleteSource into options');
@@ -64,9 +58,8 @@ function autocompleteViewModel(node, inputViewModel) {
                     value: src,
                     label: src
                 };
-            } else {
-                return src;
             }
+            return src;
         });
     }
 
@@ -80,15 +73,20 @@ function autocompleteViewModel(node, inputViewModel) {
                 sourceArray = data[keyMap.dataKey];
                 // todo: update to use mapItem
                 var mappedData = data[keyMap.dataKey].map(function (d) {
-                    return keyMap.textKey && keyMap.valueKey ? {
+                    var retVal = keyMap.textKey && keyMap.valueKey ? {
                         label: (Array.isArray(keyMap.textKey) ? keyMap.textKey : [keyMap.textKey]).map(function (k) {
                             return d[k];
                         }).join(keyMap.delimiter || ' / '),
                         value: d[keyMap.valueKey]
-                    } : d[node.id]; //todo: remove this and add mapping!
+                    } : d[node.id]; // todo: remove this and add mapping!
+                    return retVal;
                 });
                 autocompleteSource(mapAutocompleteSource(_lodash2.default.uniqBy(mappedData, function (item) {
-                    return item ? (0, _scalejs3.has)(item, 'value') ? item.value : item : '';
+                    var retVal = '';
+                    if (item && (0, _scalejs2.has)(item, 'value')) {
+                        retVal = item.value;
+                    }
+                    return retVal;
                 }).filter(Boolean))); // remove empty values
             } else {
                 sourceArray = data.SearchResults;
@@ -98,13 +96,13 @@ function autocompleteViewModel(node, inputViewModel) {
     }
 
     function getAutocompleteSourceFromContext() {
-        var source = _lodash2.default.toArray((0, _scalejs2.evaluate)(autocompleteSourceDef.fromArray || [], context.getValue));
+        var source = _lodash2.default.toArray((0, _scalejs.evaluate)(autocompleteSourceDef.fromArray || [], context.getValue));
 
         // storing source array before any mapping
         sourceArray = source;
         if (Array.isArray(source)) {
             autocompleteSource(_lodash2.default.uniqBy(source.map(itemMapper)
-            //todo: remove additional mapping - using binding options
+            // todo: remove additional mapping - using binding options
             .map(function (item) {
                 return {
                     label: item.text,
@@ -150,7 +148,6 @@ function autocompleteViewModel(node, inputViewModel) {
     }
 
     if (unique) {
-
         inputValue.subscribe(function (oldValue) {
             context.unique[node.id].remove(oldValue);
         }, null, 'beforeChange');
@@ -185,6 +182,8 @@ function autocompleteViewModel(node, inputViewModel) {
         }).extend({ deferred: true });
     }
 
+    console.log('Autocomplete source array:', sourceArray);
+
     return {
         autocompleteSource: unique ? computedSource : autocompleteSource,
         validations: validations,
@@ -196,5 +195,5 @@ function autocompleteViewModel(node, inputViewModel) {
             }
         }
     };
-};
+}
 //# sourceMappingURL=autocompleteViewModel.js.map

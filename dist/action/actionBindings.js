@@ -3,9 +3,10 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-/*global define */
 exports.default = {
     'action-button': function actionButton() {
+        var _this = this;
+
         var classes = this.buttonClasses || '';
 
         if (this.icon) {
@@ -14,7 +15,7 @@ exports.default = {
 
         return {
             click: function click() {
-                this.action();
+                _this.action();
             },
             css: classes
         };

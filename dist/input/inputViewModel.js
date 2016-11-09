@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 exports.default = inputViewModel;
 
@@ -19,10 +19,6 @@ var _scalejs2 = require('scalejs.expression-jsep');
 var _scalejs3 = require('scalejs.messagebus');
 
 var _scalejs4 = require('scalejs');
-
-var _dataservice = require('dataservice');
-
-var _dataservice2 = _interopRequireDefault(_dataservice);
 
 var _lodash = require('lodash');
 
@@ -59,17 +55,10 @@ var inputTypes = {
 };
 
 function inputViewModel(n) {
-    var _this = this;
-
     var // metadata node + context
     node = _lodash2.default.merge({}, (0, _scalejs.globalMetadata)().input_defaults || {}, n),
         options = node.options || {},
-        keyMap = node.keyMap || {},
         context = this || {},
-
-
-    // inputValue: accepts user input via KO Binding
-    inputValue = createInputValue(),
 
 
     // values which can be chosen from
@@ -89,25 +78,24 @@ function inputViewModel(n) {
 
 
     // validations
-    validations = options.validations || null,
-        required = validations ? validations.required : false,
+    required = options.validations ? options.validations.required : false,
         customError = (0, _knockout.observable)(),
 
 
     // attributes
     disabled = (0, _knockout.observable)(!!options.disabled),
         readonly = deriveReadonly(options.readonly),
-        maxlength = validations && validations.maxLength,
+        maxlength = options.validations && options.validations.maxLength,
 
 
     // patterns
     pattern = options.pattern === true ? getPattern() : options.pattern,
         tooltipShown = (0, _knockout.observable)(false),
-        //for patterns
+        // for patterns
     shake = (0, _knockout.observable)(false),
 
 
-    //specific datepicker
+    // specific datepicker
     datePlaceholder = node.inputType === 'datepicker' && _knockout2.default.pureComputed(function () {
         var placeholder = !hover() || hasFocus() ? '' : 'mm/dd/yyyy';
         return placeholder;
@@ -124,23 +112,26 @@ function inputViewModel(n) {
 
     // subs disposable array
     subs = [],
-        computedValueExpression,
-
-
-    // registered action vars
-    registeredAction,
-        initialRegisteredAction,
-        initial,
 
 
     // move out to utility?
     formatters = {
         dateFormatter: dateFormatter
     },
-        format = options.values && options.values.textFormatter ? formatters[options.values.textFormatter] : _lodash2.default.identity,
+        format = options.values && options.values.textFormatter ? formatters[options.values.textFormatter] : _lodash2.default.identity;
 
+    var viewmodel = {},
+        validations = options.validations || null,
+        computedValueExpression = void 0,
 
-    // BaseViewModel to be passed to Mixins
+    // registered action vars
+    registeredAction = void 0,
+        initialRegisteredAction = void 0,
+
+    // inputValue: accepts user input via KO Binding
+    inputValue = createInputValue(),
+        initial = void 0;
+
     viewmodel = {
         mapItem: mapItem,
         inputValue: inputValue,
@@ -158,11 +149,17 @@ function inputViewModel(n) {
         if (node.inputType === 'checkbox') {
             return inputValue() ? (0, _scalejs4.get)(options, 'checkedValue', true) : (0, _scalejs4.get)(options, 'uncheckedValue', false);
         }
-        return inputValue() !== '' ? inputValue() : options.hasOwnProperty('emptyValue') ? options.emptyValue : '';
+        if (inputValue() === '') {
+            return {}.hasOwnProperty.call(options, 'emptyValue') ? options.emptyValue : '';
+        }
+        if (options.number) {
+            return Number(inputValue());
+        }
+        return inputValue();
     }
 
     function setValue(data) {
-        var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+        var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
         var value = (0, _scalejs4.is)(data, 'object') ? data.value : data,
             // TODO: Refactor - should only accept "value", not "data".
@@ -191,19 +188,20 @@ function inputViewModel(n) {
     }
 
     function update(data) {
-        if (data.hasOwnProperty('value')) {
+        if ({}.hasOwnProperty.call(data, 'value')) {
             setValue(data.value);
         }
-        if (data.hasOwnProperty('error')) {
+        if ({}.hasOwnProperty.call(data, 'error')) {
             customError(data.error);
         }
-        if (data.hasOwnProperty('values')) {
+        if ({}.hasOwnProperty.call(data, 'values')) {
             values(data.values);
         }
     }
 
     function validate() {
-        // can rely on "this" when properties are garuenteed from MD factory and used with compliance
+        // can rely on "this" when properties are garuenteed
+        // from MD factory and used with compliance
         inputValue.isModified(true);
         return !inputValue.isValid() && isShown() && this.rendered() && inputValue.severity() === 1;
     }
@@ -211,9 +209,9 @@ function inputViewModel(n) {
     // TODO: How to allow for custom visible message specific to project?
     function visibleMessage() {
         // returns the message to be displayed (based on validations)
-        var inputMessage,
-            message,
-            severity = inputValue.severity();
+        var severity = inputValue.severity();
+        var inputMessage = void 0,
+            message = void 0;
 
         if (!inputValue.isModified() || inputValue.isValid() || !this.rendered() || !isShown()) {
             // the user has yet to modify the input
@@ -271,7 +269,7 @@ function inputViewModel(n) {
     }
 
     function setCheckboxValue(data) {
-        inputValue(data === (0, _scalejs4.get)(options, 'checkedValue', true) ? true : false);
+        inputValue(data === (0, _scalejs4.get)(options, 'checkedValue', true));
     }
 
     /*
@@ -279,31 +277,29 @@ function inputViewModel(n) {
      */
     function createInputValue() {
         // checkboxList can have multiple answers so make it an array
-        if (['checkboxList', 'multiselect'].includes(node.inputType)) {
+        if (['checkboxList', 'multiselect'].indexOf(node.inputType) !== -1) {
             return (0, _knockout.observableArray)(options.value || []);
-        } else {
-            // if there is no initial value, set it to empty string,
-            // so that isModified does not get triggered for empty dropdowns
-            var value = options.value;
-            if (node.inputType === 'checkbox') {
-                value = options.value === (0, _scalejs4.get)(options, 'checkedValue', true) ? true : false;
-            }
-            return (0, _knockout.observable)((0, _scalejs4.has)(options.value) ? value : '');
         }
+        // if there is no initial value, set it to empty string,
+        // so that isModified does not get triggered for empty dropdowns
+        var value = options.value;
+        if (node.inputType === 'checkbox') {
+            value = options.value === (0, _scalejs4.get)(options, 'checkedValue', true);
+        }
+        return (0, _knockout.observable)((0, _scalejs4.has)(options.value) ? value : '');
     }
 
     function getPattern() {
         // implicitly determine pattern (inputmask) if there is a Regex validation
-        if (validations && validations.pattern) {
-
-            if (!validations.pattern.params) {
+        if (options.validations && options.validations.pattern) {
+            if (!options.validations.pattern.params) {
                 console.error('Pattern validation must have params and message', node);
                 return;
             }
 
             return {
                 alias: 'Regex',
-                regex: validations.pattern.params
+                regex: options.validations.pattern.params
             };
         }
     }
@@ -340,25 +336,58 @@ function inputViewModel(n) {
         var textFormatter = formatters[mapper.textFormatter] || _lodash2.default.identity,
             delimiter = mapper.delimeter || ' / ';
 
-        function format(val, key) {
+        function formatText(val, key) {
             if (Array.isArray(key)) {
                 return key.map(function (k) {
                     return val[k];
                 }).join(delimiter);
-            } else {
-                return val[key];
             }
+            return val[key];
         }
 
         return function (val) {
             return {
-                text: textFormatter(format(val, mapper.textKey)),
-                value: format(val, mapper.valueKey),
+                text: textFormatter(formatText(val, mapper.textKey)),
+                value: formatText(val, mapper.valueKey),
                 original: val
             };
         };
     }
 
+    function fetchData() {
+        var newValue = inputValue(),
+            action = initial ? initialRegisteredAction : registeredAction;
+        // our own sub gets called before context is updated
+        action.options.data[node.id] = newValue;
+
+        if (newValue !== '') {
+            action.action({
+                callback: function callback(error, data) {
+                    if (error) {
+                        return;
+                    }
+                    Object.keys(data).forEach(function (key) {
+                        if (key === 'store') {
+                            Object.keys(data[key]).forEach(function (storeKey) {
+                                var valueToStore = data[key][storeKey];
+                                _scalejs6.default.setValue(storeKey, valueToStore);
+                            });
+                            return;
+                        }
+
+                        if (!context.dictionary && !context.data) {
+                            console.warn('Using a registered input when no data/dictionary available in context', node);
+                            return;
+                        }
+                        var updateNode = context.dictionary && context.dictionary()[key];
+                        if (updateNode && updateNode.update) {
+                            updateNode.update(data[key]);
+                        }
+                    });
+                }
+            });
+        }
+    }
     /*
      * Init
      */
@@ -378,66 +407,30 @@ function inputViewModel(n) {
     }
 
     if (options.registered) {
-        (function () {
-            var fetchData = function fetchData() {
-                var newValue = inputValue(),
-                    action = initial ? initialRegisteredAction : registeredAction;
+        registeredAction = _scalejs.createViewModel.call(this, {
+            type: 'action',
+            actionType: 'ajax',
+            options: (0, _scalejs4.merge)(options.registered.update || options.registered, { data: {} })
+        });
 
-                action.options.data[node.id] = newValue; //our own sub gets called before context is updated
+        initialRegisteredAction = _scalejs.createViewModel.call(this, {
+            type: 'action',
+            actionType: 'ajax',
+            options: (0, _scalejs4.merge)(options.registered.initial || options.registered, { data: {} })
+        });
 
-                if (newValue !== '') {
-                    action.action({
-                        callback: function callback(error, data) {
-                            if (error) {
-                                return;
-                            }
-                            Object.keys(data).forEach(function (key) {
-                                if (key === 'store') {
-                                    Object.keys(data[key]).forEach(function (storeKey) {
-                                        var valueToStore = data[key][storeKey];
-                                        _scalejs6.default.setValue(storeKey, valueToStore);
-                                    });
-                                    return;
-                                }
+        inputValue.subscribe(function () {
+            fetchData();
+        });
 
-                                if (!context.dictionary && !context.data) {
-                                    console.warn('Using a registered input when no data/dictionary available in context', node);
-                                    return;
-                                }
-                                var node = context.dictionary && context.dictionary()[key];
-                                if (node && node.update) {
-                                    node.update(data[key]);
-                                }
-                            });
-                        }
-                    });
-                }
-            };
+        // listen for 'refresh' event
+        subs.push((0, _scalejs3.receive)(node.id + '.refreshRegistered', function (eventOptions) {
+            // console.log('--> refreshing registered', node);
+            fetchData(eventOptions);
+        }));
 
-            registeredAction = _scalejs.createViewModel.call(_this, {
-                type: 'action',
-                actionType: 'ajax',
-                options: (0, _scalejs4.merge)(options.registered.update || options.registered, { data: {} })
-            });
-
-            initialRegisteredAction = _scalejs.createViewModel.call(_this, {
-                type: 'action',
-                actionType: 'ajax',
-                options: (0, _scalejs4.merge)(options.registered.initial || options.registered, { data: {} })
-            });
-
-            inputValue.subscribe(function (newValue) {
-                fetchData();
-            });
-
-            // listen for 'refresh' event
-            subs.push((0, _scalejs3.receive)(node.id + '.refreshRegistered', function (options) {
-                //console.log('--> refreshing registered', node);
-                fetchData(options);
-            }));
-
-            fetchData(); //make initial call if default value is set--fetchData checks if inputValue() is ''
-        })();
+        // make initial call if default value is set--fetchData checks if inputValue() is ''
+        fetchData();
     }
 
     // TODO: Clean up validation Code
@@ -445,11 +438,14 @@ function inputViewModel(n) {
     validations = (0, _scalejs4.merge)(_lodash2.default.cloneDeep(options.validations), { customError: customError });
     if (validations.expression) {
         if (options.validations.expression.message && !options.validations.expression.term) {
-            console.error("[input] if providing a message for expression validation, must also provide term");
-            options.validations.expression.term = "true"; // don't cause exceptions.
+            console.error('[input] if providing a message for expression validation, must also provide term');
+            options.validations.expression.term = 'true'; // don't cause exceptions.
         }
         validations.expression.params = [options.validations.expression.message ? options.validations.expression.term : options.validations.expression, context.getValue];
     }
+
+    // Updates input component
+    subs.push((0, _scalejs3.receive)(node.id + '.update', update));
 
     if (options.unique && node.inputType !== 'autocomplete') {
         inputValue.subscribe(function (oldValue) {
@@ -471,8 +467,8 @@ function inputViewModel(n) {
             });
         }
 
-        context.unique[node.id].subscribe(function (values) {
-            var occurances = values.filter(function (value) {
+        context.unique[node.id].subscribe(function (newValues) {
+            var occurances = newValues.filter(function (value) {
                 return value === inputValue();
             }).length;
 
@@ -557,16 +553,17 @@ function inputViewModel(n) {
             }
         }
     });
-};
+}
 
 // implements an input of type
 // text, select, date, radio, checkbox, checkboxList
 
-//TODO: Refactor Session
-//- createJSDocs
-//- revisit and de-tangle bindings
-//- refactor validations so that the tooltip works without inputText wrapper in the inputType template
-//- move tooltip/helpText in options
+// TODO: Refactor Session
+// - createJSDocs
+// - revisit and de-tangle bindings
+// - refactor validations so that the tooltip works without
+// inputText wrapper in the inputType template
+// - move tooltip/helpText in options
 
 /**
  *  input is the component to use when accepting user-input.
@@ -578,13 +575,15 @@ function inputViewModel(n) {
  * @param {object} node
  *  The configuration specs for the component.
  * @param {string} [node.id]
- *  By specifying an "id" on your input, you are automatically adding your input's data to the data context model.
+ *  By specifying an "id" on your input, you are automatically
+ * adding your input's data to the data context model.
  * @param {object} node.options
  *  The options pertaining to your specific inputType
  * @param {boolean|string} [node.rendered=true]
  *  Boolean or expression to render the input (or not)
  * @param {array} [node.options.values]
- *  The values that can be chosen from for inputTypes that have selections (e.g. radio, checkboxList)
+ *  The values that can be chosen from for inputTypes that have selections
+ * (e.g. radio, checkboxList)
  * @param {object} [node.options.validations]
  *  KO validations object to validate the inputValue
  * @param {boolean} [node.options.validations.required]
@@ -594,9 +593,11 @@ function inputViewModel(n) {
  * @param {boolean} [node.options.disabled]np
  *  Disables the input (different from readonly)
  * @param {object|string|boolean} [node.options.pattern]
- *  Sets an inputmask for the input. If a string, this is the mask. If an object, gets passed as is.
+ *  Sets an inputmask for the input. If a string, this is the mask.
+ * If an object, gets passed as is.
  *  If boolean = true, uses pattern validation.
  * @param {boolean} [node.options.vertical=false]
- *  For multi-option types (e.g. checkboxList, radio), sets the display to block if true for the options
+ *  For multi-option types (e.g. checkboxList, radio),
+ * sets the display to block if true for the options
  */
 //# sourceMappingURL=inputViewModel.js.map
