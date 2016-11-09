@@ -232,7 +232,7 @@ export default function inputViewModel(n) {
      */
     function createInputValue() {
         // checkboxList can have multiple answers so make it an array
-        if (['checkboxList', 'multiselect'].includes(node.inputType)) {
+        if (['checkboxList', 'multiselect'].indexOf(node.inputType) !== -1) {
             return observableArray(options.value || []);
         }
         // if there is no initial value, set it to empty string,
