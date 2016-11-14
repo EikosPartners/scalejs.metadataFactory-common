@@ -49,12 +49,16 @@ exports.default = function (node, metadata) {
                 (0, _scalejs4.notify)(options.validations[tabDef.text], {
                     successCallback: function successCallback() {
                         activeTabRegion(tabTemplate());
-                        setTabRoute(newRoute || tabDef);
+                        if (options.setRoute !== false) {
+                            setTabRoute(newRoute || tabDef);
+                        }
                     }
                 });
             } else {
                 activeTabRegion(tabTemplate());
-                setTabRoute(newRoute || tabDef);
+                if (options.setRoute !== false) {
+                    setTabRoute(newRoute || tabDef);
+                }
             }
         };
 

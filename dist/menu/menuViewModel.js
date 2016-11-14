@@ -23,14 +23,11 @@ exports.default = function (node) {
 
         var zipped = data.sections.map(function (section) {
             return [section.title, mapToAccordion(section)];
-        });
-
-        var _$unzip = _lodash2.default.unzip(zipped);
-
-        var _$unzip2 = _slicedToArray(_$unzip, 2);
-
-        var sections = _$unzip2[0];
-        var children = _$unzip2[1];
+        }),
+            _$unzip = _lodash2.default.unzip(zipped),
+            _$unzip2 = _slicedToArray(_$unzip, 2),
+            sections = _$unzip2[0],
+            children = _$unzip2[1];
 
 
         return {
