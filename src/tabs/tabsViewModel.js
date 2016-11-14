@@ -183,14 +183,14 @@ import dataservice from 'dataservice';
                    notify(options.validations[tabDef.text], {
                        successCallback: function() {
                            activeTabRegion(tabTemplate());
-                           if (!options.hasOwnProperty('setRoute') || options.setRoute) {
+                           if (options.setRoute !== false) {
                                setTabRoute(newRoute || tabDef);
                            }
                        }
                    });
                } else {
                     activeTabRegion(tabTemplate());
-                    if (!options.hasOwnProperty('setRoute') || options.setRoute) {
+                    if (options.setRoute !== false) {
                         setTabRoute(newRoute || tabDef);
                     }
                }
