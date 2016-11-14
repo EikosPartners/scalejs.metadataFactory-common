@@ -32,7 +32,7 @@ import dataservice from 'dataservice';
             setActiveTab = tabObj.setActiveTab,
             tabTemplate = tabObj.tabTemplate,
             context = this;
-        
+
         tabObj.mappedChildNodes = mappedChildNodes;
 
         tabObj.setActiveTab = function (newRoute) {
@@ -183,12 +183,16 @@ import dataservice from 'dataservice';
                    notify(options.validations[tabDef.text], {
                        successCallback: function() {
                            activeTabRegion(tabTemplate());
-                           setTabRoute(newRoute || tabDef);
+                           if (!options.hasOwnProperty('setRoute') || options.setRoute) {
+                               setTabRoute(newRoute || tabDef);
+                           }
                        }
                    });
                } else {
                     activeTabRegion(tabTemplate());
-                    setTabRoute(newRoute || tabDef);
+                    if (!options.hasOwnProperty('setRoute') || options.setRoute) {
+                        setTabRoute(newRoute || tabDef);
+                    }
                }
            };
 
@@ -233,7 +237,7 @@ import dataservice from 'dataservice';
             initialActiveTab.setActiveTab();
         } else if (!activeTabRegion().template) {
             // initialize to first tab if we havent routed to a specific tab
-            
+
             // will set first visible tab to active tab
             let initialTab = tabs.filter((tab) => {
                 return unwrap(tab.visible);
