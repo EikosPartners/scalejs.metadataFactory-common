@@ -243,7 +243,7 @@ export default function adapterViewModel(node) {
 
     // listen for 'refresh' event
     subs.push(receive(`${node.id}.refresh`, (options) => {
-        console.log('-->', node);
+        // console.log('-->', node);
         if (node.dataSourceEndpoint) {
             fetchData(options);
         } else {
