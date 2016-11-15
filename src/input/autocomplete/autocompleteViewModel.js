@@ -172,7 +172,7 @@ export default function autocompleteViewModel(node, inputViewModel) {
         }).extend({ deferred: true });
     }
 
-    console.log('Autocomplete source array:', sourceArray);
+    // console.log('Autocomplete source array:', sourceArray);
 
     return {
         autocompleteSource: unique ? computedSource : autocompleteSource,
