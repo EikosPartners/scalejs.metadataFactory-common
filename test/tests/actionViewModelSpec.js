@@ -736,13 +736,13 @@ describe('actionModule test', function () {
             "disabled": false
         }
         it('sets disabled property to true', function (done){
-           let action = createViewModel.call({}, disabledActionNode);
+           let action = createViewModel(disabledActionNode);
            action.action();
 
            setTimeout(() => {
               expect(action.disabled()).to.equal(true);
               done();            
-           }, 1000);
+           }, 300);
         })
     })
 });
