@@ -2,7 +2,7 @@ import { getRegisteredTypes, registerViewModels, createViewModel, createViewMode
 import { getCurrent, setRoute } from 'scalejs.navigation';
 import { createMetadataDomStub } from 'utils';
 import noticeboard from 'scalejs.noticeboard';
-import { receive } from 'scalejs.messagebus';
+import { receive, notify } from 'scalejs.messagebus';
 import { merge } from 'lodash';
 import ko from 'knockout';
 import 'chai';
@@ -723,4 +723,26 @@ describe('actionModule test', function () {
         });
 
     });
+    
+    describe('toggle action disabled tests', function(){
+        const disabledActionNode = {
+            "type": "action",
+            "id": "disabledAction",
+            "actionType": "event",
+            "options": {
+                "target": "disabledAction.setDisabled",
+                "params": {value: true}
+            },
+            "disabled": false
+        }
+        it('sets disabled property to true', function (done){
+           let action = createViewModel.call({}, disabledActionNode);
+           action.action();
+
+           setTimeout(() => {
+              expect(action.disabled()).to.equal(true);
+              done();            
+           }, 1000);
+        })
+    })
 });

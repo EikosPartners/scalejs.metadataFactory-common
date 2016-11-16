@@ -7,6 +7,7 @@ import _ from 'lodash';
 import 'chai';
 import 'input/inputModule';
 import inputViewModel from 'input/inputViewModel';
+import { notify } from 'scalejs.messagebus';
 import noticeboard from 'scalejs.noticeboard';
 import moment from 'moment';
 
@@ -860,4 +861,31 @@ describe('inputViewModel test', function () {
         });
     });
 
+    describe('inputViewModel tests for update receiver', function(){
+        it('clears input comment after notify is invoked', function (done){
+
+            let updateNode = {
+                "type": "input",
+                "inputType": "text",
+                "Label": "Update Test",
+                "id": "updateTest"
+            }
+
+            let updateNodeStub = createMetadataDomStub(updateNode);
+            updateNodeStub.data[0].inputValue('Hello world')
+
+            let theInputValue1 = updateNodeStub.node.querySelector('input').value;
+            expect(theInputValue1).equals('Hello world');
+            
+            notify('updateTest.update', {value: ''});
+
+            setTimeout(function(){
+              let theInputValue2 = updateNodeStub.node.querySelector('input').value;
+              expect(theInputValue2).equals('');
+
+              updateNodeStub.dispose();
+              done();  
+            }, 3000);
+        })
+    })
 });
