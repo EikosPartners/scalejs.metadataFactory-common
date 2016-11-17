@@ -730,10 +730,11 @@ describe('actionModule test', function () {
             "id": "disabledAction",
             "actionType": "event",
             "options": {
-                "target": "disabledAction.setDisabled",
-                "params": {value: true}
-            },
-            "disabled": false
+                "target": "disabledAction.update",
+                "params": {disabled: true},
+                "disabled": false,
+                "enableUpdates": true
+            }
         }
         it('sets disabled property to true', function (done){
            let action = createViewModel(disabledActionNode);
