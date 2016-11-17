@@ -1,4 +1,4 @@
-import { notify } from 'scalejs.messagebus';
+import { notify, receive } from 'scalejs.messagebus';
 import { observable } from 'knockout';
 import { merge, has } from 'scalejs';
 import { extend } from 'lodash';
@@ -16,8 +16,8 @@ export default function actionViewModel(node) {
         mergedActions = extend(actions, registeredActions),
         actionFunc = (mergedActions[actionType] && mergedActions[actionType].bind(context)) || null,
         isShown = observable(true),
-        disabled = observable(has(options.disabled) ? options.disabled : false);
-
+        disabled = observable(has(options.disabled) ? options.disabled : false),
+        enableUpdates = observable(has(options.enableUpdates) ? options.enableUpdates : false);
 
     function action(args) {
         if (!actionFunc) {
@@ -39,6 +39,14 @@ export default function actionViewModel(node) {
     if (node.immediate) {
         action();
         return;
+    }
+
+    if (enableUpdates){
+        receive(`${node.id}.update`, (data) => { 
+            Object.keys(data).forEach((key) => {
+                if(key == 'disabled'){ disabled(data[key]); }
+            });
+        });
     }
 
     return merge(node, {
