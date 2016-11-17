@@ -16,7 +16,8 @@ export default function actionViewModel(node) {
         mergedActions = extend(actions, registeredActions),
         actionFunc = (mergedActions[actionType] && mergedActions[actionType].bind(context)) || null,
         isShown = observable(true),
-        disabled = observable(has(options.disabled) ? options.disabled : false);
+        disabled = observable(has(options.disabled) ? options.disabled : false),
+        enableUpdates = observable(has(options.enableUpdates) ? options.enableUpdates : false);
 
     function action(args) {
         if (!actionFunc) {
@@ -40,9 +41,13 @@ export default function actionViewModel(node) {
         return;
     }
 
-    receive(`${node.id}.setDisabled`, (data) => { 
-        disabled(data.value); 
-    });
+    if (enableUpdates){
+        receive(`${node.id}.update`, (data) => { 
+            Object.keys(data).forEach((key) => {
+                if(key == 'disabled'){ disabled(data[key]); }
+            });
+        });
+    }
 
     return merge(node, {
         isShown: isShown,
