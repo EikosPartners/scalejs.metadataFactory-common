@@ -56,7 +56,6 @@
     "karma-webpack": "^1.7.0",
     "mocha": "^2.5.3",
     "mocha-waitsfor": "^1.0.0",
-    "node-sass": "^3.8.0",
     "phantomjs-prebuilt": "^2.1.7",
     "rimraf": "^2.5.2",
     "sass-loader": "^3.2.0",
@@ -90,6 +89,7 @@
     "scalejs.navigation": ">=0.0.1",
     "scalejs.noticeboard": ">=0.0.1",
     "scalejs.popup": ">=0.0.1",
-    "style-loader": "^0.13.1"
+    "style-loader": "^0.13.1",    
+    "node-sass": "^3.8.0"
   }
 }
