@@ -453,6 +453,7 @@ import _ from 'lodash';
         return merge(node, {
             add: add,
             rows: node.infinite ? visibleRows : rows,
+            options: options,
             allRows: rows,
             scrolled: scrolled,
             mappedChildNodes: mappedChildNodes,
