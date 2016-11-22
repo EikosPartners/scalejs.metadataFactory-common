@@ -10,7 +10,10 @@ export default {
             click: () => {
                 this.action();
             },
-            css: classes
+            css: classes,
+            attr: {
+                'data-id': this.buttonId
+            }
         };
     }
 };
