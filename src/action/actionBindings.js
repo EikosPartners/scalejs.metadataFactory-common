@@ -12,7 +12,7 @@ export default {
             },
             css: classes,
             attr: {
-                'data-id': this.buttonId
+                'data-id': this.id
             }
         };
     }
