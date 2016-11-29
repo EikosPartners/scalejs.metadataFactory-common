@@ -1,0 +1,110 @@
+/* inject-globals */
+$advanced-filter-blue-button: #3974ba;
+$filter-border: #7d7d7d;
+$filter-section: #f2f2f2;
+
+.advanced-filter-container {
+    display: inline-block;
+    position: relative;
+    
+    .advanced-filter-button {
+        background-color: transparent;
+        color: $advanced-filter-blue-button;
+        text-transform: capitalize;
+        font-size: 14px;
+        padding-right: 11px;
+
+        &:hover {
+            background-color: transparent;
+            color: $advanced-filter-blue-button;
+            text-decoration: underline;
+        }
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .advanced-filter {
+        position: absolute;
+        width: 339px;
+        z-index: $advanced-filter-form-z-index;
+        background-color: #fff;
+        top: 32px;
+        right: 9px;
+        box-shadow: 0 0 0 1px $filter-border;
+
+        .filter-list {
+            display: inline-block;
+            width: 100%;
+        }
+
+        .input-date, .input-text{
+            width: calc(100% - 7px);
+            background-color: #fff;
+            margin: 0 auto;
+        }
+
+        .input-select {
+            width: 100%;
+            background-color: white;
+        }
+
+        .action-button-wrapper {
+            padding: 5px;
+            display: inline-block;
+        }
+
+        .accordion-header.fp-caret-down:before,
+        .accordion-header.fp-caret-right:before {
+            content: "";
+        }
+        .accordion-header {
+            display: block;
+            background-color: $gray;
+            border-bottom: 1px solid $filter-border;
+            margin-bottom: 0px;
+            padding: 8px;
+            height: initial;
+            &:hover {
+                cursor: pointer;
+            }
+
+            .header-preview-bg {
+                width: 12px;
+                line-height: 12px;
+                display: inline-block;
+                background: $darker-gray;
+                border-radius: 50%;
+                text-align: center;
+
+                .header-preview-text {
+                    color: #fff;
+                    font-size: 10px;
+                }
+            }
+
+            span {
+                @include font-light();
+                font-size: 12px;
+                color: $darker-gray;
+            }
+            &.fp{ //overriding NEXEN style. This fixes advanced search menu display.
+                display:block;
+            }
+
+        }
+
+        section {
+            &.inner-accordion {
+                padding: 10px;
+            }
+            section {
+                background-color: $filter-section;
+                border-bottom: 1px solid $filter-border;
+            }
+            > button {
+                    margin: 10px;
+            }
+        }
+    }
+}
