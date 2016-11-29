@@ -17,7 +17,10 @@ exports.default = {
             click: function click() {
                 _this.action();
             },
-            css: classes
+            css: classes,
+            attr: {
+                'data-id': this.id
+            }
         };
     }
 };

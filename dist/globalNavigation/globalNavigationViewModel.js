@@ -19,6 +19,10 @@ var _knockout = require('knockout');
 
 var _knockout2 = _interopRequireDefault(_knockout);
 
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function globalNavigation(node) {
@@ -27,22 +31,23 @@ function globalNavigation(node) {
         activeLink = _scalejs2.navigation.activeLink;
 
     function walkGetTypes(nodes) {
-        return (nodes || []).reduce(function (types, node) {
-            return types.concat([node.type]).concat(walkGetTypes(node.children));
+        return (nodes || []).reduce(function (types, childNode) {
+            return types.concat([childNode.type]).concat(walkGetTypes(childNode.children));
         }, []);
     }
 
     routes().forEach(function (route) {
         _scalejs2.navigation.addNav(route, function (routeInfo) {
             var name = route.get.replace('{path}', routeInfo.path ? '_' + routeInfo.path.replace('/', '_') : '');
-            _dataservice2.default.ajax({ 'uri': name }, function (err, metadata) {
+            _dataservice2.default.ajax({ uri: name }, function (err, metadata) {
                 if (err) {
                     return;
                 }
-                var types = _.uniq(walkGetTypes(Array.isArray(metadata) ? metadata : [metadata])).filter(function (type) {
+                var types = _lodash2.default.uniq(walkGetTypes(Array.isArray(metadata) ? metadata : [metadata])).filter(function (type) {
                     return type && (0, _scalejs.getRegisteredTypes)().indexOf(type) === -1;
                 });
-                console.log('Missing types:', types);
+
+                // console.log('Missing types:', types);
 
                 _scalejs2.layout.content(metadata);
             });

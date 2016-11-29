@@ -1,0 +1,16 @@
+<div id="grid_template">
+    <div class="grid-header">
+        <!-- ko foreach: $data.gridHeaderItems -->
+            <!-- ko template: 'metadata_item_template' --> <!-- /ko -->
+        <!-- /ko -->
+    </div>
+    <table class="pjson" data-class="grid"></table>
+    <div class="grid-spinner-background" data-class="grid-loader">
+        <div class="cssload-spin-box"></div>
+    </div>
+    <div class="grid-footer-padded">
+        <div class="grid-footer">
+            <span class="loader-text" data-bind="text: loader.text()"></span>
+        </div>
+    </div>
+</div>
