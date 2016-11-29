@@ -27,7 +27,9 @@ function actionViewModel(node) {
         mergedActions = (0, _lodash.extend)(actions, registeredActions),
         actionFunc = mergedActions[actionType] && mergedActions[actionType].bind(context) || null,
         isShown = (0, _knockout.observable)(true),
-        disabled = (0, _knockout.observable)((0, _scalejs2.has)(options.disabled) ? options.disabled : false);
+        disabled = (0, _knockout.observable)((0, _scalejs2.has)(options.disabled) ? options.disabled : false),
+        enableUpdates = options.enableUpdates,
+        subs = [];
 
     function action(args) {
         if (!actionFunc) {
@@ -51,6 +53,16 @@ function actionViewModel(node) {
         return;
     }
 
+    if (enableUpdates) {
+        subs.push((0, _scalejs.receive)(node.id + '.update', function (data) {
+            Object.keys(data).forEach(function (key) {
+                if (key == 'disabled') {
+                    disabled(data[key]);
+                }
+            });
+        }));
+    }
+
     return (0, _scalejs2.merge)(node, {
         isShown: isShown,
         action: action,
@@ -58,7 +70,12 @@ function actionViewModel(node) {
         actionType: actionType,
         options: options,
         disabled: disabled,
-        context: context
+        context: context,
+        dispose: function dispose() {
+            subs.forEach(function (sub) {
+                sub.dispose();
+            });
+        }
     });
 }
 //# sourceMappingURL=actionViewModel.js.map

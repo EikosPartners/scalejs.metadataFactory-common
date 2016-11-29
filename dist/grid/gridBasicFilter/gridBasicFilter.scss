@@ -1,0 +1,39 @@
+/* inject-globals */
+
+$placeholderGray: #BCBEC0;
+
+.basic-filter-layout {
+    display: inline-block;
+    position: relative;
+
+    .filter-input {
+        vertical-align: top;
+        width: 210px;
+        height: 26px;
+        padding-left:30px;
+        box-shadow: 0 0 0 1px #cfd4d8;
+        border: none;
+        &:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #F3D30E, -2px 0 0 2px #F3D30E;
+        }
+    }
+
+    i.fp-search {
+        position: absolute;
+        top:-2px; //NEXEN style alignment
+        transform: translateY(50%);
+        left: 10px;
+        font-size: 15px;
+    }
+
+    .filter-placeholder {
+        position: absolute;
+        -webkit-transform: translateY(50%);
+        transform: translateY(50%);
+        left: 30px;
+        font-size: 12px;
+        color: $placeholderGray;
+        font-style: italic;
+    }
+}

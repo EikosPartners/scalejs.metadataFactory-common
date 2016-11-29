@@ -264,7 +264,7 @@ function adapterViewModel(node) {
 
     // listen for 'refresh' event
     subs.push((0, _scalejs2.receive)(node.id + '.refresh', function (options) {
-        console.log('-->', node);
+        // console.log('-->', node);
         if (node.dataSourceEndpoint) {
             fetchData(options);
         } else {

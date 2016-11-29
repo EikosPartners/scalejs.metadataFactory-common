@@ -470,6 +470,7 @@ function listViewModel(node) {
     return (0, _scalejs5.merge)(node, {
         add: add,
         rows: node.infinite ? visibleRows : rows,
+        options: options,
         allRows: rows,
         scrolled: scrolled,
         mappedChildNodes: mappedChildNodes,
