@@ -1,0 +1,399 @@
+/* inject-globals */
+
+//grid styles
+$grid-background-color-main: #e6e7e8;
+$grid-border-color-main:#f1f2f2;
+
+$grid-header-color: #231f20;
+$grid-header-seperator-color: #969696;
+
+$grid-header-tooltip-background-color: #FFF8DC;
+$grid-header-tooltip-color: #424242;
+
+$grid-row-border-color: #e0e0e0;
+$grid-row-background-color-even: #FFFFFF;
+$grid-row-background-color-odd: #f7f7f7;
+
+$grid-row-error-background-color: #f2dbdb;
+$grid-row-error-color: #CE0000;
+
+$grid-row-hover-color: #002D6A;
+$grid-row-hover-background-color: #def3fb;
+$grid-row-hover-border-color: #def3fb;
+$grid-expanded-row-border-color: #ccc;
+
+$grid-row-selected-bacground-color: #FFF8D4;
+
+$grid-cell-color: #424242;
+
+$grid-footer-background-color: #e6e7e8;
+
+$grid-row-height: 50px;
+$grid-header-row-height: 42px;
+
+$grid-footer-height: 40px;
+$grid-footer-font-size: 12px;
+
+//spinner / loader styles // TODO: move elsewhere?
+$spinner-background-color: #eeeeee;
+$spinner-opacity: .8;
+$spinner-affix-top: 0px;
+
+.grid-header {
+    float: right;
+    padding-bottom: 10px;
+}
+
+table.pjson {
+    border-spacing: 0;
+    border-collapse: collapse;
+    width: 100%;
+    text-align: left;
+
+    thead {
+        color: $grid-header-color;
+        @include font-medium;
+        font-size: 10px;
+        text-transform: uppercase;
+
+        .sorting_asc,
+        .sorting_desc {
+            background: url('~public/images/icon-sort-asc.svg') no-repeat center right 10px;
+            background-color: $grid-background-color-main;
+        }
+
+        .sorting_desc { 
+            background: url('~public/images/icon-sort-desc.svg') no-repeat center right 10px;
+        }
+
+        tr {
+            border: 0;
+            height: $grid-header-row-height;
+            &:hover {
+                border: 0;
+            }
+        }
+
+        th {
+            background-color: $grid-background-color-main;
+            position: relative;
+
+            .tool-tip{
+                display: none;
+                top: 1px;
+                left: 30px;
+                @include tooltip();
+                z-index: 1;
+            }
+            &:hover {
+                .tool-tip{
+                    display: block;
+                }
+            }
+        }
+    }
+
+    tbody > tr {
+        height: $grid-row-height;
+        border: 1px solid $grid-border-color-main;
+        border-top: 0;
+        // TODO: review when adding child rows
+        // &.expanded {
+        //     border: 1px solid $grid-expanded-row-border-color;
+        //     background-color: $grid-row-hover-background-color;
+        //     + tr[role='child']{
+        //         border: 1px solid $grid-expanded-row-border-color;
+        //         border-top: none;
+        //         background-color: $grid-row-hover-background-color;
+        //     }
+        //     + tr + tr:hover td{ // remove border when hover over next tr
+        //         border-top: none;
+        //     }
+        // }
+        // &.expanded-sibling {
+        //     border-bottom: none;
+        //     &:hover td {
+        //     border-bottom: none;
+       // }
+       }
+
+    tr:nth-child(even) {
+        background: $grid-row-background-color-even;
+    }
+
+    tr:nth-child(odd) {
+        background: $grid-row-background-color-odd;
+    }
+    
+    tr:hover {
+        border: 1px solid $grid-row-hover-border-color;
+        background-color: $grid-row-hover-background-color;
+        
+        td {
+            border-bottom: 1px solid $grid-row-hover-border-color;
+            border-top: 1px solid $grid-row-hover-border-color;
+            cursor: pointer;
+        }
+    }
+
+    // TODO: for child rows
+    // tr.expanded:hover td {
+    //     border-bottom: none;
+    //     border-top: none;
+    // }
+    
+    td {
+        color: $grid-cell-color;
+        font-size: 12px;
+        vertical-align: middle;
+        label{ // removing NEXEN style from the grid
+            font-weight: normal;
+            margin-bottom:0;
+        }
+    }
+
+    tr.highlight {
+        background-color: $grid-row-selected-bacground-color;
+        border: 1px solid $grid-border-color-main;
+    }
+    
+    // ICON related styles
+     th, td {
+        > .fp {
+            font-size: 15px;
+            display: block;
+            margin: 0 auto;
+            width: 15px;
+            padding: 8px;
+            text-align: left;
+            &.red {
+                color: $orange;
+            }
+        }
+    }
+     th {
+        box-sizing: content-box !important;
+    }
+}
+
+// TODO: move elsewhere, custom template styles
+table.pjson {
+    label.fp-icon-star {
+        color: $yellow;
+    }
+
+    label.fp-icon-rejected {
+        color: #637594;
+    }
+
+    label.grid-favorite-toggle {
+        .tooltip {
+            display: none;
+            @include tooltip();
+        }
+        &:hover .tooltip {
+            display: block;
+        }
+        }
+
+    .grid-child-panel {
+        width: 100%;
+        .hide-col-name {
+            span:first-child {
+                display: none;
+            }
+        }
+        .value {
+            @include font-medium;
+            padding-top: 5px;
+        }
+        .bnym-team {
+            display: block;
+        }
+        .profile-image {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            overflow: hidden;
+            float: left;
+            margin-right: 15px;
+        }
+    }
+
+    progress {
+        display: inline-block;
+    }
+
+    progress[value] {
+        /* Reset the default appearance */
+        -webkit-appearance: none;
+        appearance: none;
+
+        width: 75%;
+        height: 6px;
+        padding-right: 10px;
+
+        &::-webkit-progress-bar {
+            background-color: #ccc;            
+            border-radius: 3px;
+        }
+
+        &::-webkit-progress-value {
+            background-color: #d8e260;            
+            border-radius: 3px;
+        }
+    }
+
+    .grid-progress-text {
+        display: inline;
+        font-size: 11px;
+    }
+}
+
+// TODO: functional styles:
+table.pjson {
+    &.fixedHeader-floating {
+        position: fixed;
+        height: 0;
+    }
+
+    .dataTables_scrollBody {
+        overflow: visible !important;
+        padding-bottom: $grid-footer-height;
+    }
+}
+
+.grid-spinner-background {
+    display: none;
+    position: absolute;
+    z-index: $spinner-overlay-z-index;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: inherit;
+    opacity: $spinner-opacity;
+    position: fixed;
+    top: 0;
+
+    // TODO: still need?
+    // &.affix {
+    //     top: $spinner-affix-top !important;
+    //     position: fixed;
+    // }
+
+
+    &.active {
+        display: block;
+    }
+}
+
+
+.grid-footer-padded {
+	margin: 0px auto;
+    overflow: visible;
+    text-align: center;
+}
+
+@include mobile {   
+    .grid-footer {
+        width: calc(100% - 10px) !important;
+    }  
+    .grid-footer-padded {
+		width: 100% !important;
+	}
+}
+
+@include tablet {
+    .grid-footer {
+        width: calc(100% - 40px) !important;
+    }
+    .grid-footer-padded {
+		width: 100% !important;
+	}
+}
+
+@include desktop {
+    .grid-footer-padded {
+		width: $container-max-width - 80 !important;
+	}
+}
+// footer styles
+.grid-footer {
+    height: $grid-footer-height;
+    position: fixed;
+    bottom: 0;
+    background-color: $grid-footer-background-color;
+    width: inherit; 
+    font-size: $grid-footer-font-size;
+
+    .loader-text {
+        position: absolute;
+        top: 15px;
+        width: 100%;
+        text-align: center;
+        display: block;
+    }
+
+    .counter {
+        position: absolute;
+        top: 15px;
+        left: 10px;
+
+        .count {
+            @include font-medium();
+            padding-right: 20px;
+        }
+    }
+
+    .pager {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+
+        div {
+            display: inline-block;
+        }
+
+        .input {
+            input {
+                width: 30px !important;
+                text-align: center;
+                margin-left: 10px;
+                font-size: 12px;
+            }
+        }
+
+        .first {
+            width: 7px;
+            height: 10px;
+            // background: url("./images/icon-first.png");
+            background-repeat: no-repeat;
+            margin-left: 10px;
+        }
+
+        .prev {
+            width: 5px;
+            height: 10px;
+            // background: url("./images/icon-prev.png");
+            background-repeat: no-repeat;
+            margin-left: 10px;
+        }
+
+        .next {
+            width: 5px;
+            height: 10px;
+            // background: url("./images/icon-next.png");
+            background-repeat: no-repeat;
+            margin-left: 10px;
+        }
+
+        .last {
+            width: 7px;
+            height: 10px;
+            // background: url("./images/icon-last.png");
+            background-repeat: no-repeat;
+            margin-left: 10px;
+        }
+    }
+
+}
