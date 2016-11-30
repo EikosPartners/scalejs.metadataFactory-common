@@ -71,6 +71,10 @@ exports.default = function (node) {
 
     function sendQuery(isFilter) {
         if (isFilter || !loader.done && !loader.inProgress()) {
+            if (isFilter) {
+                skip(0);
+                rows.removeAll();
+            }
             query.options.target.data = {
                 skip: skip(),
                 limit: limit()
@@ -96,9 +100,7 @@ exports.default = function (node) {
         search.extend({ rateLimit: 1000 });
         if (!clientSearch) {
             search.subscribe(function () {
-                skip(0);
-                rows.removeAll();
-                sendQuery(true);
+                return sendQuery(true);
             });
             filters.subscribe(function () {
                 return sendQuery(true);
