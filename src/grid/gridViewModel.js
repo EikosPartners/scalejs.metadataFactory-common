@@ -1,5 +1,6 @@
 import { createViewModel } from 'scalejs.metadataFactory';
 import { merge, get } from 'scalejs';
+import { receive } from 'scalejs.messagebus';
 import ko from 'knockout';
 import _ from 'lodash';
 
@@ -35,7 +36,8 @@ export default function (node) {
             text: ko.observable(loaderNoText),
             done: false,
             inProgress: ko.observable(false)
-        };
+        },
+        subs = [];
 
     let query,
         queryCallback,
@@ -69,6 +71,10 @@ export default function (node) {
 
     function sendQuery(isFilter) {
         if (isFilter || (!loader.done && !loader.inProgress())) {
+            if (isFilter) {
+                skip(0);
+                rows.removeAll();
+            }
             query.options.target.data = {
                 skip: skip(),
                 limit: limit()
@@ -91,13 +97,15 @@ export default function (node) {
         // TODO: update to createViewModels after Erica updates mf
         search.extend({ rateLimit: 1000 });
         if (!clientSearch) {
-            search.subscribe(() => {
-                skip(0);
-                rows.removeAll();
-                sendQuery(true);
-            });
+            search.subscribe(() => sendQuery(true));
             filters.subscribe(() => sendQuery(true));
         }
+    }
+
+    function setupRefresh() {
+        subs.push(receive(`${node.id}.refresh`, () => {
+            sendQuery(true);
+        }));
     }
 
     function setupSelection() {
@@ -116,6 +124,7 @@ export default function (node) {
             setupQuery();
             setupGetResponse();
             sendQuery();
+            setupRefresh();
         } else if (data) {
             rows(data);
         }
@@ -136,6 +145,11 @@ export default function (node) {
         search,
         filters,
         caseInsensitive,
-        selectedItem
+        selectedItem,
+        dispose: function () {
+            subs.forEach((sub) => {
+                sub.dispose();
+            });
+        }
     });
 }
