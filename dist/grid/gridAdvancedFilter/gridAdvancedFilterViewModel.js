@@ -36,12 +36,8 @@ exports.default = function (node) {
                     }
                 }
             });
-            context.skip(0);
             context.filters(query);
             filterIsVisible(false);
-            if (!context.clientSearch) {
-                context.rows.removeAll();
-            }
         }));
     }
 
