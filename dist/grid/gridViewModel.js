@@ -36,7 +36,8 @@ exports.default = function (node) {
         text: _knockout2.default.observable(loaderNoText),
         done: false,
         inProgress: _knockout2.default.observable(false)
-    };
+    },
+        subs = [];
 
     var query = void 0,
         queryCallback = void 0,
@@ -105,6 +106,12 @@ exports.default = function (node) {
         }
     }
 
+    function setupRefresh() {
+        subs.push((0, _scalejs3.receive)(node.id + '.refresh', function () {
+            sendQuery(true);
+        }));
+    }
+
     function setupSelection() {
         if (node.selection) {
             selectedItem.subscribe(function (item) {
@@ -121,6 +128,7 @@ exports.default = function (node) {
             setupQuery();
             setupGetResponse();
             sendQuery();
+            setupRefresh();
         } else if (data) {
             rows(data);
         }
@@ -140,13 +148,20 @@ exports.default = function (node) {
         search: search,
         filters: filters,
         caseInsensitive: caseInsensitive,
-        selectedItem: selectedItem
+        selectedItem: selectedItem,
+        dispose: function dispose() {
+            subs.forEach(function (sub) {
+                sub.dispose();
+            });
+        }
     });
 };
 
 var _scalejs = require('scalejs.metadataFactory');
 
 var _scalejs2 = require('scalejs');
+
+var _scalejs3 = require('scalejs.messagebus');
 
 var _knockout = require('knockout');
 
