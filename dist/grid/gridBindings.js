@@ -8,6 +8,12 @@ require('datatables.net-fixedheader');
 
 require('datatables.net-select');
 
+var _gridRegistry = require('./registry/gridRegistry');
+
+var _gridRegistry2 = _interopRequireDefault(_gridRegistry);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = {
     grid: function grid() {
         var options = this.options,
@@ -28,7 +34,8 @@ exports.default = {
                 blurable: true,
                 className: 'highlight',
                 selectedItem: this.selectedItem
-            }
+            },
+            registry: _gridRegistry2.default
         };
 
         if (clientSearch) {
