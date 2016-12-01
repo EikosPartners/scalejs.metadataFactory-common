@@ -4,13 +4,12 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /*global define */
-//todo move out
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /* global define */
 
 
-var _jsFormat = require('js-format');
+var _moment = require('moment');
 
-var _jsFormat2 = _interopRequireDefault(_jsFormat);
+var _moment2 = _interopRequireDefault(_moment);
 
 var _knockout = require('knockout');
 
@@ -20,7 +19,7 @@ require('ko-bindings/slideVisible');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//todo evaluate if should move to advanced grid?
+// todo evaluate if should move to advanced grid?
 function aggregateValues(node) {
     var value;
     if (node.getValue) {
@@ -45,7 +44,7 @@ function aggregateValues(node) {
             } // we don't want to custom operators values in preview
             return value = Object.keys(value).map(function (key) {
                 if (Date.parse(value[key])) {
-                    return (0, _jsFormat2.default)('MM/DD/YYYY', new Date(value[key]));
+                    return _moment2.default.utc(value[key]).format('MM/DD/YYYY');
                 } else {
                     return value[key];
                 }
