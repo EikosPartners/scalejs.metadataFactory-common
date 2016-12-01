@@ -1,10 +1,10 @@
-/*global define */
-import format from 'js-format'; //todo move out
+/* global define */
+import moment from 'moment';
 import { computed } from 'knockout';
 import { has } from 'scalejs';
 import 'ko-bindings/slideVisible';
 
-    //todo evaluate if should move to advanced grid?
+    // todo evaluate if should move to advanced grid?
     function aggregateValues(node) {
         var value;
         if (node.getValue) {
@@ -25,7 +25,7 @@ import 'ko-bindings/slideVisible';
                 if (value.op) { delete value.op; } // we don't want to custom operators values in preview
                 return value = Object.keys(value).map(function(key) {
                     if (Date.parse(value[key])) {
-                        return format('MM/DD/YYYY', new Date(value[key]));
+                        return moment.utc(value[key]).format('MM/DD/YYYY');
                     } else {
                         return value[key];
                     }
