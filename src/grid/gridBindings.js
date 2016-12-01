@@ -1,5 +1,6 @@
 import 'datatables.net-fixedheader';
 import 'datatables.net-select';
+import registry from './registry/gridRegistry';
 
 export default {
     grid: function () {
@@ -21,7 +22,8 @@ export default {
                     blurable: true,
                     className: 'highlight',
                     selectedItem: this.selectedItem
-                }
+                },
+                registry
             };
 
         if (clientSearch) {
