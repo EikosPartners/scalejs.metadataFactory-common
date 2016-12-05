@@ -15,11 +15,13 @@ export default {
                 paging: false,
                 fixedHeader: options.fixedHeader,
                 infiniteScroll: options.infinite,
+                hasChildren: options.hasChildren,
                 query: this.sendQuery,
                 searching: clientSearch,
                 select: {
                     style: 'single',
                     blurable: true,
+                    items: 'cell',
                     className: 'highlight',
                     selectedItem: this.selectedItem
                 },
