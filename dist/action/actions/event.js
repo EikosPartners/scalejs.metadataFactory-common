@@ -26,7 +26,8 @@ function renderParams(params, data) {
 }
 
 function event(options) {
-    var data = (0, _knockout.unwrap)(this && this.data);
+    var data = (0, _knockout.unwrap)(this && this.data),
+        optionData = options.data || {};
     var params = options.params;
 
     if (options.paramsKey) {
@@ -34,7 +35,7 @@ function event(options) {
     }
 
     if (params) {
-        params = renderParams(params, data);
+        params = renderParams(params, (0, _scalejs2.merge)(data, optionData));
     }
 
     (0, _scalejs.notify)((0, _knockout.unwrap)(options.target), params);
