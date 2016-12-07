@@ -20,7 +20,8 @@ function renderParams(params, data) {
 
 
 function event(options) {
-    const data = unwrap(this && this.data);
+    const data = unwrap(this && this.data),
+        optionData = options.data || {};
     let params = options.params;
 
     if (options.paramsKey) {
@@ -28,7 +29,7 @@ function event(options) {
     }
 
     if (params) {
-        params = renderParams(params, data);
+        params = renderParams(params, merge(data, optionData));
     }
 
     notify(unwrap(options.target), params);

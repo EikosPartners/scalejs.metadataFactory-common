@@ -12,7 +12,7 @@ module.exports = {
         "one-var": ["error", "always"],
         "eol-last": ["error", "never"],
         "func-names": ["error", "never"],
-        "object-shorthand": [2, "properties"],
+        "object-shorthand": "off",
         "import/no-extraneous-dependencies": "off", // revisit 
         "import/no-duplicates": "off",
         "no-duplicate-imports": "off",

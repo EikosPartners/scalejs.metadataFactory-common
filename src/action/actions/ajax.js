@@ -96,7 +96,8 @@ function ajax(options, args) {
 
     nextAction = function (error, results) {
         const opts = options ? _.cloneDeep(options) : {},
-            err = error;
+            err = error,
+            keyMap = options.keyMap || { resultsKey: 'results' };
 
         ((err ? opts.errorActions : opts.nextActions) || []).forEach((item) => {
             if (err && opts.errorActions) {
@@ -111,7 +112,7 @@ function ajax(options, args) {
             const response = {
                 request: options.target,
                 error: error,
-                results: results
+                [keyMap.resultsKey]: results
             };
 
             item.options = merge(response, item.options);
