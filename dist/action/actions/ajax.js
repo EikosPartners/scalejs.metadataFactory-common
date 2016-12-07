@@ -30,6 +30,8 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function renderParams(params, data) {
     var ret = params;
     try {
@@ -118,7 +120,8 @@ function ajax(options, args) {
 
     nextAction = function nextAction(error, results) {
         var opts = options ? _lodash2.default.cloneDeep(options) : {},
-            err = error;
+            err = error,
+            keyMap = options.keyMap || { resultsKey: 'results' };
 
         ((err ? opts.errorActions : opts.nextActions) || []).forEach(function (item) {
             if (err && opts.errorActions) {
@@ -130,11 +133,10 @@ function ajax(options, args) {
             }
 
             // get the results of the request and push
-            var response = {
+            var response = _defineProperty({
                 request: options.target,
-                error: error,
-                results: results
-            };
+                error: error
+            }, keyMap.resultsKey, results);
 
             item.options = (0, _scalejs3.merge)(response, item.options);
             _scalejs.createViewModel.call(context, item).action();
