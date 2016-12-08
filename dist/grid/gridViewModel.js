@@ -54,16 +54,20 @@ exports.default = function (node) {
     function setupGetResponse() {
         queryCallback = {
             callback: function callback(err, results) {
-                var key = (0, _scalejs2.get)(endpoint, 'keyMap.resultsKey'),
-                    resultData = key ? results[key] : results;
-                rows.push.apply(rows, _toConsumableArray(resultData));
-                skip(results.skip);
-                loader.inProgress(false);
-                loader.done = results.skip >= results.total;
-                if (loader.done) {
-                    loader.text(loaderDone);
+                if (!err) {
+                    var key = (0, _scalejs2.get)(endpoint, 'keyMap.resultsKey'),
+                        resultData = key ? results[key] : results;
+                    rows.push.apply(rows, _toConsumableArray(resultData));
+                    skip(results.skip);
+                    loader.inProgress(false);
+                    loader.done = results.skip >= results.total;
+                    if (loader.done) {
+                        loader.text(loaderDone);
+                    } else {
+                        loader.text(loaderNoText);
+                    }
                 } else {
-                    loader.text(loaderNoText);
+                    console.error('Error in grid query callback: ' + (err.message || ''));
                 }
             }
         };

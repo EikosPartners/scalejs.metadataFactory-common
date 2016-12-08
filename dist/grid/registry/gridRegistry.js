@@ -1,20 +1,21 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+/* eslint no-unused-vars: ["error", { "args": "none" }]*/
 
-var _moment = require('moment');
+var registry = {};
 
-var _moment2 = _interopRequireDefault(_moment);
+function register(funcName, func) {
+    registry[funcName] = func;
+}
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// sample formatter function
-function gridDateFormatter(data, type, row, meta) {
-    return _moment2.default.utc(data).format('MM/DD/YYYY');
-} /* eslint no-unused-vars: ["error", { "argsIgnorePattern": "type|row|meta" }] */
+function get(funcName) {
+    return registry[funcName];
+}
 exports.default = {
-    gridDateFormatter: gridDateFormatter
+    register: register,
+    get: get
 };
 //# sourceMappingURL=gridRegistry.js.map
