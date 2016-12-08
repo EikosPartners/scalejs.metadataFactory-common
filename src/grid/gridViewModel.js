@@ -54,16 +54,20 @@ export default function (node) {
     function setupGetResponse() {
         queryCallback = {
             callback: function (err, results) {
-                const key = get(endpoint, 'keyMap.resultsKey'),
-                    resultData = key ? results[key] : results;
-                rows.push(...resultData);
-                skip(results.skip);
-                loader.inProgress(false);
-                loader.done = results.skip >= results.total;
-                if (loader.done) {
-                    loader.text(loaderDone);
+                if (!err) {
+                    const key = get(endpoint, 'keyMap.resultsKey'),
+                        resultData = key ? results[key] : results;
+                    rows.push(...resultData);
+                    skip(results.skip);
+                    loader.inProgress(false);
+                    loader.done = results.skip >= results.total;
+                    if (loader.done) {
+                        loader.text(loaderDone);
+                    } else {
+                        loader.text(loaderNoText);
+                    }
                 } else {
-                    loader.text(loaderNoText);
+                    console.error(`Error in grid query callback: ${err.message || ''}`);
                 }
             }
         };

@@ -1,11 +1,15 @@
-/* eslint no-unused-vars: ["error", { "argsIgnorePattern": "type|row|meta" }] */
-import moment from 'moment';
+/* eslint no-unused-vars: ["error", { "args": "none" }]*/
 
-// sample formatter function
-function gridDateFormatter(data, type, row, meta) {
-    return moment.utc(data).format('MM/DD/YYYY');
+const registry = {};
+
+function register(funcName, func) {
+    registry[funcName] = func;
 }
 
-export default {
-    gridDateFormatter
+function get(funcName) {
+    return registry[funcName];
+}
+export default{
+    register,
+    get
 };
