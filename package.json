@@ -1,6 +1,6 @@
 {
   "name": "scalejs.metadatafactory-common",
-  "version": "1.0.164",
+  "version": "1.0.165",
   "description": "Common scalejs.metadatafactory modules",
   "main": "dist/scalejs.metadataFactory-common.js",
   "scripts": {
@@ -79,7 +79,7 @@
     "lodash": "^4.13.1",
     "moment": "^2.13.0",
     "mustache": "^2.2.1",
-    "node-sass": "3.7.0",
+    "node-sass": "^3.8.0",
     "pikaday": "^1.4.0",
     "sass-loader": "^3.2.3",
     "scalejs": ">=0.4.1",
