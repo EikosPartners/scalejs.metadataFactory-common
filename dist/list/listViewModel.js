@@ -31,14 +31,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // -- deleteRows - if false delete button does not appear
 // -- minRequiredRows - initializes list with # of rows and wont let user delete
 
-//TODO: Refactor Session
-//- implement "parent passes to children" pattern for labels
-//- brainstorm cleaner "itemViewModel" imp.
-//- general clean up/renaming/documenting session
+// TODO: Refactor Session
+// - implement "parent passes to children" pattern for labels
+// - brainstorm cleaner "itemViewModel" imp.
+// - general clean up/renaming/documenting session
 // ...add more refactor session goals here!
 /**
  *  list is the component to use when wanting to group items into enumerable lists.
- *  There are two types of lists: responsive form lists (default) and table lists (+listAdvanced wrapper)
+ *  There are two types of lists:
+ * responsive form lists (default) and table lists (+listAdvanced wrapper)
  *  The underlying data model for a list is an array of objects.
  *
  * @module list
@@ -76,7 +77,7 @@ function deleteFlag(itemDef) {
     return context.isNew ? del.call(context, itemDef) : (0, _scalejs5.merge)(context, {
         template: 'list_del_flag_template',
         getValue: function getValue() {
-            return context.deleteFlag() ? "T" : "F";
+            return context.deleteFlag() ? 'T' : 'F';
         },
         deleteRow: function deleteRow() {
             context.deleteFlag(true);
@@ -91,30 +92,30 @@ function deleteFlag(itemDef) {
 }
 
 function listViewModel(node) {
-    var keyMap = node.keyMap || {},
-        rows = (0, _knockout.observableArray)(),
+    var rows = (0, _knockout.observableArray)(),
         options = node.options || {},
         isShown = (0, _knockout.observable)(true),
         context = this || {},
-        readonly = (0, _knockout.observable)(context.readonly && context.readonly() || false),
-        //initialize to the context's state as determined by the form generally
-    deleteRows = (0, _knockout.observable)(options.deleteRows !== false),
-        minRequiredRows = 0,
-        showRemoveButton,
+
+    // initialize to the context's state as determined by the form generally
+    readonly = (0, _knockout.observable)(context.readonly && context.readonly() || false),
+        deleteRows = (0, _knockout.observable)(options.deleteRows !== false),
 
     // addButtonContext = node.addButtonContext,
     mappedChildNodes = (0, _knockout.observableArray)(),
         data = (0, _knockout.observable)(node.data),
         unique = {},
         visibleRows = (0, _knockout.observableArray)(),
-        scrolled,
         initialData = _lodash2.default.cloneDeep(node.data) || [],
         addButtonRendered = (0, _scalejs5.is)(node.addButtonRendered, 'string') ? (0, _knockout.computed)(_scalejs2.evaluate.bind(null, node.addButtonRendered, context.getValue)) : (0, _knockout.observable)(node.addButtonRendered !== false);
+    var minRequiredRows = 0,
+        showRemoveButton = null,
+        scrolled = void 0;
 
     function setReadonly(bool) {
-        readonly(bool); //sets readonly state of the list
+        readonly(bool); // sets readonly state of the list
         rows().forEach(function (row) {
-            //sets readonly state of each row
+            // sets readonly state of each row
             row.readonly(bool);
         });
     }
@@ -125,15 +126,15 @@ function listViewModel(node) {
     function rowViewModel(initialValues, isNew) {
         var items = (0, _knockout.observableArray)(),
             // observable array to hold the items in the row
+        // observable dictionary to hold the items and other properties
         itemDictionary = (0, _knockout.observable)({}),
-            // observable dictionary to hold the items and other properties
-        rowContext = {
+            rowContext = {
             metadata: context.metadata, // reference to the parent metadata
             rows: rows,
             unique: unique,
             isNew: isNew,
             itemDictionary: itemDictionary,
-            editMode: (0, _knockout.observable)(false), //for styling - maybe better if called isActiveRow
+            editMode: (0, _knockout.observable)(false), // for styling - maybe better if called isActiveRow
             deleteFlag: (0, _knockout.observable)(false),
             data: (0, _knockout.computed)(function () {
                 var dict = itemDictionary();
@@ -148,10 +149,10 @@ function listViewModel(node) {
                 }, {});
             })
         },
-            row = {},
-            // the row itself
-        itemViewModels,
-            rowReadonly;
+            row = {}; // the row itself
+        var prop = void 0,
+            itemViewModels = null,
+            rowReadonly = void 0;
 
         // initialize row readonly as the list's state
         rowContext.readonly = (0, _knockout.observable)(readonly());
@@ -160,7 +161,7 @@ function listViewModel(node) {
         if ((0, _scalejs5.is)(options.rowReadonly, 'string')) {
             rowReadonly = (0, _knockout.computed)(function () {
                 if (rowContext.readonly && rowContext.readonly()) {
-                    return true; //if readonly is true on context, then row is readonly
+                    return true; // if readonly is true on context, then row is readonly
                 }
                 // else, eval the expression to determine if the row is readonly
                 return (0, _scalejs2.evaluate)(options.rowReadonly, function (id) {
@@ -211,7 +212,7 @@ function listViewModel(node) {
                 return (0, _knockout.unwrap)(item);
             }
 
-            var prop = rowContext[id];
+            prop = rowContext[id];
 
             if ((0, _scalejs5.has)(prop)) {
                 return (0, _knockout.unwrap)(prop);
@@ -221,7 +222,8 @@ function listViewModel(node) {
         };
 
         itemViewModels = node.items.map(function (_item) {
-            var item = _lodash2.default.cloneDeep(_item); // deep clone the item as we might mutate it before passing to createViewModels
+            // deep clone the item as we might mutate it before passing to createViewModels
+            var item = _lodash2.default.cloneDeep(_item);
 
             // add readonly computed to the item before passing it to input
             // input will use the already defined observable if it exists
@@ -234,7 +236,7 @@ function listViewModel(node) {
                 if (!item.id) {
                     console.error('Cannot set unique on item without id');
                 } else if (!unique[item.id]) {
-                    //only create once
+                    // only create once
                     unique[item.id] = (0, _knockout.observableArray)();
                 }
             }
@@ -248,16 +250,16 @@ function listViewModel(node) {
                     });
                 }
                 return ret;
-            } else {
-                return _scalejs.createViewModel.call(rowContext, item);
             }
+            return _scalejs.createViewModel.call(rowContext, item);
         });
 
         // if there are initial values, update the children
         if (initialValues) {
             itemViewModels.forEach(function (item) {
+                // allow for JSON default values don't get overwritten
+                // by server data that doesn't contain data
                 if (initialValues[item.id]) {
-                    // allow for JSON default values don't get overwritten by server data that doesn't contain data
                     item.setValue && item.setValue(initialValues[item.id]);
                 }
             });
@@ -275,7 +277,8 @@ function listViewModel(node) {
                 row[item.id] = item.inputValue;
             }
             return dict;
-        }, (0, _scalejs5.merge)(initialValues || {}))); // just in case some data doesnt have a column, keep it in the item dict
+        }, (0, _scalejs5.merge)(initialValues || {})));
+        // just in case some data doesnt have a column, keep it in the item dict
 
         // TODO: ItemDict or Row? which one is better?
         // rowVM
@@ -327,6 +330,7 @@ function listViewModel(node) {
                         item.hasFocus(true);
                         return true;
                     }
+                    return false;
                 });
             });
         }
@@ -334,11 +338,11 @@ function listViewModel(node) {
 
     // returns the values of the list
     // e.g. [{item1:'Value1',item2:'Value2'}]
-    // dontSendIfEmpty - this prevents items from getting sent in the data if that property is empty
+    // dontSendIfEmpty - this prevents items from getting
+    // sent in the data if that property is empty
     // if array is empty send null
     function getValue() {
-        var originalData = data.peek(),
-            listData = _lodash2.default.cloneDeep(rows().map(function (row) {
+        var listData = _lodash2.default.cloneDeep(rows().map(function (row) {
             var originalRowItems = row.itemDictionary.peek();
             return Object.keys(originalRowItems).reduce(function (dataObj, itemKey) {
                 var item = row.itemDictionary.peek()[itemKey];
@@ -362,8 +366,8 @@ function listViewModel(node) {
     // on initialization if the node already has data defined, add rows
     // else generate the minReqiredRows
     function initialize() {
-        //console.time('List init');
-        if (data()) {
+        // console.time('List init');
+        if (data() && Array.isArray(data()) && data().length > 0) {
             rows().forEach(function (row) {
                 row.items().forEach(function (item) {
                     item.dispose && item.dispose();
@@ -374,12 +378,12 @@ function listViewModel(node) {
                 add(item, false);
             });
 
-            //if trackDiffChanges set to true store the original data to noticeboard
+            // if trackDiffChanges set to true store the original data to noticeboard
             if (node.trackDiffChanges) {
                 _scalejs4.default.set(node.id, data());
             }
         } else {
-            for (var i = 0; i < minRequiredRows; i++) {
+            for (var i = rows().length; i < minRequiredRows; i++) {
                 add(null, true);
             }
         }
@@ -484,5 +488,5 @@ function listViewModel(node) {
         setReadonly: setReadonly,
         addButtonRendered: addButtonRendered
     });
-};
+}
 //# sourceMappingURL=listViewModel.js.map
