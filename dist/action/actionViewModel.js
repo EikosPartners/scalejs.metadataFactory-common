@@ -49,6 +49,12 @@ function actionViewModel(node) {
     }
 
     if (node.immediate) {
+        if ((0, _scalejs2.has)(node.delay)) {
+            setTimeout(function () {
+                action();
+            }, node.delay);
+            return;
+        }
         action();
         return;
     }
@@ -56,7 +62,7 @@ function actionViewModel(node) {
     if (enableUpdates) {
         subs.push((0, _scalejs.receive)(node.id + '.update', function (data) {
             Object.keys(data).forEach(function (key) {
-                if (key == 'disabled') {
+                if (key === 'disabled') {
                     disabled(data[key]);
                 }
             });
