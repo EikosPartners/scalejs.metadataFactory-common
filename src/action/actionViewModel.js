@@ -38,14 +38,20 @@ export default function actionViewModel(node) {
     }
 
     if (node.immediate) {
+        if (has(node.delay)) {
+            setTimeout(() => {
+                action();
+            }, node.delay);
+            return;
+        }
         action();
         return;
     }
 
-    if (enableUpdates){
-        subs.push(receive(`${node.id}.update`, (data) => { 
+    if (enableUpdates) {
+        subs.push(receive(`${node.id}.update`, (data) => {
             Object.keys(data).forEach((key) => {
-                if(key == 'disabled'){ disabled(data[key]); }
+                if (key === 'disabled') { disabled(data[key]); }
             });
         }));
     }
@@ -58,8 +64,8 @@ export default function actionViewModel(node) {
         options: options,
         disabled: disabled,
         context: context,
-        dispose: function (){
-            subs.forEach(function(sub){
+        dispose: function () {
+            subs.forEach((sub) => {
                 sub.dispose();
             });
         }
