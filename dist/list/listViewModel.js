@@ -110,7 +110,8 @@ function listViewModel(node) {
         addButtonRendered = (0, _scalejs5.is)(node.addButtonRendered, 'string') ? (0, _knockout.computed)(_scalejs2.evaluate.bind(null, node.addButtonRendered, context.getValue)) : (0, _knockout.observable)(node.addButtonRendered !== false);
     var minRequiredRows = 0,
         showRemoveButton = null,
-        scrolled = void 0;
+        scrolled = void 0,
+        onlyIf = void 0;
 
     function setReadonly(bool) {
         readonly(bool); // sets readonly state of the list
@@ -408,12 +409,23 @@ function listViewModel(node) {
 
     // sets minrequired rows
     if (node.validations && node.validations.required) {
-        minRequiredRows = node.validations.required === true ? 1 : node.validations.required;
+        var minRows = node.validations.required.params || node.validations.required;
+        minRequiredRows = minRows === true ? 1 : minRows;
+
+        if (node.validations.required.onlyIf) {
+            onlyIf = node.validations.required.onlyIf;
+        }
     }
 
     // only show remove button if rows is greater than min req rows
     showRemoveButton = (0, _knockout.computed)(function () {
-        return rows().length > minRequiredRows;
+        var isRequired = true;
+        if (onlyIf) {
+            isRequired = (0, _scalejs2.evaluate)(onlyIf, context.getValue);
+        }
+        return !isRequired || rows().filter(function (r) {
+            return !r.deleteFlag || !r.deleteFlag();
+        }).length > minRequiredRows;
     });
 
     // get data from data parent if exists
