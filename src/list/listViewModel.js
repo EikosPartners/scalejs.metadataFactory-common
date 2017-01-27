@@ -93,7 +93,8 @@ export default function listViewModel(node) {
                 : observable(node.addButtonRendered !== false);
     let minRequiredRows = 0,
         showRemoveButton = null,
-        scrolled;
+        scrolled,
+        onlyIf;
 
     function setReadonly(bool) {
         readonly(bool); // sets readonly state of the list
@@ -370,6 +371,9 @@ export default function listViewModel(node) {
     // sets value in list
     // or re-inits if data is empty or invalid
     function setValue(newData) {
+        if (Array.isArray(newData) && newData.length === 0 && rows().length === 0) {
+            return; // new data is same as current one (empty array)
+        }
             // reverse the data because adding now unshifts the rows.
         if (Array.isArray(newData) && !options.push) {
             newData.reverse();
@@ -385,11 +389,23 @@ export default function listViewModel(node) {
 
         // sets minrequired rows
     if (node.validations && node.validations.required) {
-        minRequiredRows = node.validations.required === true ? 1 : node.validations.required;
+        const minRows = node.validations.required.params || node.validations.required;
+        minRequiredRows = minRows === true ? 1 : minRows;
+
+        if (node.validations.required.onlyIf) {
+            onlyIf = node.validations.required.onlyIf;
+        }
     }
 
         // only show remove button if rows is greater than min req rows
-    showRemoveButton = computed(() => rows().length > minRequiredRows);
+    showRemoveButton = computed(() => {
+        let isRequired = true;
+        if (onlyIf) {
+            isRequired = evaluate(onlyIf, context.getValue);
+        }
+        return !isRequired ||
+            rows().filter(r => !r.deleteFlag || !r.deleteFlag()).length > minRequiredRows;
+    });
 
         // get data from data parent if exists
     if (context.data && !options.subscribeToData) {
