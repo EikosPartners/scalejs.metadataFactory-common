@@ -371,7 +371,8 @@ export default function listViewModel(node) {
     // sets value in list
     // or re-inits if data is empty or invalid
     function setValue(newData) {
-        if (Array.isArray(newData) && newData.length === 0 && rows().length === 0) {
+        if ((newData === null ||
+            (Array.isArray(newData) && newData.length === 0)) && getValue() === null) {
             return; // new data is same as current one (empty array)
         }
             // reverse the data because adding now unshifts the rows.
