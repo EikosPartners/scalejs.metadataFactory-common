@@ -394,3 +394,11 @@ span.validation-message {
         top: -10px;
     }
 }
+
+/* 
+    hiding the time container,
+    since we updated to pikday-time for the datetimepicker
+*/
+.pika-time-container {
+    display: none;
+}
