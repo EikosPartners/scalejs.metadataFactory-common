@@ -28,7 +28,7 @@ function event(options) {
         params = merge(params || {}, options[options.paramsKey]);
     }
 
-    if (params) {
+    if (params && options.renderParams !== false) {
         params = renderParams(params, merge(data, optionData));
     }
 
