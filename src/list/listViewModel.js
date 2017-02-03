@@ -238,7 +238,7 @@ export default function listViewModel(node) {
                 // allow for JSON default values don't get overwritten
                 // by server data that doesn't contain data
                 if (initialValues[item.id]) {
-                    item.setValue && item.setValue(initialValues[item.id]);
+                    item.setValue && item.setValue(initialValues[item.id], { initial: true });
                 }
             });
         }
