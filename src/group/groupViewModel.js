@@ -27,7 +27,7 @@ export default function (node) {
         const value = has(values, 'value') ? values.value : values;
         Object.keys(dictionary()).forEach((id) => {
             const child = dictionary()[id];
-            if (child.setValue && Object.prototype.isPrototypeOf.call(value, child.id)) {
+            if (child.setValue && Object.prototype.hasOwnProperty.call(value, child.id)) {
                 child.setValue(value[child.id], opts);
             }
         });
