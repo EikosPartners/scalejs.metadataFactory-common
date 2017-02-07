@@ -1,6 +1,6 @@
-/*global define, ko*/
 import { createViewModels as createViewModelsUnbound } from 'scalejs.metadataFactory';
-import { unwrap, computed, observable } from 'knockout';
+import { unwrap, computed, observable, observableArray } from 'knockout';
+import { evaluate } from 'scalejs.expression-jsep';
 import { receive } from 'scalejs.messagebus';
 import { merge } from 'scalejs';
 
@@ -12,54 +12,64 @@ import { merge } from 'scalejs';
      */
 
     // TODO: add docs
-    export default function (node, metadata) {
-        var subs = [],
-            createViewModels = createViewModelsUnbound.bind(this), //ensures context is passed
-            options = node.options || {},
-            mappedChildNodes,
-            sections,
-            isShown = observable(true);
+export default function (node) {
+    const context = this,
+        subs = [],
+        createViewModels = createViewModelsUnbound.bind(this), // ensures context is passed
+        options = node.options || {},
+        mappedChildNodes = observableArray(),
+        isShown = observable(true),
+        children = createViewModels(node.children);
 
-        mappedChildNodes = createViewModels(node.children);
+    let sections = null;
 
-    
-        sections = node.sections.map(function (section, index) {
-            var visible = observable(options.openByDefault === false ? false : true);
-            return merge(mappedChildNodes[index], {
-                header: section,
-                visible: visible,
-                toggleVisibility: function () {
-                    if(!visible() && options && options.trueAccordion){
-                        setAllSectionVisibility(false);
-                    }
-                    visible(!visible());
+    mappedChildNodes(children);
+
+
+    sections = node.sections.map((section, index) => {
+        const visible = observable(options.openByDefault !== false);
+        return merge(mappedChildNodes[index], {
+            header: section,
+            visible: visible,
+            toggleVisibility: function () {
+                if (!visible() && options && options.trueAccordion) {
+                    setAllSectionVisibility(false);
                 }
-            });
-        });
-
-        function setAllSectionVisibility(visiblity) {
-            sections.forEach(function(section) {
-               section.visible(visiblity);
-            });
-        }
-
-        subs.push(receive(node.id + '.collapseAll', function(data) {
-            setAllSectionVisibility(false);
-        }));
-
-        subs.push(receive(node.id + '.expandAll', function(data) {
-            setAllSectionVisibility(true);
-        }));
-
-        return merge(node, {
-            isShown: isShown,
-            sections: sections,
-            mappedChildNodes: mappedChildNodes,
-            setAllSectionVisibility: setAllSectionVisibility,
-            dispose: function () {
-                subs.forEach(function(sub) {
-                    sub.dispose();
-                })
+                visible(!visible());
             }
         });
-    };
+    });
+
+    function setAllSectionVisibility(visiblity) {
+        sections.forEach((section) => {
+            section.visible(visiblity);
+        });
+    }
+
+    subs.push(receive(`${node.id}.collapseAll`, () => {
+        setAllSectionVisibility(false);
+    }));
+
+    subs.push(receive(`${node.id}.expandAll`, () => {
+        setAllSectionVisibility(true);
+    }));
+
+    if (node.rendered) {
+        subs.push(computed(() => {
+            const rendered = evaluate(node.rendered, context.getValue);
+            mappedChildNodes(rendered ? children : []);
+        }));
+    }
+
+    return merge(node, {
+        isShown: isShown,
+        sections: sections,
+        mappedChildNodes: mappedChildNodes,
+        setAllSectionVisibility: setAllSectionVisibility,
+        dispose: function () {
+            subs.forEach((sub) => {
+                sub.dispose();
+            });
+        }
+    });
+}
