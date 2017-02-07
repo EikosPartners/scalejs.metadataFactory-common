@@ -1,4 +1,4 @@
-import { observable } from 'knockout';
+import { observable, unwrap } from 'knockout';
 import { has, merge } from 'scalejs';
 import { createViewModels } from 'scalejs.metadataFactory';
 
@@ -10,10 +10,10 @@ function createNodeDictionary(mappedChildNodes) {
             dictionary[node.id] = node;
         }
         if (!node.getValue) {
-            (node.mappedChildNodes || []).forEach(addToDictionary);
+            (unwrap(node.mappedChildNodes) || []).forEach(addToDictionary);
         }
     }
-    (mappedChildNodes || []).forEach(addToDictionary);
+    (unwrap(mappedChildNodes) || []).forEach(addToDictionary);
 
     return dictionary;
 }
