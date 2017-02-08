@@ -21,45 +21,44 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // todo evaluate if should move to advanced grid?
 function aggregateValues(node) {
-    var value;
+    var value = void 0;
     if (node.getValue) {
         value = [].concat(node.getValue());
     } else if (node.mappedChildNodes) {
-        value = node.mappedChildNodes.reduce(function (values, childNode) {
+        value = (0, _knockout.unwrap)(node.mappedChildNodes).reduce(function (values, childNode) {
             var childValue = aggregateValues(childNode);
             if (childValue) {
-                values = values.concat(childValue);
+                return values.concat(childValue);
             }
             return values;
         }, []);
     }
     // convert objects to strings
-    value = value.map(function (value) {
-        if (!(0, _scalejs.has)(value)) {
-            value = '';
+    value = value.map(function (v) {
+        if (!(0, _scalejs.has)(v)) {
+            return '';
         }
-        if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
-            if (value.op) {
-                delete value.op;
+        if ((typeof v === 'undefined' ? 'undefined' : _typeof(v)) === 'object') {
+            if (v.op) {
+                delete v.op;
             } // we don't want to custom operators values in preview
-            return value = Object.keys(value).map(function (key) {
-                if (Date.parse(value[key])) {
-                    return _moment2.default.utc(value[key]).format('MM/DD/YYYY');
-                } else {
-                    return value[key];
+            return Object.keys(v).map(function (key) {
+                if (Date.parse(v[key])) {
+                    return _moment2.default.utc(v[key]).format('MM/DD/YYYY');
                 }
+                return v[key];
             }).join(' ');
         }
-        return value;
+        return v;
     });
     return value;
 }
 
 exports.default = {
-    'accordion-header': function accordionHeader(ctx) {
+    'accordion-header': function accordionHeader() {
         return {
             click: this.toggleVisibility,
-            //todo this should be an SVG / class
+            // todo this should be an SVG / class
             css: {
                 'fa-caret-down': this.visible(),
                 'fa-caret-right': !this.visible()
@@ -85,9 +84,9 @@ exports.default = {
             clickBubble: false
         };
     },
-    //todo move to advanced grid
+    // todo move to advanced grid
     'accordion-header-preview-text': function accordionHeaderPreviewText(ctx) {
-        var accordionChild = ctx.$parents[1].mappedChildNodes[ctx.$index()],
+        var accordionChild = (0, _knockout.unwrap)(ctx.$parents[1].mappedChildNodes)[ctx.$index()],
             count = (0, _knockout.computed)(function () {
             var values = aggregateValues(accordionChild);
             return values.length > 0 && values[0] ? values.length : '';
@@ -97,7 +96,7 @@ exports.default = {
             text: count
         };
     },
-    'accordion-header-text': function accordionHeaderText(ctx) {
+    'accordion-header-text': function accordionHeaderText() {
         return {
             text: typeof this.header === 'string' ? this.header : this.header.text
         };

@@ -34,7 +34,7 @@ function event(options) {
         params = (0, _scalejs2.merge)(params || {}, options[options.paramsKey]);
     }
 
-    if (params) {
+    if (params && options.renderParams !== false) {
         params = renderParams(params, (0, _scalejs2.merge)(data, optionData));
     }
 
