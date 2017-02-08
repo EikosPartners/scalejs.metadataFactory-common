@@ -28,7 +28,7 @@ export default function (node) {
 
     sections = node.sections.map((section, index) => {
         const visible = observable(options.openByDefault !== false);
-        return merge(mappedChildNodes[index], {
+        return merge(children[index], {
             header: section,
             visible: visible,
             toggleVisibility: function () {
