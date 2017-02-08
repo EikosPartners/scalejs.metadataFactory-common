@@ -24,7 +24,7 @@ export default function (node) {
         mappedChildNodes = createViewModels.call(this, node.children);
 
     function setValue(values, opts) {
-        const value = has(values, 'value') ? values.value : values;
+        const value = (has(values, 'value') ? values.value : values) || {};
         Object.keys(dictionary()).forEach((id) => {
             const child = dictionary()[id];
             if (child.setValue && Object.prototype.hasOwnProperty.call(value, child.id)) {
