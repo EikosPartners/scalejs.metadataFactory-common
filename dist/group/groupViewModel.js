@@ -5,17 +5,16 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function (node) {
-    var options = node.options || {},
-        dictionary = (0, _knockout.observable)(),
+    var dictionary = (0, _knockout.observable)(),
         context = this,
-        mappedChildNodes;
+        mappedChildNodes = _scalejs2.createViewModels.call(this, node.children);
 
-    function setValue(values) {
+    function setValue(values, opts) {
         var value = (0, _scalejs.has)(values, 'value') ? values.value : values;
         Object.keys(dictionary()).forEach(function (id) {
             var child = dictionary()[id];
-            if (child.setValue && value.hasOwnProperty(child.id)) {
-                child.setValue(value[child.id]);
+            if (child.setValue && Object.prototype.hasOwnProperty.call(value, child.id)) {
+                child.setValue(value[child.id], opts);
             }
         });
     }
@@ -30,8 +29,6 @@ exports.default = function (node) {
         }, {});
         return ret;
     }
-
-    mappedChildNodes = _scalejs2.createViewModels.call(this, node.children);
 
     dictionary(createNodeDictionary(mappedChildNodes));
 
@@ -58,13 +55,11 @@ function createNodeDictionary(mappedChildNodes) {
             dictionary[node.id] = node;
         }
         if (!node.getValue) {
-            (node.mappedChildNodes || []).forEach(addToDictionary);
+            ((0, _knockout.unwrap)(node.mappedChildNodes) || []).forEach(addToDictionary);
         }
     }
-    (mappedChildNodes || []).forEach(addToDictionary);
+    ((0, _knockout.unwrap)(mappedChildNodes) || []).forEach(addToDictionary);
 
     return dictionary;
 }
-
-;
 //# sourceMappingURL=groupViewModel.js.map

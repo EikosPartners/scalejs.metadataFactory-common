@@ -1,7 +1,7 @@
 import { evaluate } from 'scalejs.expression-jsep';
 import ko from 'knockout';
 import _ from 'lodash';
-import 'knockout.validation';
+import 'ep-knockout.validation';
 
 /*
 * made validation engine its own file to support more complex logic
