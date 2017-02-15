@@ -383,6 +383,11 @@ export default function listViewModel(node) {
         initialize();
     }
 
+    function update(value) {
+        console.info('List only supports udate for value');
+        setValue(value);
+    }
+
         // returns last row
     function lastRow() {
         return rows()[rows().length - 1];
@@ -477,6 +482,7 @@ export default function listViewModel(node) {
         deleteRows: deleteRows,
         lastRow: lastRow,
         setReadonly: setReadonly,
-        addButtonRendered: addButtonRendered
+        addButtonRendered: addButtonRendered,
+        update: update
     });
 }

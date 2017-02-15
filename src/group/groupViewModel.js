@@ -44,6 +44,11 @@ export default function (node) {
         return ret;
     }
 
+    function update(value) {
+        console.info('Group only supports udate for value');
+        setValue(value);
+    }
+
     dictionary(createNodeDictionary(mappedChildNodes));
 
     return merge(node, {
@@ -51,6 +56,7 @@ export default function (node) {
         dictionary,
         setValue,
         getValue,
-        context
+        context,
+        update
     });
 }
