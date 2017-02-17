@@ -5,33 +5,33 @@ import noticeboard from 'scalejs.noticeboard';
 import { merge, has, is } from 'scalejs';
 import _ from 'lodash';
 
-    // todo: revisit comments below
-    // listViewModel is a component which manages a simple list
-    // - items - items are what are used to make up the rows in the list
-    // - options
-    // -- addRows - if false add button does not appear
-    // -- deleteRows - if false delete button does not appear
-    // -- minRequiredRows - initializes list with # of rows and wont let user delete
+// todo: revisit comments below
+// listViewModel is a component which manages a simple list
+// - items - items are what are used to make up the rows in the list
+// - options
+// -- addRows - if false add button does not appear
+// -- deleteRows - if false delete button does not appear
+// -- minRequiredRows - initializes list with # of rows and wont let user delete
 
-    // TODO: Refactor Session
-    // - implement "parent passes to children" pattern for labels
-    // - brainstorm cleaner "itemViewModel" imp.
-    // - general clean up/renaming/documenting session
-    // ...add more refactor session goals here!
-    /**
-     *  list is the component to use when wanting to group items into enumerable lists.
-     *  There are two types of lists:
-     * responsive form lists (default) and table lists (+listAdvanced wrapper)
-     *  The underlying data model for a list is an array of objects.
-     *
-     * @module list
-     *
-     * @param {object} node
-     *  The configuration specs for the component.
-     * @param {string} [node.id]
-     *  The id of the list becomes the key in the data for all the children of the list.
-     *
-     */
+// TODO: Refactor Session
+// - implement "parent passes to children" pattern for labels
+// - brainstorm cleaner "itemViewModel" imp.
+// - general clean up/renaming/documenting session
+// ...add more refactor session goals here!
+/**
+ *  list is the component to use when wanting to group items into enumerable lists.
+ *  There are two types of lists:
+ * responsive form lists (default) and table lists (+listAdvanced wrapper)
+ *  The underlying data model for a list is an array of objects.
+ *
+ * @module list
+ *
+ * @param {object} node
+ *  The configuration specs for the component.
+ * @param {string} [node.id]
+ *  The id of the list becomes the key in the data for all the children of the list.
+ *
+ */
 const listItems = {
     DELETE: del,
     DELETE_FLAG: deleteFlag
@@ -54,8 +54,8 @@ function del(itemDef) {
 
 function deleteFlag(itemDef) {
     const context = this;
-        // the id will be the propertu
-        // getValue - return if it was deleted or not
+    // the id will be the propertu
+    // getValue - return if it was deleted or not
     return context.isNew ? del.call(context, itemDef) : merge(context, {
         template: 'list_del_flag_template',
         getValue: function () {
@@ -82,17 +82,18 @@ export default function listViewModel(node) {
         // initialize to the context's state as determined by the form generally
         readonly = observable((context.readonly && context.readonly()) || false),
         deleteRows = observable(options.deleteRows !== false),
-            // addButtonContext = node.addButtonContext,
+        // addButtonContext = node.addButtonContext,
         mappedChildNodes = observableArray(),
         data = observable(node.data),
         unique = {},
         visibleRows = observableArray(),
         initialData = _.cloneDeep(node.data) || [],
         addButtonRendered = is(node.addButtonRendered, 'string') ?
-                computed(evaluate.bind(null, node.addButtonRendered, context.getValue))
-                : observable(node.addButtonRendered !== false);
+            computed(evaluate.bind(null, node.addButtonRendered, context.getValue))
+            : observable(node.addButtonRendered !== false);
     let minRequiredRows = 0,
         showRemoveButton = null,
+        sub = null,
         scrolled,
         onlyIf;
 
@@ -103,9 +104,9 @@ export default function listViewModel(node) {
         });
     }
 
-        // rowViewModel
-        // called on each add
-        // or when data is set with initial values
+    // rowViewModel
+    // called on each add
+    // or when data is set with initial values
     function rowViewModel(initialValues, isNew) {
         const items = observableArray(), // observable array to hold the items in the row
             // observable dictionary to hold the items and other properties
@@ -136,16 +137,16 @@ export default function listViewModel(node) {
             itemViewModels = null,
             rowReadonly;
 
-            // initialize row readonly as the list's state
+        // initialize row readonly as the list's state
         rowContext.readonly = observable(readonly());
 
-            // rowReadonly - string to run thrown expression parser to show/hide rows
+        // rowReadonly - string to run thrown expression parser to show/hide rows
         if (is(options.rowReadonly, 'string')) {
             rowReadonly = computed(() => {
                 if (rowContext.readonly && rowContext.readonly()) {
                     return true; // if readonly is true on context, then row is readonly
                 }
-                    // else, eval the expression to determine if the row is readonly
+                // else, eval the expression to determine if the row is readonly
                 return evaluate(options.rowReadonly, (id) => {
                     const item = itemDictionary()[id];
                     if (item && item.getValue) {
@@ -155,7 +156,7 @@ export default function listViewModel(node) {
             });
         }
 
-            // can be utilized by expression parser to get error for an id
+        // can be utilized by expression parser to get error for an id
         function error(id) {
             const item = itemDictionary()[id];
             if (item && item.inputValue && item.inputValue.error) {
@@ -163,11 +164,11 @@ export default function listViewModel(node) {
             }
         }
 
-            // accurately calculates the index of the row in the list
+        // accurately calculates the index of the row in the list
         rowContext.index = computed(() => rows().indexOf(row));
 
-            // getValueById function for expression parsing
-            // todo. refactor this
+        // getValueById function for expression parsing
+        // todo. refactor this
         rowContext.getValue = function (id) {
             if (id === 'index') {
                 return rowContext.index();
@@ -181,13 +182,13 @@ export default function listViewModel(node) {
             if (id === 'error') {
                 return error;
             }
-                // check the item dictionary
+            // check the item dictionary
             const item = itemDictionary()[id];
             if (item && item.getValue) {
                 return item.getValue();
             }
 
-                // if the item doesnt have getValue, return itself
+            // if the item doesnt have getValue, return itself
             if (has(item)) {
                 return unwrap(item);
             }
@@ -206,9 +207,9 @@ export default function listViewModel(node) {
             // deep clone the item as we might mutate it before passing to createViewModels
             const item = _.cloneDeep(_item);
 
-                // add readonly computed to the item before passing it to input
-                // input will use the already defined observable if it exists
-                // but, if the input already has readonly set on it, dont get readonly from row..
+            // add readonly computed to the item before passing it to input
+            // input will use the already defined observable if it exists
+            // but, if the input already has readonly set on it, dont get readonly from row..
             if (rowReadonly && item.input && !has(item.input.readonly)) {
                 item.input.readonly = rowReadonly;
             }
@@ -221,7 +222,7 @@ export default function listViewModel(node) {
                 }
             }
 
-                // todo - clean this up?
+            // todo - clean this up?
             if (listItems[item.type]) {
                 const ret = listItems[item.type].call(rowContext, item);
                 if (item.visible) {
@@ -232,7 +233,7 @@ export default function listViewModel(node) {
             return createViewModel.call(rowContext, item);
         });
 
-            // if there are initial values, update the children
+        // if there are initial values, update the children
         if (initialValues) {
             itemViewModels.forEach((item) => {
                 // allow for JSON default values don't get overwritten
@@ -243,12 +244,12 @@ export default function listViewModel(node) {
             });
         }
 
-            // update items obsArr
+        // update items obsArr
         items(itemViewModels);
 
-            // generate itemDictionary from the itemViewModels
-            // also add each item's inputValue directly on the row
-            // this is for MemberExpressions to work properly (list[0].Status)
+        // generate itemDictionary from the itemViewModels
+        // also add each item's inputValue directly on the row
+        // this is for MemberExpressions to work properly (list[0].Status)
         itemDictionary(itemViewModels.reduce((dict, item) => {
             if (has(item.id)) {
                 dict[item.id] = item;
@@ -278,11 +279,11 @@ export default function listViewModel(node) {
         return row;
     }
 
-        // generates a new row and add to list
+    // generates a new row and add to list
     function add(row, isNew) {
         const rowVm = rowViewModel(row, isNew);
 
-            // add remove function to rowVM
+        // add remove function to rowVM
         rowVm.remove = function () {
             rowVm.items().forEach((item) => {
                 if (item.dispose) {
@@ -300,9 +301,9 @@ export default function listViewModel(node) {
 
 
         if (isNew === true) {
-                // auto-focus on the newly added row
+            // auto-focus on the newly added row
             setTimeout(() => {
-                    // need to wait for clickOff events to stop firing.
+                // need to wait for clickOff events to stop firing.
                 rowVm.editMode(true);
                 (rowVm.items() || []).some((item) => {
                     if (item.rendered() && item.hasFocus) {
@@ -315,11 +316,11 @@ export default function listViewModel(node) {
         }
     }
 
-        // returns the values of the list
-        // e.g. [{item1:'Value1',item2:'Value2'}]
-        // dontSendIfEmpty - this prevents items from getting
-        // sent in the data if that property is empty
-        // if array is empty send null
+    // returns the values of the list
+    // e.g. [{item1:'Value1',item2:'Value2'}]
+    // dontSendIfEmpty - this prevents items from getting
+    // sent in the data if that property is empty
+    // if array is empty send null
     function getValue() {
         let listData = _.cloneDeep(rows().map((row) => {
             const originalRowItems = row.itemDictionary.peek();
@@ -334,7 +335,7 @@ export default function listViewModel(node) {
                 return dataObj;
             }, {});
         }).filter(obj => !(options.dontSendIfEmpty &&
-                        (!obj[options.dontSendIfEmpty] && obj[options.dontSendIfEmpty] !== 0))));
+            (!obj[options.dontSendIfEmpty] && obj[options.dontSendIfEmpty] !== 0))));
         if (options.sendNullIfEmpty && listData.length === 0) {
             listData = null;
         }
@@ -375,7 +376,7 @@ export default function listViewModel(node) {
             (Array.isArray(newData) && newData.length === 0)) && getValue() === null) {
             return; // new data is same as current one (empty array)
         }
-            // reverse the data because adding now unshifts the rows.
+        // reverse the data because adding now unshifts the rows.
         if (Array.isArray(newData) && !options.push) {
             newData.reverse();
         }
@@ -388,12 +389,12 @@ export default function listViewModel(node) {
         setValue(value);
     }
 
-        // returns last row
+    // returns last row
     function lastRow() {
         return rows()[rows().length - 1];
     }
 
-        // sets minrequired rows
+    // sets minrequired rows
     if (node.validations && node.validations.required) {
         const minRows = node.validations.required.params || node.validations.required;
         minRequiredRows = minRows === true ? 1 : minRows;
@@ -403,7 +404,7 @@ export default function listViewModel(node) {
         }
     }
 
-        // only show remove button if rows is greater than min req rows
+    // only show remove button if rows is greater than min req rows
     showRemoveButton = computed(() => {
         let isRequired = true;
         if (onlyIf) {
@@ -413,7 +414,7 @@ export default function listViewModel(node) {
             rows().filter(r => !r.deleteFlag || !r.deleteFlag()).length > minRequiredRows;
     });
 
-        // get data from data parent if exists
+    // get data from data parent if exists
     if (context.data && !options.subscribeToData) {
         console.warn('Please make sure you get the Data from setValue or set node.subscribeToData to true! Removing data-subscribe as a default', node);
     }
@@ -432,11 +433,15 @@ export default function listViewModel(node) {
 
     initialize();
 
-        // will "remove" mapped child nodes if the list is hidden
-        // this is required for validations to work properly
-        // todo: remove this workaround and implement validation on list itself
-    computed(() => {
-        if (isShown()) {
+    // will "remove" mapped child nodes if the list is hidden
+    // this is required for validations to work properly
+    // todo: remove this workaround and implement validation on list itself
+    sub = computed(() => {
+        let rendered = true;
+        if (node.rendered) {
+            rendered = evaluate(node.rendered, context.getValue);
+        }
+        if (isShown() && rendered) {
             mappedChildNodes(rows().filter(row => !row.deleteFlag()));
         } else {
             mappedChildNodes([]);
@@ -458,7 +463,7 @@ export default function listViewModel(node) {
                     visibleRows.push(currentRows[seed + i]);
 
                     if (!currentRows[seed + i]) {
-                            // no more rows stahp
+                        // no more rows stahp
                         break;
                     }
                 }
@@ -483,6 +488,9 @@ export default function listViewModel(node) {
         lastRow: lastRow,
         setReadonly: setReadonly,
         addButtonRendered: addButtonRendered,
-        update: update
+        update: update,
+        dispose() {
+            sub.dispose();
+        }
     });
 }

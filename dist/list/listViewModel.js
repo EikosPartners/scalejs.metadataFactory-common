@@ -110,6 +110,7 @@ function listViewModel(node) {
         addButtonRendered = (0, _scalejs5.is)(node.addButtonRendered, 'string') ? (0, _knockout.computed)(_scalejs2.evaluate.bind(null, node.addButtonRendered, context.getValue)) : (0, _knockout.observable)(node.addButtonRendered !== false);
     var minRequiredRows = 0,
         showRemoveButton = null,
+        sub = null,
         scrolled = void 0,
         onlyIf = void 0;
 
@@ -405,6 +406,11 @@ function listViewModel(node) {
         initialize();
     }
 
+    function update(value) {
+        console.info('List only supports udate for value');
+        setValue(value);
+    }
+
     // returns last row
     function lastRow() {
         return rows()[rows().length - 1];
@@ -453,8 +459,12 @@ function listViewModel(node) {
     // will "remove" mapped child nodes if the list is hidden
     // this is required for validations to work properly
     // todo: remove this workaround and implement validation on list itself
-    (0, _knockout.computed)(function () {
-        if (isShown()) {
+    sub = (0, _knockout.computed)(function () {
+        var rendered = true;
+        if (node.rendered) {
+            rendered = (0, _scalejs2.evaluate)(node.rendered, context.getValue);
+        }
+        if (isShown() && rendered) {
             mappedChildNodes(rows().filter(function (row) {
                 return !row.deleteFlag();
             }));
@@ -501,7 +511,11 @@ function listViewModel(node) {
         deleteRows: deleteRows,
         lastRow: lastRow,
         setReadonly: setReadonly,
-        addButtonRendered: addButtonRendered
+        addButtonRendered: addButtonRendered,
+        update: update,
+        dispose: function dispose() {
+            sub.dispose();
+        }
     });
 }
 //# sourceMappingURL=listViewModel.js.map

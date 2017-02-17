@@ -7,10 +7,13 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = function (node) {
     var dictionary = (0, _knockout.observable)(),
         context = this,
-        mappedChildNodes = _scalejs2.createViewModels.call(this, node.children);
+        mappedChildNodes = _scalejs2.createViewModels.call(this, node.children),
+        sub = (0, _knockout.computed)(function () {
+        return dictionary(createNodeDictionary(mappedChildNodes));
+    });
 
     function setValue(values, opts) {
-        var value = (0, _scalejs.has)(values, 'value') ? values.value : values;
+        var value = ((0, _scalejs.has)(values, 'value') ? values.value : values) || {};
         Object.keys(dictionary()).forEach(function (id) {
             var child = dictionary()[id];
             if (child.setValue && Object.prototype.hasOwnProperty.call(value, child.id)) {
@@ -30,14 +33,21 @@ exports.default = function (node) {
         return ret;
     }
 
-    dictionary(createNodeDictionary(mappedChildNodes));
+    function update(value) {
+        console.info('Group only supports udate for value');
+        setValue(value);
+    }
 
     return (0, _scalejs.merge)(node, {
         mappedChildNodes: mappedChildNodes,
         dictionary: dictionary,
         setValue: setValue,
         getValue: getValue,
-        context: context
+        context: context,
+        update: update,
+        dispose: function dispose() {
+            sub.dispose();
+        }
     });
 };
 

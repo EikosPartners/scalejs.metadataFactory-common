@@ -1,4 +1,4 @@
-import { observable, unwrap } from 'knockout';
+import { observable, unwrap, computed } from 'knockout';
 import { has, merge } from 'scalejs';
 import { createViewModels } from 'scalejs.metadataFactory';
 
@@ -21,7 +21,9 @@ function createNodeDictionary(mappedChildNodes) {
 export default function (node) {
     const dictionary = observable(),
         context = this,
-        mappedChildNodes = createViewModels.call(this, node.children);
+        mappedChildNodes = createViewModels.call(this, node.children),
+        sub = computed(() => dictionary(createNodeDictionary(mappedChildNodes)));
+
 
     function setValue(values, opts) {
         const value = (has(values, 'value') ? values.value : values) || {};
@@ -49,14 +51,15 @@ export default function (node) {
         setValue(value);
     }
 
-    dictionary(createNodeDictionary(mappedChildNodes));
-
     return merge(node, {
         mappedChildNodes,
         dictionary,
         setValue,
         getValue,
         context,
-        update
+        update,
+        dispose() {
+            sub.dispose();
+        }
     });
 }
