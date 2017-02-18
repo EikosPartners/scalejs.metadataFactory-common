@@ -1,12 +1,13 @@
 import { notify, receive } from 'scalejs.messagebus';
 import { observable } from 'knockout';
 import { merge, has } from 'scalejs';
-import { extend } from 'lodash';
+import { extend, cloneDeep } from 'lodash';
 
 import { getRegisteredActions } from './actionModule';
 
 export default function actionViewModel(node) {
     const registeredActions = getRegisteredActions(),
+        originalJson = cloneDeep(node),
         context = this || {},
         options = node.options || {},
         text = node.text || options.text, // TODO: Why are we checking options?
@@ -30,7 +31,8 @@ export default function actionViewModel(node) {
             notify(validate, {
                 successCallback: function () {
                     actionFunc(options, args);
-                }
+                },
+                actionNode: cloneDeep(originalJson)
             });
         } else {
             actionFunc(options, args);
