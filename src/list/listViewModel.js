@@ -122,7 +122,7 @@ export default function listViewModel(node) {
                 deleteFlag: observable(false),
                 data: computed(() => {
                     const dict = itemDictionary();
-                    return Object.keys(dict).reduce((d, id) => {
+                    return merge(initialValues || {}, Object.keys(dict).reduce((d, id) => {
                         const item = dict[id];
                         if (item && item.getValue) {
                             d[id] = item.getValue();
@@ -130,7 +130,7 @@ export default function listViewModel(node) {
                             d[id] = item;
                         }
                         return d;
-                    }, {});
+                    }, {}));
                 })
             },
             row = {}; // the row itself
