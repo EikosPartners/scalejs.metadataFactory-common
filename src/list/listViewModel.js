@@ -91,7 +91,8 @@ export default function listViewModel(node) {
         addButtonRendered = is(node.addButtonRendered, 'string') ?
             computed(evaluate.bind(null, node.addButtonRendered, context.getValue))
             : observable(node.addButtonRendered !== false);
-    let minRequiredRows = 0,
+    let initial = node.nodeDataAsInitial !== false,
+        minRequiredRows = 0,
         showRemoveButton = null,
         sub = null,
         scrolled,
@@ -107,7 +108,7 @@ export default function listViewModel(node) {
     // rowViewModel
     // called on each add
     // or when data is set with initial values
-    function rowViewModel(initialValues, isNew) {
+    function rowViewModel(initialValues, isNew, initialOverride) {
         const items = observableArray(), // observable array to hold the items in the row
             // observable dictionary to hold the items and other properties
             itemDictionary = observable({}),
@@ -239,7 +240,7 @@ export default function listViewModel(node) {
                 // allow for JSON default values don't get overwritten
                 // by server data that doesn't contain data
                 if (initialValues[item.id]) {
-                    item.setValue && item.setValue(initialValues[item.id], { initial: true });
+                    item.setValue && item.setValue(initialValues[item.id], { initial: initialOverride !== false });
                 }
             });
         }
@@ -280,8 +281,8 @@ export default function listViewModel(node) {
     }
 
     // generates a new row and add to list
-    function add(row, isNew) {
-        const rowVm = rowViewModel(row, isNew);
+    function add(row, isNew, initialOverride) {
+        const rowVm = rowViewModel(row, isNew, initialOverride);
 
         // add remove function to rowVM
         rowVm.remove = function () {
@@ -354,7 +355,7 @@ export default function listViewModel(node) {
             });
             rows.removeAll();
             data().forEach((item) => {
-                add(item, false);
+                add(item, false, initial);
             });
 
             // if trackDiffChanges set to true store the original data to noticeboard
@@ -363,9 +364,10 @@ export default function listViewModel(node) {
             }
         } else {
             for (let i = rows().length; i < minRequiredRows; i++) {
-                add(null, true);
+                add(null, true, initial);
             }
         }
+        initial = undefined;
         //  console.timeEnd('List init');
     }
 
