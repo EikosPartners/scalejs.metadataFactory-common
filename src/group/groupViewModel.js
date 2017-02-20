@@ -38,8 +38,11 @@ export default function (node) {
     function getValue() {
         const ret = Object.keys(dictionary()).reduce((obj, id) => {
             const child = dictionary()[id];
-            if (child.getValue) {
+            if ((child.getValue &&
+            (child.rendered() || node.trackIfHidden !== false || child.trackIfHidden))) {
                 obj[child.id] = child.getValue();
+            } else {
+                delete obj[child.id]; // track if hidden functionality for group..
             }
             return obj;
         }, {});
