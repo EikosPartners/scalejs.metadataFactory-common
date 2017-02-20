@@ -301,7 +301,7 @@ export default function listViewModel(node) {
         }
 
 
-        if (isNew === true) {
+        if (isNew === true && options.focusNew !== false) {
             // auto-focus on the newly added row
             setTimeout(() => {
                 // need to wait for clickOff events to stop firing.
