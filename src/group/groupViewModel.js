@@ -39,7 +39,7 @@ export default function (node) {
         const ret = Object.keys(dictionary()).reduce((obj, id) => {
             const child = dictionary()[id];
             if ((child.getValue &&
-            (child.rendered() || node.trackIfHidden !== false || child.trackIfHidden))) {
+            (child.rendered() || node.trackChildrenIfHidden !== false || child.trackIfHidden))) {
                 obj[child.id] = child.getValue();
             } else {
                 delete obj[child.id]; // track if hidden functionality for group..
