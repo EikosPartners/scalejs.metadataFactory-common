@@ -39,6 +39,11 @@ $spinner-background-color: #eeeeee;
 $spinner-opacity: .8;
 $spinner-affix-top: 0px;
 
+// Had to add these because they weren't being imported
+$orange: orange;
+$yellow: yellow;
+$spinner-overlay-z-index: 5000;
+
 .grid-header {
     float: right;
     padding-bottom: 10px;
@@ -52,18 +57,17 @@ table.pjson {
 
     thead {
         color: $grid-header-color;
-        @include font-medium;
         font-size: 10px;
         text-transform: uppercase;
 
         .sorting_asc,
         .sorting_desc {
-            background: url('~public/images/icon-sort-asc.svg') no-repeat center right 10px;
+            background: url('~./images/icon-sort-asc.svg') no-repeat center right 10px;
             background-color: $grid-background-color-main;
         }
 
-        .sorting_desc { 
-            background: url('~public/images/icon-sort-desc.svg') no-repeat center right 10px;
+        .sorting_desc {
+            background: url('~./images/icon-sort-desc.svg') no-repeat center right 10px;
         }
 
         tr {
@@ -82,7 +86,6 @@ table.pjson {
                 display: none;
                 top: 1px;
                 left: 30px;
-                @include tooltip();
                 z-index: 1;
             }
             &:hover {
@@ -124,11 +127,11 @@ table.pjson {
     tr:nth-child(odd) {
         background: $grid-row-background-color-odd;
     }
-    
+
     tr:hover {
         border: 1px solid $grid-row-hover-border-color;
         background-color: $grid-row-hover-background-color;
-        
+
         td {
             border-bottom: 1px solid $grid-row-hover-border-color;
             border-top: 1px solid $grid-row-hover-border-color;
@@ -141,7 +144,7 @@ table.pjson {
     //     border-bottom: none;
     //     border-top: none;
     // }
-    
+
     td {
         color: $grid-cell-color;
         font-size: 12px;
@@ -156,7 +159,7 @@ table.pjson {
         background-color: $grid-row-selected-bacground-color;
         border: 1px solid $grid-border-color-main;
     }
-    
+
     // ICON related styles
      th, td {
         > .fp {
@@ -189,7 +192,6 @@ table.pjson {
     label.grid-favorite-toggle {
         .tooltip {
             display: none;
-            @include tooltip();
         }
         &:hover .tooltip {
             display: block;
@@ -204,12 +206,9 @@ table.pjson {
             }
         }
         .value {
-            @include font-medium;
             padding-top: 5px;
         }
-        .bnym-team {
-            display: block;
-        }
+        
         .profile-image {
             width: 32px;
             height: 32px;
@@ -234,12 +233,12 @@ table.pjson {
         padding-right: 10px;
 
         &::-webkit-progress-bar {
-            background-color: #ccc;            
+            background-color: #ccc;
             border-radius: 3px;
         }
 
         &::-webkit-progress-value {
-            background-color: #d8e260;            
+            background-color: #d8e260;
             border-radius: 3px;
         }
     }
@@ -294,36 +293,37 @@ table.pjson {
     text-align: center;
 }
 
-@include mobile {   
-    .grid-footer {
-        width: calc(100% - 10px) !important;
-    }  
-    .grid-footer-padded {
-		width: 100% !important;
-	}
-}
-
-@include tablet {
-    .grid-footer {
-        width: calc(100% - 40px) !important;
-    }
-    .grid-footer-padded {
-		width: 100% !important;
-	}
-}
-
-@include desktop {
-    .grid-footer-padded {
-		width: $container-max-width - 80 !important;
-	}
-}
+// Commented out because of broken mixins
+// @include mobile {
+//     .grid-footer {
+//         width: calc(100% - 10px) !important;
+//     }
+//     .grid-footer-padded {
+// 		width: 100% !important;
+// 	}
+// }
+//
+// @include tablet {
+//     .grid-footer {
+//         width: calc(100% - 40px) !important;
+//     }
+//     .grid-footer-padded {
+// 		width: 100% !important;
+// 	}
+// }
+//
+// @include desktop {
+//     .grid-footer-padded {
+// 		width: $container-max-width - 80 !important;
+// 	}
+// }
 // footer styles
 .grid-footer {
     height: $grid-footer-height;
     position: fixed;
     bottom: 0;
     background-color: $grid-footer-background-color;
-    width: inherit; 
+    width: inherit;
     font-size: $grid-footer-font-size;
 
     .loader-text {
@@ -340,7 +340,6 @@ table.pjson {
         left: 10px;
 
         .count {
-            @include font-medium();
             padding-right: 20px;
         }
     }

@@ -56,7 +56,7 @@ export default function (node) {
             callback: function (err, results) {
                 if (!err) {
                     const key = get(endpoint, 'keyMap.resultsKey'),
-                        resultData = key ? results[key] : results;
+                        resultData = key && results ? results[key] : results;
                     rows.push(...resultData);
                     skip(results.skip);
                     loader.inProgress(false);

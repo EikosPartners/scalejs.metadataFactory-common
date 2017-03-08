@@ -1,0 +1,243 @@
+/* inject-globals */
+$grid-footer-height: 40px;
+$grid-footer-color: #f4f6d0;
+$advanced-filter-button-width: 80px;
+
+// Had to add these because they weren't being imported?
+$lightest-gray: lightgray;
+$teal: teal;
+$dark-gray: gray;
+$light-gray: lightgray;
+$error-red: red;
+$btn-orange: orange;
+
+.table-header-styles {
+    thead {
+        border-bottom: 1px solid $lightest-gray;
+        tr {
+            background-color: #fff;
+        }
+        th {
+            background-color: #fff;
+            text-transform: uppercase;
+            font-size: 11px;
+            font-weight: bold;
+            color: #000;
+            opacity: .5;
+            &.sorting_desc,
+            &.sorting_asc {
+                background: none;
+                background-color: #fff;
+                color: $teal;
+                opacity: 1;
+                &::after {
+                    content: " \02C4 ";
+                    display: inline-block;
+                    transform:scale(2,1);
+                    margin-left: 10px;
+                }
+            }
+            &.sorting_asc {
+                &::after {
+                    content: " \02C5 ";
+                }
+            }
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+}
+.grid-wrapper {
+    margin-bottom: $grid-footer-height;
+    .grid-validations.affix {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        left: 0;
+    }
+    .grid-container {
+        overflow: hidden;
+        &.visibleFilter {
+            overflow: visible;
+        }
+        .grid-header {
+            &.flex-header {
+                width: 100%;
+                display: flex;
+                &.hide {
+                    display: none;
+                }
+                .search {
+                    flex-grow: 1;
+                    max-width: calc(100% - #{$advanced-filter-button-width});
+                }
+                .grid-item {
+                    min-height: 75px;
+                }
+            }
+        }
+        .action-button-wrapper {
+            button {
+                text-transform: none;
+            }
+            float: right;
+            &:last-child {
+                margin-right: 20px;
+            }
+        }
+        .grid-select {
+            width: 110px;
+            margin-bottom: 20px;
+            .input-wrapper {
+                &::after {
+                    content: "";
+                    width: 0;
+                    height: 0;
+                    border-left: 5px solid transparent;
+                    border-right: 5px solid transparent;
+                    border-top: 5px solid $dark-gray;
+                    right: 10px;
+                    top: 15px;
+                    position: absolute;
+                    pointer-events: none;
+                }
+            }
+            .input-select {
+                border-bottom: none;
+                background-image: none;
+                font-size: 18px;
+                font-weight: bold;
+                color: $dark-gray;
+                width: 100%;
+            }
+        }
+    }
+    .grid-footer-padded {
+        max-width: 1286px;
+        &.hide {
+            display: none;
+        }
+        .grid-footer {
+            max-width: 1286px; // TODO: review
+            background-color: $grid-footer-color;
+        }
+    }
+    &.fixedHeader-floating {
+        margin-top: 0;
+    }
+    .advanced-filter-container {
+        display: inline-flex;
+        align-items: flex-end;
+        .advanced-filter-button {
+            padding: 0;
+            width: $advanced-filter-button-width;
+        }
+        .advanced-filter {
+            text-align: left;
+            width: 340px;
+            top: 60px;
+            &.visible {
+                right: 0;
+            }
+            .input-text,
+            .token-input-list-pjson {
+                background-color: transparent;
+                width: calc(100% - 30px);
+                margin: 0 auto;
+            }
+            .input-label {
+                padding-left: 15px;
+            }
+        }
+        .floating-input {
+            height: 75px;
+            &:not(:first-child) {
+                margin-top: initial; // TODO: overwriting from popup, make that specific;
+                &.first-child {
+                    margin-top: 30px; // in a rush for demo, dont judge
+                }
+            }
+        }
+        .advanced-filter-title {
+            padding: 10px;
+            background-color: $light-gray;
+            color: $dark-gray;
+            border-bottom: 2px solid $dark-gray;
+            span {
+                vertical-align: middle;
+            }
+            .advanced-popup-title {
+                size: 14px;
+                font-weight: bold;
+            }
+            .fp-close {
+                float: right;
+                cursor: pointer;
+            }
+        }
+        .advanced-filter-footer {
+            overflow: auto;
+            border-top: 2px solid $dark-gray;
+            padding: 5px 0;
+            .action-button-wrapper {
+            //     width: 50%;
+            //     display: inline-block;
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+    .grid-banner {
+        color: #fff;
+        padding: 7px;
+        border-radius: 5px;
+        &.green {
+            background-color: green;
+        }
+        &.red {
+            background-color: $error-red;
+
+        }
+        &.amber {
+            background-color: $btn-orange;
+            color: #000;
+        }
+    }
+    .child-details-wrapper {
+        margin: 10px 0;
+        .child-item {
+            list-style-type: none;
+            display: inline-block;
+            margin-right: 50px;
+            &:last-child {
+                margin-right: 0;
+            }
+            div {
+                padding: 5px 0;
+            }
+            .child-value {
+                font-weight: bold;
+            }
+        }
+
+    }
+    table.pjson.dataTable {
+        th,
+        td {
+            padding-left: 10px;
+            font-size: 13px;
+            color: $dark-gray;
+        }
+        @extend .table-header-styles;
+        tr {
+            border-left: 0;
+            border-right: 0;
+        }
+    }
+}
+
+.fixedHeader-floating.pjson.dataTable {
+    @extend .table-header-styles;
+}

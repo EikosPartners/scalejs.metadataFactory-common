@@ -17,6 +17,7 @@ var _actionModule = require('./actionModule');
 
 function actionViewModel(node) {
     var registeredActions = (0, _actionModule.getRegisteredActions)(),
+        originalJson = (0, _lodash.cloneDeep)(node),
         context = this || {},
         options = node.options || {},
         text = node.text || options.text,
@@ -41,7 +42,8 @@ function actionViewModel(node) {
             (0, _scalejs.notify)(validate, {
                 successCallback: function successCallback() {
                     actionFunc(options, args);
-                }
+                },
+                actionNode: (0, _lodash.cloneDeep)(originalJson)
             });
         } else {
             actionFunc(options, args);
