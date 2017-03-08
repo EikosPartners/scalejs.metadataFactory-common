@@ -1,6 +1,6 @@
 {
   "name": "scalejs.metadatafactory-common",
-  "version": "1.0.185",
+  "version": "1.0.186",
   "description": "Common scalejs.metadatafactory modules",
   "main": "dist/scalejs.metadataFactory-common.js",
   "scripts": {
@@ -69,6 +69,7 @@
     "autosize": "^3.0.17",
     "babel-polyfill": "^6.16.0",
     "datatables.net-fixedheader": "^3.1.2",
+    "datatables.net-responsive": "^2.1.1",
     "datatables.net-select": "^1.2.0",
     "jquery": "^3.0.0",
     "jquery-ui": "1.12.0",

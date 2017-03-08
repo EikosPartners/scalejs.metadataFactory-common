@@ -56,7 +56,7 @@ exports.default = function (node) {
             callback: function callback(err, results) {
                 if (!err) {
                     var key = (0, _scalejs2.get)(endpoint, 'keyMap.resultsKey'),
-                        resultData = key ? results[key] : results;
+                        resultData = key && results ? results[key] : results;
                     rows.push.apply(rows, _toConsumableArray(resultData));
                     skip(results.skip);
                     loader.inProgress(false);

@@ -7,6 +7,8 @@ import gridTemplates from './grid.html';
 
 import './grid.scss';
 
+// TODO: find out if this should go here or not
+import './dataTables.js';
 
 registerBindings(gridBindings);
 registerTemplates(gridTemplates);

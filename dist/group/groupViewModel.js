@@ -25,8 +25,10 @@ exports.default = function (node) {
     function getValue() {
         var ret = Object.keys(dictionary()).reduce(function (obj, id) {
             var child = dictionary()[id];
-            if (child.getValue) {
+            if (child.getValue && (child.rendered() || node.trackChildrenIfHidden !== false || child.trackIfHidden)) {
                 obj[child.id] = child.getValue();
+            } else {
+                delete obj[child.id]; // track if hidden functionality for group..
             }
             return obj;
         }, {});

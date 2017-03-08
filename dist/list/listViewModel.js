@@ -108,7 +108,8 @@ function listViewModel(node) {
         visibleRows = (0, _knockout.observableArray)(),
         initialData = _lodash2.default.cloneDeep(node.data) || [],
         addButtonRendered = (0, _scalejs5.is)(node.addButtonRendered, 'string') ? (0, _knockout.computed)(_scalejs2.evaluate.bind(null, node.addButtonRendered, context.getValue)) : (0, _knockout.observable)(node.addButtonRendered !== false);
-    var minRequiredRows = 0,
+    var initial = node.nodeDataAsInitial !== false,
+        minRequiredRows = 0,
         showRemoveButton = null,
         sub = null,
         scrolled = void 0,
@@ -125,7 +126,7 @@ function listViewModel(node) {
     // rowViewModel
     // called on each add
     // or when data is set with initial values
-    function rowViewModel(initialValues, isNew) {
+    function rowViewModel(initialValues, isNew, initialOverride) {
         var items = (0, _knockout.observableArray)(),
             // observable array to hold the items in the row
         // observable dictionary to hold the items and other properties
@@ -140,7 +141,7 @@ function listViewModel(node) {
             deleteFlag: (0, _knockout.observable)(false),
             data: (0, _knockout.computed)(function () {
                 var dict = itemDictionary();
-                return Object.keys(dict).reduce(function (d, id) {
+                return (0, _scalejs5.merge)(initialValues || {}, Object.keys(dict).reduce(function (d, id) {
                     var item = dict[id];
                     if (item && item.getValue) {
                         d[id] = item.getValue();
@@ -148,7 +149,7 @@ function listViewModel(node) {
                         d[id] = item;
                     }
                     return d;
-                }, {});
+                }, {}));
             })
         },
             row = {}; // the row itself
@@ -262,7 +263,7 @@ function listViewModel(node) {
                 // allow for JSON default values don't get overwritten
                 // by server data that doesn't contain data
                 if (initialValues[item.id]) {
-                    item.setValue && item.setValue(initialValues[item.id], { initial: true });
+                    item.setValue && item.setValue(initialValues[item.id], { initial: initialOverride !== false });
                 }
             });
         }
@@ -303,8 +304,8 @@ function listViewModel(node) {
     }
 
     // generates a new row and add to list
-    function add(row, isNew) {
-        var rowVm = rowViewModel(row, isNew);
+    function add(row, isNew, initialOverride) {
+        var rowVm = rowViewModel(row, isNew, initialOverride);
 
         // add remove function to rowVM
         rowVm.remove = function () {
@@ -322,7 +323,7 @@ function listViewModel(node) {
             rows.unshift(rowVm);
         }
 
-        if (isNew === true) {
+        if (isNew === true && options.focusNew !== false) {
             // auto-focus on the newly added row
             setTimeout(function () {
                 // need to wait for clickOff events to stop firing.
@@ -377,7 +378,7 @@ function listViewModel(node) {
             });
             rows.removeAll();
             data().forEach(function (item) {
-                add(item, false);
+                add(item, false, initial);
             });
 
             // if trackDiffChanges set to true store the original data to noticeboard
@@ -386,9 +387,10 @@ function listViewModel(node) {
             }
         } else {
             for (var i = rows().length; i < minRequiredRows; i++) {
-                add(null, true);
+                add(null, true, initial);
             }
         }
+        initial = undefined;
         //  console.timeEnd('List init');
     }
 
