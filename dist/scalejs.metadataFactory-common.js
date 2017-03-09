@@ -14,9 +14,9 @@ require('./template/templateModule');
 
 require('./list/listModule');
 
-require('./grid/gridModule');
+require('./listAdvanced/listAdvancedModule');
 
-require('./gridTemplates/gridTemplatesModule');
+require('./grid/gridModule');
 
 var _scalejs = require('scalejs.mvvm');
 

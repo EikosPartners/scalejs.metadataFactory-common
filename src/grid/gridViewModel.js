@@ -134,6 +134,15 @@ export default function (node) {
         }
     }
 
+    function addRow(row) {
+        rows.push(...row);
+    }
+
+    // Set up a receiver to push rows to the grid.
+    subs.push(receive(`${node.id}.add`, (row) => {
+        addRow(row);
+    }));
+
 
     setupData();
     setupSelection();

@@ -140,6 +140,15 @@ exports.default = function (node) {
         }
     }
 
+    function addRow(row) {
+        rows.push.apply(rows, _toConsumableArray(row));
+    }
+
+    // Set up a receiver to push rows to the grid.
+    subs.push((0, _scalejs3.receive)(node.id + '.add', function (row) {
+        addRow(row);
+    }));
+
     setupData();
     setupSelection();
     setupGridHeader();

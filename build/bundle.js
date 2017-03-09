@@ -69,7 +69,7 @@
 	
 	__webpack_require__(218);
 	
-	__webpack_require__(232);
+	__webpack_require__(228);
 	
 	var _scalejs = __webpack_require__(3);
 	
@@ -42170,20 +42170,23 @@
 	    value: true
 	});
 	
-	exports.default = function (node, metadata) {
-	    var subs = [],
+	exports.default = function (node) {
+	    var context = this,
+	        subs = [],
 	        createViewModels = _scalejs.createViewModels.bind(this),
-	        //ensures context is passed
+	        // ensures context is passed
 	    options = node.options || {},
-	        mappedChildNodes,
-	        sections,
-	        isShown = (0, _knockout.observable)(true);
+	        mappedChildNodes = (0, _knockout.observableArray)(),
+	        isShown = (0, _knockout.observable)(true),
+	        children = createViewModels(node.children);
 	
-	    mappedChildNodes = createViewModels(node.children);
+	    var sections = null;
+	
+	    mappedChildNodes(children);
 	
 	    sections = node.sections.map(function (section, index) {
-	        var visible = (0, _knockout.observable)(options.openByDefault === false ? false : true);
-	        return (0, _scalejs3.merge)(mappedChildNodes[index], {
+	        var visible = (0, _knockout.observable)(options.openByDefault !== false);
+	        return (0, _scalejs4.merge)(children[index], {
 	            header: section,
 	            visible: visible,
 	            toggleVisibility: function toggleVisibility() {
@@ -42201,15 +42204,22 @@
 	        });
 	    }
 	
-	    subs.push((0, _scalejs2.receive)(node.id + '.collapseAll', function (data) {
+	    subs.push((0, _scalejs3.receive)(node.id + '.collapseAll', function () {
 	        setAllSectionVisibility(false);
 	    }));
 	
-	    subs.push((0, _scalejs2.receive)(node.id + '.expandAll', function (data) {
+	    subs.push((0, _scalejs3.receive)(node.id + '.expandAll', function () {
 	        setAllSectionVisibility(true);
 	    }));
 	
-	    return (0, _scalejs3.merge)(node, {
+	    if (node.rendered) {
+	        subs.push((0, _knockout.computed)(function () {
+	            var rendered = (0, _scalejs2.evaluate)(node.rendered, context.getValue);
+	            mappedChildNodes(rendered ? children : []);
+	        }));
+	    }
+	
+	    return (0, _scalejs4.merge)(node, {
 	        isShown: isShown,
 	        sections: sections,
 	        mappedChildNodes: mappedChildNodes,
@@ -42226,20 +42236,11 @@
 	
 	var _knockout = __webpack_require__(10);
 	
-	var _scalejs2 = __webpack_require__(139);
+	var _scalejs2 = __webpack_require__(135);
 	
-	var _scalejs3 = __webpack_require__(137);
+	var _scalejs3 = __webpack_require__(139);
 	
-	;
-	
-	/*
-	 * Responsible for combining sections with children
-	 * Sections contain the names of the headers
-	 * There is one child per section
-	 */
-	
-	// TODO: add docs
-	/*global define, ko*/
+	var _scalejs4 = __webpack_require__(137);
 
 /***/ },
 /* 139 */
@@ -43003,45 +43004,44 @@
 	
 	// todo evaluate if should move to advanced grid?
 	function aggregateValues(node) {
-	    var value;
+	    var value = void 0;
 	    if (node.getValue) {
 	        value = [].concat(node.getValue());
 	    } else if (node.mappedChildNodes) {
-	        value = node.mappedChildNodes.reduce(function (values, childNode) {
+	        value = (0, _knockout.unwrap)(node.mappedChildNodes).reduce(function (values, childNode) {
 	            var childValue = aggregateValues(childNode);
 	            if (childValue) {
-	                values = values.concat(childValue);
+	                return values.concat(childValue);
 	            }
 	            return values;
 	        }, []);
 	    }
 	    // convert objects to strings
-	    value = value.map(function (value) {
-	        if (!(0, _scalejs.has)(value)) {
-	            value = '';
+	    value = value.map(function (v) {
+	        if (!(0, _scalejs.has)(v)) {
+	            return '';
 	        }
-	        if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
-	            if (value.op) {
-	                delete value.op;
+	        if ((typeof v === 'undefined' ? 'undefined' : _typeof(v)) === 'object') {
+	            if (v.op) {
+	                delete v.op;
 	            } // we don't want to custom operators values in preview
-	            return value = Object.keys(value).map(function (key) {
-	                if (Date.parse(value[key])) {
-	                    return _moment2.default.utc(value[key]).format('MM/DD/YYYY');
-	                } else {
-	                    return value[key];
+	            return Object.keys(v).map(function (key) {
+	                if (Date.parse(v[key])) {
+	                    return _moment2.default.utc(v[key]).format('MM/DD/YYYY');
 	                }
+	                return v[key];
 	            }).join(' ');
 	        }
-	        return value;
+	        return v;
 	    });
 	    return value;
 	}
 	
 	exports.default = {
-	    'accordion-header': function accordionHeader(ctx) {
+	    'accordion-header': function accordionHeader() {
 	        return {
 	            click: this.toggleVisibility,
-	            //todo this should be an SVG / class
+	            // todo this should be an SVG / class
 	            css: {
 	                'fa-caret-down': this.visible(),
 	                'fa-caret-right': !this.visible()
@@ -43067,9 +43067,9 @@
 	            clickBubble: false
 	        };
 	    },
-	    //todo move to advanced grid
+	    // todo move to advanced grid
 	    'accordion-header-preview-text': function accordionHeaderPreviewText(ctx) {
-	        var accordionChild = ctx.$parents[1].mappedChildNodes[ctx.$index()],
+	        var accordionChild = (0, _knockout.unwrap)(ctx.$parents[1].mappedChildNodes)[ctx.$index()],
 	            count = (0, _knockout.computed)(function () {
 	            var values = aggregateValues(accordionChild);
 	            return values.length > 0 && values[0] ? values.length : '';
@@ -43079,7 +43079,7 @@
 	            text: count
 	        };
 	    },
-	    'accordion-header-text': function accordionHeaderText(ctx) {
+	    'accordion-header-text': function accordionHeaderText() {
 	        return {
 	            text: typeof this.header === 'string' ? this.header : this.header.text
 	        };
@@ -53504,6 +53504,7 @@
 	
 	function actionViewModel(node) {
 	    var registeredActions = (0, _actionModule.getRegisteredActions)(),
+	        originalJson = (0, _lodash.cloneDeep)(node),
 	        context = this || {},
 	        options = node.options || {},
 	        text = node.text || options.text,
@@ -53528,7 +53529,8 @@
 	            (0, _scalejs.notify)(validate, {
 	                successCallback: function successCallback() {
 	                    actionFunc(options, args);
-	                }
+	                },
+	                actionNode: (0, _lodash.cloneDeep)(originalJson)
 	            });
 	        } else {
 	            actionFunc(options, args);
@@ -66701,8 +66703,10 @@
 	        visibleRows = (0, _knockout.observableArray)(),
 	        initialData = _lodash2.default.cloneDeep(node.data) || [],
 	        addButtonRendered = (0, _scalejs5.is)(node.addButtonRendered, 'string') ? (0, _knockout.computed)(_scalejs2.evaluate.bind(null, node.addButtonRendered, context.getValue)) : (0, _knockout.observable)(node.addButtonRendered !== false);
-	    var minRequiredRows = 0,
+	    var initial = node.nodeDataAsInitial !== false,
+	        minRequiredRows = 0,
 	        showRemoveButton = null,
+	        sub = null,
 	        scrolled = void 0,
 	        onlyIf = void 0;
 	
@@ -66717,7 +66721,7 @@
 	    // rowViewModel
 	    // called on each add
 	    // or when data is set with initial values
-	    function rowViewModel(initialValues, isNew) {
+	    function rowViewModel(initialValues, isNew, initialOverride) {
 	        var items = (0, _knockout.observableArray)(),
 	            // observable array to hold the items in the row
 	        // observable dictionary to hold the items and other properties
@@ -66732,7 +66736,7 @@
 	            deleteFlag: (0, _knockout.observable)(false),
 	            data: (0, _knockout.computed)(function () {
 	                var dict = itemDictionary();
-	                return Object.keys(dict).reduce(function (d, id) {
+	                return (0, _scalejs5.merge)(initialValues || {}, Object.keys(dict).reduce(function (d, id) {
 	                    var item = dict[id];
 	                    if (item && item.getValue) {
 	                        d[id] = item.getValue();
@@ -66740,7 +66744,7 @@
 	                        d[id] = item;
 	                    }
 	                    return d;
-	                }, {});
+	                }, {}));
 	            })
 	        },
 	            row = {}; // the row itself
@@ -66854,7 +66858,7 @@
 	                // allow for JSON default values don't get overwritten
 	                // by server data that doesn't contain data
 	                if (initialValues[item.id]) {
-	                    item.setValue && item.setValue(initialValues[item.id], { initial: true });
+	                    item.setValue && item.setValue(initialValues[item.id], { initial: initialOverride !== false });
 	                }
 	            });
 	        }
@@ -66895,8 +66899,8 @@
 	    }
 	
 	    // generates a new row and add to list
-	    function add(row, isNew) {
-	        var rowVm = rowViewModel(row, isNew);
+	    function add(row, isNew, initialOverride) {
+	        var rowVm = rowViewModel(row, isNew, initialOverride);
 	
 	        // add remove function to rowVM
 	        rowVm.remove = function () {
@@ -66914,7 +66918,7 @@
 	            rows.unshift(rowVm);
 	        }
 	
-	        if (isNew === true) {
+	        if (isNew === true && options.focusNew !== false) {
 	            // auto-focus on the newly added row
 	            setTimeout(function () {
 	                // need to wait for clickOff events to stop firing.
@@ -66969,7 +66973,7 @@
 	            });
 	            rows.removeAll();
 	            data().forEach(function (item) {
-	                add(item, false);
+	                add(item, false, initial);
 	            });
 	
 	            // if trackDiffChanges set to true store the original data to noticeboard
@@ -66978,9 +66982,10 @@
 	            }
 	        } else {
 	            for (var i = rows().length; i < minRequiredRows; i++) {
-	                add(null, true);
+	                add(null, true, initial);
 	            }
 	        }
+	        initial = undefined;
 	        //  console.timeEnd('List init');
 	    }
 	
@@ -66996,6 +67001,11 @@
 	        }
 	        data(newData || initialData || []);
 	        initialize();
+	    }
+	
+	    function update(value) {
+	        console.info('List only supports udate for value');
+	        setValue(value);
 	    }
 	
 	    // returns last row
@@ -67046,8 +67056,12 @@
 	    // will "remove" mapped child nodes if the list is hidden
 	    // this is required for validations to work properly
 	    // todo: remove this workaround and implement validation on list itself
-	    (0, _knockout.computed)(function () {
-	        if (isShown()) {
+	    sub = (0, _knockout.computed)(function () {
+	        var rendered = true;
+	        if (node.rendered) {
+	            rendered = (0, _scalejs2.evaluate)(node.rendered, context.getValue);
+	        }
+	        if (isShown() && rendered) {
 	            mappedChildNodes(rows().filter(function (row) {
 	                return !row.deleteFlag();
 	            }));
@@ -67094,7 +67108,11 @@
 	        deleteRows: deleteRows,
 	        lastRow: lastRow,
 	        setReadonly: setReadonly,
-	        addButtonRendered: addButtonRendered
+	        addButtonRendered: addButtonRendered,
+	        update: update,
+	        dispose: function dispose() {
+	            sub.dispose();
+	        }
 	    });
 	}
 
@@ -67163,21 +67181,624 @@
 	
 	var _scalejs2 = __webpack_require__(21);
 	
-	var _gridViewModel = __webpack_require__(219);
+	var _listAdvancedViewModel = __webpack_require__(219);
 	
-	var _gridViewModel2 = _interopRequireDefault(_gridViewModel);
+	var _listAdvancedViewModel2 = _interopRequireDefault(_listAdvancedViewModel);
 	
-	var _gridBindings = __webpack_require__(220);
+	var _listAdvancedBindings = __webpack_require__(220);
 	
-	var _gridBindings2 = _interopRequireDefault(_gridBindings);
+	var _listAdvancedBindings2 = _interopRequireDefault(_listAdvancedBindings);
 	
-	var _grid = __webpack_require__(226);
+	var _listAdvanced = __webpack_require__(221);
 	
-	var _grid2 = _interopRequireDefault(_grid);
+	var _listAdvanced2 = _interopRequireDefault(_listAdvanced);
+	
+	__webpack_require__(222);
 	
 	__webpack_require__(227);
 	
-	__webpack_require__(231);
+	__webpack_require__(146);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	(0, _scalejs.registerBindings)(_listAdvancedBindings2.default);
+	(0, _scalejs.registerTemplates)(_listAdvanced2.default);
+	(0, _scalejs2.registerViewModels)({
+	    listAdvanced: _listAdvancedViewModel2.default
+	});
+
+/***/ },
+/* 219 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	exports.default = function (node) {
+	    var createViewModel = _scalejs.createViewModel.bind(this),
+	        context = this,
+	        itemDictionary = (0, _knockout.observable)({}),
+	        listViewModel = createViewModel((0, _scalejs4.merge)({ id: node.id }, node.list)),
+	        // pass along id
+	    headers = (node.headers || []).map(function (header) {
+	        return {
+	            items: header.items.map(function (item) {
+	                if (listItems[item.type]) {
+	                    return listItems[item.type].call(this, item, listViewModel);
+	                }
+	            })
+	        };
+	    }),
+	        headerItems = (node.list.items || []).map(function (header) {
+	        var classes = [];
+	
+	        if (header.id) {
+	            classes.push(header.id);
+	        }
+	        if (header.headerClasses) {
+	            classes.push(header.headerClasses);
+	        }
+	        return {
+	            text: header.label,
+	            classes: classes.join(' '),
+	            hidden: header.hidden
+	        };
+	    }),
+	        footers = (node.footers || []).map(function (footer) {
+	        var items,
+	            visible = true;
+	
+	        // maps footer item defs
+	        items = footer.items.map(function (item) {
+	            if (listItems[item.type]) {
+	                return listItems[item.type].call(context, item, listViewModel);
+	            } else {
+	                return _scalejs.createViewModel.call({
+	                    metadata: context.metadata,
+	                    getValue: function getValue(id) {
+	                        var item = itemDictionary()[id];
+	                        if (item && item.getValue) {
+	                            return item.getValue();
+	                        }
+	                        return context.getValue(id);
+	                    }
+	                }, item);
+	            }
+	        });
+	
+	        items.forEach(function (item) {
+	            if (item.id) {
+	                // add to dictionary for accessibility from expressions
+	                itemDictionary()[item.id] = item;
+	                itemDictionary.valueHasMutated();
+	            }
+	        });
+	
+	        // creates expression binding for visible
+	        if ((0, _scalejs4.has)(footer.visible)) {
+	            visible = (0, _scalejs4.is)(footer.visible, 'boolean') ? footer.visible : (0, _knockout.pureComputed)(function () {
+	                return (0, _scalejs2.evaluate)(footer.visible, function (id) {
+	                    if (id === 'list') {
+	                        return listViewModel.rows() || [];
+	                    }
+	
+	                    if (id === 'dict') {
+	                        return itemDictionary();
+	                    }
+	
+	                    if (id === 'readonly') {
+	                        return context.readonly();
+	                    }
+	
+	                    var item = itemDictionary()[id];
+	                    if (item) {
+	                        return item;
+	                    }
+	                    console.log(id);
+	                    // returning empty string within string as catch all for evaluate function
+	                    return '""';
+	                });
+	            });
+	        }
+	
+	        return (0, _scalejs4.merge)(footer, {
+	            items: items,
+	            visible: visible
+	        });
+	    }),
+	        groups,
+	        visibleRows = (0, _knockout.observableArray)(),
+	        viewmodel,
+	        showInfinite;
+	
+	    // Updates rows within the list with additional properties in regards to their group
+	    // all subscribers are notified
+	    function updateRowsWithGroupValues(groupDict) {
+	        Object.keys(groupDict).forEach(function (group) {
+	            var groupArray = groupDict[group];
+	            groupArray.forEach(function (row, index) {
+	                row.itemDictionary().group = groupArray;
+	                row.itemDictionary().groupIndex = index;
+	                row.itemDictionary.valueHasMutated();
+	            });
+	        });
+	    }
+	
+	    // will group the nodes based on groupby prop
+	    if (node.groupBy) {
+	        groups = (0, _knockout.computed)(function () {
+	            var groupDict = {};
+	            listViewModel.rows().forEach(function (row) {
+	                var group = (0, _knockout.unwrap)(row[node.groupBy]);
+	                groupDict[group] = groupDict[group] || [];
+	                groupDict[group].push(row);
+	            });
+	            return groupDict;
+	        });
+	        // update rows
+	        groups.subscribe(updateRowsWithGroupValues);
+	        updateRowsWithGroupValues(groups());
+	    }
+	
+	    if (listViewModel.infinite) {
+	        //the listViewModel is managing its rows to account for infinite scroll
+	        //the listAdvanced will show only up to 25 rows and show the infinitely scrolling list in a popup
+	
+	        visibleRows((listViewModel.allRows() || []).slice(0, 20));
+	        listViewModel.allRows.subscribe(function (newRows) {
+	            visibleRows((newRows || []).slice(0, 20));
+	        });
+	
+	        showInfinite = function showInfinite() {
+	            listViewModel.rows(listViewModel.rows().slice(0, 20));
+	            (0, _scalejs3.notify)('showPopup', (0, _scalejs4.merge)(viewmodel, {
+	                template: 'listAdvanced_infinite_template',
+	                disableHasFocus: true
+	            }));
+	        };
+	    }
+	
+	    viewmodel = (0, _scalejs4.merge)(node, {
+	        setReadonly: listViewModel.setReadonly,
+	        getValue: listViewModel.getValue,
+	        setValue: listViewModel.setValue,
+	        headers: headers,
+	        headerItems: headerItems,
+	        footers: footers,
+	        groups: groups,
+	        list: listViewModel,
+	        rows: listViewModel.infinite ? visibleRows : listViewModel.rows,
+	        showInfinite: showInfinite,
+	        showRemove: listViewModel.showRemove,
+	        deleteRows: listViewModel.deleteRows,
+	        itemDictionary: itemDictionary,
+	        mappedChildNodes: listViewModel.mappedChildNodes, //for automatic stuff
+	        context: this //for the bindings to access context
+	    });
+	    return viewmodel;
+	};
+	
+	var _knockout = __webpack_require__(10);
+	
+	var _scalejs = __webpack_require__(21);
+	
+	var _scalejs2 = __webpack_require__(135);
+	
+	var _scalejs3 = __webpack_require__(139);
+	
+	var _scalejs4 = __webpack_require__(137);
+	
+	// the list advanced component provides advanced features over the base list
+	// - Headers (TBD) and Footers (partially done)
+	// - ListItems such as ADD and EMPTY
+	// - GroupBy
+	var listItems = {
+	    ADD: add,
+	    EMPTY: empty,
+	    TEXT: text,
+	    TOTAL: total
+	};
+	
+	// creates the Add ViewModel from the add def
+	function add(addDef, list) {
+	    return (0, _scalejs4.merge)({
+	        template: 'list_advanced_add_item_template',
+	        text: 'Add',
+	        add: function add() {
+	            var lastRow = list.lastRow(),
+	                initialItems = {};
+	
+	            // autpopulate
+	            // an array containing the items which should be autopopulated with the last row's values
+	            if (addDef.autopopulate) {
+	                addDef.autopopulate.forEach(function (prop) {
+	                    var lastProp = lastRow.itemDictionary()[prop];
+	                    initialItems[prop] = lastProp.getValue();
+	                });
+	            }
+	
+	            // increment
+	            // a string indicating which property to incremement upon add
+	            if (addDef.increment) {
+	                (Array.isArray(addDef.increment) ? addDef.increment : [addDef.increment]).forEach(function (prop) {
+	                    initialItems[prop] = Number(lastRow.itemDictionary()[prop].getValue()) + 1;
+	                });
+	            }
+	
+	            // defaults
+	            // sets the value of an item to a default value
+	            if (addDef.defaults) {
+	                Object.keys(addDef.defaults).forEach(function (key) {
+	                    initialItems[key] = addDef.defaults[key];
+	                });
+	            }
+	
+	            // creates new item in list
+	            list.add(initialItems);
+	        }
+	    }, addDef);
+	}
+	
+	// creates an empty space in table
+	function empty(emptyDef, base) {
+	    return (0, _scalejs4.merge)({
+	        template: 'list_advanced_empty_item_template',
+	        cellClasses: 'empty'
+	    }, emptyDef);
+	}
+	
+	function text(textDef, base) {
+	    return (0, _scalejs4.merge)({
+	        template: 'list_advanced_text_item_template'
+	    }, textDef);
+	}
+	
+	function total(totalDef, list) {
+	    // create a input vm
+	    var totalJson = {
+	        id: totalDef.id,
+	        type: 'input',
+	        inputType: 'text',
+	        label: 'Total',
+	        cellClasses: totalDef.cellClasses,
+	        options: (0, _scalejs4.merge)({
+	            readonly: true
+	        }, totalDef.options)
+	    },
+	
+	    // use input view model for instant formatting/validation
+	    totalViewModel = _scalejs.createViewModel.call(this, totalJson),
+	        total = (0, _knockout.computed)(function () {
+	        return list.rows().reduce(function (sum, row) {
+	            return sum + Number(row[totalDef.field]() || 0); // get the value for field
+	        }, 0);
+	    });
+	
+	    total.subscribe(function (sum) {
+	        totalViewModel.setValue(sum.toFixed(2));
+	    });
+	
+	    // adding totals to the dictionary from the context
+	    if (totalDef.id) {
+	        this.dictionary()[totalDef.id] = totalViewModel;
+	        //this.dictionary.valueHasMutated();
+	    }
+	
+	    return totalViewModel;
+	}
+	
+	;
+
+/***/ },
+/* 220 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _scalejs = __webpack_require__(21);
+	
+	var _lodash = __webpack_require__(23);
+	
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function sticky(_el) {
+	    _el.style.transform = "translateY(" + this.scrollTop + "px)";
+	}
+	
+	exports.default = {
+	    'list-advanced-cell': function listAdvancedCell() {
+	        return {
+	            css: this.cellClasses,
+	            attr: {
+	                colspan: this.colspan || 1
+	            }
+	        };
+	    },
+	    'list-advanced-row-editable': function listAdvancedRowEditable(ctx) {
+	        var editMode = this.editMode,
+	            context = ctx.$parent.context || {},
+	            readonly = context.readonly ? context.readonly() : false;
+	
+	        return {
+	            css: {
+	                'edit-mode': editMode() && !readonly
+	            },
+	            click: function click() {
+	                editMode(true);
+	                return true;
+	            },
+	            clickOff: {
+	                excludes: ['ui-autocomplete'],
+	                handler: function handler() {
+	                    editMode(false);
+	                }
+	            }
+	        };
+	    },
+	    'list-advanced-group-actions': function listAdvancedGroupActions(ctx) {
+	        var group = ctx.$parent,
+	            listViewModel = ctx.$parents[1],
+	            groupActions = _lodash2.default.cloneDeep(listViewModel.groupActions),
+	            groupActionViewModels;
+	
+	        if (!groupActions) {
+	            return;
+	        }
+	
+	        groupActionViewModels = _scalejs.createViewModels.call({
+	            metadata: [],
+	            getValue: function getValue(id) {
+	                if (id === 'group') {
+	                    return group;
+	                }
+	                return listViewModel.context.getValue(id);
+	            }
+	        }, groupActions);
+	
+	        return {
+	            template: {
+	                name: 'metadata_items_template',
+	                data: groupActionViewModels
+	            }
+	        };
+	    },
+	    'list-advanced-group-row-spacer': function listAdvancedGroupRowSpacer(ctx) {
+	        var showSpacer = false,
+	            currentGroupIndex = Number(ctx.$data) - 1;
+	
+	        showSpacer = Object.keys(ctx.$parent.groups()).map(function (groupKey) {
+	            return ctx.$parent.groups()[groupKey];
+	        }).slice(0, currentGroupIndex + 1).reduce(function (previousHasSpacer, group, index) {
+	            var ret,
+	                previousGroup = ctx.$parent.groups()[index.toString()];
+	
+	            if (!previousGroup) {
+	                return false;
+	            }
+	
+	            if ((previousGroup.length + (previousHasSpacer ? 1 : 0)) % 2 !== 0) {
+	                return true;
+	            } else {
+	                return false;
+	            }
+	        }, false);
+	
+	        return {
+	            if: showSpacer
+	        };
+	    }
+	};
+
+/***/ },
+/* 221 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=\"listAdvanced_template\">\n    <div data-bind=\"css: $data.classes\" class=\"list-advanced\">\n        <header>\n            <div class=\"add\" data-class=\"list-add-rendered\">\n                <button data-bind=\"fontIcon: 'icon-add', click: list.add.bind(null, null, true)\">\n                    <span class=\"button-text\">Add</span>\n                </button>\n            </div>\n        </header>\n        <table>\n            <!-- ko template: { name: 'list_table_header_row_template', foreach: headers } -->\n            <!-- /ko -->\n            <tr data-bind=\"foreach: headerItems\">\n                <!-- ko if: !$data.hidden -->\n                    <td class=\"header-cell\" data-bind=\"text: text, css: classes\"></td>\n                <!-- /ko -->\n            </tr>\n            <tbody>\n                <!-- ko foreach: rows  -->\n                    <!-- ko if: !deleteFlag() -->\n                    <tr data-class=\"list-advanced-row-editable\">\n                        <!-- ko foreach: items -->\n                            <!-- ko if: !$data.hidden -->\n                                <td class=\"cell\" data-class=\"list-advanced-cell\">\n                                    <!-- ko template: 'metadata_item_template'-->\n                                    <!-- /ko -->\n                                </td>\n                            <!-- /ko -->\n                        <!-- /ko -->\n                    </tr>\n                    <!-- /ko -->\n                <!-- /ko -->\n                <tr class=\"row-no-data\">\n                    <td class=\"cell\" data-bind=\"attr: { colspan: headerItems.length }\">No data available.</td>\n                </tr>\n                <!-- ko template: {name: 'list_table_footer_row_template', foreach: footers } -->\n                <!-- /ko -->\n            </tbody>\n        </table>\n\n    </div>\n    <!-- ko if: list.infinite -->\n    <button data-bind=\"click: showInfinite, visible: list.mappedChildNodes().length > 20\">Show More</button>\n    <!-- /ko -->\n</div>\n\n\n<!-- Note to Developers: The infinte template is used within a popup\ntherefore lots of work-arounds needed to be put in place for fixed header stylings-->\n<div id=\"listAdvanced_infinite_template\">\n    <div class=\"table-viewport table-fixed-header\" data-bind=\"css: $data.classes\">\n        <div class=\"table-header\">\n            <div class=\"add\" data-bind=\"if: !list.readonly()\">\n                <button data-bind=\"fontIcon: 'icon-add', click: list.add.bind(null, null, true)\" style=\"float:none\">\n                    <span class=\"button-text\">Add</span>\n                </button>\n            </div>\n        </div>\n        <table data-bind=\"fixedTableHeader: { scrollListener: list.scrolled }\">\n            <!-- ko template: { name: 'list_table_header_row_template', foreach: headers } -->\n            <!-- /ko -->\n            <thead>\n                <tr data-bind=\"foreach: headerItems\">\n                    <td class=\"header-cell\" data-bind=\"text: text, css: classes\">\n                </tr>\n            </thead>\n            <tbody>\n                <!-- ko template: {name: 'list_table_row_template', foreach: list.rows } -->\n                <!-- /ko -->\n                <!-- ko template: {name: 'list_table_footer_row_template', foreach: footers } -->\n                <!-- /ko -->\n            </tbody>\n        </table>\n    </div>\n</div>\n\n<!-- templates for groups -->\n<div id=\"listAdvanced_groups_template\">\n     <div data-bind=\"css: $data.classes\">\n        <table>\n            <!-- ko template: { name: 'list_table_header_row_template', foreach: headers } -->\n            <!-- /ko -->\n            <tbody>\n                <tr data-bind=\"foreach: headerItems\">\n                    <td class=\"header-cell\" data-bind=\"text: text, css: classes\">\n                </tr>\n            </tbody>\n            <!-- ko template: { name: 'list_group_template', foreach: Object.keys(groups()) } -->\n            <!-- /ko -->\n            <tbody>\n                <!-- ko foreach: footers -->\n                <!-- ko template: $data.template || 'list_table_footer_row_template' -->\n                <!-- /ko -->\n                <!-- /ko -->\n            </tbody>\n        </table>\n        <div data-class=\"list-add-rendered\">\n            <button data-bind=\"fontIcon: 'icon-add', click: list.add.bind(null, null)\">\n                <span class=\"button-text\">Add</span>\n            </button>\n        </div>\n    </div>\n</div>\n\n<script type=\"text/template\" id=\"list_table_group_row_template\">\n    <tr data-class=\"list-advanced-row-editable\">\n        <!-- ko foreach: items -->\n        <td class=\"cell\" data-class=\"list-advanced-cell\">\n            <!-- ko template: 'metadata_item_template'-->\n            <!-- /ko -->\n        </td>\n        <!-- /ko -->\n        <td style=\"width: 0px; position: relative\">\n\n        <!-- ko if: $index() == 0 -->\n            <div class=\"list-advanced-group-actions\" data-class=\"list-advanced-group-actions\"></div>\n        <!-- /ko -->\n        </td>\n    </tr>\n</script>\n\n<!-- todo: refactor row templates into 1 template -->\n\n<script type=\"text/template\" id=\"list_table_header_row_template\">\n    <tr>\n        <!-- ko foreach: items -->\n        <td class=\"header-cell\" data-class=\"list-advanced-cell\">\n            <!-- ko template: 'metadata_item_template'-->\n            <!-- /ko -->\n        </td>\n        <!-- /ko -->\n    </tr>\n</script>\n\n<script type=\"text/template\" id=\"list_table_row_template\">\n    <!-- ko if: !deleteFlag() -->\n    <tr data-class=\"list-advanced-row-editable\">\n        <!-- ko foreach: items -->\n            <!-- ko if: !$data.hidden -->\n                <td class=\"cell\" data-class=\"list-advanced-cell\">\n                    <!-- ko template: 'metadata_item_template'-->\n                    <!-- /ko -->\n                </td>\n            <!-- /ko -->\n        <!-- /ko -->\n    </tr>\n    <!-- /ko -->\n</script>\n\n<script type=\"text/template\" id=\"list_table_footer_row_template\">\n    <tr data-bind=\"if: visible, click: $data.clickHandler, clickOff: $data.clickOffHandler\">\n        <!-- ko foreach: items -->\n        <td class=\"footer-cell\" data-class=\"list-advanced-cell\">\n            <!-- ko template: 'metadata_item_template'-->\n            <!-- /ko -->\n        </td>\n        <!-- /ko -->\n    </tr>\n</script>\n\n<!-- item templates -->\n\n<div id=\"list_advanced_add_item_template\">\n    <button data-bind=\"fontIcon: 'icon-add', click: add\">\n        <span data-bind=\"text: text\" class=\"button-text\">Add</span>\n    </button>\n</div>\n\n<div id=\"list_advanced_empty_item_template\">\n\n</div>\n\n<div id=\"list_advanced_text_item_template\">\n    <span data-bind=\"text:text\"></span>\n</div>\n";
+
+/***/ },
+/* 222 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+	"use strict";
+
+/***/ },
+/* 223 */,
+/* 224 */,
+/* 225 */,
+/* 226 */,
+/* 227 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _scalejs = __webpack_require__(4);
+	
+	var _scalejs2 = _interopRequireDefault(_scalejs);
+	
+	var _knockout = __webpack_require__(10);
+	
+	var _knockout2 = _interopRequireDefault(_knockout);
+	
+	var _lodash = __webpack_require__(23);
+	
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * A knockout binding that is used to allow detection of clicking on another element i.e. "clicking off"
+	 * @param {function} clickOff - the function that is called when click off
+	 * @param {object} clickOff - a configuration object with additional parameters to modify the behaviour of click off
+	 * @param {function} clickOff.handler -  the function that is called when click off
+	 * @param {string[]|HTMLElement[]} [clickOff.includes] - an array of class names or html dom elements that when clicked on will invoke the handler
+	 * @param {string[]|HTMLElement[]} [clickOff.excludes] - an array of class names or html dom elements that when clicked on will <strong>not</strong> invoke the handler
+	 * 
+	 * @example <caption>Passing a function to value accessor</caption>
+	 * clickOff: function() {
+	 *   alert('it works!');
+	 * }
+	 * @example <caption>Passing an object with includes and excludes</caption>
+	 * clickOff: {
+	 *    handler: function ( ) {
+	 *        alert('it works!');
+	 *    },
+	 *    includes: ['clickOn', 'mainContent'],
+	 *    excludes: ['clickOff', 'titleBar']
+	 * }
+	 * @module clickOff
+	 */
+	
+	var has = _scalejs2.default.object.has;
+	
+	/**
+	 *
+	 * 1. click off should be invoked if the click target is not the element
+	 *    or a child of the element bound to click-off
+	 * 2. click off should also be invoked if the target or one of the parents
+	 *    of the target include a class name that matches this.includes
+	 * 3. the opposite applies for this.excludes
+	 * @private
+	 * @param  {HTMLElement} element        the element that has click-off bound to it
+	 * @param  {HTMLElement} clickTarget    the target of the click
+	 * @return {boolean}
+	 */
+	
+	function canClickOff(element, clickTarget) {
+	    var cls = void 0,
+	        index = void 0,
+	        value = void 0;
+	
+	    //loop from click target to root parent of click target
+	    while (has(clickTarget)) {
+	
+	        if (element === clickTarget) {
+	            return false;
+	        }
+	
+	        //clickTarget.className.baseVal is the way to get classNames for SVG elements (path, etc)
+	        if (has(clickTarget.className, 'baseVal')) {
+	            cls = clickTarget.className.baseVal.split(' ');
+	        } else {
+	            cls = (clickTarget.className || '').split(' ');
+	        }
+	
+	        var filterFunc = function filterFunc(value) {
+	            return typeof value === 'string' && cls.indexOf(value) > -1 || value instanceof Element && value.isEqualNode(clickTarget);
+	        };
+	
+	        if (_lodash2.default.some(this.includes, filterFunc)) {
+	            return true;
+	        }
+	
+	        if (_lodash2.default.some(this.excludes, filterFunc)) {
+	            return false;
+	        }
+	
+	        // move up in the dom
+	        clickTarget = clickTarget.parentNode;
+	    }
+	    return true;
+	}
+	
+	/**
+	 * clickOff binding - A binding that invokes a handler when the user clicks somewhere else
+	 * @private
+	 * @param  {HTMLElement} element        the dom element clickOff is bound to
+	 * @param  {Function} valueAccessor     the options passed to the clickOff binding
+	 * @param  {type} allBindings           description
+	 * @param  {type} viewModel             description
+	 */
+	function init(element, valueAccessor, allBindings, viewModel) {
+	    var va = valueAccessor(),
+	        wasRemoved = false,
+	        eventListener = void 0;
+	
+	    if (!has(va)) {
+	        return;
+	    }
+	
+	    // Normalize value accessor
+	    if (va instanceof Function) {
+	        // convert function to expected object
+	        va = {
+	            handler: va,
+	            includes: va.includes,
+	            excludes: va.excludes
+	        };
+	    }
+	
+	    // enforce handler function
+	    if (!(va.handler instanceof Function)) {
+	        throw new TypeError('clickoff: handler function required');
+	    }
+	
+	    va.handler = va.handler.bind(viewModel);
+	
+	    // provide defaults for includes and excludes
+	    if (!has(va.includes)) {
+	        va.includes = ['clickoff'];
+	    }
+	    if (!has(va.excludes)) {
+	        va.excludes = ['no-clickoff'];
+	    }
+	
+	    eventListener = function eventListener(event) {
+	        if (wasRemoved) {
+	            return;
+	        }
+	        if (canClickOff.call(va, element, event.target)) {
+	            va.handler.apply(this, [arguments, [element]]);
+	        }
+	    };
+	
+	    // add handler to body and create dom removal callback for cleanup
+	    document.body.addEventListener('click', eventListener);
+	    _knockout2.default.utils.domNodeDisposal.addDisposeCallback(element, function () {
+	        wasRemoved = true;
+	        document.body.removeEventListener('click', eventListener);
+	    });
+	}
+	
+	_knockout2.default.bindingHandlers.clickOff = {
+	    init: init
+	};
+	//# sourceMappingURL=clickoff.js.map
+
+/***/ },
+/* 228 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _scalejs = __webpack_require__(3);
+	
+	var _scalejs2 = __webpack_require__(21);
+	
+	var _gridViewModel = __webpack_require__(229);
+	
+	var _gridViewModel2 = _interopRequireDefault(_gridViewModel);
+	
+	var _gridBindings = __webpack_require__(230);
+	
+	var _gridBindings2 = _interopRequireDefault(_gridBindings);
+	
+	var _grid = __webpack_require__(236);
+	
+	var _grid2 = _interopRequireDefault(_grid);
+	
+	__webpack_require__(237);
+	
+	__webpack_require__(241);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -67191,7 +67812,7 @@
 	});
 
 /***/ },
-/* 219 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67336,6 +67957,15 @@
 	        }
 	    }
 	
+	    function addRow(row) {
+	        rows.push.apply(rows, _toConsumableArray(row));
+	    }
+	
+	    // Set up a receiver to push rows to the grid.
+	    subs.push((0, _scalejs3.receive)(node.id + '.add', function (row) {
+	        addRow(row);
+	    }));
+	
 	    setupData();
 	    setupSelection();
 	    setupGridHeader();
@@ -67378,7 +68008,7 @@
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 /***/ },
-/* 220 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67389,13 +68019,13 @@
 	
 	var _scalejs = __webpack_require__(135);
 	
-	__webpack_require__(221);
+	__webpack_require__(231);
 	
-	__webpack_require__(223);
+	__webpack_require__(233);
 	
-	__webpack_require__(224);
+	__webpack_require__(234);
 	
-	var _gridRegistry = __webpack_require__(225);
+	var _gridRegistry = __webpack_require__(235);
 	
 	var _gridRegistry2 = _interopRequireDefault(_gridRegistry);
 	
@@ -67499,7 +68129,7 @@
 	};
 
 /***/ },
-/* 221 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! FixedHeader 3.1.2
@@ -67529,7 +68159,7 @@
 	(function( factory ){
 		if ( true ) {
 			// AMD
-			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(144), __webpack_require__(222)], __WEBPACK_AMD_DEFINE_RESULT__ = function ( $ ) {
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(144), __webpack_require__(232)], __WEBPACK_AMD_DEFINE_RESULT__ = function ( $ ) {
 				return factory( $, window, document );
 			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 		}
@@ -68177,7 +68807,7 @@
 
 
 /***/ },
-/* 222 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1.10.13
@@ -83489,7 +84119,7 @@
 
 
 /***/ },
-/* 223 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! Select for DataTables 1.2.1
@@ -83518,7 +84148,7 @@
 	(function( factory ){
 		if ( true ) {
 			// AMD
-			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(144), __webpack_require__(222)], __WEBPACK_AMD_DEFINE_RESULT__ = function ( $ ) {
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(144), __webpack_require__(232)], __WEBPACK_AMD_DEFINE_RESULT__ = function ( $ ) {
 				return factory( $, window, document );
 			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 		}
@@ -84629,7 +85259,7 @@
 
 
 /***/ },
-/* 224 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! Responsive 2.1.1
@@ -84657,7 +85287,7 @@
 	(function( factory ){
 		if ( true ) {
 			// AMD
-			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(144), __webpack_require__(222)], __WEBPACK_AMD_DEFINE_RESULT__ = function ( $ ) {
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(144), __webpack_require__(232)], __WEBPACK_AMD_DEFINE_RESULT__ = function ( $ ) {
 				return factory( $, window, document );
 			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 		}
@@ -85890,7 +86520,7 @@
 
 
 /***/ },
-/* 225 */
+/* 235 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -85915,23 +86545,23 @@
 	};
 
 /***/ },
-/* 226 */
+/* 236 */
 /***/ function(module, exports) {
 
 	module.exports = "<div id=\"grid_template\">\n    <div data-class=\"grid-wrapper\">\n        <div class=\"grid-header\" data-class=\"grid-header\">\n            <!-- ko foreach: $data.gridHeaderItems -->\n            <!-- ko template: 'metadata_item_template' -->\n            <!-- /ko -->\n            <!-- /ko -->\n        </div>\n        <div class=\"grid-display\" data-class=\"grid-display\">\n            <table class=\"pjson\" data-class=\"grid\"></table>\n            <div class=\"grid-footer-padded\" data-class=\"grid-footer\">\n                <div class=\"grid-footer\">\n                    <span class=\"loader-text\" data-bind=\"text: loader.text()\"></span>\n                </div>\n            </div>\n        </div>\n        <div class=\"grid-spinner-background\" data-class=\"grid-loader\">\n            <div class=\"cssload-spin-box\"></div>\n        </div>\n    </div>\n</div>";
 
 /***/ },
-/* 227 */
+/* 237 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	"use strict";
 
 /***/ },
-/* 228 */,
-/* 229 */,
-/* 230 */,
-/* 231 */
+/* 238 */,
+/* 239 */,
+/* 240 */,
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -85948,7 +86578,7 @@
 	
 	var _lodash2 = _interopRequireDefault(_lodash);
 	
-	__webpack_require__(222);
+	__webpack_require__(232);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -86339,127 +86969,6 @@
 	        });
 	    }
 	};
-
-/***/ },
-/* 232 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var _scalejs = __webpack_require__(3);
-	
-	var _gridTemplates = __webpack_require__(233);
-	
-	var _gridTemplates2 = _interopRequireDefault(_gridTemplates);
-	
-	var _gridTemplatesBindings = __webpack_require__(234);
-	
-	var _gridTemplatesBindings2 = _interopRequireDefault(_gridTemplatesBindings);
-	
-	__webpack_require__(235);
-	
-	__webpack_require__(236);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	(0, _scalejs.registerTemplates)(_gridTemplates2.default);
-	(0, _scalejs.registerBindings)(_gridTemplatesBindings2.default);
-
-/***/ },
-/* 233 */
-/***/ function(module, exports) {
-
-	module.exports = "<div id=\"grid_test_template\">\r\n    <h3 data-bind=\"text: 'testing the data bind'\"></h3>\r\n</div>\r\n\r\n<div id=\"grid_test_icon_template\">\r\n    <span data-class=\"new-grid-icon\"></span>\r\n</div>\r\n\r\n\r\n<div id=\"grid_favorite_template\">\r\n    <span _style=\"margin-left: 10px\" data-class=\"grid-favorite-icon\"></span>\r\n</div>\r\n\r\n<div id=\"advanced_filter_title_template\">\r\n    <div class=\"advanced-filter-title\">\r\n        <span class=\"advanced-popup-title\">Filters</span>\r\n        <span class=\"fp fp-close\" data-class=\"advanced-filter-close\"></span>\r\n    </div>\r\n</div>\r\n\r\n<div id=\"grid_child_template\">\r\n    <div class=\"child-details-wrapper\">\r\n        <ul data-class=\"grid-child-list\" class=\"child-list\">\r\n            <li class=\"child-item\">\r\n                <div data-bind=\"text: label\" class=\"child-label\"></div>\r\n                <div data-bind=\"text: value\" class=\"child-value\"></div>\r\n            </li>\r\n        </ul>\r\n    </div>\r\n</div>";
-
-/***/ },
-/* 234 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _moment = __webpack_require__(25);
-	
-	var _moment2 = _interopRequireDefault(_moment);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	exports.default = {
-	    'new-grid-icon': function newGridIcon() {
-	        return {
-	            css: 'fp fp-plus-square-o'
-	        };
-	    },
-	    'grid-favorite-icon': function gridFavoriteIcon() {
-	        return {
-	            css: 'fp fp-star-o'
-	        };
-	    },
-	    'advanced-filter-close': function advancedFilterClose(ctx) {
-	        // todo: replace with filter function?
-	        var visible = ctx.$parents[4].filterIsVisible;
-	        return {
-	            click: function click() {
-	                return visible(false);
-	            }
-	        };
-	    },
-	    'grid-child-list': function gridChildList() {
-	        var list = [{
-	            label: 'Sales & Relationship Manager',
-	            value: this.data.srm
-	        }, {
-	            label: 'Negotiator',
-	            value: this.data.negotiator
-	        }];
-	        return {
-	            foreach: list
-	        };
-	    }
-	};
-
-/***/ },
-/* 235 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var _gridRegistry = __webpack_require__(225);
-	
-	var _gridRegistry2 = _interopRequireDefault(_gridRegistry);
-	
-	var _moment = __webpack_require__(25);
-	
-	var _moment2 = _interopRequireDefault(_moment);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/* eslint no-unused-vars: ["error", { "args": "none" }]*/
-	// import registry from 'scalejs.metadatafactory-common/dist/grid/registry/gridRegistry';
-	function gridUpperCase(data, type, row, meta) {
-	    return data.toUpperCase();
-	}
-	
-	function gridDateFormatter(data, type, row, meta) {
-	    var date = '';
-	    if (data) {
-	        date = _moment2.default.utc(data).format('DD MMM YYYY') || '';
-	    }
-	    return date;
-	}
-	
-	_gridRegistry2.default.register('gridDateFormatter', gridDateFormatter);
-	_gridRegistry2.default.register('gridUpperCase', gridUpperCase);
-
-/***/ },
-/* 236 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-	"use strict";
 
 /***/ }
 /******/ ]);
