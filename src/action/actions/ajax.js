@@ -112,7 +112,8 @@ function ajax(options, args) {
             const response = {
                 request: options.target,
                 error: error,
-                [keyMap.resultsKey]: results
+                [keyMap.resultsKey]: results,
+                status: results ? 200 : error.status
             };
 
             item.options = merge(response, item.options);

@@ -20,12 +20,16 @@ function renderParams(params, data) {
 
 
 function event(options) {
-    const data = unwrap(this && this.data),
+    let data = unwrap(this && this.data),
         optionData = options.data || {};
     let params = options.params;
 
     if (options.paramsKey) {
         params = merge(params || {}, options[options.paramsKey]);
+    }
+
+    if (options.useOptions) {
+        optionData = options;
     }
 
     if (params && options.renderParams !== false) {

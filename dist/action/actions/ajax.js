@@ -124,6 +124,8 @@ function ajax(options, args) {
             keyMap = options.keyMap || { resultsKey: 'results' };
 
         ((err ? opts.errorActions : opts.nextActions) || []).forEach(function (item) {
+            var _response;
+
             if (err && opts.errorActions) {
                 opts.errorActions.forEach(function (errorAction) {
                     if (errorAction.options.message && error.message) {
@@ -133,10 +135,10 @@ function ajax(options, args) {
             }
 
             // get the results of the request and push
-            var response = _defineProperty({
+            var response = (_response = {
                 request: options.target,
                 error: error
-            }, keyMap.resultsKey, results);
+            }, _defineProperty(_response, keyMap.resultsKey, results), _defineProperty(_response, 'status', results ? 200 : error.status), _response);
 
             item.options = (0, _scalejs3.merge)(response, item.options);
             _scalejs.createViewModel.call(context, item).action();
