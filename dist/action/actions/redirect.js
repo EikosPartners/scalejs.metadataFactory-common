@@ -1,6 +1,6 @@
 'use strict';
 
-var _actionModule = require('scalejs.metadatafactory-common/dist/action/actionModule');
+var _actionModule = require('../actionModule');
 
 var _knockout = require('knockout');
 
@@ -12,6 +12,16 @@ var _mustache2 = _interopRequireDefault(_mustache);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/**
+ * Redirect action to redirect the current page to another
+ *
+ * @module redirect
+ *
+ * @param {object} node
+ *  The configuration object for the redirect action
+ * @param {string} node.type='redirect',
+ *
+ */
 function redirect(options) {
     if (!options.target) {
         console.error('Must provide target!');

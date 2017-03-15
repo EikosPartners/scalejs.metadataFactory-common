@@ -18,6 +18,8 @@ require('./listAdvanced/listAdvancedModule');
 
 require('./grid/gridModule');
 
+require('./action/actions/redirect');
+
 var _scalejs = require('scalejs.mvvm');
 
 var _scalejs2 = _interopRequireDefault(_scalejs);

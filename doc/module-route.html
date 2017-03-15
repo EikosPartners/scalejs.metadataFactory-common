@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: store</title>
+    <title>JSDoc: Module: route</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: store</h1>
+    <h1 class="page-title">Module: route</h1>
 
     
 
@@ -38,9 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description">Store: a component that takes a dataSourceEndpoint
-and adds the results to the noticeboard.
-It has no viewmodel and does not accept children.</div>
+            <div class="description">Route action to re-route to another page</div>
         
 
         
@@ -97,7 +95,7 @@ It has no viewmodel and does not accept children.</div>
 
             
 
-            <td class="description last">The configuation object for the module
+            <td class="description last">The configuration object for the route action
                 <h6>Properties</h6>
                 
 
@@ -110,8 +108,6 @@ It has no viewmodel and does not accept children.</div>
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
         
 
         
@@ -140,125 +136,23 @@ It has no viewmodel and does not accept children.</div>
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
                 <td class="default">
                 
-                    'store'
+                    'action'
                 
                 </td>
             
 
-            <td class="description last">The type of the node is store     *</td>
+            <td class="description last">The type of the node is action</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>storeKey</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The key that the results are stored on in the noticeboard</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>dataSourceEndpoint</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-|
-
-<span class="param-type">Array.&lt;Object></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">An object defining the endpoint(s) that makes the ajax calls
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>uri</code></td>
+                <td class="name"><code>actionType</code></td>
             
 
             <td class="type">
@@ -271,25 +165,23 @@ It has no viewmodel and does not accept children.</div>
             </td>
 
             
-                <td class="attributes">
-                
 
+            
+                <td class="default">
                 
-
+                    'route'
                 
                 </td>
             
 
-            
-
-            <td class="description last">The uri for the endpoint</td>
+            <td class="description last">The actionType of the node is route</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>url</code></td>
+                <td class="name"><code>text</code></td>
             
 
             <td class="type">
@@ -302,20 +194,14 @@ It has no viewmodel and does not accept children.</div>
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
 
-                
-
+            
+                <td class="default">
                 
                 </td>
             
 
-            
-
-            <td class="description last">The url for the endpoint</td>
+            <td class="description last">The text to display on the button</td>
         </tr>
 
     
@@ -335,56 +221,6 @@ It has no viewmodel and does not accept children.</div>
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Options for the ajax call</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>keyMap</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
                 <td class="default">
@@ -392,7 +228,7 @@ It has no viewmodel and does not accept children.</div>
                 </td>
             
 
-            <td class="description last">A mapper object to map keys
+            <td class="description last">The options pertaining to the route action
                 <h6>Properties</h6>
                 
 
@@ -406,8 +242,6 @@ It has no viewmodel and does not accept children.</div>
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -420,7 +254,30 @@ It has no viewmodel and does not accept children.</div>
 
         <tr>
             
-                <td class="name"><code>result</code></td>
+                <td class="name"><code>target</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The uri to route to</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
             
 
             <td class="type">
@@ -433,20 +290,56 @@ It has no viewmodel and does not accept children.</div>
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
 
-                
+            
 
+            <td class="description last">The data to send along when routing</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
                 
-                </td>
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
             
 
             
 
-            <td class="description last">Map the results from the ajax call with this key</td>
+            <td class="description last">Key-value pairs to merge pass along as data when routing</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>paramsKey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The key of the data for the parameters</td>
         </tr>
 
     
@@ -501,7 +394,7 @@ It has no viewmodel and does not accept children.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="store_storeViewModel.js.html">store/storeViewModel.js</a>, <a href="store_storeViewModel.js.html#line9">line 9</a>
+        <a href="action_actions_route.js.html">action/actions/route.js</a>, <a href="action_actions_route.js.html#line20">line 20</a>
     </li></ul></dd>
     
 
@@ -524,6 +417,18 @@ It has no viewmodel and does not accept children.</div>
 
 
 
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>{
+    "type": "action",
+    "actionType": "route",
+    "text": "Add User",
+    "options": {
+        "target": "add-user"
+    }
+ }</code></pre>
 
 
 

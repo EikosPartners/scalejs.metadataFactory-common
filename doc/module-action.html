@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: input</title>
+    <title>JSDoc: Module: action</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: input</h1>
+    <h1 class="page-title">Module: action</h1>
 
     
 
@@ -38,9 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description">input is the component to use when accepting user-input.
- This is the best way to create an interactive UI and
- autogenerate your underlying data model by using an adapter in the parent chain.</div>
+            <div class="description">Action: a component to create an action</div>
         
 
         
@@ -97,7 +95,7 @@
 
             
 
-            <td class="description last">The configuration specs for the component.
+            <td class="description last">The configuration object for the module
                 <h6>Properties</h6>
                 
 
@@ -127,7 +125,7 @@
 
         <tr>
             
-                <td class="name"><code>id</code></td>
+                <td class="name"><code>type</code></td>
             
 
             <td class="type">
@@ -142,8 +140,6 @@
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
-                
 
                 
 
@@ -154,24 +150,25 @@
             
                 <td class="default">
                 
+                    'action'
+                
                 </td>
             
 
-            <td class="description last">By specifying an "id" on your input, you are automatically
-adding your input's data to the data context model.</td>
+            <td class="description last">The type of the node is action</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>actionType</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type">string</span>
 
 
             
@@ -193,7 +190,42 @@ adding your input's data to the data context model.</td>
                 </td>
             
 
-            <td class="description last">The options pertaining to your specific inputType</td>
+            <td class="description last">The type of action to create</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The text to display on the button</td>
         </tr>
 
     
@@ -235,52 +267,14 @@ adding your input's data to the data context model.</td>
                 </td>
             
 
-            <td class="description last">Boolean or expression to render the input (or not)</td>
+            <td class="description last">Boolean or expression to render the action (or not)</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>options.values</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">array</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The values that can be chosen from for inputTypes that have selections
-(e.g. radio, checkboxList)</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options.validations</code></td>
+                <td class="name"><code>options</code></td>
             
 
             <td class="type">
@@ -295,8 +289,6 @@ adding your input's data to the data context model.</td>
             
                 <td class="attributes">
                 
-                    &lt;optional><br>
-                
 
                 
 
@@ -310,7 +302,7 @@ adding your input's data to the data context model.</td>
                 </td>
             
 
-            <td class="description last">KO validations object to validate the inputValue
+            <td class="description last">The options pertaining to your specific actionType
                 <h6>Properties</h6>
                 
 
@@ -324,8 +316,6 @@ adding your input's data to the data context model.</td>
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -338,33 +328,95 @@ adding your input's data to the data context model.</td>
 
         <tr>
             
-                <td class="name"><code>required</code></td>
+                <td class="name"><code>disabled</code></td>
             
 
             <td class="type">
             
                 
 <span class="param-type">boolean</span>
+|
+
+<span class="param-type">string</span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
 
-                
+            
 
+            <td class="description last">Boolean or expression to disable the button or not</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>nextActions</code></td>
+            
+
+            <td class="type">
+            
                 
-                </td>
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
             
 
             
 
-            <td class="description last">Required validation for ko - also will show * next to label indicating it is required</td>
+            <td class="description last">An array of action objects to perform after the action is completed successfully</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errorActions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">An array of action objects to perform if the action ends with an error</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mergeid</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The merge id of the action</td>
         </tr>
 
     
@@ -372,170 +424,6 @@ adding your input's data to the data context model.</td>
 </table>
 
             </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options.readonly</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-|
-
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    false
-                
-                </td>
-            
-
-            <td class="description last">Boolean or expression to set the input as readonly</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options.disabled</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Disables the input (different from readonly)</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options.pattern</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-|
-
-<span class="param-type">string</span>
-|
-
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Sets an inputmask for the input. If a string, this is the mask.
-If an object, gets passed as is.
- If boolean = true, uses pattern validation.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options.vertical</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    false
-                
-                </td>
-            
-
-            <td class="description last">For multi-option types (e.g. checkboxList, radio),
-sets the display to block if true for the options</td>
         </tr>
 
     
@@ -583,7 +471,7 @@ sets the display to block if true for the options</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="input_inputViewModel.js.html">input/inputViewModel.js</a>, <a href="input_inputViewModel.js.html#line523">line 523</a>
+        <a href="action_actionViewModel.js.html">action/actionViewModel.js</a>, <a href="action_actionViewModel.js.html#line8">line 8</a>
     </li></ul></dd>
     
 

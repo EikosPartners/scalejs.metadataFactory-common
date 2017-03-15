@@ -229,7 +229,47 @@
                 </td>
             
 
-            <td class="description last">If the child nodes need to be lazily loaded (e.g. delay creation of children viewmodels until data returns)</td>
+            <td class="description last">If the child nodes need to be lazily loaded
+(e.g. delay creation of children viewmodels until data returns)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>persist</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">If data object should be persisted from one fetch data call to the next (upon refresh)</td>
         </tr>
 
     
@@ -367,6 +407,9 @@
             <td class="type">
             
                 
+<span class="param-type">array</span>
+|
+
 <span class="param-type">object</span>
 
 
@@ -387,7 +430,7 @@
 
             
 
-            <td class="description last">A mapper object to map keys
+            <td class="description last">A mapper object or array of mapper objects to map keys
                 <h6>Properties</h6>
                 
 
@@ -478,6 +521,39 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>storeKey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Place the resultsByKey inside of the store with this key</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -556,7 +632,8 @@
                 </td>
             
 
-            <td class="description last">The json configuration for children nodes which will be mapped to view models and kept track of from the adapter</td>
+            <td class="description last">The json configuration for children nodes which will be mapped
+to view models and kept track of from the adapter</td>
         </tr>
 
     
@@ -593,7 +670,8 @@
                 </td>
             
 
-            <td class="description last">The json configuration for plugins which will be accessible from getValue function, based upon type</td>
+            <td class="description last">The json configuration for plugins which will be accessible
+from getValue function, based upon type</td>
         </tr>
 
     
@@ -700,7 +778,8 @@
 
             
 
-            <td class="description last">an object that contains the plugins which have been added to the adapter context</td>
+            <td class="description last">an object that contains the plugins which have
+been added to the adapter context</td>
         </tr>
 
     
@@ -785,7 +864,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="adapter_adapterViewModel.js.html">adapter/adapterViewModel.js</a>, <a href="adapter_adapterViewModel.js.html#line14">line 14</a>
+        <a href="adapter_adapterViewModel.js.html">adapter/adapterViewModel.js</a>, <a href="adapter_adapterViewModel.js.html#line13">line 13</a>
     </li></ul></dd>
     
 
@@ -812,7 +891,25 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>{     "type": "adapter",     "id": "ADAPTER_ID",     "dataSourceEndpoint": [         {             "uri": "endpoint/uri",             "options": {                 "type": "PUT"             },             "keyMap": {                 "dataKey": "a",                 "resultsKey": "b"             }         }     ],     "children": [         // children json configuration goes here     ]}</code></pre>
+    <pre class="prettyprint"><code>{
+     "type": "adapter",
+     "id": "ADAPTER_ID",
+     "dataSourceEndpoint": [
+         {
+             "uri": "endpoint/uri",
+             "options": {
+                 "type": "PUT"
+             },
+             "keyMap": {
+                 "dataKey": "a",
+                 "resultsKey": "b"
+             }
+         }
+     ],
+     "children": [
+         // children json configuration goes here
+     ]
+}</code></pre>
 
 
 
@@ -847,13 +944,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-adapter.html">adapter</a></li><li><a href="module-input.html">input</a></li><li><a href="module-input-select.html">input-select</a></li><li><a href="module-store.html">store</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-action.html">action</a></li><li><a href="module-adapter.html">adapter</a></li><li><a href="module-ajax.html">ajax</a></li><li><a href="module-event.html">event</a></li><li><a href="module-input.html">input</a></li><li><a href="module-input-select.html">input-select</a></li><li><a href="module-list.html">list</a></li><li><a href="module-redirect.html">redirect</a></li><li><a href="module-route.html">route</a></li><li><a href="module-series.html">series</a></li><li><a href="module-store.html">store</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon Jun 20 2016 16:21:07 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Mar 15 2017 11:18:21 GMT-0400 (EDT)
 </footer>
 
 <script> prettyPrint(); </script>
