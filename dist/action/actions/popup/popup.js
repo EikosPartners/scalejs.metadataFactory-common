@@ -33,6 +33,53 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var popupRoot = _scalejs5.default.popupRoot;
 var initialized = false;
 
+/**
+ * Popup action creates a popup in the window
+ *
+ * @module popup
+ *
+ * @param {object} node
+ *  The configuration object for the popup action
+ * @param {string} node.type
+ *  The type of the node is action
+ * @param {string} node.actionType
+ *  The actionType of the node is popup
+ * @param {string} node.text
+ *  The text to display on the button
+ * @param {string} node.id
+ *  The id of the popup
+ * @param {string} node.buttonClasses
+ *  A string of classes to apply the button
+ * @param {object} node.options
+ *  The options pertaining to the ajax action
+ * @param {string} node.options.template
+ *  The template to use to construct the popup
+ * @param {string} node.options.title
+ *  The title of the popup
+ * @param {string} node.options.message
+ *  The message to display in the popup
+ * @param {object|array} node.options.data
+ *  The data to pass to the popup to be mustache rendered
+ * @param {boolean} node.options.modal
+ *  Boolean to display the popup as a modal or not
+ * @param {string} node.options.wrapperTemplate
+ *  The template to use as the wrapper for the popup
+ * @param {object} node.options.hidePopupAction
+ *  The action to perform when the popup is hidden
+ * @param {number} node.options.hideDelay
+ *  The amount of time before the popup is closed in milliseconds
+ *
+ * @example
+ * {
+ *     "type": "action",
+ *     "actionType": "popup",
+ *     "options": {
+ *         "title": "Success",
+ *         "template": "action_popup_template",
+ *         "message": "Your form has been submitted successfully"
+ *     }
+ * }
+ */
 function popupAction(options) {
     if (!initialized) {
         init();

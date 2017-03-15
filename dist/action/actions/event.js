@@ -32,8 +32,8 @@ function renderParams(params, data) {
  *
  * @param {object} node
  *  The configuration object for the event action
- * @param {string} node.type='event'
- *  The type of the node is event
+ * @param {string} node.type='action'
+ *  The type of the node is action
  * @param {string} node.actionType='event'
  *  The actionType of the node is event
  * @param {object} node.options
