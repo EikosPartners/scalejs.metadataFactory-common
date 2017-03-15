@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: store</title>
+    <title>JSDoc: Module: event</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: store</h1>
+    <h1 class="page-title">Module: event</h1>
 
     
 
@@ -38,9 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description">Store: a component that takes a dataSourceEndpoint
-and adds the results to the noticeboard.
-It has no viewmodel and does not accept children.</div>
+            <div class="description">Event action to notify an event to all its subscribers</div>
         
 
         
@@ -97,7 +95,7 @@ It has no viewmodel and does not accept children.</div>
 
             
 
-            <td class="description last">The configuation object for the module
+            <td class="description last">The configuration object for the event action
                 <h6>Properties</h6>
                 
 
@@ -110,8 +108,6 @@ It has no viewmodel and does not accept children.</div>
 
         <th>Type</th>
 
-        
-        <th>Attributes</th>
         
 
         
@@ -140,125 +136,23 @@ It has no viewmodel and does not accept children.</div>
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
                 <td class="default">
                 
-                    'store'
+                    'action'
                 
                 </td>
             
 
-            <td class="description last">The type of the node is store     *</td>
+            <td class="description last">The type of the node is action</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>storeKey</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The key that the results are stored on in the noticeboard</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>dataSourceEndpoint</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-|
-
-<span class="param-type">Array.&lt;Object></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">An object defining the endpoint(s) that makes the ajax calls
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>uri</code></td>
+                <td class="name"><code>actionType</code></td>
             
 
             <td class="type">
@@ -271,51 +165,16 @@ It has no viewmodel and does not accept children.</div>
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
-
-            <td class="description last">The uri for the endpoint</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>url</code></td>
-            
-
-            <td class="type">
-            
+                <td class="default">
                 
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
+                    'event'
                 
                 </td>
             
 
-            
-
-            <td class="description last">The url for the endpoint</td>
+            <td class="description last">The actionType of the node is event</td>
         </tr>
 
     
@@ -335,56 +194,6 @@ It has no viewmodel and does not accept children.</div>
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Options for the ajax call</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>keyMap</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
                 <td class="default">
@@ -392,7 +201,7 @@ It has no viewmodel and does not accept children.</div>
                 </td>
             
 
-            <td class="description last">A mapper object to map keys
+            <td class="description last">The options pertaining to the event action
                 <h6>Properties</h6>
                 
 
@@ -406,8 +215,6 @@ It has no viewmodel and does not accept children.</div>
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -420,7 +227,79 @@ It has no viewmodel and does not accept children.</div>
 
         <tr>
             
-                <td class="name"><code>result</code></td>
+                <td class="name"><code>target</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the channel to notify</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+|
+
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Key-value pairs to pass along as data with the event that will be mustache rendered</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>useOptions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Boolean to determine whether to use the options as the data to pass along</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
             
 
             <td class="type">
@@ -433,20 +312,10 @@ It has no viewmodel and does not accept children.</div>
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
 
-            <td class="description last">Map the results from the ajax call with this key</td>
+            <td class="description last">Data object to pass along with the event</td>
         </tr>
 
     
@@ -501,7 +370,7 @@ It has no viewmodel and does not accept children.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="store_storeViewModel.js.html">store/storeViewModel.js</a>, <a href="store_storeViewModel.js.html#line9">line 9</a>
+        <a href="action_actions_event.js.html">action/actions/event.js</a>, <a href="action_actions_event.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -524,6 +393,25 @@ It has no viewmodel and does not accept children.</div>
 
 
 
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>{
+       "type": "action",
+       "actionType": "event",
+       "options": {
+           "target": "my_grid.add",
+           "params": [
+               {
+                   "name": "{{request.name}}",
+                   "endpoint": "{{request.uri}}",
+                   "status": "{{status}}"
+               }
+           ],
+           "useOptions": true
+       }
+   }</code></pre>
 
 
 

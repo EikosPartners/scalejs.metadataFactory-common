@@ -15,6 +15,30 @@ var _lodash = require('lodash');
 
 var _actionModule = require('./actionModule');
 
+/** Action: a component to create an action
+ * @module action
+ *
+ * @param {object} node
+ *  The configuration object for the module
+ * @param {string} node.type='action'
+ *  The type of the node is action
+ * @param {string} node.actionType
+ *  The type of action to create
+ * @param {string} node.text
+ *  The text to display on the button
+ * @param {boolean|string} [node.rendered=true]
+ *  Boolean or expression to render the action (or not)
+ * @param {object} node.options
+ *  The options pertaining to your specific actionType
+ * @param {boolean|string} node.options.disabled
+ *  Boolean or expression to disable the button or not
+ * @param {array} node.options.nextActions
+ *  An array of action objects to perform after the action is completed successfully
+ * @param {array} node.options.errorActions
+ *  An array of action objects to perform if the action ends with an error
+ * @param {string} node.options.mergeid
+ *  The merge id of the action
+ */
 function actionViewModel(node) {
     var registeredActions = (0, _actionModule.getRegisteredActions)(),
         originalJson = (0, _lodash.cloneDeep)(node),

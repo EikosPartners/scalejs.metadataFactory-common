@@ -25,6 +25,45 @@ function renderParams(params, data) {
     return ret;
 }
 
+/**
+ * Event action to notify an event to all its subscribers
+ *
+ * @module event
+ *
+ * @param {object} node
+ *  The configuration object for the event action
+ * @param {string} node.type='event'
+ *  The type of the node is event
+ * @param {string} node.actionType='event'
+ *  The actionType of the node is event
+ * @param {object} node.options
+ *  The options pertaining to the event action
+ * @param {string} node.options.target
+ *  The name of the channel to notify
+ * @param {object|array} node.options.params
+ *  Key-value pairs to pass along as data with the event that will be mustache rendered
+ * @param {boolean} node.options.useOptions
+ *  Boolean to determine whether to use the options as the data to pass along
+ * @param {object} node.options.data
+ *  Data object to pass along with the event
+ *
+ * @example
+ *  {
+ *        "type": "action",
+ *        "actionType": "event",
+ *        "options": {
+ *            "target": "my_grid.add",
+ *            "params": [
+ *                {
+ *                    "name": "{{request.name}}",
+ *                    "endpoint": "{{request.uri}}",
+ *                    "status": "{{status}}"
+ *                }
+ *            ],
+ *            "useOptions": true
+ *        }
+ *    }
+ */
 function event(options) {
     var data = (0, _knockout.unwrap)(this && this.data),
         optionData = options.data || {};

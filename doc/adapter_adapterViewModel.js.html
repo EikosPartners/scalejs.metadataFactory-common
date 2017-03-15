@@ -26,158 +26,195 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/*global define,ko,sandbox,dataservice */
-import sandbox from 'scalejs.sandbox';
-import ko from 'knockout';
-import dataservice from 'dataservice';
-import { observable, observableArray, computed } from 'scalejs.mvvm';
-import { receive, notify } from 'scalejs.messagebus';
-import { createViewModels } from 'scalejs.metadataFactory';
+            <pre class="prettyprint source linenums"><code>import { observable, observableArray, computed, unwrap } from 'knockout';
+import { createViewModel, createViewModels } from 'scalejs.metadataFactory';
+import { receive } from 'scalejs.messagebus';
+import { extend } from 'lodash';
+import { get, merge } from 'scalejs';
+import noticeboard from 'scalejs.noticeboard';
 
-    /* TODO: 
-    In PJSON, we used readonly, errors, etc. We need a way to do that outside of adapter
-    i.e. plugin to adapter context with other components
-    */     
+/* TODO:
+In PJSON, we used readonly, errors, etc. We need a way to do that outside of adapter
+i.e. plugin to adapter context with other components
+*/
 
-    /** Adapter: a viewless component which keeps track of child nodes and the data for the nodes
-     * @module adapter
-     *
-     * @param {object} node
-     *  The configuration object for the module
-     * @param {string} node.type='adapter'
-     *  The type of the node is adapter
-     * @param {string} node.id
-     *  The id for the module
-     * @param {boolean} [node.lazy=false]
-     *  If the child nodes need to be lazily loaded (e.g. delay creation of children viewmodels until data returns)
-     * @param {object|Object[]} [node.dataSourceEndpoint]
-     *  An object defining the endpoint(s) that makes the ajax calls
-     * @param {string} node.dataSourceEndpoint.uri
-     *   The uri for the endpoint
-     * @param {string} [node.dataSourceEndpoint.url]
-     *  The url for the endpoint
-     * @param {object} [node.dataSourceEndpoint.keyMap]
-     *  A mapper object to map keys
-     * @param {string} [node.dataSourceEndpoint.keyMap.resultsKey]
-     *  Map the results from the ajax call with this key
-     * @param {string} [node.dataSourceEndpoint.keyMap.dataKey]
-     *  Extend the data object with this key
-     * @param {object} [node.dataSourceEndpoint.options]
-     *  Options for the ajax call
-     * @param {array} node.children
-     *  The json configuration for children nodes which will be mapped to view models and kept track of from the adapter
-     * @param {array} [node.plugins]
-     *  The json configuration for plugins which will be accessible from getValue function, based upon type
-     *
-     * @property {array} mappedChildNodes the mapped children nodes
-     * @property {observable} data the data retrieved from dataSourceEndpoint and tracked from children
-     * @property {object} contextPlugins an object that contains the plugins which have been added to the adapter context
-     * @property {context} the context for the adapter (which can be utilized in a custom template)
-     * @property {function} dispose the dispose function for all internal subs
-     *
-     * @example
-     * {
-     *      "type": "adapter",
-     *      "id": "ADAPTER_ID",
-     *      "dataSourceEndpoint": [
-     *          {
-     *              "uri": "endpoint/uri",
-     *              "options": {
-     *                  "type": "PUT"
-     *              },
-     *              "keyMap": {
-     *                  "dataKey": "a",
-     *                  "resultsKey": "b"
-     *              }
-     *          }
-     *      ],
-     *      "children": [
-     *          // children json configuration goes here
-     *      ]
-     * }
-     */
-    export default function adapterViewModel(node) {
-        let // imports
-            unwrap = ko.unwrap,
-            merge = sandbox.object.merge,
-            get = sandbox.object.get,
-            extend = sandbox.object.extend,
-            // props
-            dictionary = observable({}), // dictionary of nodes with an id
-            data = observable({}), // data of dictionary contents
-            context = {
-                metadata: node.children,
-                parentContext: this,
-                getValue: getValue,
-                dictionary: dictionary,
-                data: data
-            },
-            mappedChildNodes = observableArray(),
-            updated = false,
-            subs = [],
-            dataSyncSubscription,
-            plugins = node.plugins ? createViewModels.call(context, node.plugins) : [],
-            contextPlugins = {};
+/** Adapter: a viewless component which keeps track of child nodes and the data for the nodes
+ * @module adapter
+ *
+ * @param {object} node
+ *  The configuration object for the module
+ * @param {string} node.type='adapter'
+ *  The type of the node is adapter
+ * @param {string} node.id
+ *  The id for the module
+ * @param {boolean} [node.lazy=false]
+ *  If the child nodes need to be lazily loaded
+ * (e.g. delay creation of children viewmodels until data returns)
+ * @param {boolean} [node.persist=false]
+ *  If data object should be persisted from one fetch data call to the next (upon refresh)
+ * @param {object|Object[]} [node.dataSourceEndpoint]
+ *  An object defining the endpoint(s) that makes the ajax calls
+ * @param {string} node.dataSourceEndpoint.uri
+ *   The uri for the endpoint
+ * @param {string} [node.dataSourceEndpoint.url]
+ *  The url for the endpoint
+ * @param {array|object} [node.dataSourceEndpoint.keyMap]
+ *  A mapper object or array of mapper objects to map keys
+ * @param {string} [node.dataSourceEndpoint.keyMap.resultsKey]
+ *  Map the results from the ajax call with this key
+ * @param {string} [node.dataSourceEndpoint.keyMap.dataKey]
+ *  Extend the data object with this key
+ * @param {string} [node.dataSourceEndpoint.keyMap.storeKey]
+ *  Place the resultsByKey inside of the store with this key
+ * @param {object} [node.dataSourceEndpoint.options]
+ *  Options for the ajax call
+ * @param {array} node.children
+ *  The json configuration for children nodes which will be mapped
+ * to view models and kept track of from the adapter
+ * @param {array} [node.plugins]
+ *  The json configuration for plugins which will be accessible
+ * from getValue function, based upon type
+ *
+ * @property {array} mappedChildNodes the mapped children nodes
+ * @property {observable} data the data retrieved from dataSourceEndpoint and tracked from children
+ * @property {object} contextPlugins an object that contains the plugins which have
+ * been added to the adapter context
+ * @property {context} the context for the adapter (which can be utilized in a custom template)
+ * @property {function} dispose the dispose function for all internal subs
+ *
+ * @example
+ * {
+ *      "type": "adapter",
+ *      "id": "ADAPTER_ID",
+ *      "dataSourceEndpoint": [
+ *          {
+ *              "uri": "endpoint/uri",
+ *              "options": {
+ *                  "type": "PUT"
+ *              },
+ *              "keyMap": {
+ *                  "dataKey": "a",
+ *                  "resultsKey": "b"
+ *              }
+ *          }
+ *      ],
+ *      "children": [
+ *          // children json configuration goes here
+ *      ]
+ * }
+ */
+export default function adapterViewModel(node) {
+    const dictionary = observable({}), // dictionary of nodes with an id
+        data = observable({}), // data of dictionary contents
+        context = {
+            metadata: node.children,
+            parentContext: this,
+            getValue: getValue,
+            dictionary: dictionary,
+            data: data,
+            id: node.id
+        },
+        mappedChildNodes = observableArray(),
+        subs = [],
+        plugins = node.plugins ? createViewModels.call(context, node.plugins) : [],
+        contextPlugins = {};
 
-        // recursive function which parses through nodes and adds nodes with an id to dictionary
-        function createDictionary(nodes) {                
-            let dict = dictionary.peek();
-            nodes.forEach(node => {
-                // add node to dictionary if it isnt there yet
-                if (node.id &amp;&amp; !dict[node.id]) {
-                    dict[node.id] = node;
-                    updated = true;
-                }
-                // add children to dictionary if getValue function is not exposed
-                if (!node.getValue) {
-                    createDictionary(unwrap(node.mappedChildNodes) || []);
-                }
-            });
-        }
+    let dataSyncSubscription,
+        updated = false;
 
-        // keep the data current if the node value changed with dataSyncDescription
-        function syncDataDictionary() {
-            dataSyncSubscription = computed(() => {
-                let dict = dictionary();
-                Object.keys(dict).forEach(id => {
-                    if (dict[id].getValue) {
+    plugins.forEach((plugin) => {
+        contextPlugins[plugin.type] = plugin;
+    });
+
+    // recursive function which parses through nodes and adds nodes with an id to dictionary
+    function createDictionary(nodes) {
+        const dict = dictionary.peek();
+        nodes.forEach((n) => {
+            // add node to dictionary if it isnt there yet
+            if (n.id &amp;&amp; !dict[n.id]) {
+                dict[n.id] = n;
+                updated = true;
+            }
+            // add children to dictionary if getValue function is not exposed
+            if (!n.getValue) {
+                createDictionary(unwrap(n.mappedChildNodes) || []);
+            }
+        });
+    }
+
+    // keep the data current if the node value changed with dataSyncDescription
+    function syncDataDictionary() {
+        dataSyncSubscription = computed(() => {
+            const dict = dictionary();
+            Object.keys(dict).forEach((id) => {
+                if (dict[id].rendered) {
+                    if (dict[id].rendered() &amp;&amp; dict[id].getValue) {
                         data()[id] = dict[id].getValue();
+                    } else if (!dict[id].rendered()) {
+                        if (dict[id].trackIfHidden) {
+                            data()[id] = dict[id].getValue();
+                        } else {
+                            delete data()[id];
+                        }
                     }
-                });
+                }
             });
-        }
-        
-        // pause dataSyncDescription and update the data
-        function updateData(newData) {
-            dataSyncSubscription &amp;&amp; dataSyncSubscription.dispose();
-            data(newData);
-            syncDataDictionary();
-        }
+        });
+    }
 
-        // fetches the data from dataSourceEndpoint(s)
-        function fetchData() {
-            let dataSourceEndpointArray = Array.isArray(node.dataSourceEndpoint)
-                ? node.dataSourceEndpoint : [node.dataSourceEndpoint],
-                count = 0,
-                dataObject = data();
+    // pause dataSyncDescription and update the data
+    function updateData(newData) {
+        dataSyncSubscription &amp;&amp; dataSyncSubscription.dispose();
+        data(newData);
+        syncDataDictionary();
+    }
 
-            dataSourceEndpointArray.forEach(endpoint => {
-                dataservice.ajax(endpoint, (error, results) => {
+    // fetches the data from dataSourceEndpoint(s)
+    function fetchData() {
+        const dataSourceEndpointArray = Array.isArray(node.dataSourceEndpoint)
+            ? node.dataSourceEndpoint : [node.dataSourceEndpoint],
+            dataObject = node.persist ? data() : {};
+        let count = 0;
+
+        dataSourceEndpointArray.forEach((e) => {
+            let endpoint = e;
+            if (endpoint.uri) {
+                console.warn('dataSourceEndpoint expects URI in "target". Please update your JSON to reflect the new syntax');
+                endpoint = merge(endpoint, {
+                    target: endpoint
+                });
+                delete endpoint.uri;
+            }
+
+            createViewModel.call(context, {
+                type: 'action',
+                actionType: 'ajax',
+                options: endpoint
+            }).action({
+                callback: function (error, results) {
                     let resultsByKey,
-                        keyMap = endpoint.keyMap || {},
+                        keyMapArray = endpoint.keyMap || [{}],
                         newDataObject = {};
 
-                    count++;
+                    count += 1;
+
+                    if (!Array.isArray(keyMapArray)) {
+                        keyMapArray = [keyMapArray];
+                    }
 
                     if (!error) {
-                        resultsByKey = keyMap.resultsKey ? get(results, keyMap.resultsKey) : results;
-                        // optional: keyMap.dataKey path to extend dataObject on
-                        if (keyMap.dataKey) {
-                            newDataObject[keyMap.dataKey] = resultsByKey;
-                        } else {
-                            newDataObject = resultsByKey;
-                        }
-                        extend(dataObject, newDataObject);
+                        keyMapArray.forEach((keyMap) => {
+                            resultsByKey = keyMap.resultsKey ? get(results, keyMap.resultsKey) : results;
+                            // optional: keyMap.dataKey path to extend dataObject on
+                            if (keyMap.dataKey) {
+                                newDataObject[keyMap.dataKey] = resultsByKey;
+                            } else if (keyMap.storeKey) {
+                                noticeboard.setValue(keyMap.storeKey, resultsByKey);
+                            } else {
+                                newDataObject = resultsByKey;
+                            }
+                            extend(dataObject, newDataObject);
+                        });
                     }
 
                     if (count === dataSourceEndpointArray.length) {
@@ -186,70 +223,76 @@ import { createViewModels } from 'scalejs.metadataFactory';
                             mappedChildNodes(createViewModels.call(context, node.children || []));
                         }
                     }
-                });
+                }
+            });
+        });
+    }
+
+    function getValue(id) {
+        const dictNode = dictionary()[id],
+            dataValue = (data() || {})[id];
+
+        // the node has been defined so get the value from the node
+        if (dictNode &amp;&amp; dictNode.getValue) { return dictNode.getValue(); }
+
+        // data has been defined for the node but the node doesnt exist yet
+        if (dataValue) { return dataValue; }
+
+        if (contextPlugins &amp;&amp; contextPlugins[id]) {
+            return contextPlugins[id]();
+        }
+        return context.parentContext.getValue(id);
+    }
+
+    if (node.keepContextData) {
+        data(unwrap(this.data) || {});
+    }
+
+    if (!node.lazy) {
+        mappedChildNodes(createViewModels.call(context, node.children || []));
+    }
+
+    // update dictionary if mappedChildNodes of a node updates
+    computed(() => {
+        updated = false;
+        createDictionary(mappedChildNodes());
+        if (updated) {
+            dictionary.valueHasMutated();
+        }
+    });
+
+    // initialize the data subscription
+    syncDataDictionary();
+
+    // get initial data
+    if (node.dataSourceEndpoint) {
+        fetchData();
+    }
+
+    // listen for 'refresh' event
+    subs.push(receive(`${node.id}.refresh`, (options) => {
+        // console.log('-->', node);
+        if (node.dataSourceEndpoint) {
+            fetchData(options);
+        } else {
+            Object.keys(dictionary()).forEach((key) => {
+                dictionary()[key].setValue &amp;&amp; dictionary()[key].setValue('');
             });
         }
+    }));
 
-        function getValue(id) {
-            let node = dictionary()[id],
-                dataValue = (data() || {})[id];
-
-            // the node has been defined so get the value from the node
-            if (node &amp;&amp; node.getValue) { return node.getValue(); }
-
-            // data has been defined for the node but the node doesnt exist yet
-            if (dataValue) { return dataValue; }
-
-            if (contextPlugins &amp;&amp; contextPlugins[id]) {
-               return contextPlugins[id](); 
-            }
-            return context.parentContext.getValue(id);
+    return merge(node, {
+        mappedChildNodes: mappedChildNodes,
+        data: data,
+        contextPlugins: contextPlugins,
+        context: context,
+        dispose: function () {
+            subs.forEach((sub) => {
+                sub.dispose();
+            });
         }
-
-        if (!node.lazy) {
-            mappedChildNodes(createViewModels.call(context, node.children || []));
-        }
-
-        plugins.forEach(plugin => {
-            contextPlugins[plugin.type] = plugin;
-        });
-
-        // update dictionary if mappedChildNodes of a node updates
-        computed(() => {
-            updated = false;
-            createDictionary(mappedChildNodes())
-            if (updated) {
-                dictionary.valueHasMutated();
-            }
-        });
-
-        // initialize the data subscription
-        syncDataDictionary();
-
-        // get initial data
-        if (node.dataSourceEndpoint) { 
-            fetchData();
-        }
-
-        // listen for 'refresh' event
-        subs.push(receive(node.id + '.refresh', function (options) {
-            fetchData(options);
-        }));
-
-        return merge(node, {
-            mappedChildNodes: mappedChildNodes,
-            data: data,
-            contextPlugins: contextPlugins,
-            context: context,
-            dispose: function () {
-                subs.forEach(function (sub) {
-                    sub.unsubscribe(); // should be DISPOSE!
-                });
-            }
-        });
-    };
-    
-</code></pre>
+    });
+}</code></pre>
         </article>
     </section>
 
@@ -259,13 +302,13 @@ import { createViewModels } from 'scalejs.metadataFactory';
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-adapter.html">adapter</a></li><li><a href="module-input.html">input</a></li><li><a href="module-input-select.html">input-select</a></li><li><a href="module-store.html">store</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-action.html">action</a></li><li><a href="module-adapter.html">adapter</a></li><li><a href="module-ajax.html">ajax</a></li><li><a href="module-event.html">event</a></li><li><a href="module-input.html">input</a></li><li><a href="module-input-select.html">input-select</a></li><li><a href="module-list.html">list</a></li><li><a href="module-redirect.html">redirect</a></li><li><a href="module-route.html">route</a></li><li><a href="module-series.html">series</a></li><li><a href="module-store.html">store</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Mon Jun 20 2016 16:21:07 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Mar 15 2017 11:18:21 GMT-0400 (EDT)
 </footer>
 
 <script> prettyPrint(); </script>

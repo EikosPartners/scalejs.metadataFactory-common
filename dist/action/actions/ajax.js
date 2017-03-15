@@ -42,6 +42,78 @@ function renderParams(params, data) {
     return ret;
 }
 
+/**
+ * Ajax action to execute an ajax request
+ *
+ * @module ajax
+ *
+ * @param {object} node
+ *  The configuration object for the ajax action
+ * @param {string} node.type='action'
+ *  The type of the node is action
+ * @param {string} node.actionType='ajax'
+ *  The actionType of the node is ajax
+ * @param {string} node.text
+ *  The text to display on the button
+ * @param {object} node.options
+ *  The options pertaining to the ajax action
+ * @param {object} node.options.target
+ *  The target object for the ajax request
+ * @param {string} node.options.target.uri
+ *  The uri of the request to be made
+ * @param {string} node.options.target.name
+ *  The name of the request to be made
+ * @param {object} node.options.target.options
+ *  The options pertaining to the target
+ * @param {object} node.options.target.data
+ *  The data to send on the request
+ * @param {object} node.options.target.options.headers
+ *  Key-value pairs to set as headers on the request
+ * @param {string} node.options.target.options.type
+ *  The HTTP type of request to make (POST, PUT, etc)
+ * @param {string|Array} node.options.sendDataFromKey
+ *  The key or array of keys for where the data is stored
+ * @param {boolean} node.options.dataAndResults
+ *  Boolean value to determine whether to combine data with results from a previous ajax action
+ * @param {object} node.options.results
+ *  Object of results from a previous ajax action
+ * @param {object} node.options.params
+ *  Key-value pairs to set as parameters on the request
+ * @param {array|object} node.options.keyMap
+ *  A mapper object or array of mapper objects to map keys
+ * @param {string} node.options.keyMap.resultsKey
+ *  Map the results from the ajax call with this key
+ * @param {array} node.options.nextActions
+ *  An array of action objects to perform after the action is completed successfully
+ * @param {array} node.options.errorActions
+ *  An array of action objects to perform if the action ends with an error
+ * @param {string} node.options.mergeid
+ *  The merge id of the action
+ *
+ * @example
+ * {
+ *        "type": "action",
+ *        "actionType": "ajax",
+ *        "text": "SUBMIT",
+ *        "options": {
+ *            "target": {
+ *                "uri": "add-endpoint",
+ *                "options": {
+ *                    "type": "POST"
+ *                }
+ *            },
+ *            "nextActions": [
+ *                {
+ *                    "type": "action",
+ *                    "actionType": "route",
+ *                    "options": {
+ *                        "target": "dashboard"
+ *                    }
+ *                }
+ *            ]
+ *        }
+ *    }
+ */
 function ajax(options, args) {
     var context = this,
         data = context.data && _knockout2.default.unwrap(context.data),
