@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: input-select</title>
+    <title>JSDoc: Module: popup</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: input-select</h1>
+    <h1 class="page-title">Module: popup</h1>
 
     
 
@@ -38,8 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description">select is a type of input that lets the
- user select the value from dropdown options</div>
+            <div class="description">Popup action creates a popup in the window</div>
         
 
         
@@ -96,7 +95,7 @@
 
             
 
-            <td class="description last">The configuration specs for the component.
+            <td class="description last">The configuration object for the popup action
                 <h6>Properties</h6>
                 
 
@@ -122,7 +121,7 @@
 
         <tr>
             
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>type</code></td>
             
 
             <td class="type">
@@ -138,7 +137,122 @@
 
             
 
-            <td class="description last">Options specific to this component
+            <td class="description last">The type of the node is action</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>actionType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The actionType of the node is popup</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The text to display on the button</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The id of the popup</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>buttonClasses</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A string of classes to apply the button</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The options pertaining to the ajax action
                 <h6>Properties</h6>
                 
 
@@ -152,11 +266,7 @@
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -168,46 +278,76 @@
 
         <tr>
             
-                <td class="name"><code>addBlank</code></td>
+                <td class="name"><code>template</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">bool</span>
+<span class="param-type">string</span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                    true
-                
-                </td>
-            
 
-            <td class="description last">Whether or not to add a blank to the beginning of the select options</td>
+            <td class="description last">The template to use to construct the popup</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>values</code></td>
+                <td class="name"><code>title</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The title of the popup</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message to display in the popup</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
             
 
             <td class="type">
@@ -223,52 +363,40 @@
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                </td>
-            
 
-            <td class="description last">Specifies either an array of values to use or an object describing the values
-                <h6>Properties</h6>
-                
+            <td class="description last">The data to pass to the popup to be mustache rendered</td>
+        </tr>
 
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>fromArray</code></td>
+                <td class="name"><code>modal</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Boolean to display the popup as a modal or not</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>wrapperTemplate</code></td>
             
 
             <td class="type">
@@ -281,178 +409,56 @@
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                </td>
-            
 
-            <td class="description last">A string to be evaluated that will be used to map the values</td>
+            <td class="description last">The template to use as the wrapper for the popup</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>textKey</code></td>
+                <td class="name"><code>hidePopupAction</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
-|
-
-<span class="param-type">array</span>
+<span class="param-type">object</span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                </td>
-            
 
-            <td class="description last">A string or array which refers to the text key (i.e. the label) for the options</td>
+            <td class="description last">The action to perform when the popup is hidden</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>valueKey</code></td>
+                <td class="name"><code>hideDelay</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">number</span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                </td>
-            
 
-            <td class="description last">A string which referes to the value key for the options</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>delimeter</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    ' / '
-                
-                </td>
-            
-
-            <td class="description last">A delimeter for the label if the textKey is an array</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>textFormatter</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The name of a function to format the label for the option (i.e. dateFormatter)</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
+            <td class="description last">The amount of time before the popup is closed in milliseconds</td>
         </tr>
 
     
@@ -507,7 +513,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="input_select_selectViewModel.js.html">input/select/selectViewModel.js</a>, <a href="input_select_selectViewModel.js.html#line6">line 6</a>
+        <a href="action_actions_popup_popup.js.html">action/actions/popup/popup.js</a>, <a href="action_actions_popup_popup.js.html#line15">line 15</a>
     </li></ul></dd>
     
 
@@ -530,6 +536,19 @@
 
 
 
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>{
+    "type": "action",
+    "actionType": "popup",
+    "options": {
+        "title": "Success",
+        "template": "action_popup_template",
+        "message": "Your form has been submitted successfully"
+    }
+}</code></pre>
 
 
 
@@ -547,72 +566,6 @@
 
     
 
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="~computedValues"><span class="type-signature">(inner) </span>computedValues<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    If currentFilter is defined, return only values which match
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="input_select_selectViewModel.js.html">input/select/selectViewModel.js</a>, <a href="input_select_selectViewModel.js.html#line147">line 147</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
     
 
     
