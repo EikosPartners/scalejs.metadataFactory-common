@@ -73,6 +73,8 @@ function renderParams(params, data) {
  *  The HTTP type of request to make (POST, PUT, etc)
  * @param {string|Array} node.options.sendDataFromKey
  *  The key or array of keys for where the data is stored
+ * @param {Array} node.options.sendDataKeys
+ *  Array of data keys to use, can be objects with key-value pairs
  * @param {boolean} node.options.dataAndResults
  *  Boolean value to determine whether to combine data with results from a previous ajax action
  * @param {object} node.options.results
@@ -87,9 +89,6 @@ function renderParams(params, data) {
  *  An array of action objects to perform after the action is completed successfully
  * @param {array} node.options.errorActions
  *  An array of action objects to perform if the action ends with an error
- * @param {string} node.options.mergeid
- *  The merge id of the action
- *
  * @example
  * {
  *        "type": "action",

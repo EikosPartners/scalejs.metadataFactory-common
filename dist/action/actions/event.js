@@ -42,8 +42,10 @@ function renderParams(params, data) {
  *  The name of the channel to notify
  * @param {object|array} node.options.params
  *  Key-value pairs to pass along as data with the event that will be mustache rendered
+ * @param {string} node.options.paramsKey
+ *  The key of the data for the parameters
  * @param {boolean} node.options.useOptions
- *  Boolean to determine whether to use the options as the data to pass along
+ *  Boolean to determine whether to use the options as the data to pass along or to use the params
  * @param {object} node.options.data
  *  Data object to pass along with the event
  *
