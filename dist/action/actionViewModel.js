@@ -26,18 +26,18 @@ var _actionModule = require('./actionModule');
  *  The type of action to create
  * @param {string} node.text
  *  The text to display on the button
+ * @param {boolean} node.immediate
+ *  Boolean to determine whether to run the action immediately or not
+ * @param {number} node.delay
+ *  How long to delay the action in milliseconds
+ * @param {string} node.validate
+ *  The id of an element to validate
  * @param {boolean|string} [node.rendered=true]
  *  Boolean or expression to render the action (or not)
  * @param {object} node.options
  *  The options pertaining to your specific actionType
  * @param {boolean|string} node.options.disabled
  *  Boolean or expression to disable the button or not
- * @param {array} node.options.nextActions
- *  An array of action objects to perform after the action is completed successfully
- * @param {array} node.options.errorActions
- *  An array of action objects to perform if the action ends with an error
- * @param {string} node.options.mergeid
- *  The merge id of the action
  */
 function actionViewModel(node) {
     var registeredActions = (0, _actionModule.getRegisteredActions)(),
