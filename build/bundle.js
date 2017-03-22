@@ -73,6 +73,10 @@
 	
 	__webpack_require__(242);
 	
+	__webpack_require__(245);
+	
+	__webpack_require__(251);
+	
 	var _scalejs = __webpack_require__(3);
 	
 	var _scalejs2 = _interopRequireDefault(_scalejs);
@@ -62431,6 +62435,7 @@
 	    var url = (isRequestString ? req : req.url || '/') + (req.uri || '');
 	
 	    // Check if we're in the testing suite.
+	    // Also check if we are working from a file and not a server. (i.e. with the common bundle)
 	    if (window.location.port === '9004' || window.location.protocol === 'file:') {
 	        url = 'http://localhost:3000' + url;
 	    }
@@ -67064,13 +67069,13 @@
 	    // else generate the minReqiredRows
 	    function initialize() {
 	        // console.time('List init');
-	        if (data() && Array.isArray(data()) && data().length > 0) {
-	            rows().forEach(function (row) {
-	                row.items().forEach(function (item) {
-	                    item.dispose && item.dispose();
-	                });
+	        rows().forEach(function (row) {
+	            row.items().forEach(function (item) {
+	                item.dispose && item.dispose();
 	            });
-	            rows.removeAll();
+	        });
+	        rows.removeAll();
+	        if (data() && Array.isArray(data()) && data().length > 0) {
 	            data().forEach(function (item) {
 	                add(item, false, initial);
 	            });
@@ -67120,6 +67125,8 @@
 	        if (node.validations.required.onlyIf) {
 	            onlyIf = node.validations.required.onlyIf;
 	        }
+	    } else if (node.data) {
+	        minRequiredRows = node.data.length;
 	    }
 	
 	    // only show remove button if rows is greater than min req rows
@@ -87075,11 +87082,97 @@
 
 	'use strict';
 	
+	var _scalejs = __webpack_require__(3);
+	
+	var _scalejs2 = __webpack_require__(21);
+	
+	var _renderViewModel = __webpack_require__(243);
+	
+	var _renderViewModel2 = _interopRequireDefault(_renderViewModel);
+	
+	var _render = __webpack_require__(244);
+	
+	var _render2 = _interopRequireDefault(_render);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	(0, _scalejs.registerTemplates)(_render2.default);
+	(0, _scalejs2.registerViewModels)({
+	    render: _renderViewModel2.default
+	});
+
+/***/ },
+/* 243 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	exports.default = function (node) {
+	    var context = _lodash2.default.cloneDeep(this),
+	        mappedChildNodes = (0, _knockout.observableArray)(),
+	        render = (0, _scalejs2.receive)(node.id + '.render', function (options) {
+	        var children = options.data;
+	        if (options.keyMap) {
+	            children = (0, _scalejs3.get)(options, options.keyMap.resultsKey);
+	        }
+	        children = Array.isArray(children) ? children : [children];
+	
+	        if (mappedChildNodes()) {
+	            dispose(mappedChildNodes());
+	        }
+	        mappedChildNodes(_scalejs.createViewModels.call(context, children));
+	    });
+	
+	    function dispose(nodes) {
+	        nodes.forEach(function (n) {
+	            n.dispose && n.dispose();
+	            dispose((0, _knockout.unwrap)(n.mappedChildNodes) || []);
+	        });
+	    }
+	
+	    return (0, _scalejs3.merge)(node, {
+	        mappedChildNodes: mappedChildNodes,
+	        dispose: function dispose() {
+	            render.dispose();
+	        }
+	    });
+	};
+	
+	var _scalejs = __webpack_require__(21);
+	
+	var _knockout = __webpack_require__(10);
+	
+	var _scalejs2 = __webpack_require__(139);
+	
+	var _scalejs3 = __webpack_require__(137);
+	
+	var _lodash = __webpack_require__(23);
+	
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ },
+/* 244 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=\"render_template\">\r\n    <!-- ko template: { name: 'metadata_items_template', data: mappedChildNodes } -->\r\n    <!-- /ko -->\r\n</div>";
+
+/***/ },
+/* 245 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
 	var _scalejs = __webpack_require__(21);
 	
 	var _actionModule = __webpack_require__(147);
 	
-	var _scalejs2 = __webpack_require__(243);
+	var _scalejs2 = __webpack_require__(246);
 	
 	var _scalejs3 = __webpack_require__(137);
 	
@@ -87095,7 +87188,7 @@
 	
 	var _knockout2 = _interopRequireDefault(_knockout);
 	
-	var _mustache = __webpack_require__(247);
+	var _mustache = __webpack_require__(250);
 	
 	var _mustache2 = _interopRequireDefault(_mustache);
 	
@@ -87301,7 +87394,7 @@
 	(0, _actionModule.registerActions)({ ajax: ajax });
 
 /***/ },
-/* 243 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {'use strict';
@@ -87319,11 +87412,11 @@
 	
 	var _knockout2 = _interopRequireDefault(_knockout);
 	
-	var _crossroads = __webpack_require__(244);
+	var _crossroads = __webpack_require__(247);
 	
 	var _crossroads2 = _interopRequireDefault(_crossroads);
 	
-	var _hasher = __webpack_require__(246);
+	var _hasher = __webpack_require__(249);
 	
 	var _hasher2 = _interopRequireDefault(_hasher);
 	
@@ -87658,7 +87751,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)(module)))
 
 /***/ },
-/* 244 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/** @license
@@ -88376,7 +88469,7 @@
 	};
 	
 	if (true) {
-	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(245)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(248)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	} else if (typeof module !== 'undefined' && module.exports) { //Node
 	    module.exports = factory(require('signals'));
 	} else {
@@ -88389,7 +88482,7 @@
 
 
 /***/ },
-/* 245 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*jslint onevar:true, undef:true, newcap:true, regexp:true, bitwise:true, maxerr:50, indent:4, white:false, nomen:false, plusplus:false */
@@ -88840,7 +88933,7 @@
 
 
 /***/ },
-/* 246 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!!
@@ -89275,7 +89368,7 @@
 	};
 	
 	if (true) {
-	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(245)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(248)], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	} else if (typeof exports === 'object') {
 	    module.exports = factory(require('signals'));
 	} else {
@@ -89287,7 +89380,7 @@
 
 
 /***/ },
-/* 247 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -89921,6 +90014,100 @@
 	  return mustache;
 	}));
 
+
+/***/ },
+/* 251 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _scalejs = __webpack_require__(139);
+	
+	var _knockout = __webpack_require__(10);
+	
+	var _scalejs2 = __webpack_require__(137);
+	
+	var _mustache = __webpack_require__(250);
+	
+	var _mustache2 = _interopRequireDefault(_mustache);
+	
+	var _actionModule = __webpack_require__(147);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function renderParams(params, data) {
+	    var ret = params;
+	    try {
+	        ret = JSON.parse(_mustache2.default.render(JSON.stringify(params), data));
+	    } catch (ex) {
+	        console.error('Unable to JSON parse/stringify params', ex);
+	    }
+	
+	    return ret;
+	}
+	
+	/**
+	 * Event action to notify an event to all its subscribers
+	 *
+	 * @module event
+	 *
+	 * @param {object} node
+	 *  The configuration object for the event action
+	 * @param {string} node.type='action'
+	 *  The type of the node is action
+	 * @param {string} node.actionType='event'
+	 *  The actionType of the node is event
+	 * @param {object} node.options
+	 *  The options pertaining to the event action
+	 * @param {string} node.options.target
+	 *  The name of the channel to notify
+	 * @param {object|array} node.options.params
+	 *  Key-value pairs to pass along as data with the event that will be mustache rendered
+	 * @param {string} node.options.paramsKey
+	 *  The key of the data for the parameters
+	 * @param {boolean} node.options.useOptions
+	 *  Boolean to determine whether to use the options as the data to pass along or to use the params
+	 * @param {object} node.options.data
+	 *  Data object to pass along with the event
+	 *
+	 * @example
+	 *  {
+	 *        "type": "action",
+	 *        "actionType": "event",
+	 *        "options": {
+	 *            "target": "my_grid.add",
+	 *            "params": [
+	 *                {
+	 *                    "name": "{{request.name}}",
+	 *                    "endpoint": "{{request.uri}}",
+	 *                    "status": "{{status}}"
+	 *                }
+	 *            ],
+	 *            "useOptions": true
+	 *        }
+	 *    }
+	 */
+	function event(options) {
+	    var data = (0, _knockout.unwrap)(this && this.data),
+	        optionData = options.data || {};
+	    var params = options.params;
+	
+	    if (options.paramsKey) {
+	        params = (0, _scalejs2.merge)(params || {}, options[options.paramsKey]);
+	    }
+	
+	    if (options.useOptions) {
+	        optionData = options;
+	    }
+	
+	    if (params && options.renderParams !== false) {
+	        params = renderParams(params, (0, _scalejs2.merge)(data, optionData));
+	    }
+	
+	    (0, _scalejs.notify)((0, _knockout.unwrap)(options.target), params);
+	}
+	
+	(0, _actionModule.registerActions)({ event: event });
 
 /***/ }
 /******/ ]);
