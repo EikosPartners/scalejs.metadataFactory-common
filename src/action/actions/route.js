@@ -53,6 +53,7 @@ function renderParams(params, data) {
  */
 function route(options) {
     let data = unwrap(options.data || (this && this.data)),
+        target = unwrap(options.target),
         params;
 
     if (options.params && options.paramsKey) {
@@ -61,7 +62,11 @@ function route(options) {
 
     params = options.params ? renderParams(options.params, data) : undefined;
 
-    setRoute(unwrap(options.target), params);
+    if (options.renderTarget) {
+        target = mustache.render(target, data);
+    }
+
+    setRoute(target, params);
 }
 
 registerActions({ route });
