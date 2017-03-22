@@ -370,13 +370,13 @@ function listViewModel(node) {
     // else generate the minReqiredRows
     function initialize() {
         // console.time('List init');
-        if (data() && Array.isArray(data()) && data().length > 0) {
-            rows().forEach(function (row) {
-                row.items().forEach(function (item) {
-                    item.dispose && item.dispose();
-                });
+        rows().forEach(function (row) {
+            row.items().forEach(function (item) {
+                item.dispose && item.dispose();
             });
-            rows.removeAll();
+        });
+        rows.removeAll();
+        if (data() && Array.isArray(data()) && data().length > 0) {
             data().forEach(function (item) {
                 add(item, false, initial);
             });
@@ -426,6 +426,8 @@ function listViewModel(node) {
         if (node.validations.required.onlyIf) {
             onlyIf = node.validations.required.onlyIf;
         }
+    } else if (node.data) {
+        minRequiredRows = node.data.length;
     }
 
     // only show remove button if rows is greater than min req rows
