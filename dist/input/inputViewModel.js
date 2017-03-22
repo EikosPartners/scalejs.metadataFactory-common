@@ -3,6 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 exports.default = inputViewModel;
 
 var _knockout = require('knockout');
@@ -303,15 +306,21 @@ function inputViewModel(n) {
 
     function deriveReadonly(readonlyParam) {
         if ((0, _scalejs4.is)(readonlyParam, 'string')) {
-            var override = (0, _knockout.observable)();
-            return (0, _knockout.computed)({
-                read: function read() {
-                    return (0, _scalejs4.has)(override()) ? override() : (0, _scalejs2.evaluate)(readonlyParam, context.getValue);
-                },
-                write: function write(value) {
-                    override(value);
-                }
-            });
+            var _ret = function () {
+                var override = (0, _knockout.observable)();
+                return {
+                    v: (0, _knockout.computed)({
+                        read: function read() {
+                            return (0, _scalejs4.has)(override()) ? override() : (0, _scalejs2.evaluate)(readonlyParam, context.getValue);
+                        },
+                        write: function write(value) {
+                            override(value);
+                        }
+                    })
+                };
+            }();
+
+            if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
         }
         return (0, _knockout.observable)(!!readonlyParam);
     }
