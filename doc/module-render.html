@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: series</title>
+    <title>JSDoc: Module: render</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: series</h1>
+    <h1 class="page-title">Module: render</h1>
 
     
 
@@ -38,7 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description">Series action to perform a set of actions synchronously</div>
+            <div class="description">Render: a viewless component to conditionally render pjson components</div>
         
 
         
@@ -95,7 +95,7 @@
 
             
 
-            <td class="description last">The configuration object for the series action
+            <td class="description last">The configuration object for the module
                 <h6>Properties</h6>
                 
 
@@ -140,48 +140,19 @@
             
                 <td class="default">
                 
-                    'action'
+                    'render'
                 
                 </td>
             
 
-            <td class="description last">The type of the node is action</td>
+            <td class="description last">The type of the node is render</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>actionType</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-                <td class="default">
-                
-                    'series',
-                
-                </td>
-            
-
-            <td class="description last">The actionType of the node is series</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>text</code></td>
+                <td class="name"><code>id</code></td>
             
 
             <td class="type">
@@ -201,83 +172,7 @@
                 </td>
             
 
-            <td class="description last">The text to display on the button</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The options pertaining to the series action
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>actions</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">array</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Array of actions to perform synchronously</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
+            <td class="description last">The channel to set up the receiver for</td>
         </tr>
 
     
@@ -325,7 +220,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="action_actions_series.js.html">action/actions/series.js</a>, <a href="action_actions_series.js.html#line4">line 4</a>
+        <a href="render_renderViewModel.js.html">render/renderViewModel.js</a>, <a href="render_renderViewModel.js.html#line7">line 7</a>
     </li></ul></dd>
     
 
@@ -352,38 +247,7 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>{
-       "type": "action",
-       "actionType": "series",
-       "text": "Start Actions",
-       "options": {
-           "actions": [
-                {
-                   "type": "action",
-                   "actionType": "route",
-                   "text": "Add User",
-                   "options": {
-                       "target": "add-user"
-                   }
-                },
-                {
-                   "type": "action",
-                   "actionType": "event",
-                   "options": {
-                       "target": "my_grid.add",
-                       "params": [
-                           {
-                               "name": "{{request.name}}",
-                               "endpoint": "{{request.uri}}",
-                               "status": "{{status}}"
-                           }
-                       ],
-                       "useOptions": true
-                   }
-               }
-           ]
-       }
-   }</code></pre>
+    <pre class="prettyprint"><code>{     "type": "render",     "id": "my_grid"</code></pre>
 
 
 
