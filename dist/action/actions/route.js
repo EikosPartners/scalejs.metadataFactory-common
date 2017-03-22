@@ -60,6 +60,7 @@ function renderParams(params, data) {
  */
 function route(options) {
     var data = (0, _knockout.unwrap)(options.data || this && this.data),
+        target = (0, _knockout.unwrap)(options.target),
         params = void 0;
 
     if (options.params && options.paramsKey) {
@@ -68,7 +69,11 @@ function route(options) {
 
     params = options.params ? renderParams(options.params, data) : undefined;
 
-    (0, _scalejs.setRoute)((0, _knockout.unwrap)(options.target), params);
+    if (options.renderTarget) {
+        target = _mustache2.default.render(target, data);
+    }
+
+    (0, _scalejs.setRoute)(target, params);
 }
 
 (0, _actionModule.registerActions)({ route: route });

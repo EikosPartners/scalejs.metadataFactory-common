@@ -1,1 +1,1 @@
-{"version":3,"sources":["../../src/menu/menuBindings.js"],"names":[],"mappings":";;AAAA;;AACA","file":"menuBindings.js","sourcesContent":["import { createViewModel, createViewModels } from 'scalejs.metadataFactory';\r\nimport { observable } from 'knockout';\r\n"]}
+{"version":3,"sources":["../../src/menu/menuBindings.js"],"names":[],"mappings":";;AAAA;;AACA","file":"menuBindings.js","sourcesContent":["import { createViewModel, createViewModels } from 'scalejs.metadataFactory';\nimport { observable } from 'knockout';\n"]}
