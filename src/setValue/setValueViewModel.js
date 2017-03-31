@@ -27,8 +27,5 @@ export default function setValueViewModel(node) {
         if (n.id && n.setValue && ({}.hasOwnProperty.call(data, n.id) || clear)) {
             n.setValue(data[n.id], { initial: true }); // pass as object with value key?
         }
-        (ko.unwrap(n.mappedChildNodes) || []).forEach((n2) => {
-            _setValue(n2, data, clear);
-        });
     }
 }
