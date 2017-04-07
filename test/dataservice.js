@@ -8,7 +8,50 @@ import ajax from 'test/data/ajax_data.json';
 const timeout = 100;
 const baseUri = window.service || '/';
 
-let testData = {},
+let testData = {
+        tasks: {
+            data: [
+                {
+                    taskName: "My Task Name",
+                    name: "Deal Name",
+                    id: 1,
+                    taskStatus: "Incomplete",
+                    dueDate: "2017-03-07T16:20:50+00:00",
+                    childData: [
+                        {
+                            taskName: "My Child Task",
+                            name: "Child Name",
+                            id: 12,
+                            taskStatus: "Complete",
+                            dueDate: 'February 21st, 2050'
+                        }
+                    ]
+
+                },
+                {
+                    taskName: "Zach's Task",
+                    name: "Zach's Deal",
+                    id: 3,
+                    taskStatus: "Complete",
+                    dueDate: "NaN"
+                }
+            ]
+        },
+        childTasks: {
+            data: [
+                {
+                    childTaskName: "Wow",
+                    dealName: "Ma Deal",
+                    id: 13
+                },
+                {
+                    childTaskName: "So",
+                    dealName: "Much",
+                    id: 14
+                }
+            ]
+        }
+    },
     o = {};
 
 
@@ -89,6 +132,20 @@ function mockAjax(request, callback) {
                 callback(null, { Status: 'SUCCESS', Original: request.data });
             } else if (testData[request.uri]){
                 callback(null, testData[request.uri]);
+            } else if (request.uri.indexOf('tasks/') > -1) {
+                let id = request.uri.match(/[0-9]/)[0],
+                    task = {
+                        data: []
+                    };
+
+                testData.tasks.data.some( (data) => {
+                    if (data.id === parseInt(id)) {
+                        task.data = data.childData;
+                        return true;
+                    }
+                });
+
+                callback(null, task);
             } else {
 
                 _ajax(request, (error, data) => {
@@ -104,4 +161,3 @@ function mockAjax(request, callback) {
 export default {
     ajax: mockAjax
 };
-

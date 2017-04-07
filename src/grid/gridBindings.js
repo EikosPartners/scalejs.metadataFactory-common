@@ -1,11 +1,13 @@
 import { evaluate } from 'scalejs.expression-jsep';
+import { notify } from 'scalejs.messagebus';
 import 'datatables.net-fixedheader';
 import 'datatables.net-select';
 import 'datatables.net-responsive';
 import registry from './registry/gridRegistry';
+import ko from 'knockout';
 
 export default {
-grid: function () {
+    grid: function () {
         const options = this.options,
             clientSearch = options.clientSearch,
             caseInsen = this.caseInsensitive,
@@ -31,7 +33,8 @@ grid: function () {
                     className: 'highlight',
                     selectedItem: this.selectedItem
                 },
-                registry
+                registry,
+                autoWidth: false
             };
 
         if (clientSearch) {
@@ -92,6 +95,47 @@ grid: function () {
             css: {
                 [this.classes]: this.classes,
                 visibleFilter: filter && filter.filterIsVisible
+            }
+        };
+    },
+    'grid-expanded': function (ctx) {
+        if (!this.data) {
+            return;
+        }
+
+        let metadata = ctx.$parent.options.hasChildren.children,
+            DEFAULT_KEY_MAP = {
+                resultsKey: 'data',
+                childDataKey: 'childData'
+            },
+            keyMap = ctx.$parent.dataSourceEndpoint ? _.merge(ctx.$parent.dataSourceEndpoint.keyMap, DEFAULT_KEY_MAP) : DEFAULT_KEY_MAP,
+            parentContext = ctx.$parents.filter(x => x.context)[0],
+            newContext = {
+                metadata: metadata,
+                parentContext: parentContext.context,
+                data: {
+                    [keyMap.resultsKey]: this.data
+                },
+                getValue: function (id) {
+                    if (id === 'row') {
+                        return row;
+                    }
+
+                    return parentContext.context.getValue(id);
+                }
+            };
+
+        // If there is a dataSourceEndpoint, give it the row data for mustache rendering if necessary
+        if (metadata[0].dataSourceEndpoint) {
+            metadata[0].dataSourceEndpoint.data = this.data;
+        }
+
+        metadata[0].data = this.data[keyMap.childDataKey];
+
+        return {
+            metadataFactory: {
+                metadata: metadata,
+                context: newContext
             }
         };
     }

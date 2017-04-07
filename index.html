@@ -99,9 +99,175 @@
         {
             "type": "template",
             "template": "div",
-            "children": []
-                        .concat(inputJSON)
-                        .concat(advancedListJSON)
+            "children": [
+                {
+                    "type": "adapter",
+                    "id": "all_tasks_adapter",
+                    "template": "div",
+                    "classes": "viewport viewport-padding grid-wrapper",
+                    "children": [
+                        {
+                            "type": "template",
+                            "template": "div",
+                            "children": [
+                                {
+                                    "type": "grid",
+                                    "id": "tasks_grid",
+                                    "classes": "grid-container",
+                                    "gridHeaderClasses": "flex-header",
+                                    "options": {
+                                        "infinite": true,
+                                        "fixedHeader": true,
+                                        "footer": {
+                                            "hideOnDone": true,
+                                            "loadingText": "Loading...",
+                                            "doneText": "Loaded all rows."
+                                        },
+                                        "hasChildren": {
+                                            "showIcon": "icon-open",
+                                            "hideIcon": "icon-close",
+                                            "template": "grid_expanded_template",
+                                            "onRowSelect": true,
+                                            "accordion": true,
+                                            "children": [
+                                                {
+                                                    "type": "grid",
+                                                    "id": "tasks_child_grid",
+                                                    "classes": "grid-container",
+                                                    "options": {
+                                                        "infinite": true,
+                                                        "hasChildren": {
+                                                            "showIcon": "icon-open",
+                                                            "hideIcon": "icon-close",
+                                                            "template": "grid_expanded_template",
+                                                            "onRowSelect": true,
+                                                            "children": [
+                                                                {
+                                                                    "type": "grid",
+                                                                    "id": "task_child_child_grid",
+                                                                    "classes": "grid-container",
+                                                                    "options": {
+                                                                        "infinite": true
+                                                                    },
+                                                                    "dataSourceEndpoint": {
+                                                                        "target": {
+                                                                            "uri": "childTasks"
+                                                                        },
+                                                                        "keyMap": {
+                                                                            "resultsKey": "data"
+                                                                        }
+                                                                    },
+                                                                    "pagination": {
+                                                                        "start": 0,
+                                                                        "limit": 30
+                                                                    },
+                                                                    "columns": [
+                                                                        {
+                                                                            "data": "childTaskName",
+                                                                            "title": "Child Task",
+                                                                            "width": "140px"
+                                                                        },
+                                                                        {
+                                                                            "data": "dealName",
+                                                                            "title": "Deal Name"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    },
+                                                    "dataSourceEndpoint": {
+                                                        "target": {
+                                                            "uri": "tasks/{{id}}"
+                                                        },
+                                                        "keyMap": {
+                                                            "resultsKey": "data"
+                                                        }
+                                                    },
+                                                    "pagination": {
+                                                        "start": 0,
+                                                        "limit": 30
+                                                    },
+                                                    "columns": [
+                                                        {
+                                                            "data": "taskName",
+                                                            "title": "Task Name",
+                                                            "width": "170px",
+                                                            "pinned": true
+                                                        },
+                                                        {
+                                                            "data": "name",
+                                                            "title": "Deal Name"
+                                                        },
+                                                        {
+                                                            "data": "id",
+                                                            "title": "Deal Id",
+                                                            "orderable": false
+                                                        },
+                                                        {
+                                                            "data": "taskStatus",
+                                                            "title": "Status",
+                                                            "orderable": false
+                                                        },
+                                                        {
+                                                            "data": "dueDate",
+                                                            "sort": "asc",
+                                                            "title": "Due Date"
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "dataSourceEndpoint": {
+                                        "target": {
+                                            "uri": "tasks",
+                                            "dataMapFunctions": {
+                                                "before": "before.updateTasksGridParams",
+                                                "after": "after.mapTaskData"
+                                            }
+                                        },
+                                        "keyMap": {
+                                            "resultsKey": "data"
+                                        }
+                                    },
+                                    "pagination": {
+                                        "start": 0,
+                                        "limit": 30
+                                    },
+                                    "columns": [
+                                        {
+                                            "data": "taskName",
+                                            "title": "Task Name",
+                                            "width": "200px",
+                                            "pinned": true
+                                        },
+                                        {
+                                            "data": "name",
+                                            "title": "Deal Name"
+                                        },
+                                        {
+                                            "data": "id",
+                                            "title": "Deal Id",
+                                            "orderable": false
+                                        },
+                                        {
+                                            "data": "taskStatus",
+                                            "title": "Status",
+                                            "orderable": false
+                                        },
+                                        {
+                                            "data": "dueDate",
+                                            "sort": "asc",
+                                            "title": "Due Date"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         }]
 
 

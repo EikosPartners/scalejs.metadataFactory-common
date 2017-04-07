@@ -7,6 +7,10 @@ import './template/templateModule';
 import './list/listModule';
 import './listAdvanced/listAdvancedModule';
 import './grid/gridModule';
+import './group/groupModule';
+import './action/actions/ajax';
+import './action/actions/event';
+import './action/actions/redirect';
 
 import mvvm from 'scalejs.mvvm';
 
