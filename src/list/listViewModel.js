@@ -4,6 +4,7 @@ import { evaluate } from 'scalejs.expression-jsep';
 import noticeboard from 'scalejs.noticeboard';
 import { merge, has, is } from 'scalejs';
 import _ from 'lodash';
+import ko from 'knockout';
 
 // todo: revisit comments below
 // listViewModel is a component which manages a simple list
@@ -231,11 +232,15 @@ export default function listViewModel(node) {
                 }
                 return ret;
             }
+            if (options.optimize && initialValues) {
+                item.options = item.options || {};
+                item.options.value = initialValues[item.id];
+            }
             return createViewModel.call(rowContext, item);
         });
 
         // if there are initial values, update the children
-        if (initialValues) {
+        if (initialValues && !options.optimize) {
             itemViewModels.forEach((item) => {
                 // allow for JSON default values don't get overwritten
                 // by server data that doesn't contain data
@@ -347,6 +352,9 @@ export default function listViewModel(node) {
     // else generate the minReqiredRows
     function initialize() {
         // console.time('List init');
+        if (options.optimize) {
+            ko.options.deferUpdates = true;
+        }
         rows().forEach((row) => {
             row.items().forEach((item) => {
                 item.dispose && item.dispose();
@@ -368,6 +376,9 @@ export default function listViewModel(node) {
             }
         }
         initial = undefined;
+        if (options.optimize) {
+            ko.options.deferUpdates = false;
+        }
         //  console.timeEnd('List init');
     }
 
