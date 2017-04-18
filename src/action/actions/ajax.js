@@ -1,4 +1,4 @@
-import { createViewModel } from 'scalejs.metadataFactory';
+import { createViewModel, globalMetadata } from 'scalejs.metadataFactory';
 import { registerActions } from '../actionModule';
 import { getCurrent } from 'scalejs.navigation';
 import { get, is, has, merge } from 'scalejs';
@@ -167,10 +167,14 @@ function ajax(options, args) {
     nextAction = function (error, results) {
         const opts = options ? _.cloneDeep(options) : {},
             err = error,
-            keyMap = options.keyMap || { resultsKey: 'results' };
+            keyMap = options.keyMap || { resultsKey: 'results' },
+            overrideErrorMessage = (globalMetadata() || {}).ajaxAction_overrideErrorMessage;
 
         ((err ? opts.errorActions : opts.nextActions) || []).forEach((item) => {
             if (err && opts.errorActions) {
+                if (overrideErrorMessage) {
+                    error.message = merge(error.message, overrideErrorMessage[error.statusCode] || {});
+                }
                 opts.errorActions.forEach((errorAction) => {
                     if (errorAction.options.message && error.message) {
                         errorAction.options.message = error.message;
