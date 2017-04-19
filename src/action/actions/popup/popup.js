@@ -103,6 +103,7 @@ function popupAction(options) {
             hidePopup: popup.hidePopup,
             title: merged.title || 'Popup',
             modal: merged.modal || false,
+            popupClasses: merged.popupClasses,
             classes: merged.classes,
             popupContent: {
                 name: merged.template || 'popup_default_region_template',
