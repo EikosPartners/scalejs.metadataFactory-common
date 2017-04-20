@@ -75,7 +75,7 @@ function popupAction(options) {
 
     data = this && ko.unwrap(this.data);
 
-    if (options.message) {
+    if (typeof options.message === 'string') {
         options.message = mustache.render(options.message, data || {});
     }
 
