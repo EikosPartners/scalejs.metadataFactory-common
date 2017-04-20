@@ -2,7 +2,7 @@ import { evaluate } from 'scalejs.expression-jsep';
 import { notify } from 'scalejs.messagebus';
 import 'datatables.net-fixedheader';
 import 'datatables.net-select';
-import 'datatables.net-responsive';
+import 'datatables-epresponsive';
 import registry from './registry/gridRegistry';
 import ko from 'knockout';
 
@@ -12,7 +12,7 @@ export default {
             clientSearch = options.clientSearch,
             caseInsen = this.caseInsensitive,
             gridSettings = {
-                dom: 't',
+                dom: 'tR',
                 rows: this.rows,
                 columns: this.columns,
                 data: this.data,
@@ -49,7 +49,6 @@ export default {
         return {
             css: this.gridClasses,
             dataTables: gridSettings
-
         };
     },
     'grid-loader': function () {

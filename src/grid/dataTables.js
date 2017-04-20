@@ -373,7 +373,7 @@ ko.bindingHandlers.dataTables = {
                     }, 0);
                     console.log(`${count} column(s) are hidden`);
                     table.columns.adjust()
-                        .responsive.recalc();
+                        .epResponsive.recalc();
 
                     // temporarily manually updated width of tables to force
                     // tds to fit within visible space
