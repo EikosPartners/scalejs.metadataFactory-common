@@ -189,4 +189,123 @@ var _lodash2 = _interopRequireDefault(_lodash);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * Grid component to display a grid of data
+ *
+ * @module grid
+ *
+ * @param {object} node
+ *  The configuration object for the grid
+ * @param {object} node.data
+ *  Initial data to populate the grid with
+ * @param {string} node.id
+ *  The id of the grid
+ * @param {string} node.classes
+ *  The classes to apply to the grid
+ * @param {string} node.gridHeaderClasses
+ *  The classes to apply to the grid header
+ * @param {array} node.gridHeader
+ *  An array of PJSON components to use as the grid header
+ * @param {object} node.dataSourceEndpoint
+ *  Configuration object for the grid's data source
+ * @param {object} node.dataSourceEndpoint.target
+ *  Configuration object for the target of the grid's data source
+ * @param {string} node.dataSourceEndpoint.target.uri
+ *  The uri endpoint for the grid's data source
+ * @param {object} node.dataSourceEndpoint.target.dataMapFunctions
+ *  An object of functions to run on the data
+ * @param {string} node.dataSourceEndpoint.target.dataMapFunctions.before
+ *  Function to run before the data is added to the grid?
+ * @param {string} node.dataSourceEndpoint.target.dataMapFunctions.after
+ *  Function to run after the data is added to the grid?
+ * @param {object|array} node.dataSourceEndpoint.keyMap
+ *  A mapper object or array of mapper objects to map keys
+ * @param {object} node.pagination
+ *  An object to specify pagination for the grid
+ * @param {number} node.pagination.start=0
+ *  The number of which page to start the grid at
+ * @param {number} node.pagination.limit=15
+ *  The max number of grid items to show on each page
+ * @param {array} node.columns
+ *  An array of objects to build the columns
+ * @param {object} node.selection
+ *  A PJSON action to use when a row is selected
+ * @param {object} node.options
+ *  The options pertaining to the grid
+ * @param {boolean} node.options.infinite
+ *  Boolean to specify whether to show infinite items on the grid
+ * @param {boolean} node.options.fixedHeader
+ *  Boolean to specify if the grid header should be fixed or not
+ * @param {object} node.options.footer
+ *  Configuration object for the grid footer
+ * @param {boolean} node.options.footer.hideOnDone
+ *  Boolean to hide the footer once the grid is loaded or not
+ * @param {string} node.options.footer.loadingText
+ *  A string to show while the grid is loading
+ * @param {string} node.options.footer.doneText
+ *  A string to show when the grid has finished loading.
+ * @param {object} node.options.hasChildren
+ *  Configuration object for a grid row's child
+ * @param {string} node.options.hasChildren.showIcon
+ *  The class to apply to the show child button
+ * @param {string} node.options.hasChildren.hideIcon
+ *  The class to apply to the hide child button
+ * @param {string} node.options.hasChildren.template
+ *  The template to apply to the child row
+ * @param {boolean} node.options.hasChildren.onRowSelect
+ *  Boolean to determine whether to show/hide the child on selecting the row or via a button
+ * @param {boolean} node.options.hasChildren.accordion
+ *  Boolean to determine if only one child should be shown at a time
+ * @param {boolean} node.options.clientSearch
+ *  Boolean on whether to search/sort client side
+ * @param {boolean|expression} node.options.gridDisplay
+ *  Boolean or expression on whether to display the grid
+ * @param {boolean} node.options.queryOnSearch
+ *  Boolean to query on search or do it client side
+ * @param {string} node.options.scrollElement
+ *  The element on which the scrolling for the grid should be done
+ *
+ * @example
+ * {
+ *      "type": "grid",
+ *      "id": "my_grid_id",
+ *      "classes": "grid-container",
+ *      "gridHeaderClasses": "grid-header",
+ *      "options": {
+ *          "infinite": true,
+ *          "fixedHeader": true,
+ *          "footer": {
+ *              "hideOnDone": true,
+ *              "loadingText": "Loading...",
+ *              "doneText": "Loaded all rows."
+ *          },
+ *          "hasChildren": {
+ *              "showIcon": "icon-open",
+ *              "hideIcon": "icon-close",
+ *              "template": "grid_child_template",
+ *              "onRowSelect": true,
+ *              "accordion": true,
+ *          },
+ *      }
+ *      "dataSourceEndpoint": {
+ *         "target": {
+ *              "uri": "endpoint"
+ *         },
+ *         "keyMap": {
+ *             "resultsKey": "data"
+ *         }
+ *      },
+ *      "pagination": {
+ *          "start": 0,
+ *          "limit": 30
+ *      },
+ *      "columns": [
+ *          {
+ *              "data": "colData",
+ *              "title": "Column Data Title"
+ *          }
+ *      ]
+ * }
+ */
 //# sourceMappingURL=gridViewModel.js.map
