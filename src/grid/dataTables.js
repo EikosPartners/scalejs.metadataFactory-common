@@ -293,6 +293,13 @@ ko.bindingHandlers.dataTables = {
             } else {
                 clickElement = $('table.dataTable td.child-control');
             }
+
+            // Click handler is being bound to the element multiple times causing
+            // a bug for child row to not show. Fixed by unbinding click handler
+            // before rebinding.
+            // TODO: Make the click element selection cleaner.
+            clickElement.off('click');
+
             clickElement.on('click', (event) => {
                 const td = $(event.currentTarget),
                     tr = td.closest('tr'),

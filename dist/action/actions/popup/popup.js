@@ -98,7 +98,7 @@ function popupAction(options) {
 
     data = this && _knockout2.default.unwrap(this.data);
 
-    if (options.message) {
+    if (typeof options.message === 'string') {
         options.message = _mustache2.default.render(options.message, data || {});
     }
 
@@ -125,6 +125,7 @@ function popupAction(options) {
         hidePopup: _scalejs5.default.hidePopup,
         title: merged.title || 'Popup',
         modal: merged.modal || false,
+        popupClasses: merged.popupClasses,
         classes: merged.classes,
         popupContent: {
             name: merged.template || 'popup_default_region_template',

@@ -298,6 +298,13 @@ _knockout2.default.bindingHandlers.dataTables = {
             } else {
                 clickElement = (0, _jquery2.default)('table.dataTable td.child-control');
             }
+
+            // Click handler is being bound to the element multiple times causing
+            // a bug for child row to not show. Fixed by unbinding click handler
+            // before rebinding.
+            // TODO: Make the click element selection cleaner.
+            clickElement.off('click');
+
             clickElement.on('click', function (event) {
                 var td = (0, _jquery2.default)(event.currentTarget),
                     tr = td.closest('tr'),

@@ -41,9 +41,6 @@ function setValueViewModel(node) {
         if (n.id && n.setValue && ({}.hasOwnProperty.call(data, n.id) || clear)) {
             n.setValue(data[n.id], { initial: true }); // pass as object with value key?
         }
-        (_knockout2.default.unwrap(n.mappedChildNodes) || []).forEach(function (n2) {
-            _setValue(n2, data, clear);
-        });
     }
 }
 //# sourceMappingURL=setValueViewModel.js.map
