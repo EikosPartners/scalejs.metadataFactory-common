@@ -69,6 +69,8 @@ _knockout2.default.bindingHandlers.dataTables = {
         }
 
         function setupColumns() {
+            var columnWidth = 100 / columns.length;
+
             columns.forEach(function (col, idx) {
                 var model = col;
                 columnsMap[model.data] = model; // create column dictionary
@@ -89,12 +91,16 @@ _knockout2.default.bindingHandlers.dataTables = {
                 if (col.renderFunction && registry) {
                     col.render = registry.get(col.renderFunction);
                 }
+
+                if (!col.width) {
+                    col.width = columnWidth + "%";
+                }
             });
 
             settings.headerCallback = _headerCallback;
             settings.createdRow = _createdRow;
 
-            if (hasChildren && columns[0]) {
+            if (hasChildren && columns[0] && !hasChildren.onRowSelect) {
                 if (columns[0].className && columns[0].className.indexOf('child-control') > -1) {
                     return;
                 }
@@ -370,7 +376,7 @@ _knockout2.default.bindingHandlers.dataTables = {
                         return b === false ? a + 1 : a;
                     }, 0);
                     console.log(count + ' column(s) are hidden');
-                    table.columns.adjust().responsive.recalc();
+                    table.columns.adjust().epResponsive.recalc();
 
                     // temporarily manually updated width of tables to force
                     // tds to fit within visible space

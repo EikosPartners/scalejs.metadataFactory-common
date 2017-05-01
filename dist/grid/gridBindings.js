@@ -6,15 +6,21 @@ Object.defineProperty(exports, "__esModule", {
 
 var _scalejs = require('scalejs.expression-jsep');
 
+var _scalejs2 = require('scalejs.messagebus');
+
 require('datatables.net-fixedheader');
 
 require('datatables.net-select');
 
-require('datatables.net-responsive');
+require('datatables-epresponsive');
 
 var _gridRegistry = require('./registry/gridRegistry');
 
 var _gridRegistry2 = _interopRequireDefault(_gridRegistry);
+
+var _knockout = require('knockout');
+
+var _knockout2 = _interopRequireDefault(_knockout);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26,7 +32,7 @@ exports.default = {
             clientSearch = options.clientSearch,
             caseInsen = this.caseInsensitive,
             gridSettings = {
-            dom: 't',
+            dom: 'tR',
             rows: this.rows,
             columns: this.columns,
             data: this.data,
@@ -47,7 +53,8 @@ exports.default = {
                 className: 'highlight',
                 selectedItem: this.selectedItem
             },
-            registry: _gridRegistry2.default
+            registry: _gridRegistry2.default,
+            autoWidth: false
         };
 
         if (clientSearch) {
@@ -62,7 +69,6 @@ exports.default = {
         return {
             css: this.gridClasses,
             dataTables: gridSettings
-
         };
     },
     'grid-loader': function gridLoader() {
@@ -75,7 +81,7 @@ exports.default = {
         return {
             if: this.footer && this.loader.visible(),
             css: {
-                hide: !ko.unwrap(this.loader.visible)
+                hide: !_knockout2.default.unwrap(this.loader.visible)
             }
         };
     },
@@ -111,6 +117,47 @@ exports.default = {
         })[0];
         return {
             css: (_css2 = {}, _defineProperty(_css2, this.classes, this.classes), _defineProperty(_css2, 'visibleFilter', filter && filter.filterIsVisible), _css2)
+        };
+    },
+    'grid-expanded': function gridExpanded(ctx) {
+        if (!this.data) {
+            return;
+        }
+
+        var metadata = ctx.$parent.options.hasChildren.children,
+            DEFAULT_KEY_MAP = {
+            resultsKey: 'data',
+            childDataKey: 'childData'
+        },
+            keyMap = ctx.$parent.dataSourceEndpoint ? _.merge(ctx.$parent.dataSourceEndpoint.keyMap, DEFAULT_KEY_MAP) : DEFAULT_KEY_MAP,
+            parentContext = ctx.$parents.filter(function (x) {
+            return x.context;
+        })[0],
+            newContext = {
+            metadata: metadata,
+            parentContext: parentContext.context,
+            data: _defineProperty({}, keyMap.resultsKey, this.data),
+            getValue: function getValue(id) {
+                if (id === 'row') {
+                    return row;
+                }
+
+                return parentContext.context.getValue(id);
+            }
+        };
+
+        // If there is a dataSourceEndpoint, give it the row data for mustache rendering if necessary
+        if (metadata[0].dataSourceEndpoint) {
+            metadata[0].dataSourceEndpoint.data = this.data;
+        }
+
+        metadata[0].data = this.data[keyMap.childDataKey];
+
+        return {
+            metadataFactory: {
+                metadata: metadata,
+                context: newContext
+            }
         };
     }
 };
