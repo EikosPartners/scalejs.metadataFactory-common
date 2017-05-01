@@ -1,7 +1,8 @@
 import { notify, receive } from 'scalejs.messagebus';
-import { observable } from 'knockout';
+import { observable, computed } from 'knockout';
 import { merge, has } from 'scalejs';
 import { extend, cloneDeep } from 'lodash';
+import { evaluate } from 'scalejs.expression-jsep';
 
 import { getRegisteredActions } from './actionModule';
 
@@ -44,6 +45,8 @@ export default function actionViewModel(node) {
         disabled = observable(has(options.disabled) ? options.disabled : false),
         enableUpdates = options.enableUpdates,
         subs = [];
+    
+    let disabledComputed = null;
 
     function action(args) {
         if (!actionFunc) {
@@ -80,6 +83,16 @@ export default function actionViewModel(node) {
                 if (key === 'disabled') { disabled(data[key]); }
             });
         }));
+    }
+
+    if (node.disabledExpression) {
+        disabledComputed = computed(() => evaluate(node.disabledExpression, context.getValue))
+            .extend({ deferred: true });
+        disabled(disabledComputed());
+        disabledComputed.subscribe((val) => {
+            disabled(val);
+        });
+        subs.push(disabledComputed);
     }
 
     return merge(node, {
