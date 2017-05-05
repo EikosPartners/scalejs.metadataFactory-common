@@ -74,7 +74,8 @@ function popupAction(options) {
     });
 
     data = this && ko.unwrap(this.data);
-
+    data = merge(options, data);
+    
     if (typeof options.message === 'string') {
         options.message = mustache.render(options.message, data || {});
     }
