@@ -59,7 +59,8 @@ export default function actionViewModel(node) {
                 successCallback: function () {
                     actionFunc(options, args);
                 },
-                actionNode: cloneDeep(originalJson)
+                actionNode: cloneDeep(originalJson),
+                context: context
             });
         } else {
             actionFunc(options, args);
