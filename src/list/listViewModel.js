@@ -184,6 +184,9 @@ export default function listViewModel(node) {
             if (id === 'error') {
                 return error;
             }
+            if (id === 'parent') {
+                return context.data();
+            }
             // check the item dictionary
             const item = itemDictionary()[id];
             if (item && item.getValue) {
