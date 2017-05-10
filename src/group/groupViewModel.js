@@ -1,6 +1,7 @@
 import { observable, unwrap, computed } from 'knockout';
 import { has, merge } from 'scalejs';
 import { createViewModels } from 'scalejs.metadataFactory';
+import _ from 'lodash';
 
 function createNodeDictionary(mappedChildNodes) {
     const dictionary = {};
@@ -26,13 +27,19 @@ export default function (node) {
 
 
     function setValue(values, opts) {
-        const value = (has(values, 'value') ? values.value : values) || {};
+        const value = (has(values, 'value') ? values.value : values) || {},
+            originalDict = Object.keys(dictionary());
+
         Object.keys(dictionary()).forEach((id) => {
             const child = dictionary()[id];
             if (child.setValue && Object.prototype.hasOwnProperty.call(value, child.id)) {
                 child.setValue(value[child.id], opts);
             }
         });
+
+        if (!_.isEqual(originalDict, Object.keys(dictionary()))) {
+            setValue(values, opts);
+        }
     }
 
     function getValue() {
