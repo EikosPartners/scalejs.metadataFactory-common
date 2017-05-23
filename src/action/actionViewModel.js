@@ -63,6 +63,14 @@ export default function actionViewModel(node) {
                 context: context
             });
         } else {
+            if (node.onlyIf) {
+                const only = evaluate(node.onlyIf, identifier =>
+                    options[identifier] || identifier
+                );
+                if (only) {
+                    actionFunc(options, args);
+                }
+            }
             actionFunc(options, args);
         }
     }
