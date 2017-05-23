@@ -7,6 +7,8 @@ exports.default = listViewModel;
 
 var _knockout = require('knockout');
 
+var _knockout2 = _interopRequireDefault(_knockout);
+
 var _scalejs = require('scalejs.metadataFactory');
 
 var _scalejs2 = require('scalejs.expression-jsep');
@@ -204,6 +206,9 @@ function listViewModel(node) {
             if (id === 'error') {
                 return error;
             }
+            if (id === 'parent') {
+                return context.data();
+            }
             // check the item dictionary
             var item = itemDictionary()[id];
             if (item && item.getValue) {
@@ -254,11 +259,15 @@ function listViewModel(node) {
                 }
                 return ret;
             }
+            if (options.optimize && initialValues) {
+                item.options = item.options || {};
+                item.options.value = initialValues[item.id];
+            }
             return _scalejs.createViewModel.call(rowContext, item);
         });
 
         // if there are initial values, update the children
-        if (initialValues) {
+        if (initialValues && !options.optimize) {
             itemViewModels.forEach(function (item) {
                 // allow for JSON default values don't get overwritten
                 // by server data that doesn't contain data
@@ -370,6 +379,9 @@ function listViewModel(node) {
     // else generate the minReqiredRows
     function initialize() {
         // console.time('List init');
+        if (options.optimize) {
+            _knockout2.default.options.deferUpdates = true;
+        }
         rows().forEach(function (row) {
             row.items().forEach(function (item) {
                 item.dispose && item.dispose();
@@ -391,6 +403,9 @@ function listViewModel(node) {
             }
         }
         initial = undefined;
+        if (options.optimize) {
+            _knockout2.default.options.deferUpdates = false;
+        }
         //  console.timeEnd('List init');
     }
 

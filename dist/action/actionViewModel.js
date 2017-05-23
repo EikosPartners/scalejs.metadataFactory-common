@@ -13,6 +13,8 @@ var _scalejs2 = require('scalejs');
 
 var _lodash = require('lodash');
 
+var _scalejs3 = require('scalejs.expression-jsep');
+
 var _actionModule = require('./actionModule');
 
 /** Action: a component to create an action
@@ -56,6 +58,8 @@ function actionViewModel(node) {
         enableUpdates = options.enableUpdates,
         subs = [];
 
+    var disabledComputed = null;
+
     function action(args) {
         if (!actionFunc) {
             console.error('actionType is not defined', node);
@@ -67,9 +71,18 @@ function actionViewModel(node) {
                 successCallback: function successCallback() {
                     actionFunc(options, args);
                 },
-                actionNode: (0, _lodash.cloneDeep)(originalJson)
+                actionNode: (0, _lodash.cloneDeep)(originalJson),
+                context: context
             });
         } else {
+            if (node.onlyIf) {
+                var only = (0, _scalejs3.evaluate)(node.onlyIf, function (identifier) {
+                    return options[identifier] || identifier;
+                });
+                if (only) {
+                    actionFunc(options, args);
+                }
+            }
             actionFunc(options, args);
         }
     }
@@ -93,6 +106,17 @@ function actionViewModel(node) {
                 }
             });
         }));
+    }
+
+    if (node.disabledExpression) {
+        disabledComputed = (0, _knockout.computed)(function () {
+            return (0, _scalejs3.evaluate)(node.disabledExpression, context.getValue);
+        }).extend({ deferred: true });
+        disabled(disabledComputed());
+        disabledComputed.subscribe(function (val) {
+            disabled(val);
+        });
+        subs.push(disabledComputed);
     }
 
     return (0, _scalejs2.merge)(node, {

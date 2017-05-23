@@ -192,12 +192,16 @@ function ajax(options, args) {
     nextAction = function nextAction(error, results) {
         var opts = options ? _lodash2.default.cloneDeep(options) : {},
             err = error,
-            keyMap = options.keyMap || { resultsKey: 'results' };
+            keyMap = options.keyMap || { resultsKey: 'results' },
+            overrideErrorMessage = ((0, _scalejs.globalMetadata)() || {}).ajaxAction_overrideErrorMessage;
 
         ((err ? opts.errorActions : opts.nextActions) || []).forEach(function (item) {
             var _response;
 
             if (err && opts.errorActions) {
+                if (overrideErrorMessage) {
+                    error.message = (0, _scalejs3.merge)(error.message, overrideErrorMessage[error.statusCode] || {});
+                }
                 opts.errorActions.forEach(function (errorAction) {
                     if (errorAction.options.message && error.message) {
                         errorAction.options.message = error.message;

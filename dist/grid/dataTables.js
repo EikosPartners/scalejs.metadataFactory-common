@@ -69,8 +69,6 @@ _knockout2.default.bindingHandlers.dataTables = {
         }
 
         function setupColumns() {
-            var columnWidth = 100 / columns.length;
-
             columns.forEach(function (col, idx) {
                 var model = col;
                 columnsMap[model.data] = model; // create column dictionary
@@ -91,16 +89,12 @@ _knockout2.default.bindingHandlers.dataTables = {
                 if (col.renderFunction && registry) {
                     col.render = registry.get(col.renderFunction);
                 }
-
-                if (!col.width) {
-                    col.width = columnWidth + "%";
-                }
             });
 
             settings.headerCallback = _headerCallback;
             settings.createdRow = _createdRow;
 
-            if (hasChildren && columns[0] && !hasChildren.onRowSelect) {
+            if (hasChildren && columns[0]) {
                 if (columns[0].className && columns[0].className.indexOf('child-control') > -1) {
                     return;
                 }
@@ -261,33 +255,35 @@ _knockout2.default.bindingHandlers.dataTables = {
         function setupSorting() {
             // TODO: refactor clientsearch vs serverside approach
             if (!settings.clientSearch) {
-                var th = (0, _jquery2.default)(table.header()[0]).find('th');
-                th.each(function (i, cell) {
-                    cell.className = cell.className.replace('sorting_disabled', '');
-                    if (columns[i].sort) {
-                        if (columns[i].sort.toLowerCase() === 'asc') {
-                            cell.className = cell.className + ' ' + sortAscClass;
-                        } else {
-                            cell.className = cell.className + ' ' + sortDescClass;
-                        }
-                    }
-                    if (columns[i].orderable || columns[i].orderable !== false) {
-                        (0, _jquery2.default)(cell).click(function () {
-                            if (cell.className.indexOf(sortAscClass) > -1) {
-                                th.removeClass(sortAscClass);
-                                cell.className = cell.className + ' ' + sortDescClass;
-                                sort({}); // update for multicol sort
-                                sort()[columns[i].data] = -1;
-                            } else {
-                                // clear classes from all other cells
-                                th.removeClass(sortDescClass + ' ' + sortAscClass);
+                (function () {
+                    var th = (0, _jquery2.default)(table.header()[0]).find('th');
+                    th.each(function (i, cell) {
+                        cell.className = cell.className.replace('sorting_disabled', '');
+                        if (columns[i].sort) {
+                            if (columns[i].sort.toLowerCase() === 'asc') {
                                 cell.className = cell.className + ' ' + sortAscClass;
-                                sort({}); // update for multicol sort
-                                sort()[columns[i].data] = 1;
+                            } else {
+                                cell.className = cell.className + ' ' + sortDescClass;
                             }
-                        });
-                    }
-                });
+                        }
+                        if (columns[i].orderable || columns[i].orderable !== false) {
+                            (0, _jquery2.default)(cell).click(function () {
+                                if (cell.className.indexOf(sortAscClass) > -1) {
+                                    th.removeClass(sortAscClass);
+                                    cell.className = cell.className + ' ' + sortDescClass;
+                                    sort({}); // update for multicol sort
+                                    sort()[columns[i].data] = -1;
+                                } else {
+                                    // clear classes from all other cells
+                                    th.removeClass(sortDescClass + ' ' + sortAscClass);
+                                    cell.className = cell.className + ' ' + sortAscClass;
+                                    sort({}); // update for multicol sort
+                                    sort()[columns[i].data] = 1;
+                                }
+                            });
+                        }
+                    });
+                })();
             }
         }
 
@@ -376,7 +372,7 @@ _knockout2.default.bindingHandlers.dataTables = {
                         return b === false ? a + 1 : a;
                     }, 0);
                     console.log(count + ' column(s) are hidden');
-                    table.columns.adjust().epResponsive.recalc();
+                    table.columns.adjust().responsive.recalc();
 
                     // temporarily manually updated width of tables to force
                     // tds to fit within visible space

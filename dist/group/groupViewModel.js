@@ -13,13 +13,19 @@ exports.default = function (node) {
     });
 
     function setValue(values, opts) {
-        var value = ((0, _scalejs.has)(values, 'value') ? values.value : values) || {};
+        var value = ((0, _scalejs.has)(values, 'value') ? values.value : values) || {},
+            originalDict = Object.keys(dictionary());
+
         Object.keys(dictionary()).forEach(function (id) {
             var child = dictionary()[id];
             if (child.setValue && Object.prototype.hasOwnProperty.call(value, child.id)) {
                 child.setValue(value[child.id], opts);
             }
         });
+
+        if (!_lodash2.default.isEqual(originalDict, Object.keys(dictionary()))) {
+            setValue(values, opts);
+        }
     }
 
     function getValue() {
@@ -58,6 +64,12 @@ var _knockout = require('knockout');
 var _scalejs = require('scalejs');
 
 var _scalejs2 = require('scalejs.metadataFactory');
+
+var _lodash = require('lodash');
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function createNodeDictionary(mappedChildNodes) {
     var dictionary = {};

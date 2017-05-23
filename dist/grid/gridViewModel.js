@@ -260,11 +260,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
  * @param {boolean} node.options.clientSearch
  *  Boolean on whether to search/sort client side
  * @param {boolean|expression} node.options.gridDisplay
- *  Boolean or expression on whether to display the grid
- * @param {boolean} node.options.queryOnSearch
- *  Boolean to query on search or do it client side
+ *  Boolean or expression to render the grid programmatically
  * @param {string} node.options.scrollElement
- *  The element on which the scrolling for the grid should be done
+ *  Element to scroll grid on, defaults to scrolling on window
  *
  * @example
  * {

@@ -49,34 +49,6 @@ $spinner-overlay-z-index: 5000;
     padding-bottom: 10px;
 }
 
-.child-container {
-
-    thead > tr {
-        line-height: 0px;
-        height: 0px !important;
-
-        th {
-            font-size: 0px;
-        }
-    }
-}
-
-.icon-close {
-    background: url('~./images/icon-sort-desc.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-.icon-open {
-    background: url('~./images/icon-sort-asc.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-.dataTables_wrapper {
-    width: 100%;
-}
-
 table.pjson {
     border-spacing: 0;
     border-collapse: collapse;
@@ -177,7 +149,7 @@ table.pjson {
         color: $grid-cell-color;
         font-size: 12px;
         vertical-align: middle;
-        label {
+        label{ // removing NEXEN style from the grid
             font-weight: normal;
             margin-bottom:0;
         }
@@ -236,7 +208,7 @@ table.pjson {
         .value {
             padding-top: 5px;
         }
-
+        
         .profile-image {
             width: 32px;
             height: 32px;
