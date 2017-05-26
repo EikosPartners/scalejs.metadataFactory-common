@@ -187,7 +187,8 @@ function ajax(options, args) {
                 request: options.target,
                 error: error,
                 [keyMap.resultsKey]: results,
-                status: results ? 200 : error.status
+                status: results ? 200 : error.status,
+                statusCode: results ? null : error.statusCode
             };
 
             item.options = merge(response, item.options);

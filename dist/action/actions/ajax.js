@@ -213,7 +213,7 @@ function ajax(options, args) {
             var response = (_response = {
                 request: options.target,
                 error: error
-            }, _defineProperty(_response, keyMap.resultsKey, results), _defineProperty(_response, 'status', results ? 200 : error.status), _response);
+            }, _defineProperty(_response, keyMap.resultsKey, results), _defineProperty(_response, 'status', results ? 200 : error.status), _defineProperty(_response, 'statusCode', results ? null : error.statusCode), _response);
 
             item.options = (0, _scalejs3.merge)(response, item.options);
             _scalejs.createViewModel.call(context, item).action();
