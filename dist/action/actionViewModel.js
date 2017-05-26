@@ -82,8 +82,9 @@ function actionViewModel(node) {
                 if (only) {
                     actionFunc(options, args);
                 }
+            } else {
+                actionFunc(options, args);
             }
-            actionFunc(options, args);
         }
     }
 
