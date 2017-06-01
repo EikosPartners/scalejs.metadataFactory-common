@@ -1,10 +1,11 @@
 import { registerTemplates, registerBindings, template } from 'scalejs.mvvm';
-import { createViewModel } from 'scalejs.metadataFactory';
-import { registerActions } from '../../actionModule';
 import { merge } from 'scalejs';
 import popup from 'scalejs.popup';
 import mustache from 'mustache';
 import ko from 'knockout';
+import { evaluate } from 'scalejs.expression-jsep';
+import { createViewModel } from 'scalejs.metadataFactory';
+import { registerActions } from '../../actionModule';
 
 import popupBindings from './popupBindings';
 import popupTemplates from './popup.html';
@@ -105,6 +106,7 @@ function popupAction(options) {
             title: merged.title || 'Popup',
             modal: merged.modal || false,
             popupClasses: merged.popupClasses,
+            hideClose: merged.hideClose || false,
             classes: merged.classes,
             popupContent: {
                 name: merged.template || 'popup_default_region_template',
