@@ -77,8 +77,10 @@ function actionViewModel(node) {
         } else {
             if (node.onlyIf) {
                 var only = (0, _scalejs3.evaluate)(node.onlyIf, function (identifier) {
-                    return options[identifier] || identifier;
-                });
+                    return (0, _scalejs2.get)(options, identifier);
+                }
+                // options[identifier] || identifier
+                );
                 if (only) {
                     actionFunc(options, args);
                 }

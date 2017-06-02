@@ -2,15 +2,11 @@
 
 var _scalejs = require('scalejs.mvvm');
 
-var _scalejs2 = require('scalejs.metadataFactory');
+var _scalejs2 = require('scalejs');
 
-var _actionModule = require('../../actionModule');
+var _scalejs3 = require('scalejs.popup');
 
-var _scalejs3 = require('scalejs');
-
-var _scalejs4 = require('scalejs.popup');
-
-var _scalejs5 = _interopRequireDefault(_scalejs4);
+var _scalejs4 = _interopRequireDefault(_scalejs3);
 
 var _mustache = require('mustache');
 
@@ -19,6 +15,12 @@ var _mustache2 = _interopRequireDefault(_mustache);
 var _knockout = require('knockout');
 
 var _knockout2 = _interopRequireDefault(_knockout);
+
+var _scalejs5 = require('scalejs.expression-jsep');
+
+var _scalejs6 = require('scalejs.metadataFactory');
+
+var _actionModule = require('../../actionModule');
 
 var _popupBindings = require('./popupBindings');
 
@@ -30,7 +32,7 @@ var _popup2 = _interopRequireDefault(_popup);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var popupRoot = _scalejs5.default.popupRoot;
+var popupRoot = _scalejs4.default.popupRoot;
 var initialized = false;
 
 /**
@@ -93,23 +95,23 @@ function popupAction(options) {
 
     actions = (options.actions || []).map(function (action) {
         action.type = 'action';
-        return _scalejs2.createViewModel.call(context, action);
+        return _scalejs6.createViewModel.call(context, action);
     });
 
     data = this && _knockout2.default.unwrap(this.data);
-    data = (0, _scalejs3.merge)(options, data);
+    data = (0, _scalejs2.merge)(options, data);
 
     if (typeof options.message === 'string') {
         options.message = _mustache2.default.render(options.message, data || {});
     }
 
     if (options.hidePopupAction) {
-        onHidePopup = _scalejs2.createViewModel.call(context, options.hidePopupAction).action;
+        onHidePopup = _scalejs6.createViewModel.call(context, options.hidePopupAction).action;
     }
 
-    modal = typeof options.modal === 'undefined' || typeof options.modal === 'boolean' ? options.modal : evaluate(options.modal, this.getValue);
+    modal = typeof options.modal === 'undefined' || typeof options.modal === 'boolean' ? options.modal : (0, _scalejs5.evaluate)(options.modal, this.getValue);
 
-    merged = (0, _scalejs3.merge)(options, {
+    merged = (0, _scalejs2.merge)(options, {
         title: options.title,
         message: options.message,
         template: options.template,
@@ -121,17 +123,18 @@ function popupAction(options) {
         context: this
     });
 
-    _scalejs5.default.onHidePopup(merged.onHidePopup);
-    _scalejs5.default.renderPopup((0, _scalejs.template)(merged.wrapperTemplate || 'popup_default_wrapper_template', {
-        hidePopup: _scalejs5.default.hidePopup,
+    _scalejs4.default.onHidePopup(merged.onHidePopup);
+    _scalejs4.default.renderPopup((0, _scalejs.template)(merged.wrapperTemplate || 'popup_default_wrapper_template', {
+        hidePopup: _scalejs4.default.hidePopup,
         title: merged.title || 'Popup',
         modal: merged.modal || false,
         popupClasses: merged.popupClasses,
+        hideClose: merged.hideClose || false,
         classes: merged.classes,
         popupContent: {
             name: merged.template || 'popup_default_region_template',
-            data: (0, _scalejs3.merge)(merged, {
-                hidePopup: _scalejs5.default.hidePopup
+            data: (0, _scalejs2.merge)(merged, {
+                hidePopup: _scalejs4.default.hidePopup
             })
         }
     }));
@@ -142,7 +145,7 @@ function popupAction(options) {
 }
 
 function closePopup() {
-    _scalejs5.default.hidePopup();
+    _scalejs4.default.hidePopup();
 }
 
 function init() {

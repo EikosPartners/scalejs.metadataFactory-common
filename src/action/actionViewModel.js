@@ -1,6 +1,6 @@
 import { notify, receive } from 'scalejs.messagebus';
 import { observable, computed } from 'knockout';
-import { merge, has } from 'scalejs';
+import { merge, has, get } from 'scalejs';
 import { extend, cloneDeep } from 'lodash';
 import { evaluate } from 'scalejs.expression-jsep';
 
@@ -65,7 +65,7 @@ export default function actionViewModel(node) {
         } else {
             if (node.onlyIf) {
                 const only = evaluate(node.onlyIf, identifier =>
-                    options[identifier] || identifier
+                    get(options, identifier)
                 );
                 if (only) {
                     actionFunc(options, args);
