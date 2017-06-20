@@ -198,6 +198,11 @@ export default function listViewModel(node) {
                 return unwrap(item);
             }
 
+            const value = rowContext.data.peek()[id];
+            if (has(value)) {
+                return value;
+            }
+
             prop = rowContext[id];
 
             if (has(prop)) {

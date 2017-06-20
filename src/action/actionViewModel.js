@@ -62,17 +62,22 @@ export default function actionViewModel(node) {
                 actionNode: cloneDeep(originalJson),
                 context: context
             });
-        } else {
-            if (node.onlyIf) {
-                const only = evaluate(node.onlyIf, identifier =>
-                    get(options, identifier)
-                );
-                if (only) {
-                    actionFunc(options, args);
+        } else if (node.onlyIf) {
+            const only = evaluate(node.onlyIf, (identifier) => {
+                // worried about collisions, we should keep the getValue function consistent as possible
+                if (identifier === 'results') {
+                    return options.results;
                 }
-            } else {
+                if (identifier === 'options') {
+                    return options;
+                }
+                return context.getValue(identifier);
+            });
+            if (only) {
                 actionFunc(options, args);
             }
+        } else {
+            actionFunc(options, args);
         }
     }
 
