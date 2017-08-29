@@ -24,11 +24,13 @@ export default function (node) {
         context = this,
         mappedChildNodes = createViewModels.call(this, node.children),
         sub = computed(() => dictionary(createNodeDictionary(mappedChildNodes)));
-
+    let currentValue;
 
     function setValue(values, opts) {
         const value = (has(values, 'value') ? values.value : values) || {},
             originalDict = Object.keys(dictionary());
+
+        currentValue = value;
 
         Object.keys(dictionary()).forEach((id) => {
             const child = dictionary()[id];
@@ -46,13 +48,18 @@ export default function (node) {
         const ret = Object.keys(dictionary()).reduce((obj, id) => {
             const child = dictionary()[id];
             if ((child.getValue &&
-            (child.rendered() || node.trackChildrenIfHidden !== false || child.trackIfHidden))) {
+                (child.rendered() || node.trackChildrenIfHidden !== false || child.trackIfHidden))) {
                 obj[child.id] = child.getValue();
             } else {
                 delete obj[child.id]; // track if hidden functionality for group..
             }
             return obj;
         }, {});
+
+        if (node.persistData) {
+            return merge(currentValue, ret);
+        }
+
         return ret;
     }
 
