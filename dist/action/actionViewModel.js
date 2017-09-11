@@ -74,19 +74,22 @@ function actionViewModel(node) {
                 actionNode: (0, _lodash.cloneDeep)(originalJson),
                 context: context
             });
-        } else {
-            if (node.onlyIf) {
-                var only = (0, _scalejs3.evaluate)(node.onlyIf, function (identifier) {
-                    return (0, _scalejs2.get)(options, identifier);
+        } else if (node.onlyIf) {
+            var only = (0, _scalejs3.evaluate)(node.onlyIf, function (identifier) {
+                // worried about collisions, we should keep the getValue function consistent as possible
+                if (identifier === 'results') {
+                    return options.results;
                 }
-                // options[identifier] || identifier
-                );
-                if (only) {
-                    actionFunc(options, args);
+                if (identifier === 'options') {
+                    return options;
                 }
-            } else {
+                return context.getValue(identifier);
+            });
+            if (only) {
                 actionFunc(options, args);
             }
+        } else {
+            actionFunc(options, args);
         }
     }
 

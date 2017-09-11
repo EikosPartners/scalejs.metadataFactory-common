@@ -24,8 +24,8 @@ export default function setValueViewModel(node) {
     // n is the descendant node we are setting
     // n2 is a childNode of the node we are setting
     function _setValue(n, data, clear) {
-        if (n.id && n.setValue && ({}.hasOwnProperty.call(data, n.id) || clear)) {
-            n.setValue(data[n.id], { initial: true }); // pass as object with value key?
+        if (n.id && n.setValue && (_.has(data, n.id)|| clear)) {
+            n.setValue(_.get(data, n.id), { initial: true }); // pass as object with value key?
         }
     }
 }

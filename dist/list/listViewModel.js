@@ -220,6 +220,11 @@ function listViewModel(node) {
                 return (0, _knockout.unwrap)(item);
             }
 
+            var value = rowContext.data.peek()[id];
+            if ((0, _scalejs5.has)(value)) {
+                return value;
+            }
+
             prop = rowContext[id];
 
             if ((0, _scalejs5.has)(prop)) {

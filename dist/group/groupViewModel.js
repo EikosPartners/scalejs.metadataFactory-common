@@ -11,10 +11,13 @@ exports.default = function (node) {
         sub = (0, _knockout.computed)(function () {
         return dictionary(createNodeDictionary(mappedChildNodes));
     });
+    var currentValue = void 0;
 
     function setValue(values, opts) {
         var value = ((0, _scalejs.has)(values, 'value') ? values.value : values) || {},
             originalDict = Object.keys(dictionary());
+
+        currentValue = value;
 
         Object.keys(dictionary()).forEach(function (id) {
             var child = dictionary()[id];
@@ -38,6 +41,11 @@ exports.default = function (node) {
             }
             return obj;
         }, {});
+
+        if (node.persistData) {
+            return (0, _scalejs.merge)(currentValue, ret);
+        }
+
         return ret;
     }
 
