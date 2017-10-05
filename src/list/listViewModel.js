@@ -123,7 +123,7 @@ export default function listViewModel(node) {
                 deleteFlag: observable(false),
                 data: computed(() => {
                     const dict = itemDictionary();
-                    return merge(initialValues || {}, Object.keys(dict).reduce((d, id) => {
+                    return _.extend({}, initialValues || {}, Object.keys(dict).reduce((d, id) => {
                         const item = dict[id];
                         if (item && item.getValue) {
                             d[id] = item.getValue();
