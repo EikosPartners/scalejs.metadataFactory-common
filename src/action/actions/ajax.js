@@ -164,6 +164,10 @@ function ajax(options, args) {
         target.data = merge(mergeData, renderParams(options.params, renderDataObject));
     }
 
+    if (context.adapterLoading) {
+        context.adapterLoading(true);
+    }
+
     nextAction = function (error, results) {
         const opts = options ? _.cloneDeep(options) : {},
             err = error,
@@ -194,6 +198,10 @@ function ajax(options, args) {
             item.options = merge(response, item.options);
             createViewModel.call(context, item).action();
         });
+
+        if (context.adapterLoading) {
+            context.adapterLoading(false);
+        }
 
         if (callback) {
             callback.apply(null, arguments);
