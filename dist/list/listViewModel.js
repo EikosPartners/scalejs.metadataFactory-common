@@ -143,7 +143,7 @@ function listViewModel(node) {
             deleteFlag: (0, _knockout.observable)(false),
             data: (0, _knockout.computed)(function () {
                 var dict = itemDictionary();
-                return (0, _scalejs5.merge)(initialValues || {}, Object.keys(dict).reduce(function (d, id) {
+                return _lodash2.default.extend({}, initialValues || {}, Object.keys(dict).reduce(function (d, id) {
                     var item = dict[id];
                     if (item && item.getValue) {
                         d[id] = item.getValue();

@@ -189,6 +189,10 @@ function ajax(options, args) {
         target.data = (0, _scalejs3.merge)(mergeData, renderParams(options.params, renderDataObject));
     }
 
+    if (context.adapterLoading) {
+        context.adapterLoading(true);
+    }
+
     nextAction = function nextAction(error, results) {
         var opts = options ? _lodash2.default.cloneDeep(options) : {},
             err = error,
@@ -218,6 +222,10 @@ function ajax(options, args) {
             item.options = (0, _scalejs3.merge)(response, item.options);
             _scalejs.createViewModel.call(context, item).action();
         });
+
+        if (context.adapterLoading) {
+            context.adapterLoading(false);
+        }
 
         if (callback) {
             callback.apply(null, arguments);
